@@ -1,0 +1,16 @@
+{
+  "working_directory": "Proposal/",
+  "command": [
+    "/Library/TeX/texbin/latexmk",
+    "-gg",
+    "-pdf",
+    "-interaction=nonstopmode",
+    "-halt-on-error",
+    "-file-line-error",
+    "-outdir=build",
+    "main.tex"
+  ],
+  "exit_status": 0,
+  "stdout_stderr": "build/latexmk-final.log",
+  "purpose": "Full clean skeleton rebuild after compatibility and editor configuration fixes"
+}

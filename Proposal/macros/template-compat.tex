@@ -1,0 +1,64 @@
+% !TeX root = ../main.tex
+% Narrow technical adaptations to unchanged copied CMU template files.
+% See metadata/transformation-log.md for rationale and validation.
+\makeatletter
+\newcommand{\ProposalPatchFailure}[1]{%
+  \PackageError{proposal}{CMU compatibility patch failed: #1}%
+    {Inspect the copied template and the transformation log; do not ignore this error.}%
+}
+
+% Modern LaTeX begins the document without the extra group assumed by the
+% template's legacy hook wrapper. Retain both CMU hooks and their order.
+\patchcmd{\document}{\endgroup}{}
+  {}{\ProposalPatchFailure{legacy document end-group}}
+\patchcmd{\document}{\begingroup}{}
+  {}{\ProposalPatchFailure{legacy document begin-group}}
+
+% Preserve the template title-page layout, replacing only required wording.
+\patchcmd{\maketitle}
+  {Thesis submitted in partial fulfillment of the\\}
+  {Submitted in partial fulfillment of the requirements\\}
+  {}{\ProposalPatchFailure{submission statement, first line}}
+\patchcmd{\maketitle}
+  {requirements for the degree of \@degree\ in \@discipline\par}
+  {for the degree of \@degree\\ in \@discipline.\par}
+  {}{\ProposalPatchFailure{submission statement, remaining lines}}
+% Keep the year independently editable; do not parse a placeholder date.
+\patchcmd{\maketitle}
+  {\edef\thesisyear{\expandafter\extract@year\@thesisdate\@nil}}
+  {\def\thesisyear{\ProposalCopyrightYear}}
+  {}{\ProposalPatchFailure{copyright year}}
+
+% Chapter and appendix headings need PDF targets on their own pages.
+\patchcmd{\chapter}{\cleardoublepage}{\cleardoublepage\phantomsection}
+  {}{\ProposalPatchFailure{chapter anchor}}
+\patchcmd{\cmu@appendix}{\cleardoublepage}{\cleardoublepage\phantomsection}
+  {}{\ProposalPatchFailure{appendix anchor}}
+
+% A Part divider intentionally contains no prose. Exempt just this transition
+% from the template's paragraph-after-heading check; keep all other checks.
+\apptocmd{\part}{\addtocounter{cmusectionline}{1}}
+  {}{\ProposalPatchFailure{Part divider transition}}
+
+% These commands are defined by the template at begin-document time.
+\AtBeginDocument{%
+  % Bibliography bookmarks need plain text; visible heading styling is kept
+  % separately in the template's cmu@refname@formatted command.
+  \renewcommand{\cmu@refname}{Bibliography}%
+  % Keep wrapped chapter entries aligned beyond the automatic number.
+  \renewcommand*\l@section[2]{\ThesisContentsEntry{1}{0.0em}{2.5em}{#1}{#2}}%
+  % Move each page break before its bookmark instead of after it.
+  \patchcmd{\tableofcontents}{\cleardoublepage}{}
+    {}{\ProposalPatchFailure{contents page break}}%
+  \pretocmd{\tableofcontents}{\cleardoublepage\phantomsection}
+    {}{\ProposalPatchFailure{contents target}}%
+  \patchcmd{\listoffigures}{\cleardoublepage}{}
+    {}{\ProposalPatchFailure{figures list page break}}%
+  \pretocmd{\listoffigures}{\cleardoublepage\phantomsection}
+    {}{\ProposalPatchFailure{figures list target}}%
+  \patchcmd{\listoftables}{\cleardoublepage}{}
+    {}{\ProposalPatchFailure{tables list page break}}%
+  \pretocmd{\listoftables}{\cleardoublepage\phantomsection}
+    {}{\ProposalPatchFailure{tables list target}}%
+}
+\makeatother

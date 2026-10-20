@@ -1,0 +1,16 @@
+{
+  "extension_version": "10.20.0",
+  "settings_schema_valid": true,
+  "command": [
+    "/Library/TeX/texbin/latexmk",
+    "-pdf",
+    "-interaction=nonstopmode",
+    "-halt-on-error",
+    "-file-line-error",
+    "-outdir=/Users/shahriarnz14/Documents/Dissertation-Proposal/Proposal/build",
+    "/Users/shahriarnz14/Documents/Dissertation-Proposal/Proposal/main"
+  ],
+  "working_directory": "/Users/shahriarnz14/Documents/Dissertation-Proposal/Proposal",
+  "exit_status": 0,
+  "interactive_editor_button_tested": false
+}

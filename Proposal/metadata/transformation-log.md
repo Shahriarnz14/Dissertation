@@ -1,0 +1,33 @@
+# Transformation log
+
+## Phase B - October 19, 2026
+
+Scope: skeleton, infrastructure, persistent source decisions, and technical CMU compatibility only. No scientific manuscript has been migrated or transformed. No comments have been stripped from paper sources. Original `Papers/`, pre-existing `Chapters/`, and `CMU-PhD-Template/` are preserved by a complete pre-operation file/hash and directory snapshot.
+
+| ID | Files | Technical change and reason |
+|---|---|---|
+| B01 | Root `DISSERTATION_PLAN.md`; `metadata/source-manifest.md`; `metadata/source-selections.json` | Persist explicit user selections for Chapters 2, 5, and 7, confirmed author, and Phase B approval boundary. Resolve the user's `V4.tex` shorthand to the actual `Scientific_data/main_pmoa_tts_V4.tex`; no alternate-version content is imported. |
+| B02 | `main.tex`; `template/`; `.latexmkrc` | Retain the actual `article[letterpaper,12pt]` CMU architecture. Copy eight template styles. Resolve their internal paths through `TEXINPUTS`, use existing MacTeX pdfLaTeX/BibTeX, and confine generated output to `build/`. |
+| B03 | `main.tex`; `macros/packages.tex` | Enable current LaTeX PDF management with `\DocumentMetadata{lang=en-US}` before the class, retaining the example's tagpdf setup. This is infrastructure, not an accessibility-conformance claim. No conference class, example science, artwork, custom equation examples, or sample bibliography is imported. |
+| B04 | `macros/template-compat.tex` | Remove the two obsolete group operations in the copied template's legacy `\document` wrapper while retaining the CMU preamble/end-of-begin-document hooks in order. The initial unadapted build failed with `Extra \endgroup` on current LaTeX. |
+| B05 | Copied `template/cmu-thesis.sty` only | Repair the nested TOC hyperlink macro by doubling its parameter markers and using hyperref's native `\HyColor@UseColor` handler. The original nested definition produced `Illegal parameter number in definition of \tableofcontents`. Bold/color link intent is retained. Original template file is unchanged. |
+| B06 | Copied `template/cmu-style-files/cmu-thesis-lists.sty` only | Put an inner group around the page-number box's `\normalcolor` operation so its color push/pop remains within the box when unboxed. This fixes the observed `pop empty color page stack 0` warning on the multipage TOC. Original template file is unchanged. |
+| B07 | `macros/template-compat.tex`; `frontmatter/metadata.tex` | Patch only the submission wording in the template title-page command to the exact required three-line statement, including the final period. Use an independently editable copyright year instead of parsing a placeholder submission date. Preserve the original title-page arrangement. |
+| B08 | `frontmatter/titlepage.tex`; `macros/template-compat.tex` | Restart Roman front matter after the unnumbered title. Add unique chapter/appendix PDF targets after page breaks. Move TOC/LoF/LoT page breaks before bookmarks, and give the bibliography bookmark a plain-text name while preserving its separately styled visible heading. These changes fix target placement and PDF-string warnings. |
+| B09 | `macros/template-compat.tex` | Exempt only the deliberately prose-free Part-divider transition from the template's empty-heading check. Keep all other sanity checks and diagnostics active; no invented transition text is used. Give wrapped chapter TOC entries a 2.5em hanging indent. |
+| B10 | Chapter/appendix/Part modules; `main.tex` | Create ten chapter entry points, three Part modules, and seven appendix entry points for actual existing supplements, each with explicit section inputs and marked placeholders. Use only the template's automatic numbering; no chapter/appendix counters are manually assigned. Appendix infrastructure follows Chapter 10; the single bibliography follows the appendices. |
+| B11 | `backmatter/bibliography.tex`; `references.bib`; `macros/commands.tex` | Keep an empty unified BibTeX database and use the template's bibliography heading/required-section tracking for a marked skeleton placeholder. Do not invoke BibTeX on an empty database or invent entries. A documented switch activates the real single bibliography during an approved migration. |
+| B12 | `.vscode/`; `Dissertation-Proposal.code-workspace`; component `.tex` files | Supply a scoped MacTeX latexmk recipe, SyncTeX/build output discovery, and relative root directives. The main file has no root loop or `TeX program` override: the installed LaTeX Workshop 10.20.0 source shows that a program magic comment would bypass the configured recipe. Global VS Code settings and protected paper files are untouched. |
+| B13 | `.gitignore`; `scripts/`; `metadata/`; `README.md` | Add reproducible build/preservation/acceptance/render utilities, source and copy hashes, exact copy diff, pending per-chapter reports, progress, and full changed-file inventory. All compilation intermediates and review images stay under ignored `build/`. |
+
+## Mapping and equivalence status
+
+- New skeleton labels: `chap:ch01` through `chap:ch10`, `app:ch02` through `app:ch08`, and named `part:*` labels. These are workspace identifiers, not manually assigned rendered numbers.
+- Scientific label, citation-key, and macro old-to-new mappings: **none yet**, because no scientific content is imported.
+- Template copy provenance and hashes: `template-copies.json`. Six styles are byte-identical; two contain exactly the changes recorded in `template-compatibility.patch`.
+- Scientific-content equivalence: **not applicable / not yet evaluated**. The skeleton contains no original paper passages to reconcile.
+- Diagnostics are retained in full compiler logs. No `insane` option, warning-filter package, diagnostic redirection, or global sanity-check disabling is used.
+
+## Remaining diagnostics
+
+The final converged log retains the CMU advisories `There are no tables or figures..` and `It is recommended that you include the 'acknowledgments' section (environment).` These reflect intentionally empty lists and an unsupplied optional section. No artificial content was added to remove them. Details and actual build evidence are in `validation-phase-b.md`.
