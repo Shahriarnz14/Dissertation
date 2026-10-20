@@ -1,0 +1,18 @@
+% !TeX root = ../../../main.tex
+\subsection{Experiments and Results}
+\label{ch03:sec:experiments_results}
+% \vspace{-0.25em}
+
+\input{Chapters/chapter-03/tables/02}
+
+
+
+In this section, we present our findings on survival analysis prediction performance and on causal inference treatment effect estimates.
+Performance metrics are computed at snapshots of \(\tau \in \{3, 6, 9, 12\}\) months.
+The main body highlights results at 3 and 6 months, while detailed outcomes for 9 and 12 months are included in Appendix~\ref{ch03:apd:survival_analysis} and Appendix~\ref{ch03:apd:causal_inference}. 
+A comparison of unadjusted survival curves is provided in Appendix~\ref{ch03:apd:unadjusted_survival}, demonstrating that the observed Average Treatment Effects (ATEs) cannot be fully attributed to baseline differences between groups.
+
+For transparency and reproducibility\footnote{Code is available in at \url{https://github.com/Shahriarnz14/causal-meta-learner-survival-analysis}}, we provide details on data preprocessing, training protocols, and model hyperparameters in Appendices~\ref{ch03:apd:preprocessing} and~\ref{ch03:apd:model_hyperparams}.
+Additionally, Appendix~\ref{ch03:apd:cohort_information} provides a comprehensive breakdown of the study cohort, including demographics, adverse events, adherence patterns, and prescribing trends, offering essential context on the patient population and factors influencing adherence. 
+
+% \vspace{-1em}

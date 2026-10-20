@@ -1,0 +1,35 @@
+% !TeX root = ../../../main.tex
+\begin{ChThreeAbstract}
+This study quantifies the association between non-adherence to antipsychotic medications and adverse outcomes in individuals with schizophrenia. 
+We frame the problem using survival analysis, focusing on the time to the earliest of several adverse events (early death, involuntary hospitalization, jail booking).
+We extend standard causal inference methods (T-learner, S-learner, nearest neighbor matching) to utilize various survival models to estimate individual and average treatment effects, where treatment corresponds to medication non-adherence. 
+Analyses are repeated using different amounts of longitudinal information (3, 6, 9, and 12 months). 
+Using data from Allegheny County in western Pennsylvania, we find strong evidence that non-adherence advances adverse outcomes by approximately~1 to~4 months. 
+Ablation studies confirm that county-provided risk scores adjust for key confounders, as their removal amplifies the estimated effects. 
+Subgroup analyses by medication formulation (injectable vs.~oral) and medication type consistently show that non-adherence is associated with earlier adverse events. 
+These findings highlight the clinical importance of adherence in delaying psychiatric crises and show that integrating survival analysis with causal inference tools can yield policy-relevant insights. 
+We caution that although we apply causal inference, we only make associative claims and discuss assumptions needed for causal interpretation.
+\end{ChThreeAbstract}
+
+
+
+% \vspace{-1em}
+\ChThreeParagraph{Data and Code Availability}
+This paper utilizes administrative data from the Allegheny County Department of Human Services in the United States. 
+% \textcolor{red}{For the purposes of peer review, we have anonymized the specific county and the full department name.} The dataset consists of de-identified records, where part of the de-identification process involved coarsening the time resolution to the month level. %, %, where personally identifiable information (PII) has been removed,
+% and its time resolution has been intentionally coarsened to the month level.
+Due to confidentiality agreements, the dataset is not publicly available.
+
+The implementation of our proposed method is available at our GitHub repository: \linebreak
+\url{https://github.com/Shahriarnz14/causal-meta-learner-survival-analysis}.
+
+% \vspace{-2em}
+\ChThreeParagraph{Institutional Review Board (IRB)}
+This study does not require IRB approval, as it conducts secondary analysis of de-identified data provided by the Allegheny County Department of Human Services.
+
+
+
+
+
+
+% \vspace{-1em}

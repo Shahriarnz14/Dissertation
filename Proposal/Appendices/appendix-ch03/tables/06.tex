@@ -1,0 +1,30 @@
+% !TeX root = ../../../main.tex
+\begin{table}[hbtp]
+    \setlength{\tabcolsep}{4pt}
+    % \footnotesize
+    \ChThreeFloatContents
+      {ch03:tab:table_ablation_DeepSurv}
+      {\caption{Causal Inference Ablation ATE Estimates for DeepSurv}}
+      {\adjustbox{max width=.825\textwidth}{\begin{tabular}{l c c c c c }
+    \toprule
+    &T-learner & S-learner & Matching (1) & Matching (5) & Matching (20) \\
+    \midrule
+    \textit{(3 months)}
+ &  &  &  &  \\
+    DeepSurv (Full) & -2.366 ± 0.603 & -1.986 ± 0.382 & -2.160 ± 1.014 & -2.101 ± 1.051 & -2.312 ± 1.223 \\
+    DeepSurv (Ablation) & -4.775 ± 0.853 & -3.842 ± 2.052 & -4.483 ± 2.070 & -4.529 ± 2.067 & -4.613 ± 2.061 \\\\
+    \textit{(6 months)}
+ &  &  &  &  \\
+    DeepSurv (Full) & -3.685 ± 1.998 & -0.516 ± 1.284 & -1.877 ± 0.708 & -1.927 ± 0.594 & -2.152 ± 0.422 \\
+    DeepSurv (Ablation) & -4.406 ± 2.343 & -3.130 ± 1.551 & -2.124 ± 1.442 & -2.129 ± 1.434 & -2.189 ± 1.534 \\\\
+    \textit{(9 months)}
+ &  &  &  &  \\
+    DeepSurv (Full) & -2.144 ± 2.706 & 0.837 ± 0.767 & -0.923 ± 0.446 & -0.928 ± 0.436 & -1.021 ± 0.558 \\
+    DeepSurv (Ablation) & -4.979 ± 2.941 & -2.165 ± 2.317 & -2.279 ± 1.823 & -2.366 ± 1.887 & -2.483 ± 2.043 \\\\
+    \textit{(12 months)}
+ &  &  &  &  \\
+    DeepSurv (Full) & -2.650 ± 1.553 & 1.116 ± 0.605 & 0.262 ± 1.353 & -0.025 ± 1.381 & -0.347 ± 1.399 \\
+    DeepSurv (Ablation) & -2.267 ± 1.834 & -0.593 ± 1.165 & -0.415 ± 1.082 & -0.700 ± 1.127 & -1.097 ± 1.174 \\\\
+    \bottomrule
+    \end{tabular}}}
+\end{table}

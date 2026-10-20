@@ -1,0 +1,27 @@
+% !TeX root = ../../../main.tex
+\subsubsection{ITE Distribution for Different Medication}
+\label{ch03:sec:04_results_ite_analysis}
+% \vspace{-.5em}
+
+We conducted a subgroup analysis to compare the distribution of Estimated Individual Treatment Effects (ITE) across three adherence groups: patients covered by injectable medications, non-injectable medications, and those not covered by any medication at the time snapshot \(\tau=3\) months.
+Figure~\ref{ch03:fig:ite_injectable} presents the ITE distributions for each adherence group using various survival models and meta-learners.
+The ITEs reflect the change in Restricted Mean Event Time (RMET) when comparing a non-adherence scenario to adherence within each category.
+
+For the T-learner-based approaches using survival models, the ATEs for injectable medications appear slightly more negative compared to the non-injectable or not-covered groups.
+This trend is observed in Figures~\ref{ch03:fig:ite_injectable_coxph}, \ref{ch03:fig:ite_injectable_deepsurv}, and \ref{ch03:fig:ite_injectable_random_survival_forest}, corresponding to CoxPH, DeepSurv, and Random Survival Forest, respectively.
+However, the Causal Survival Forest results in Figure~\ref{ch03:fig:ite_injectable_causal_survival_forest} do not show a similar distinction, with ATEs for injectables being closer to the non-injectable and not-covered groups.
+
+Overall, the ATEs across all survival models remain close within each formulation group, suggesting no meaningful differences in RMET across injectable, non-injectable, and not-covered groups in our dataset.
+The ITE distributions also highlight some variability across models, with Random Survival Forest showing relatively narrower distributions compared to the other methods.
+Further subgroup analysis is detailed in Appendix~\ref{ch03:apd:ite_injectable_all} for all models and meta-learners and follow the same pattern observed in Figure~\ref{ch03:fig:ite_injectable}.
+
+These consistent negative ATE values align with the results reported in Section~\ref{ch03:sec:04_results_causal}, indicating shorter adverse event times associated with non-adherence across all adherence categories and medication types.
+If nuanced differences existed in ITEs for injectable versus non-injectable formulations, they might have highlighted heterogeneity in treatment effects based on the delivery mechanism of medications.
+However, the lack of such variation suggests that the adherence effect may be largely uniform across these groups in the context of our dataset.
+
+In Section~\ref{ch03:apd:ite_medication}, we conducted a similar analysis for ITEs by medication type, observing close ATE values across the top four antipsychotic medications --risperidone, aripiprazole, olanzapine, and haloperidol-- with minimal differences in RMETs for non-adherence within each medication, showing no heterogeneity across medication type as well.
+
+These findings indicate no significant heterogeneity in treatment effects across medication formulations or specific antipsychotic medications.
+While slight variations in ATE rankings are observed across models, the magnitudes remain similar, suggesting that the adherence effect is largely stable regardless of medication type or delivery mechanism.
+
+% \vspace{-1.5em}

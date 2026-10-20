@@ -1,0 +1,166 @@
+% !TeX root = ../../../main.tex
+\subsection{Full Experimental Results}\ChThreeHeadingOnly
+\label{ch03:apd:full_results}
+
+
+
+
+\subsubsection{Survival Analysis Model Performance across 9 and 12 months Snapshots}
+\label{ch03:apd:survival_analysis}
+
+The prediction performance of the survival analysis models across 9 and 12 months snapshots is summarized in Table~\ref{ch03:tab:survival_9_12}.
+Similar to earlier time points presented in Table~\ref{ch03:tab:survival_3_6}, the Random Survival Forest consistently outperforms other models in terms of discriminative ability and calibration.
+At 9 months, it achieves the highest Concordance Index (\(C^{td} = 0.648 \pm 0.015\)) and time-dependent AUC (\(\text{AUC}^{td} = 0.694 \pm 0.015\)), along with the lowest Integrated Brier Score (\(\text{IBS} = 0.180 \pm 0.003\)).
+At 12 months, the Random Survival Forest maintains its superior performance with \(C^{td} = 0.658 \pm 0.011\), \(\text{AUC}^{td} = 0.706 \pm 0.011\), and \(\text{IBS} = 0.174 \pm 0.004\).
+
+CoxPH and DeepSurv display competitive performance at 9 months, with CoxPH maintaining slightly higher \(C^{td}\) scores (\(0.625 \pm 0.023\)) and comparable calibration as indicated by its \(\text{IBS} = 0.187 \pm 0.004\).
+DeepSurv exhibits strong calibration at 9 months (\(\text{IBS} = 0.185 \pm 0.004\)), though it trails behind Random Survival Forest in overall predictive metrics.
+By 12 months, DeepSurv demonstrates modest gains, but CoxPH results are unavailable for this time point.
+
+DeepHit continues to underperform across these later snapshots, with \(C^{td}\) values of \(0.525 \pm 0.069\) at 9 months and \(0.540 \pm 0.026\) at 12 months, indicating weaker discriminative ability.
+Similarly, its higher \(\text{IBS}\) values (\(0.234 \pm 0.026\) at 9 months and \(0.243 \pm 0.021\) at 12 months) suggest poorer calibration.
+These trends highlight DeepHit's limitations in handling the low-dimensional and moderate-sized dataset used in this study.
+Given these limitations, the use of DeepHit in our causal inference meta-learner approach for predicting restricted mean time (RMET) is unreliable, as its survival estimates lack the necessary stability and accuracy.
+
+
+\input{Appendices/appendix-ch03/tables/01}
+
+
+Overall, the results reinforce the performance advantage of the Random Survival Forest across varying time horizons, making it the most reliable model evaluated for predicting time-to-first-event in our dataset.
+However, even with \(C^{td}\) values consistently above 0.6, there remains significant room for improvement in survival modeling.
+This gap in predictive accuracy introduces a caveat for our causal inference analyses, as the reliability of causal estimates is contingent on the underlying survival model's performance.
+Addressing this limitation is critical for advancing both predictive and causal modeling in similar clinical contexts.
+
+\subsubsection{Full Causal Inference Results across 9 and 12 months Snapshots}
+\label{ch03:apd:causal_inference}
+
+
+\input{Appendices/appendix-ch03/tables/02}
+
+
+The Average Treatment Effect (ATE) estimates for 9 and 12 months are summarized in Table~\ref{ch03:tab:table_ate_9_12}.
+At 9 months, we observe predominantly negative ATEs across most models, suggesting that non-adherence is associated with shorter adverse event times to adverse events, consistent with expectations.
+However, by 12 months, there is a notable increase in positive ATE estimates, indicating that adherence might correspond to shorter adverse event times to adverse events, which contradicts clinical expectations.
+
+Examining the standard errors of the ATE estimates across different experimental repeats provides additional context for the unreliability of these numbers for longer time snapshots.
+For example, while some negative ATEs at 9 months align with expectations, large standard errors, such as those seen for DeepSurv (\(-2.144 \pm 2.706\)), reduce confidence in these estimates.
+Similarly, small ATE magnitudes close to zero, such as those reported by Random Survival Forest using the S-learner (\(-0.546 \pm 0.106\)), suggest minimal difference between adherence and non-adherence.
+
+This unexpected trend of positive ATEs at 12 months can be attributed to two primary factors.
+First, the underlying survival models at these later snapshots demonstrate weaker performance compared to earlier snapshots, as discussed in Appendix~\ref{ch03:apd:survival_analysis}.
+This degradation in survival model accuracy likely propagates to the causal inference estimates, introducing additional unreliability.
+Second, there is an inherent bias in the sampled cohort for these later snapshots.
+By definition, for each time snapshot, its corresponding cohort consists of individuals who have not experienced an adverse event up to the later time points, regardless of their previous adherence history.
+This selection process results in a subgroup that may not be representative of the full cohort, as it comprises patients with inherently better survival probabilities.
+Specifically, individuals who survive to later time points without experiencing an adverse event are likely to have more favorable unmeasured health characteristics or environmental factors that contribute to their prolonged survival.
+This could include better baseline health, fewer comorbid conditions, or access to additional social or medical resources not captured in the data.
+As a result, the sampled cohort at these later time points is disproportionately composed of patients who are less likely to experience adverse events, irrespective of their adherence behavior.
+Consequently, the observed ATE estimates at later snapshots are influenced by this selection bias, further complicating their interpretation.
+
+From these results, we observe that the performance and reliability of causal inference analyses at later time points are diminished.
+For instance, at 12 months, Random Survival Forest reports ATEs close to zero (\(0.099 \pm 0.430\) for the T-learner and \(0.050 \pm 0.173\) for the S-learner), indicating negligible differences between adherence and non-adherence.
+Additionally, the large standard errors in estimates such as those from DeepSurv (\(1.116 \pm 0.605\)) and DeepHit (\(1.021 \pm 0.535\)) highlight the lack of reliability in these results.
+
+The increased presence of positive ATEs highlights the compounded effects of weaker survival models and cohort selection bias.
+While these findings provide some insights, they emphasize the need for cautious interpretation and underscore the importance of addressing these limitations in future analyses.
+
+\subsubsection{Graphical Representation of ATE Trends Across Time Snapshots}
+\label{ch03:apd:graphical_ate}
+
+Figure~\ref{ch03:fig:graphical_ATE_trend} presents the Average Treatment Effect (ATE) estimates at different time snapshots \(\tau\) for the survival models experimented with (Cox Proportional Hazards (CoxPH), Random Survival Forest, DeepSurv, and DeepHit). Each subfigure illustrates the ATE trends over time for a specific survival model, incorporating multiple meta-learning approaches. To facilitate comparisons, the Causal Survival Forest (CSF) that is inherently a causal method is included in all plots.
+
+
+\input{Appendices/appendix-ch03/figures/01}
+
+
+The graphical analysis of ATE estimates over time highlights consistent trends across different survival models and meta-learning strategies. Across CoxPH, Random Survival Forest (RSF), and DeepSurv, a clear ranking of ATE estimates emerges, with the T-learner consistently producing the most negative values, the S-learner yielding the least negative values, and the Matching-based estimator falling in between. This pattern holds across all time snapshots, suggesting that the T-learner amplifies the estimated effect of non-adherence, whereas the S-learner provides more conservative estimates. The Causal Survival Forest (CSF), included in all plots, provides relatively stable estimates that align closely with those from RSF and CoxPH.
+
+As time progresses, a general upward trend is observed in ATE estimates, with some models—particularly RSF and CSF—approaching zero or slightly positive values at 12 months. However, this shift should be interpreted with caution, as it is likely influenced by \textit{survivor bias}, where the population at later time points consists only of individuals who have not yet experienced an adverse event. As discussed in Section~\ref{ch03:sec:04_results_causal}, this selection dynamic skews the estimates toward a subset of individuals who may inherently be at lower risk, leading to a potential underestimation of the true treatment effect. Even when an ATE estimate appears positive, the confidence intervals often extend into the negative range, indicating that the treatment effect of non-adherence could still be detrimental. The increasing standard deviation at later snapshots further suggests greater uncertainty, reinforcing the notion that these estimates become less reliable over longer time snapshots. While we account for observable covariates and risk scores, unmeasured resilience factors or external support systems may still differentiate the remaining population, contributing to the observed shift. Additionally, residual time-varying confounding may exacerbate this effect, as evolving risk factors influencing survival may not be fully captured by standard covariate adjustments. 
+
+DeepHit continues to stand out as the least stable model for ATE estimation, producing extreme deviations from other methods, particularly at 6 months, where the T-learner reports an ATE of \(11.551 \pm 3.806\). As noted in Section~\ref{ch03:sec:04_results_causal}, this erratic behavior aligns with its poor predictive performance, where it consistently underperformed in concordance and calibration metrics. The instability in DeepHit’s survival predictions likely propagates into its ATE estimates, making it unreliable for causal inference in our experiments. In contrast, CoxPH and RSF provide more stable and interpretable estimates across time, reinforcing their reliability in treatment effect estimation. Lastly, CSF also gives estimates that remain within a reasonable range while avoiding the extreme fluctuations observed in DeepHit.
+
+These results suggest that while ATE estimates generally indicate a detrimental effect of non-adherence at earlier time points, later snapshots introduce more uncertainty due to both selection dynamics and model instability. The consistent ordering of ATE estimates across meta-learners further underscores the systematic differences in how these approaches estimate treatment effects, with the T-learner capturing the largest negative effects, the S-learner being the most conservative, and Matching-based methods providing intermediate estimates. Given the growing standard deviations and the shifting ATE trends at later time points, care must be taken when interpreting long-term treatment effects, as unmeasured confounding and survival bias may increasingly distort the estimates.
+
+\subsubsection{Unadjusted Survival Curves}
+\label{ch03:apd:unadjusted_survival}
+
+To provide an initial assessment of the survival differences between adherent and non-adherent patients, we compute unadjusted survival curves using the Kaplan-Meier estimator. 
+Figure~\ref{ch03:fig:unadjusted_survival_curve} illustrates the survival probability over time for both groups, highlighting the divergence in survival trajectories. 
+Non-adherent patients exhibit a markedly shorter adverse event time, with an estimated Average Treatment Effect (ATE) of -7.91 months based on the difference in Restricted Mean Event Time (RMET) between the two groups. 
+In Table~\ref{ch03:tab:time_of_first_event} we also show the raw average time to the first event or censoring across the cohort. 
+While right-censoring occurs, on average, at 62.6 months, composite adverse events, including mortality, involuntary hospitalization, or jail booking, occur much earlier, averaging 25.2 months. 
+These raw results of difference in adverse event time between the non-adherent and adherent groups set the stage for the survival modeling and causal inference analyses of our paper, which account for confounding factors and provide adjusted estimates of adherence's impact on time-to-first-event.
+
+
+\input{Appendices/appendix-ch03/tables/03}
+
+
+
+
+\input{Appendices/appendix-ch03/figures/02}
+
+
+
+\subsubsection{Complete Ablation Tables}
+\label{ch03:apd:ablation}
+
+
+The complete ablation tables summarize the impact of excluding county-provided risk scores on Average Treatment Effect (ATE) estimates across different models and time snapshots.
+Table~\ref{ch03:tab:table_ablation_CoxPH} presents the ATE estimates for the Cox Proportional Hazards (CoxPH) model.
+The removal of risk scores results in consistently more negative ATEs across all snapshots, with increases in magnitude most evident at earlier time points, such as 3 months, where the ATE shifts from \(-3.524 \pm 0.274\) to \(-5.432 \pm 0.344\) using the T-learner.
+This suggests that risk scores effectively capture confounding factors that partially attenuate the observed impact of non-adherence.
+
+Table~\ref{ch03:tab:table_ablation_RandomSurvivalForest} shows the ablation results for the Random Survival Forest (RSF) model.
+Consistent with CoxPH, ablated models produce more negative ATE estimates, highlighting the importance of including risk scores to control for unmeasured confounding.
+For instance, at 3 months, the ATE using the T-learner changes from \(-2.317 \pm 0.602\) to \(-5.915 \pm 0.433\), a substantial difference.
+This trend persists across later snapshots, though the effect size diminishes as the cohort composition evolves.
+
+DeepSurv ablation results are detailed in Table~\ref{ch03:tab:table_ablation_DeepSurv}.
+The standard errors for DeepSurv ATE estimates remain large, both in full and ablated setups, reflecting its limited reliability for causal inference.
+Despite this, the removal of risk scores amplifies the negative ATE values, indicating their critical role in adjusting for confounding.
+For example, at 6 months, the S-learner's ATE shifts from \(-0.516 \pm 1.284\) to \(-3.130 \pm 1.551\) following ablation.
+
+Table~\ref{ch03:tab:table_ablation_DeepHit} provides the results for DeepHit.
+The ATE estimates show high variability, particularly in the ablated models, where standard errors are considerable.
+For example, at 9 months, the T-learner ATE for the full model is \(6.887 \pm 5.930\), which reduces to \(2.075 \pm 3.780\) post-ablation.
+This variability undermines the interpretability of DeepHit's estimates, underscoring its limitations for both survival and causal analyses in this dataset.
+
+The Causal Survival Forest (CSF) results, presented in Table~\ref{ch03:tab:table_ablation_CausalSurvivalForest}, follow a similar pattern.
+The magnitude of ATEs increases following ablation, particularly at earlier snapshots.
+At 3 months, the ATE changes from \(-3.045 \pm 0.128\) to \(-7.816 \pm 0.064\), indicating a substantial impact of excluding risk scores.
+This trend diminishes at later time points, where selection bias and survivor effects likely play a greater role.
+
+Overall, the ablation results reveal consistent trends across all models.
+The exclusion of county-provided risk scores leads to more pronounced negative ATE estimates, highlighting their utility as proxies for unmeasured confounders.
+While the observed differences are most pronounced at earlier snapshots, the increasing standard errors at later time points suggest a need for cautious interpretation.
+These findings underscore the importance of comprehensive feature inclusion in survival and causal modeling to improve robustness and accuracy.
+The trends observed in later time snapshots align with the biases discussed in Appendix~\ref{ch03:apd:causal_inference}, where selection bias and declining survival model performance introduce additional challenges in interpreting ATE estimates.
+This further reinforces the difficulty in drawing reliable causal conclusions at these later snapshots, as the subset of patients included becomes increasingly non-representative of the original cohort.
+
+
+\input{Appendices/appendix-ch03/tables/04}
+
+
+
+
+
+\input{Appendices/appendix-ch03/tables/05}
+
+
+
+
+\input{Appendices/appendix-ch03/tables/06}
+
+
+
+
+\input{Appendices/appendix-ch03/tables/07}
+
+
+
+
+\input{Appendices/appendix-ch03/tables/08}
+
+
+
+

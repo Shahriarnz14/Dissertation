@@ -1,0 +1,53 @@
+% !TeX root = ../../../main.tex
+\begin{figure}[!ht]
+\ChThreeFloatContents
+  {ch03:fig:ite_injectable_all}
+  { \caption{
+  Distribution of Estimated Individual Treatment Effects (ITE) for different medication adherence groups: \textcolor{ChThreeForestGreen}{injectable}, \textcolor{orange}{non-injectable}, and \textcolor{purple}{not covered} at time snapshot \(\tau=3\) months. 
+  Each plot's legend highlights the Average Treatment Effect (ATE) in months for the groups covered by \textcolor{ChThreeForestGreen}{injectable} medication, \textcolor{orange}{non-injectable} medication, and those \textcolor{purple}{not covered} by any medication.
+  (a)-(d) Show CoxPH survival model paired with various causal methods.
+  (e)-(h) Show DeepSurv survival model paired with various causal methods.
+  (i)-(l) Show Random Survival Forest paired with various causal methods.
+  (m) shows Causal Survival Forest.
+  Causal methods across each column is T-learner, S-learner, Matching method with 1 match, and Matching method with 5 matches.}}
+  {%
+    \subfigure[\footnotesize (CoxPH, T-Learner)]{\label{ch03:fig:ite_injectable_coxph_t_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_CoxPH_T-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (CoxPH, S-Learner)]{\label{ch03:fig:ite_injectable_coxph_s_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_CoxPH_S-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (CoxPH, Matching-1)]{\label{ch03:fig:ite_injectable_coxph_matching_1}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_CoxPH_Matching_1_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (CoxPH, Matching-5)]{\label{ch03:fig:ite_injectable_coxph_matching_5}%
+      \includegraphics[width=.21\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_CoxPH_Matching_5_injectable_type.pdf}}%
+    \\
+    \subfigure[\footnotesize (DeepSurv, T-Learner)]{\label{ch03:fig:ite_injectable_deepsurv_t_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_DeepSurv_T-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (DeepSurv, S-Learner)]{\label{ch03:fig:ite_injectable_deepsurv_s_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_DeepSurv_S-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (DeepSurv, Matching-1)]{\label{ch03:fig:ite_injectable_deepsurv_matching_1}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_DeepSurv_Matching_1_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (DeepSurv, Matching-5)]{\label{ch03:fig:ite_injectable_deepsurv_matching_5}%
+      \includegraphics[width=.21\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_DeepSurv_Matching_5_injectable_type.pdf}}%
+    \\
+    \subfigure[\footnotesize (RandomSurvivalForest, T-Learner)]{\label{ch03:fig:ite_injectable_rsf_t_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_RandomSurvivalForest_T-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (RandomSurvivalForest, S-Learner)]{\label{ch03:fig:ite_injectable_rsf_s_learner}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_RandomSurvivalForest_S-learner_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (RandomSurvivalForest, Matching-1)]{\label{ch03:fig:ite_injectable_rsf_matching_1}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_RandomSurvivalForest_Matching_1_injectable_type.pdf}}%
+    \hfill
+    \subfigure[\footnotesize (RandomSurvivalForest, Matching-5)]{\label{ch03:fig:ite_injectable_rsf_matching_5}%
+      \includegraphics[width=.21\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_RandomSurvivalForest_Matching_5_injectable_type.pdf}}%
+    \\
+    \subfigure[\footnotesize Causal Survival Forest]{\label{ch03:fig:ite_injectable_causal_survival_forest_all_3}%
+      \includegraphics[width=.22\linewidth]{Appendices/appendix-ch03/images/ITE_injectable_full_3/ITE_CausalSurvivalForest_Causal_Survival_Forest_injectable_type.pdf}}
+  }
+\end{figure}

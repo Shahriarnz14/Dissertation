@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Results: Adverse Event Time Prediction}
+\label{ch03:sec:04_results_survival}
+% \vspace{-0.25em}
+
+We begin by looking at the prediction performance of the survival models from Section~\ref{ch03:sec:methods_survival}.
+Tables~\ref{ch03:tab:survival_3_6} and~\ref{ch03:tab:survival_9_12} report the time-dependent Concordance Index (\(C^{td}\)), Integrated Brier Score (IBS), and time-dependent Area Under the Curve (\(\text{AUC}^{td}\)) for each survival model--Cox proportional hazards (CoxPH), Random Survival Forest (RSF), DeepSurv, and DeepHit--across the four snapshot horizons. 
+
+Across different prediction time snapshots, RSF consistently outperforms other models in terms of \(C^{td}\) and \(\text{AUC}^{td}\) while achieving lower IBS values, suggesting superior calibration and predictive reliability.
+CoxPH and DeepSurv exhibit similar performance trends, with CoxPH maintaining slightly higher discriminative ability at later time points, whereas DeepSurv performs better at shorter horizons.
+
+DeepHit underperforms across all time points, with lower \(C^{td}\) and \(\text{AUC}^{td}\) values and higher IBS scores, indicating weaker discrimination and calibration.
+At 3 months, its \(C^{td}\) is 0.570 and \(\text{AUC}^{td}\) is 0.588, the lowest among all models, and this trend persists at later horizons, with \(C^{td}\) dropping to 0.540 by 12 months.
+
+The superior performance of RSF suggests its strength in capturing nonlinear relationships and complex interactions among risk scores, demographic features, and adherence patterns.
+In contrast, CoxPH is interpretable but limited by its linearity and proportional hazards assumptions, reducing its flexibility in capturing complex dependencies.
+DeepSurv and DeepHit exhibit larger variability performance metrics, possibly due to hyperparameter sensitivity.
+
+% \vspace{-1em}

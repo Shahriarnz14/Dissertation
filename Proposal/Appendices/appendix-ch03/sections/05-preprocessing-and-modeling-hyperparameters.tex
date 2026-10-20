@@ -1,0 +1,55 @@
+% !TeX root = ../../../main.tex
+\subsection{Preprocessing and Modeling Hyperparameters}\ChThreeHeadingOnly
+\label{ch03:apd:preprocessing_and_modeling_hyperparameters}
+
+
+
+
+\subsubsection{Data Preprocessing}
+\label{ch03:apd:preprocessing}
+This section outlines the detailed steps involved in preprocessing the data for our analysis.
+
+The study cohort includes trajectories for 6,827 patients, where we identify the first composite adverse event for each patient.
+For patients who experienced no adverse event, the time of the last available timestep was recorded.
+At specific time snapshots \(\tau=\{3, 6, 9, 12\}\) months, we filtered the cohort to include only those patients with data available up to the snapshot time plus one additional month.
+The survival analysis event or censoring time was defined as the time of the recorded event or censoring in the subset of the cohort, minus the snapshot time (i.e. time from the snapshot to the event/censoring).
+We also generated a binary event indicator, where a value of 1 indicated the occurrence of a composite event (either involuntary hospitalization, jail stay, or death), and a value of 0 represented censoring.
+
+Adherence levels were calculated for each month based on the methodology described in Section~\ref{ch03:sec:methods_data}.
+Patients were classified as adherent ($A_{it}=0$) if they had less than 10 days of non-coverage in a month, and non-adherent ($A_{it}=1$) if they had more than 10 days of non-coverage in a month.
+
+Static demographic covariates were extracted to generate the covariate matrix for patients.
+We retained education level, race, and gender as static covariates while excluding ethnicity.
+Any patient with a static covariate combination that appeared only once in the dataset (i.e., unique combinations) was removed from the analysis, resulting in the exclusion of 11 patients.
+Age at the beginning of the study was included as an additional covariate.
+We also included five county-provided risk scores at the snapshot time, the history of adherence up to (but not including) the snapshot time, and the binary adherence indicator for the snapshot time.
+
+Continuous covariates were standardized using the training data, with the same normalization applied to validation and test sets.
+Categorical covariates (those in the static covariate matrix), were one-hot encoded with the first category dropped for each variable to mitigate collinearity.
+
+Lastly, we performed trimming to exclude patients whose static demographic information fully determined their treatment indicator (non-adherence at the snapshot time).
+This trimming step resulted in cohort sizes of 5951 patients for \(\tau=3\) months, 5550 patients for \(\tau=6\) months, 5211 patients for \(\tau=9\) months, and 4893 patients for \(\tau=12\) months.
+
+For the training and testing splits, we used an 80-20 split and repeated this process for five different random seeds to ensure robustness in experimental results.
+The splits were applied consistently across all snapshots to enable a fair evaluation of our methods.
+
+\subsubsection{Model Hyperparameters}
+\label{ch03:apd:model_hyperparams}
+
+This section provides the hyperparameters sets used for each survival analysis model implemented in our study.
+We selected the best hyperparameter combination based on performance on a validation set.
+The results presented in Section~\ref{ch03:sec:04_results_survival} are from a different test set using the best hyperparameter combination found.
+The survival models in our study include Cox Proportional Hazards (CoxPH), Random Survival Forest (RSF), DeepSurv, and DeepHit.
+The details of the hyperparameters grid for each model are summarized in Table~\ref{ch03:tab:model_hyperparameters}.
+
+
+\input{Appendices/appendix-ch03/tables/09}
+
+
+The hyperparameters in Table~\ref{ch03:tab:model_hyperparameters} were selected based on empirical tuning and prior research.
+For all neural network-based models, early stopping was employed during training to prevent overfitting.
+Random seeds were set to ensure reproducibility in experiments.
+
+
+% \input{Sections/zz_appendix}
+

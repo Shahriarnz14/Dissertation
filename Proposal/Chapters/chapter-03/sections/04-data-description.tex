@@ -1,0 +1,50 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Data Description}
+\label{ch03:sec:methods_data}
+% \vspace{-0.25em}
+We leverage longitudinal data obtained from Allegheny County Department of Human Services.
+The dataset is defined as:
+\[
+\mathcal{D} = \{(T_i, \delta_i, \{A_{it}\}_{t=1}^{M_i}, \{\mathbf{X}_{it}\}_{t=1}^{M_i}) \mid i = 1,2,\dots,N\},
+\]
+where we explain what $T_i$, $\delta_i$, $A_{it}$, and $\mathbf{X}_{it}$ refer to shortly. The cohort consists of \(N = \text{6,827}\) adult patients diagnosed with a schizophrenia, each indexed by \(i \in \{1, \dots, N\}\), who are observed on a monthly basis for up to \(M = 96\) months. 
+For each patient \(i\), \(M_i \leq 96\) denotes the number of months of observation.
+
+\ChThreeParagraph{Outcome variables $\bm{(T_{i},\delta_{i})}$.}
+For each training patient \(i\), if the patient experiences an adverse event, then the event indicator is set to $\delta_i = 1$. In this case, the observed time $T_i\in \{1,\dots,M_i\}$ is equal to the true adverse event time, defined to be the month in which the earliest adverse event occurs (any of mortality, involuntary hospitalization, or jail booking), measured starting from the month in which the patient first fills an antipsychotic medication (for example, if $\delta_i=1$ and $T_i=1$, then this means that the $i$-th training patient experienced an adverse event 1 month after their first recorded antipsychotic prescription fill). If the patient does not experience an adverse event, then $\delta_i = 0$, and the observed time $T_i$ is referred to as a \emph{censoring time}; the true adverse event time is unknown but is sometime \emph{after} the censoring time.
+
+Classically, what we call the adverse event time is instead called the ``survival'' time, but we avoid this latter wording in most of our exposition since for our application, the adverse event is \emph{not} necessarily death.
+
+\ChThreeParagraph{Treatment variables $\bm{A_{it}}$.} 
+We consider medication adherence to be the treatment and define it monthly using prescription refill records.
+For patient \(i\) at month \(t\), we define the binary treatment indicator as:
+\[
+A_{it} =
+\begin{cases}
+1, & \text{if non-adherent} \\
+   & \text{(} \leq\text{10 days of prescription coverage)}, \\
+0, & \text{if adherent} \\
+   & \text{(} >\text{10 days of prescription coverage)}.
+\end{cases}
+\]
+We experimented with threshold values ranging from 6 to 24 days and found that our downstream results remained largely unchanged, with only minor differences across this range.
+
+\ChThreeParagraph{Covariates $\mathbf{X}_{\bm{it}}$.}  
+At each month \(t\), patient \(i\) has a covariate vector \(\mathbf{X}_{it}\) that includes both static and time-varying features. 
+The static time-independent demographic covariates \( \mathbf{X}_i^{\text{(static)}} \) include age, race, gender, ethnicity, and education level.
+The county also provides time-varying individualized risk scores:
+\[
+\mathbf{R}_{it} = \big(r_{it}^{(1)}, r_{it}^{(2)}, r_{it}^{(3)}, r_{it}^{(4)}, r_{it}^{(5)}\big),
+\]
+with
+\(
+r_{it}^{(k)} = \Pr(\text{event}_k \mid \widetilde{\mathbf{X}}_{it}),
+\)
+for \(k \in \{1,2,3,4,5\}\),
+where \(\text{event}_k \in \{\)mortality, jail booking, shelter entry, involuntary hospitalization, drug overdose\(\}\) within 12 months.
+These risk scores are derived from a rich set of covariates \(\mathbf{\widetilde{X}}_{it}\) that we do \emph{not} get to observe directly due to limitations of what data the county can share with us; this richer set of covariates include administrative records such as prior interactions with the criminal justice system, past hospitalizations, and comorbidity burden.
+In more detail, the $\mathbf{R}_{it}$ risk scores that we do have access to represent the predicted probabilities obtained from a logistic regression model trained on \(\mathbf{\widetilde{X}}_{it}\), where the outcome variable corresponds to the occurrence of each respective adverse event within the next 12 months. In short, even though we do not get to observe the richer \(\mathbf{\widetilde{X}}_{it}\) covariates, we observe the county-provided $\mathbf{R}_{it}$ risk scores that serve as proxies for the full covariate set.
+
+In Appendix~\ref{ch03:apd:risk_score_evaluations}, we demonstrate that for mortality, jail booking, and involuntary hospitalization, the provided risk scores exhibit strong predictive performance. This suggests that these scores effectively capture the underlying unmeasured covariates that we do not have direct access to, reinforcing their validity as proxies within our dataset. 
+
+% \vspace{-1em}

@@ -1,0 +1,11 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Ablation Study: How ATE Estimates Change When Risk Scores are Removed}
+\label{ch03:sec:04_results_ablation}
+% \vspace{-0.25em}
+
+We next examine the impact of removing the county-provided risk scores on the ATE estimates for different survival analysis model and causal inference method pairs. 
+\ChThreeTableRefs{ch03:tab:table_ablation_CoxPH,ch03:tab:table_ablation_RandomSurvivalForest,ch03:tab:table_ablation_DeepSurv,ch03:tab:table_ablation_DeepHit,ch03:tab:table_ablation_RandomSurvivalForest} in Appendix~\ref{ch03:apd:ablation} compare the estimates obtained with the full model versus those from the ablated model (without risk scores) at the snapshot time 3, 6, 9, and 12 months. 
+Notably, the magnitude of the negative ATE increases in the ablated models across all time horizons, suggesting that the risk scores partially capture confounding factors. 
+Their removal amplifies the estimated impact of non-adherence, suggesting that these scores encode important latent risk factors that, when included, help account for confounding effects.
+
+% \vspace{-1.5em}

@@ -1,0 +1,37 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Prediction Setup}
+\label{ch03:sec:methods_prediction}
+% \vspace{-0.25em}
+We formulate a time-to-event prediction task using longitudinal patient data at snapshot times \(\tau \in \{3,6,9,12\}\) months, following a standard setup (see, e.g., Section 6.2 of \citet{chen2024introduction}). %, following the standard approach of \citet{fitzmaurice2009longitudinal}.
+For each snapshot \(\tau\), patient information up to that time is used to predict the occurrence of an adverse event after time $\tau$ (we measure the adverse event time starting from time $\tau$). 
+
+\ChThreeParagraph{Cohort selection at each time snapshot.}  
+At snapshot time \(\tau\), we include patients who have an observed time $T_i$ that is at least \(\tau+1\) months. 
+Namely, the cohort for each \(\tau\) is defined as:
+\[
+\mathcal{D}_\tau = \{(T_i, \delta_i, \{A_{it}\}_{t=1}^{\tau}, \mathbf{X}_{i\tau}) \mid M_i \geq \tau+1\}.
+\]
+
+\ChThreeParagraph{Feature construction.}  
+At snapshot \(\tau\), the feature vector for patient \(i\) is constructed as follows:
+\begin{enumerate}\renewcommand{\labelenumi}{(\roman{enumi})}\setlength{\itemsep}{0pt}
+    \item \text{Static Demographics:} \( \mathbf{X}_i^{\text{(static)}} \) (age, race, gender, education).
+    \item \text{Medication Adherence History:} The sequence \(\mathbf{A}_{i,1:\tau-1} = (A_{i1}, A_{i2}, \dots, A_{i,\tau-1})\). (patient's longitudinal adherence pattern leading up to snapshot time \(\tau\)).
+    \item \text{Risk Scores:} The county-provided risk scores \(\mathbf{R}_{i\tau}\) at time \(\tau\).
+    \item \text{Current Adherence (Treatment  Indicator):} The non-adherence indicator \(A_{i\tau}\) at snapshot \(\tau\).
+\end{enumerate}
+
+We define the patient’s full feature vector at snapshot time \( \tau \) as:
+\[
+\mathbf{Z}_{i\tau} = \left[ \mathbf{X}^{\text{(static)}}_{i}, \mathbf{R}_{i\tau}, \mathbf{A}_{i,1:\tau-1} \right].
+\]
+
+\ChThreeParagraph{Prediction task.}  
+For a test patient with feature vector \(\mathbf{Z}_{\tau}\) at snapshot time \(\tau\), the goal is to predict the time until an adverse event occurs.  
+Specifically, we define: 
+\[\widetilde{T} = T - \tau,\]
+where \(T\) is the ground-truth adverse event time, and 
+\(\widetilde{T}\) represents the time to the event from \(\tau\).  
+Thus, the prediction target is \(\widetilde{T}\), focusing solely on estimating the time to the adverse event.
+
+% \vspace{-1em}

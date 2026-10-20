@@ -1,0 +1,26 @@
+% !TeX root = ../../../main.tex
+\begin{algorithm}[t]
+\caption{S-Learner for Restricted Mean Event Time}
+\label{ch03:alg:s-learner}
+\KwIn{Cohort $\mathcal{D}_\tau = \{(\mathbf{Z}_{i\tau}, A_{i\tau}, T_i, \delta_i)\}_{i=1}^N$, time horizon $M$}
+\KwOut{Estimate $\widehat{\psi}_{\mathrm{S\text{-}learner}}$}
+
+Fit a single survival model on all data:\;
+\[
+\widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau})
+\]
+
+\For{$i = 1$ \KwTo $N$}{
+    \For{$a \in \{0,1\}$}{
+        \[
+        \widehat{\mu}(\mathbf{Z}_{i\tau}, a) \gets \int_0^M \widehat{S}(u \mid \mathbf{Z}_{i\tau}, a)\, du
+        \]
+    }
+}
+
+\Return{
+\[
+\widehat{\psi}_{\mathrm{S\text{-}learner}} = \frac{1}{N} \sum_{i=1}^N \Bigl(\widehat{\mu}(\mathbf{Z}_{i\tau},1) - \widehat{\mu}(\mathbf{Z}_{i\tau},0)\Bigr)
+\]
+}
+\end{algorithm}

@@ -1,0 +1,32 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{Set of Hyperparameters for Survival Analysis Models}
+\ChThreeFloatLabel{ch03:tab:model_hyperparameters}
+\begin{tabular}{l l c}
+\hline
+\textbf{Model}         & \textbf{Hyperparameter}             & \textbf{Values} \\ \hline
+\multirow{1}{*}{CoxPH} & Penalizer                         & \{0, 0.01, 0.1, 0.5\} \\ \hline
+\multirow{4}{*}{RSF}   & Number of estimators                & \{100, 250, 500\}   \\
+                       & Minimum samples per split           & \{5, 10, 20\}       \\
+                       & Minimum samples per leaf            & \{2, 5, 10\}        \\ \hline
+\multirow{8}{*}{DeepHit} 
+                       & Number of nodes per layer           & \{32, 64, 128, 256\} \\
+                       & Batch normalization                 & \{True, False\}       \\
+                       & Dropout rate                        & \{0.0, 0.1, 0.2, 0.3\} \\
+                       & Learning rate                       & \{0.001, 0.01, 0.05\} \\
+                       & Batch size                          & \{128, 256, 512\}    \\
+                       & Epochs                              & \{200, 512, 1000\}   \\
+                       & Alpha                               & \{0.1, 0.2, 0.3, 0.5\} \\
+                       & Sigma                               & \{0.05, 0.1, 0.2, 0.3\} \\ \hline
+\multirow{6}{*}{DeepSurv} 
+                       & Number of nodes per layer           & \{32, 64, 128, 256\} \\
+                       & Batch normalization                 & \{True, False\}       \\
+                       & Dropout rate                        & \{0.0, 0.1, 0.2, 0.3\} \\
+                       & Learning rate                       & \{0.001, 0.01, 0.05\} \\
+                       & Batch size                          & \{128, 256, 512\}    \\
+                       & Epochs                              & \{200, 512, 1000\}   \\ \hline
+\end{tabular}
+\end{table}

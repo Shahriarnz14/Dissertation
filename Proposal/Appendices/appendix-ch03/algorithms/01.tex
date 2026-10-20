@@ -1,0 +1,26 @@
+% !TeX root = ../../../main.tex
+\begin{algorithm}[ht]
+\caption{T-Learner for Restricted Mean Event Time}
+\label{ch03:alg:t-learner}
+\KwIn{Cohort $\mathcal{D}_\tau = \{(\mathbf{Z}_{i\tau}, A_{i\tau}, T_i, \delta_i)\}_{i=1}^N$, time horizon $M$}
+\KwOut{Estimate $\widehat{\psi}_{\mathrm{T\text{-}learner}}$}
+
+Partition into treated and control groups:\;
+\[
+\mathcal{D}_a \leftarrow \{(\mathbf{Z}_{i\tau}, T_i, \delta_i) : A_{i\tau} = a\}, \quad a \in \{0,1\}
+\]
+
+\For{$a \in \{0,1\}$}{
+    Fit a survival model on $\mathcal{D}_a$ to obtain $\widehat{S}_a(u \mid \mathbf{Z}_{i\tau})$\;
+    \For{$i = 1$ \KwTo $N$}{
+        \[
+        \widehat{\mu}_a(\mathbf{Z}_{i\tau}) \gets \int_0^M \widehat{S}_a(u \mid \mathbf{Z}_{i\tau})\, du
+        \]
+    }
+}
+\Return{
+\[
+\widehat{\psi}_{\mathrm{T\text{-}learner}} = \frac{1}{N} \sum_{i=1}^N \Bigl(\widehat{\mu}_1(\mathbf{Z}_{i\tau}) - \widehat{\mu}_0(\mathbf{Z}_{i\tau})\Bigr)
+\]
+}
+\end{algorithm}

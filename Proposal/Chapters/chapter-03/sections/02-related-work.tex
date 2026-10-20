@@ -1,0 +1,32 @@
+% !TeX root = ../../../main.tex
+\subsection{Related Work}
+\label{ch03:sec:related_works}
+% \vspace{-0.25em}
+Survival analysis in healthcare has been widely studied, spanning classical statistical methods and modern machine learning.
+The Cox Proportional Hazards (CoxPH) model \citep{cox1972regression} remains popular for its interpretability but assumes a log-linear relationship with proportional hazards.
+To capture complex patterns, nonparametric tree-based methods like random survival forests (RSFs) \citep{ishwaran2008random} and causal survival forests (CSFs) \citep{cui2023estimating} account for nonlinearities and interactions without explicit model assumptions.
+Deep learning models, such as DeepSurv \citep{katzman2018deepsurv} and DeepHit \citep{lee2018deephit}, offer flexible individual survival distribution estimation and improved feature learning. 
+As the goal of our paper is not to develop a new survival model, our experiments later use a variety of survival models (CoxPH, RSF, CSF, DeepSurv, DeepHit). A key message of our experiments is that our findings are robust to the choice of survival model so long as the survival model used is sufficiently accurate.
+
+A standard approach to analyzing longitudinal data emphasizes conditioning on the complete history of treatment assignments and covariates, thereby addressing time-dependent confounding and repeated measures \citep{fitzmaurice2009longitudinal, kennedy2019nonparametric}. 
+In this framework, causal inference is performed at discrete time snapshots by conditioning on the observed adherence history up to each point, allowing for the estimation of time-specific treatment effects. 
+Following these principles, we adopt a snapshot-based method in our analysis, conditioning on each individual's adherence and covariate trajectory at regular intervals and effectively performing causal inference at multiple points in time. 
+This setup provides a straightforward approach for investigating how adherence patterns may relate to subsequent adverse outcomes under time-varying exposures.
+
+Meta-learner strategies from causal inference \citep{kunzel2019metalearners} have recently been extended to survival analysis.
+For example, \citet{bo2024meta} estimate conditional average treatment effects (CATEs) in a survival analysis setting, focusing on individualized survival probabilities at specific time points.
+Their flexible framework captures heterogeneous treatment effects without restrictive parametric assumptions, making it well-suited for complex real-world survival data.
+Similar to this earlier work, we also extend meta-learners to survival analysis but directly estimate individualized treatment effects (ITE) using differences in restricted mean adverse event times, providing a more interpretable measure of treatment impact over a predefined horizon.
+This formulation better aligns with clinical and policy decision-making, where we suspect that absolute time differences (measured in months in our case) are more straightforward to interpret than probability estimates. 
+Our work contributes to the broader goal of estimating heterogeneous treatment effects in time-to-event data without strong parametric assumptions.
+Unlike standard survival models, which predict observed event times, our framework integrates survival function estimators into meta-learners, enabling principled estimation of counterfactual time-to-event distributions. This adaptation allows for robust causal inference in censored settings, offering greater interpretability and clinical relevance compared to hazard ratio-based methods that can be challenging to interpret clinically and may obscure absolute treatment benefits or harms \citep{hernan2010hazards, aalen2015does}.
+
+Separately, in the realm of medication adherence for severe mental illness, prior work consistently shows that non-adherence contributes to adverse outcomes, including relapse and criminal justice involvement \citep{semahegn2020psychotropic, lin2022time, correll2018comparison}.
+Nevertheless, many investigations restrict attention to an endpoint defined by a single event---often hospitalization---and rely on parametric frameworks that may fail when key assumptions do not hold \citep{campos2021measuring, tannous2024predictive}.
+Consequently, existing studies sometimes struggle with modeling multifaceted outcomes or precisely isolating the causal impact of adherence in real-world datasets that have right-censoring, moderate sample sizes, and only partial confounder information.
+
+In this paper, we build on these strands of research. Unlike prior studies that focus on an outcome defined by a single event or that focus on methodological innovation, we integrate various survival analysis models with causal inference estimators in a real-world dataset to assess the impact of medication adherence on a composite adverse endpoint (mortality, involuntary hospitalization, or jail booking).
+We adapt standard meta-learners to estimate restricted mean adverse event time differences, demonstrating how widely used causal methods can be applied in survival contexts.
+While our observational design does not permit definitive causal conclusions, the consistent sign of our Average Treatment Effect (ATE) estimates across multiple approaches suggests that adherence may delay adverse outcomes, highlighting its clinical benefits, informing policy-driven studies, and motivating further refinements in causal survival analysis.
+
+% \vspace{-1em}

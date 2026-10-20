@@ -1,0 +1,43 @@
+% !TeX root = ../../../main.tex
+
+\label{ch03:apd:outline}
+The appendix is organized into five main sections.
+Appendix~\ref{ch03:apd:causal_derivations} presents causal derivations and assumptions underlying our analysis. Appendix~\ref{ch03:apd:full_results} reports the full experimental results across different model snapshots and causal estimation methods. Appendix~\ref{ch03:apd:medication_subgroup_analysis} provides subgroup analyses by medication. Appendix~\ref{ch03:apd:dataset_information} describes the study cohort characteristics. Lastly, Appendix~\ref{ch03:apd:preprocessing_and_modeling_hyperparameters} details data preprocessing steps and modeling hyperparameters.
+
+\noindent\emph{Each section is further organized as follows:}
+
+In Appendix~\ref{ch03:apd:ate-ite}, we derive the relationship between the Average Treatment Effect (ATE) and the Individual Treatment Effect (ITE) under the potential outcomes framework for restricted mean adverse event time.
+In Appendix~\ref{ch03:adp:from_assoc_to_causal}, we discuss the assumptions required for causal interpretation.
+We outline the potential outcomes framework assumptions and the survival analysis assumptions necessary for making causal claims in our setup.
+We also briefly highlight challenges with time-varying confounding and suggest directions for improvement.  
+
+Appendix~\ref{ch03:apd:causal-meta-learner-algorithms} provides the pseudo-code for the adaptation of causal meta-learners (T-Learner, S-Learner, and Nearest Neighbor Matching Method) to survival analysis.
+In Appendix~\ref{ch03:apd:matching_derivation} and \ref{ch03:apd:csf_ate_derivation}, we illustrate how the treatment effect estimator is derived for the matching meta-learner and Causal Survival Forest respectively. 
+Finally, in Appendix~\ref{ch03:apd:in_context_of_new_research}, we highlight emerging methodologies that could complement or extend our approach and position our study within a larger research trajectory 
+
+In Appendix~\ref{ch03:apd:survival_analysis}, we present the performance of survival analysis models at 9- and 12-month snapshots.  
+We summarize model discriminative ability and calibration, highlighting the superiority of the Random Survival Forest.  
+In Appendix~\ref{ch03:apd:causal_inference}, we report the full causal inference results for 9- and 12-month snapshots.  
+We analyze shifts in Average Treatment Effect (ATE) estimates and discuss the role of survival model performance and selection bias. 
+The graphical representation of ATE estimates as snapshot time of the prediction is progresses is presented in Appendix~\ref{ch03:apd:graphical_ate}.
+
+In Appendix~\ref{ch03:apd:unadjusted_survival}, we present Kaplan-Meier survival curves for adherent and non-adherent patients.  
+We report restricted mean event time (RMET) estimates as a baseline for later analyses which puts into context that the treatment effects found is not due raw difference of the two cohorts.
+
+In Appendix~\ref{ch03:apd:ablation}, we evaluate the effect of removing county-provided risk scores on ATE estimates.  
+We analyze how these scores act as proxies for unmeasured confounders across different survival models.  
+
+In Appendix~\ref{ch03:apd:ite_medication}, we report Individual Treatment Effect (ITE) distributions for different medications and in Appendix~\ref{ch03:apd:ite_injectable_all}, we provide the ITE estimates by medication administration type for all survival model and meta-learner pairs. 
+
+In Appendix~\ref{ch03:apd:cohort_information}, we first present a visual overview of the modeling setup and cohort structure (Figure~\ref{ch03:fig:data_overview}), illustrating how the first adverse event is defined relative to the prediction snapshot and how monthly adherence is binarized. 
+We then describe the study cohort, including demographics, adherence patterns, and prescribing trends.  
+We detail demographics in Appendix~\ref{ch03:apd:cohort_demographics}, first adverse events timing and types in Appendix~\ref{ch03:apd:cohort_first_event},  
+non-adherence patterns in Appendix~\ref{ch03:apd:cohort_nonadherence}, and antipsychotic medication trends in Appendix~\ref{ch03:adp:cohort_medications}.  
+In Appendix~\ref{ch03:apd:risk_score_evaluations}, we assess the predictive accuracy of county-provided risk scores.  
+We present ROC curves and AUC values for predicting specific adverse events within 12 months. 
+
+In Appendix~\ref{ch03:apd:preprocessing}, we outline data preprocessing steps.  
+We describe cohort filtering, covariate construction, feature normalization, train-test splitting, and trimming strategy for the positivity assumption of our causal analysis.  
+In Appendix~\ref{ch03:apd:model_hyperparams}, we summarize hyperparameter settings for all survival models.  
+
+

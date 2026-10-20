@@ -1,0 +1,40 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Evaluation Metrics}
+\label{ch03:sec:eval_metrics}
+% \vspace{-0.25em}
+
+\input{Chapters/chapter-03/tables/01}
+
+
+
+We assess the performance of survival models using three key evaluation metrics, computed on the test set across five independent experimental repeats. 
+Each repeat involves a different randomized train-validation-test split (\(60/20/20\)). 
+Reported values include the mean and standard deviation across repeats.
+
+\ChThreeParagraph{Survival Model Metrics.}  
+The following metrics are used to evaluate time-to-event predictions:
+\begin{enumerate}\renewcommand{\labelenumi}{(\roman{enumi})}\setlength{\itemsep}{0pt}
+    \item \textbf{Time-dependent Concordance Index (\(C^{td}\))} \citep{antolini2005time}:  
+    Measures the model’s ability to correctly rank adverse event times over different time horizons.
+    Higher values indicate better discriminative performance.
+    
+    \item \textbf{Integrated Brier Score (IBS)} \citep{graf1999assessment}:  
+    Assesses the overall prediction accuracy survival probability by integrating the Brier score over time:
+    \[
+    \text{IBS} = \int_{0}^{M} \text{BS}(t)\, w(t)\, dt,
+    \]
+    where \(\text{BS}(t)\) is the Brier score at time \(t\) and \(w(t)\) is a weighting function. Lower values denote better calibration.
+    
+    \item \textbf{Time-dependent Area Under the Curve (\(\text{AUC}^{td}\))}: Quantifies the model’s discriminative ability by evaluating how well it distinguishes individuals experiencing events at different time points \citep{uno2007evaluating}. 
+    We report the mean across all prediction time points. 
+    A higher values suggest improved predictive performance.
+\end{enumerate}
+
+\ChThreeParagraph{Causal Inference Evaluation.}  
+At each snapshot \(\tau\), the ATE is estimated on the full cohort.
+The survival models used for ATE estimation are trained on different randomized subsets across experimental repeats, employing cross-validation to avoid overfitting. 
+The ATE is reported along with its standard deviation across experimental repeats. The standard deviation gives an empirical measure of uncertainty in the~ATE.
+
+In our experimental setup, a negative ATE suggests that non-adherence is associated with an earlier occurrence of adverse events (in months), and a positive ATE implies a delay in adverse events occurring.
+
+% \vspace{-1em}

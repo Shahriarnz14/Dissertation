@@ -1,0 +1,176 @@
+% !TeX root = ../../../main.tex
+\subsection{Causal Derivations and Assumptions}\ChThreeHeadingOnly
+\label{ch03:apd:causal_derivations}
+
+
+
+
+\subsubsection{Derivation Relating ATE and ITE}
+\label{ch03:apd:ate-ite}
+
+In the potential outcomes framework, under consistency, randomization (no unmeasured confounders), and positivity assumption, we have
+\[
+\mathbb{E}[\bar{T_i}|A=a, \mathbf{Z}_{i\tau}]=\mathbb{E}[\bar{T_i}(a) \mid \mathbf{Z}_{i\tau}].
+\]
+Hence, we can write our setup as:
+\begin{align*}
+\psi
+    &= \mathbb{E}[\bar{T_i}(1) - \bar{T_i}(0)] \\
+    &= \mathbb{E}\big[\mathbb{E}[\bar{T_i}(1) - \bar{T_i}(0) \mid A_{i\tau} = 1]\\
+    &\quad \quad- \mathbb{E}[\mathbb{E}[\bar{T_i}(1) - \bar{T_i}(0) \mid A_{i\tau} = 0 ] ~\big|~ \mathbf{Z}_{i\tau}\big] \\
+    &=\mathbb{E}[\mu_1(\mathbf{Z}_{i\tau})-\mu_0(\mathbf{Z}_{i\tau})] \\
+    &=\mathbb{E}[\text{ITE}_i].
+\end{align*}
+
+\subsubsection{Assumptions for Causal Interpretation}
+\label{ch03:adp:from_assoc_to_causal}
+Although our study leverages a comprehensive set of covariates and sophisticated modeling strategies, drawing causal conclusions in an observational setting requires additional assumptions beyond those used for association-based inferences. 
+If these assumptions hold, our estimates can be interpreted as causal effects rather than associations; however, we acknowledge that some assumptions may not fully hold in cohort of study. 
+To mitigate potential violations --particularly in the potential outcomes framework-- we employ trimming, as outlined in \ref{ch03:apd:preprocessing}. 
+Trimming excludes patients with a very low probability of being either adherent or non-adherent, improving the plausibility of the positivity assumption and reducing extrapolation biases in estimating causal effects.
+
+In this section, we detail the assumptions necessary for a causal interpretation, including those related to the potential outcomes framework, survival analysis, and longitudinal data.
+
+\ChThreeParagraph{Potential outcomes framework.} 
+Under the potential outcomes framework, we invoke the following core assumptions:
+\textit{(i)} \emph{Consistency}, which implies that for any individual, the potential outcome under the observed treatment exposure coincides with the observed outcome;
+\textit{(ii)} \emph{Positivity}, meaning that each patient has a nonzero probability of being either adherent or non-adherent across relevant strata of covariates;
+\textit{(iii)} \emph{Ignorability} (or no unmeasured confounding), which holds that all confounders of the relationship between adherence and outcomes are measured and properly accounted for in the model; and 
+\textit{(iv)} \emph{Stable Unit Treatment Value Assumption (SUTVA)}, which requires that one patient’s potential outcomes are unaffected by other patients’ treatments. 
+In principle, if these assumptions were satisfied and our models were correctly specified, the estimates presented would represent unbiased estimators of causal effects, rather than mere associations.
+
+\ChThreeParagraph{Survival analysis assumptions.}
+To make causal claims from our underlying survival models, we need to make additional assumptions.
+First, we assume \emph{non-informative censoring}, which states that the probability of being censored is independent of the adverse event, conditional on observed covariates.
+If censoring is informative, then our standard survival estimators may be biased.
+Second, we require \emph{consistency} of the underlying survival models,  ensuring that, given a sufficiently large sample, the estimated survival function converges to the true survival function.
+Finally, we assume \emph{independence of survival times}, meaning that the survival times of different individuals are independent.
+These assumptions are necessary to ensure that our underlying survival models yield valid causal estimates rather than biased associations driven by censoring mechanisms or dependent survival times in our causal framework.
+
+\ChThreeParagraph{Longitudinal data assumptions.}
+Lastly, when dealing with longitudinal data, causal interpretations become more nuanced when treatment and covariates vary over time.
+In principle, addressing \emph{time-varying confounding} requires specialized methods (e.g., marginal structural models or joint modeling approaches) to ensure that changing adherence patterns are not themselves driven by evolving unmeasured factors.
+To approximate these conditions in our setup, we leveraged extensive administrative data and county-provided risk scores, but the possibility of residual confounding remains.
+Future work could further mitigate bias by refining the measurement of dynamic exposures, extending models to incorporate time-varying covariates in greater detail, and conducting sensitivity analyses to quantify the impact of potential violations of these assumptions.
+
+\subsubsection{Causal Meta-Learner Algorithms}
+\label{ch03:apd:causal-meta-learner-algorithms}
+
+
+\input{Appendices/appendix-ch03/algorithms/01}
+
+
+We provide detailed pseudocode for how we adapted the causal meta-learner algorithms to survival analysis to be used to estimate the treatment effect on restricted mean event time (RMET). 
+Specifically, we implement T-Learner, S-Learner, and \(K\)-Nearest-Neighbors Matching approaches adapted for survival analysis under a finite time horizon. 
+Each algorithm estimates individual and average treatment effects by modeling survival functions conditioned on baseline covariates and treatment assignments. 
+
+Algorithm~\ref{ch03:alg:t-learner} describes the T-Learner, which fits separate survival models for treated and control groups. Algorithm~\ref{ch03:alg:s-learner} details the S-Learner, which fits a single survival model incorporating the treatment as an additional covariate. 
+Algorithm~\ref{ch03:alg:matching} outlines the \(K\)-Nearest-Neighbors Matching Estimator, which imputes counterfactual outcomes by averaging over nearest neighbors from the opposite treatment group in the covariate space.
+
+All methods operate on the cohort \(\mathcal{D}_\tau\), which contains baseline covariates \(\mathbf{Z}_{i\tau}\), treatment assignments \(A_{i\tau}\), observed event times \(T_i\), and event/censoring indicators \(\delta_i\). 
+Each approach uses a time horizon \(M\) to compute restricted mean estimates of survival time and treatment effects.
+
+
+\input{Appendices/appendix-ch03/algorithms/02}
+
+
+
+
+\input{Appendices/appendix-ch03/algorithms/03}
+
+
+
+\subsubsection{Matching Estimator Derivation}
+\label{ch03:apd:matching_derivation}
+The matching estimator aims to estimate the Individual Treatment Effect (ITE) for each patient $ i $, defined as the difference in RMET under treatment (non-adherence, $ A_{i\tau} = 1 $) versus control (adherence, $ A_{i\tau} = 0 $):
+$$ \text{ITE}_i = \bar{T}_i(1) - \bar{T}_i(0), $$
+where $ \bar{T}_i(a) = \mu_a(\mathbf{Z}_{i\tau}) = \int_{0}^{M} S(u \mid A_{i\tau} = a, \mathbf{Z}_{i\tau}) \, du $ represents the true RMET under treatment $ a $, and $ \mathbf{Z}_{i\tau} $ is the covariate vector at time $ \tau $. The upper bound $ M $ is a fixed time horizon (e.g., the maximum follow-up time).
+
+In practice, we observe only one of these potential outcomes for each patient:
+\begin{itemize}
+    \item If $ A_{i\tau} = 1 $, we observe $ \bar{T}_i(1) $, but $ \bar{T}_i(0) $ is counterfactual.
+    \item If $ A_{i\tau} = 0 $, we observe $ \bar{T}_i(0) $, but $ \bar{T}_i(1) $ is counterfactual.
+\end{itemize}
+
+The matching estimator uses a survival model and nearest-neighbor matching to estimate both the factual and counterfactual RMETs.
+
+Steps of the Matching Estimator:
+\begin{enumerate}
+\item Estimate the Factual RMET:
+   We fit a survival model (e.g., Random Survival Forest or Cox Proportional Hazards) to estimate the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) $ for the observed treatment $ A_{i\tau} $. The factual RMET is:
+   $$ \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) = \int_{0}^{M} \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) \, du. $$
+   This represents the estimated RMET under the treatment the patient actually received.\\
+(Note that this is similar to S-learner’s $\widehat{\mu}(\mathbf{Z}_{i\tau}, a)$ with $a=A_{i\tau}$ the observed treatment).
+
+\item Estimate the Counterfactual RMET:
+   For each patient $ i $, we identify the $ K $ nearest neighbors (based on $ \mathbf{Z}_{i\tau} $) from the opposite treatment group. The counterfactual RMET is approximated by averaging the factual RMETs of these neighbors:
+   \begin{itemize}
+   \item If $ A_{i\tau} = 1 $ (non-adherent), the counterfactual RMET under adherence ($ a = 0 $) is:
+     $$ \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{A_{j\tau}}(\mathbf{Z}_{j\tau}),$$
+     where $ A_{j\tau} = 0, $
+     and $ J_K(i) $ is the set of $ K $ nearest neighbors with $ A_{j\tau} = 0 $.
+   \item If $ A_{i\tau} = 0 $ (adherent), the counterfactual RMET under non-adherence ($ a = 1 $) is:
+     $$ \widehat{\mu}_{1}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{A_{j\tau}}(\mathbf{Z}_{j\tau}),$$ where $A_{j\tau} = 1. $
+    \end{itemize}
+\item Estimate the ITE:
+   The ITE for each patient is the difference between the estimated RMETs under treatment and control:
+   \begin{itemize}
+   \item For $ A_{i\tau} = 1 $:
+     $ \widehat{\text{ITE}}_i = \widehat{\mu}_{1}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}) = \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) - \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{1-A_{j\tau}}(\mathbf{Z}_{j\tau}). $
+   \item For $ A_{i\tau} = 0 $:
+     $ \widehat{\text{ITE}}_i = \widehat{\mu}_{1}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{1-A_{j\tau}}(\mathbf{Z}_{j\tau}) - \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}). $
+    \end{itemize}
+\item Estimate the ATE:
+   The ATE is the average of the ITEs across all $ N $ patients:
+   $$ \widehat{\psi}_{\text{match}} = \frac{1}{N} \sum_{i=1}^{N} \widehat{\text{ITE}}_i. $$
+   This can be written compactly using the indicator $ (2 A_{i\tau} - 1) $ to adjust the subtraction direction:
+   {\footnotesize
+   $$ \widehat{\psi}_{\text{match}} = \frac{1}{N} \sum_{i=1}^{N} \left( \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{1 - A_{i\tau}}(\mathbf{Z}_{i\tau}) \right) (2 A_{i\tau} - 1). $$}
+   \begin{itemize}
+   \item When $ A_{i\tau} = 1 $, $ (2 A_{i\tau} - 1) = 1 $, so the term inside the sum is $$ \widehat{\mu}_{1}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}). $$
+   \item When $ A_{i\tau} = 0 $, $ (2 A_{i\tau} - 1) = -1 $, so the term inside the sum becomes 
+   \begin{align*} -(\widehat{\mu}_{0}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{1}(\mathbf{Z}_{i\tau})) \\ = \widehat{\mu}_{1}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}).
+   \end{align*}
+    \end{itemize}
+\end{enumerate}
+
+Role of $ \widehat{\mu} $ and $ \widehat{S}(\cdot) $:
+\begin{itemize}
+\item $ \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) $: The factual RMET, computed directly from the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) $ via integration.
+\item $ \widehat{\mu}_{1 - A_{i\tau}}(\mathbf{Z}_{i\tau}) $: The counterfactual RMET, approximated by averaging the $ \widehat{\mu}_{A_{j\tau}}(\mathbf{Z}_{j\tau}) $ of $ K $ nearest neighbors from the opposite treatment group, where each $ \widehat{\mu}_{A_{j\tau}}(\mathbf{Z}_{j\tau}) $ is also derived from $ \widehat{S}(\cdot) $.
+\item $ \widehat{S}(\cdot) $: The survival function is foundational, as it is used to compute all $ \widehat{\mu} $ values, linking survival analysis to causal estimation.
+\end{itemize}
+
+\subsubsection{ATE Estimate Derivation of Causal Survival Forest}
+\label{ch03:apd:csf_ate_derivation}
+The Causal Survival Forest (CSF), as introduced by \citet{cui2023estimating}, is an inherently causal method designed to estimate heterogeneous treatment effects in survival data. Unlike meta-learners that adapt existing survival models (e.g., matching), CSF directly estimates the treatment effect within a random forest framework tailored to survival outcomes. We used CSF as another baseline to validate our treatment effect findings.
+
+CSF builds an ensemble of survival trees. Each tree splits the covariate space $ \mathbf{Z}_{i\tau} $ using a criterion that maximizes the difference in survival outcomes between treatment groups.
+\begin{itemize}
+\item For a patient $ i $, the estimate $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) $ is computed by averaging the RMSTs from the leaf nodes across all trees where $ \mathbf{Z}_{i\tau} $ falls under treatment $ a $.
+\item Internally, CSF estimates the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, a) $ for each treatment level and computes:
+  $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) = \int_{0}^{M} \widehat{S}(u \mid \mathbf{Z}_{i\tau}, a) \, du. $
+\item CSF estimates the ITE for each patient $ i $ as the difference in Restricted Mean Survival Time (RMST, equivalent to RMET in our context) between treatment arms:
+  $ \widehat{\theta}_{i}(\mathbf{Z}_{i\tau}) = \widehat{\mu}_1(\mathbf{Z}_{i\tau}) - \widehat{\mu}_0(\mathbf{Z}_{i\tau}), $
+  where $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) $ is the estimated RMST under treatment $ a \in \{0, 1\} $.
+\item The ATE is the average of these ITEs:
+  \[ \widehat{\psi}_{\text{CSF}} = \frac{1}{N} \sum_{i=1}^{N} \widehat{\theta}_{i}(\mathbf{Z}_{i\tau}). \]
+\item Unlike the matching estimator, CSF does not rely on external survival models or post-hoc aggregation; it optimizes directly for treatment effect estimation within the forest structure.
+\end{itemize}
+
+Role of $ \widehat{\mu} $ and $ \widehat{S}(\cdot) $:
+\begin{itemize}
+\item $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) $: The RMST for treatment $ a $, estimated directly by CSF using tree-based survival predictions.
+\item $ \widehat{S}(\cdot) $: The survival function is estimated internally within CSF and integrated to produce $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) $, enabling the computation of treatment effects.
+\end{itemize}
+
+
+\subsubsection{Emerging Methodologies and Extensions}
+\label{ch03:apd:in_context_of_new_research}
+Beyond the standard meta-learner and matching approaches utilized here, newer developments in survival analysis and causal inference offer promising directions for methodological refinement.
+For instance, techniques such as double machine learning for causal inference on survival functions may provide enhanced flexibility and reduced bias under certain assumptions \citep{kabata4875226double}.
+Recent work on handling covariate-dependent censoring and left truncation similarly represents an exciting area of inquiry \citep{wang2024learning}.
+Although these methods as of writing of this paper are still not published, integrating them into analyses like ours could further strengthen causal inferences and accommodate complex real-world data nuances.
+
+
+

@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\begin{table}[!htbp]
+    \setlength{\tabcolsep}{2pt}
+    \ChThreeFloatContents
+      {ch03:tab:survival_9_12}
+      {\caption{Prediction Performance Across Time Snapshots (9 and 12 months)}}
+      {\adjustbox{max width=.9\textwidth}{\begin{tabular}{l  c c c @{\hspace{0.5cm}} c c c }
+    \toprule
+    \textbf{Snapshot Time}&\multicolumn{3}{c}{9 months} & \multicolumn{3}{c}{12 months} \\
+    \midrule
+     & \(C^{td}\) & IBS & \(\text{AUC}^{td}\) & \(C^{td}\) & IBS & \(\text{AUC}^{td}\) \\
+    \midrule
+    CoxPH & 0.625 ± 0.023 & 0.187 ± 0.004 & 0.664 ± 0.025 & 0.630 ± 0.024 & 0.195 ± 0.010 & 0.672 ± 0.023 \\
+    Random Survival Forest & {\ChThreeBfTab 0.648} ± 0.015 & {\ChThreeBfTab 0.180} ± 0.003 & {\ChThreeBfTab 0.694} ± 0.015 & {\ChThreeBfTab 0.658} ± 0.011 & {\ChThreeBfTab 0.174} ± 0.004 & {\ChThreeBfTab 0.706} ± 0.011 \\
+    DeepSurv & 0.630 ± 0.009 & 0.185 ± 0.004 & 0.668 ± 0.011 & 0.636 ± 0.013 & 0.187 ± 0.010 & 0.675 ± 0.016 \\
+    DeepHit & 0.525 ± 0.069 & 0.234 ± 0.026 & 0.556 ± 0.065 & 0.540 ± 0.026 & 0.243 ± 0.021 & 0.558 ± 0.014 \\
+    \bottomrule
+    \end{tabular}}}
+\end{table}
