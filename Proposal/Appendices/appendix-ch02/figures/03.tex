@@ -1,0 +1,50 @@
+% !TeX root = ../../../main.tex
+\begin{figure}[htbp]
+\ChTwoFloatContents
+    {ch02:fig:toyDataset_result_complete}% label for whole figure
+    {\caption{Embedding space representation of the test trajectories of simulated dataset. For (a)- (j) 3D Embedding Space of baselines are shown which includes the purely supervised methods ((a)-(d)), predictive clustering methods ((e), (f)), and self-supervised learning methods ((g)-(j)). In (f)-(i), Hyperspherical Embedding of various ablated versions of \ChTwoSmallCaps{Temporal-SCL} is shown.}}% caption for whole figure
+    {%
+        \subfigure[LSTM]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/EmbeddingSpace_LSTM.png}
+        }
+        \subfigure[RETAIN]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_RETAIN.png}
+        }
+        \subfigure[DIPOLE]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_DIPOLE.png}
+        }
+        \subfigure[Transformer]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_Transformer.png}
+        }\par\medskip
+        \subfigure[AC-TPC]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/EmbeddingSpace_ACTPC.png}
+        }
+        \subfigure[T-Phenotype]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_TPhenotype.png}
+        }
+        \subfigure[SMD-SSL + SimCLR (Frozen)]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_SMDSSL_SimCLR_Freeze.png}
+        }
+        \subfigure[SMD-SSL + VICReg (Frozen)]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_SMDSSL_VICReg_Freeze.png}
+        }\par\medskip
+        \subfigure[SMD-SSL + SimCLR (Fine-tune)]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_SMDSSL_SimCLR.png}
+        }
+        \subfigure[SMD-SSL + VICReg (Fine-tune)]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_SMDSSL_VICReg.png}
+        }
+        \subfigure[\ChTwoSmallCaps{Simple-SCL}]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_SimpleSCL.png}
+        }
+        \subfigure[\ChTwoSmallCaps{Temporal-SCL} \newline no pretraining]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_NoPretrain.png}
+        }\par\medskip
+        \subfigure[\ChTwoSmallCaps{Temporal-SCL} \newline no NN pairing]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_NoKNN.png}
+        }
+        \subfigure[\ChTwoSmallCaps{Temporal-SCL}]{%
+            \includegraphics[width=0.21\textwidth]{Appendices/appendix-ch02/images/Embedding_TSCL.png}
+        }
+    }
+\end{figure}

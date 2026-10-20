@@ -1,0 +1,30 @@
+% !TeX root = ../../../main.tex
+\begin{table}[ht!]
+% \vspace{-6ex}
+\caption{Future Prediction on ADNI data test set accuracy (mean $\pm$ std.~dev.~across 10 experiments).}
+\centering
+\setlength\tabcolsep{8pt}
+\scriptsize
+\begin{tabular}{ccccc} 
+\toprule
+		\multirow{2}{*}[-2pt]{Model}                                       & \multicolumn{2}{c}{6 months in the future}                          & \multicolumn{2}{c}{1 year in the future}                                                   \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} %\hline %{3-7}
+                                                               & AUROC                    & AUPRC                   & AUROC                   & AUPRC \\ 
+                       \midrule  % \hline
+                        Logistic Regression                    & 0.825$\pm$0.007          & 0.659$\pm$0.008         & 0.767$\pm$0.006          & 0.620$\pm$0.012 \\
+					  LSTM                                   & \text{0.880$\pm$0.003}   & 0.789$\pm$0.005         & 0.856$\pm$0.004          & 0.736$\pm$0.008 \\
+                        RETAIN                                 & \text{0.882$\pm$0.010}   & 0.793$\pm$0.016         & \text{0.867$\pm$0.013}   & 0.740$\pm$0.017 \\
+                        DIPOLE                                 & \text{0.940$\pm$0.006}   & 0.864$\pm$0.009         & \text{0.918$\pm$0.008}   & 0.813$\pm$0.010 \\
+                        AC-TPC                                 & 0.823$\pm$0.011          & 0.702$\pm$0.016         & 0.804$\pm$0.014          & 0.679$\pm$0.020 \\
+                        Transformer:BERT                       & \text{0.947$\pm$0.005}   & 0.880$\pm$0.010         & \text{0.939$\pm$0.007}   & \text{0.846$\pm$0.011} \\
+                        \cmidrule(lr){1-5}
+                        \ChTwoSmallCaps{Simple-SCL}                    & 0.922$\pm$0.005          & 0.794$\pm$0.016         & 0.899$\pm$0.003          & 0.764$\pm$0.015    \\
+                        \ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoXbmark, NN:\ChTwoCbmark, TR:\ChTwoCbmark)    & 0.950$\pm$0.002          & {0.878$\pm$0.014}       & 0.930$\pm$0.002          & {0.807$\pm$0.018}  \\ 
+					 \ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoCbmark, NN:\ChTwoXbmark, TR:\ChTwoCbmark)    & 0.948$\pm$0.002          & {0.842$\pm$0.012}       & 0.929$\pm$0.002          & {0.800$\pm$0.011}  \\ 
+                       \ChTwoSmallCaps{Temporal-SCL} (Full)            & {\ChTwoBfTab 0.985$\pm$0.002} &{\ChTwoBfTab 0.907$\pm$0.012} & {\ChTwoBfTab 0.970$\pm$0.003} & {\ChTwoBfTab 0.878$\pm$0.015}  \\ 
+\bottomrule
+\end{tabular}
+
+
+{\scriptsize {\ChTwoBfTab{PT}}: Pre-Training, {\ChTwoBfTab{NN}}: Nearest Neighbor pairing, {\ChTwoBfTab{TR}}: Temporal Regularization\\}
+\ChTwoFloatLabel{ch02:tab:results_future_adni}
+\end{table}

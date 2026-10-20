@@ -1,0 +1,9 @@
+% !TeX root = ../../../main.tex
+\subsection{Discussion}
+
+We have proposed a variable-length tabular time series framework called \ChTwoSmallCaps{Temporal-SCL} that outperforms state-of-the-art models on two clinical datasets and on a synthetic dataset with known ground truth structure. A key ingredient to the success of \ChTwoSmallCaps{Temporal-SCL} is the nearest neighbor pairing mechanism. 
+We further suggested a visualization strategy to help probe \ChTwoSmallCaps{Temporal-SCL}'s embedding space.
+
+We highlight some limitations of our work that in turn suggest future research directions. First, we make predictions only for single time steps. Extending our framework to make predictions for an entire time series would make it more useful as it can use the entire information available at prediction time. Next, while we have demonstrated that nearest neighbor pairing works well, we do not understand when and why. For future work, we could empirically try different distance functions that can be used to answer the former question and also study an unsupervised \ChTwoSmallCaps{Temporal-SCL} variant (nearest neighbor pairing could still be used by ignoring labels) or \ChTwoSmallCaps{Temporal-SCL} with other label information (e.g., survival analysis labels). Lastly, our proposed strategy for visualizing the embedding space also focuses on individual time steps. Figuring out a visualization strategy that considers entire trajectories, even variable-length ones, could be useful for clinical decision support.
+
+

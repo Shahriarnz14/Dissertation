@@ -1,0 +1,78 @@
+% !TeX root = ../../../main.tex
+\subsection{Background}
+\label{ch02:sec:background}
+
+We state the time series prediction setup we study in Section~\ref{ch02:sec:problem-setup}. Our proposed method is based on supervised contrastive learning \citep{khosla2020supervised}, which we review in Section~\ref{ch02:sec:supcon}. For any positive integer $k$, we regularly use the notation $[k]\triangleq \{1,2,\dots,k\}$.
+
+
+\subsubsection{Problem Setup}
+\label{ch02:sec:problem-setup}
+
+
+% \vspace{.2em}
+\noindent
+\textbf{Training data.}
+We assume that the training data consist of $N$ patients with different time series.
+For the \mbox{$i$-th} patient (with $i\in[N]$), we observe $L_i$ time steps, where at each time step, we keep track of $D$ features (e.g., clinical measurements). Specifically, we denote the \mbox{$i$-th} patient's feature vector at time step $\ell\in[L_i]$ (sorted chronologically) as $\mathbf{x}_i^{(\ell)}\in\mathbb{R}^{D}$. 
+Moreover, we know the time-step times, where the \mbox{$i$-th} patient's time at the $\ell$-th time step is $t_i^{(\ell)}\in\mathbb{R}$.
+This notation allows for features to be static, i.e., a feature could stay constant across time.
+
+We further assume that every time step of a time series belongs to one of $C$ different classes, i.e., the set of classes is $[C]$. In the dynamic outcome case, where the classification label varies over time, we assume that we know the classification label $y_i^{(\ell)}\in[C]$ for every patient
+%data point
+$i\in[N]$ for every time step $\ell\in[L_i]$. For the static outcome case, we only know the classification label at the final time step per time series: we know $y_i^{(L_i)}\in[C]$ for all $i\in[N]$, and at earlier time steps $\ell < L_i$, we set $y_i^{(\ell)}=``?"$, which could be thought of as an additional ``unknown'' class.
+
+
+\noindent
+\textbf{Prediction task.} Given a test time series, suppose that we observe the feature vector $\mathbf{x}_*\in\mathbb{R}^{D}$ at a \emph{single time step}. We aim to predict the target label $y_*\in[C]$ corresponding to $\mathbf{x}_*$. In the dynamic outcome setting, this target label is for the same time step as $\mathbf{x}_*$. In the static outcome setting, this target label is for the label of final time step in the test time series.
+
+We focus on predicting the classification outcome for each time step.
+This captures the extreme case of a test time series consisting of a single time step. 
+For example, this could happen in a clinical setup if a patient enters a new hospital for which we see measurements of this patient for the first time.
+Our real-world clinical dataset experiments later reveal that our model outperforms baselines that leverage complete historical observations.
+
+Importantly, although we focus on prediction given a single time step's feature vector $\mathbf{x}_*$, our problem setup allows for a feature in $\mathbf{x}_*$ to capture historical information (e.g., a feature in $\mathbf{x}_*$ could be the maximum observed white blood count over the past 4 hours).
+
+
+\subsubsection{Supervised Contrastive Learning (SCL)}
+\label{ch02:sec:supcon}
+
+
+SCL learns an embedding representation of the data so that ``similar'' data points have embedding vectors that have higher cosine similarity compared to those of ``dissimilar'' data points. Data points are ``similar'' if they have the same classification label. As this framework was originally developed without temporal structure, we drop superscripts previously used to indicate dependence on time.
+
+
+\noindent
+\textbf{Notation.}
+We use $f$ to denote the so-called \emph{encoder network}, where given any point~$\mathbf{x}$ in the raw input feature space, its embedding representation is $f(\mathbf{x})$. This embedding representation is constrained to be a $d$-dimensional Euclidean vector with norm~1, also referred to as a \emph{hyperspherical embedding}. Thus, $\|f(\mathbf{x})\|=1$. We denote this hyperspherical output space as $\mathcal{S}^{d-1}\triangleq \{\mathbf{z}\in\mathbb{R}^d\text{ s.t.~}\|\mathbf{z}\|=1\}$. For $\mathbf{u},\mathbf{v}\in\mathcal{S}^{d-1}$, the cosine similarity between $\mathbf{u}$ and $\mathbf{v}$ is $\frac{\langle \mathbf{u}, \mathbf{v} \rangle}{\|\mathbf{u}\|\|\mathbf{v}\|} = \langle \mathbf{u}, \mathbf{v} \rangle$, where $\langle\cdot,\cdot\rangle$ denotes the dot product.
+
+We also denote $g$ as the \emph{predictor network} that maps the embedding output of the encoder in $\mathcal{S}^{d-1}$ to a probability distribution space over $C$ classes.
+
+
+\noindent
+\textbf{\bfseries\scshape Simple-SCL.}
+For ease of exposition, we present a simplified version of SCL that we call \ChTwoSmallCaps{Simple-SCL}, \emph{which does not use data augmentation} (since our experiments later will be on tabular data without data augmentation as generating realistic fake patient data is challenging in the clinical setting).
+We learn the encoder $f$ using minibatch gradient descent. For a minibatch of $B$ training points $\mathbf{x}_1,\dots,\mathbf{x}_B$ with corresponding classification labels $y_1,\dots,y_B$, we denote the embedding vectors of these points as $\mathbf{z}_1=f(\mathbf{x}_1),\dots,\mathbf{z}_B=f(\mathbf{x}_B)$. Since we want points with the same label to have high cosine similarity, we keep track of which points have the same label. To do this, we let $\mathcal{P}(i)$ denote the set of points with the same label as the $i$-th point, excluding the $i$-th point:
+\begin{equation}
+\mathcal{P}(i) \triangleq  \{ j\in[B]\text{ s.t.~}y_j=y_i\text{ and }j\ne i \}.
+\label{ch02:eq:neighbors-of-i}
+\end{equation}
+Next, we define the following ratio:
+\begin{equation}
+\Psi(i,j;\tau)
+\triangleq  \frac{\exp(\langle \mathbf{z}_i, \mathbf{z}_j \rangle / \tau)}{\sum_{k\in[B]\text{ s.t.~}k\ne i}\exp(\langle \mathbf{z}_i, \mathbf{z}_k \rangle / \tau)},
+\label{ch02:eq:Psi}
+\end{equation}
+where the constant $\tau>0$ is a user-specified hyperparameter. 
+The key idea is that if the $i$-th and $j$-th points have the same label (so $j\in\mathcal{P}(i)$), then we want $\Psi(i,j;\tau)$ to be large: the numerator being large means that cosine similarity $\langle\mathbf{z}_i, \mathbf{z}_j\rangle$ is large while the denominator provides a normalization to ensure that $\Psi(i,j;\tau)\in[0,1]$. Then to encourage $\Psi(i,j;\tau)$ to be large for all $i\in[B]$ and $j\in\mathcal{P}(i)$, we minimize the~loss
+\begin{equation}
+L_{\text{Simple-SCL}}
+\triangleq 
+-\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\sum_{i\in[B]\text{ s.t.~}|\mathcal{P}(i)|\ge1}
+   \frac{1}{|\mathcal{P}(i)|}
+     \sum_{j\in\mathcal{P}(i)} \log\Psi(i,j;\tau).
+\label{ch02:eq:sup-con-loss}
+\end{equation}
+The original SCL uses a loss of the same form but with data augmentation (see Appendix~\ref{ch02:sec:relating-to-original-SCL}).
+
+Lastly, in line with \cite{khosla2020supervised}, after the encoder is learned, we train a predictor network $g$ to map the resulting embeddings to a probability distribution over all classes.
+
+

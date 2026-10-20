@@ -1,0 +1,5 @@
+% !TeX root = ../../../main.tex
+\subsection{\ChTwoSmallCaps{Simple-SCL} vs the Original SCL}
+\label{ch02:sec:relating-to-original-SCL}
+The original SCL uses data augmentation: in the loss function $L_{\text{SCL}}$, instead of using the batch of $B$ points $(\mathbf{x}_1,y_1),\dots,(\mathbf{x}_B,y_B)$, we instead use a freshly generated batch of $2B$ points $(\mathbf{x}_1',y_1'),\dots,(\mathbf{x}_{2B}',y_{2B}')$. Specifically, each original data point $\mathbf{x}_i$ is randomly augmented once to get $\mathbf{x}_{2i-1}'$ and then $\mathbf{x}_i$ is randomly augmented a second time to get $\mathbf{x}_{2i}'$; the augmented points $\mathbf{x}_{2i-1}'$ and $\mathbf{x}_{2i}'$ have labels $y_{2i-1}'$ and $y_{2i}'$, both set to be the same as~$y_i$.
+

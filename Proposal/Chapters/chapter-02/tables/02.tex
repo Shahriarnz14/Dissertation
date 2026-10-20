@@ -1,0 +1,50 @@
+% !TeX root = ../../../main.tex
+\begin{table}[t]
+% \vspace{-6ex}
+% \vspace{-1.2em}
+\caption{Real data test set accuracy (mean $\pm$ std.~dev.~across 10 experiments).}
+\centering
+% \vspace{-1em}
+\adjustbox{max width=.8\linewidth}{%
+% {\scriptsize %
+% \narrowstyle
+% \setlength\tabcolsep{3pt}
+% \scriptsize
+\begin{tabular}{ccccc} 
+\toprule
+                        \multirow{2}{*}[-2pt]{Model}           & \multicolumn{2}{c}{MIMIC dataset}                  & \multicolumn{2}{c}{ADNI dataset}                                                   
+                                                                        \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} %\hline %{3-7}
+                                                               & AUROC                      & AUPRC                   & AUROC                   & AUPRC \\ 
+                        \midrule
+                        Logistic Regression                    & 0.745$\pm$0.003            & 0.499$\pm$0.008         & 0.845$\pm$0.006          & 0.676$\pm$0.009 \\
+					  LSTM                                   & 0.767$\pm$0.003            & 0.509$\pm$0.005         & 0.947$\pm$0.002          & 0.823$\pm$0.005 \\
+                        RETAIN                                 & 0.730$\pm$0.010            & 0.431$\pm$0.006         & 0.884$\pm$0.012          & 0.795$\pm$0.016 \\
+                        DIPOLE                                 & 0.767$\pm$0.004            & 0.453$\pm$0.003         & 0.958$\pm$0.006          & 0.824$\pm$0.009 \\
+                        Transformer:BERT                       & 0.769$\pm$0.005            & 0.509$\pm$0.003         & 0.959$\pm$0.002          & 0.922$\pm$0.003 \\                        
+                        % \cmidrule(lr){1-5}
+                        AC-TPC                                 & 0.703$\pm$0.006            & 0.432$\pm$0.007         & 0.839$\pm$0.013          & 0.681$\pm$0.017 \\
+                        T-Phenotype                            & 0.730$\pm$0.005            & 0.451$\pm$0.004         & 0.926$\pm$0.034          & 0.822$\pm$0.068 \\
+                        % \cmidrule(lr){1-5}
+                        SMD-SSL + SimCLR (Frozen)              & 0.692$\pm$0.002	        & 0.457$\pm$0.005	      & 0.803$\pm$0.015	         & 0.658$\pm$0.009 \\
+                        SMD-SSL + VICReg (Frozen)              & 0.673$\pm$0.001	        & 0.429$\pm$0.005	      & 0.819$\pm$0.018	         & 0.653$\pm$0.009 \\
+                        SMD-SSL + SimCLR (Fine-tune)           & 0.770$\pm$0.006	        & 0.511$\pm$0.010	      & 0.966$\pm$0.014	         & 0.929$\pm$0.010 \\
+                        SMD-SSL + VICReg (Fine-tune)           & 0.748$\pm$0.008	        & 0.499$\pm$0.009	      & 0.867$\pm$0.012	         & 0.672$\pm$0.011 \\
+                        \cmidrule(lr){1-5}
+\ChTwoSmallCaps{Simple-SCL} / \ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoXbmark, NN:\ChTwoXbmark, TR:\ChTwoXbmark)                                          & 0.753$\pm$0.005            & 0.498$\pm$0.003         & 0.947$\pm$0.001          & 0.894$\pm$0.015 \\
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoCbmark, NN:\ChTwoXbmark, TR:\ChTwoXbmark)    & 0.752$\pm$0.002            & 0.498$\pm$0.001         & 0.947$\pm$0.001          & 0.894$\pm$0.014 \\
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoXbmark, NN:\ChTwoCbmark, TR:\ChTwoXbmark)    & 0.770$\pm$0.002            & 0.516$\pm$0.003         & 0.987$\pm$0.001          & 0.899$\pm$0.011 \\
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoXbmark, NN:\ChTwoXbmark, TR:\ChTwoCbmark)    & 0.766$\pm$0.001            & 0.508$\pm$0.002         & 0.950$\pm$0.002          & 0.785$\pm$0.015 \\
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoXbmark, NN:\ChTwoCbmark, TR:\ChTwoCbmark)    & 0.754$\pm$0.006            & 0.499$\pm$0.003         & 0.967$\pm$0.002          & 0.900$\pm$0.017 \\ 
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoCbmark, NN:\ChTwoXbmark, TR:\ChTwoCbmark)    & 0.767$\pm$0.002            & 0.511$\pm$0.002         & 0.951$\pm$0.002          & 0.762$\pm$0.010 \\
+\ChTwoSmallCaps{Temporal-SCL} (PT:\ChTwoCbmark, NN:\ChTwoCbmark, TR:\ChTwoXbmark)    & 0.770$\pm$0.002            & 0.518$\pm$0.003         & 0.988$\pm$0.001          & 0.903$\pm$0.011 \\
+                        % \cmidrule(lr){1-1}
+                        \ChTwoSmallCaps{Temporal-SCL} (Full)          & {\ChTwoBfTab 0.773$\pm$0.002}   &{\ChTwoBfTab 0.520$\pm$0.003} & {\ChTwoBfTab 0.990$\pm$0.004} & {\ChTwoBfTab 0.936$\pm$0.014} \\ 
+\bottomrule
+\end{tabular}}
+% }
+
+
+{\scriptsize {\ChTwoBfTab{PT}}: Pre-Training, {\ChTwoBfTab{NN}}: Nearest Neighbor pairing, {\ChTwoBfTab{TR}}: Temporal Regularization\\}
+\ChTwoFloatLabel{ch02:tab:results}
+
+\end{table}

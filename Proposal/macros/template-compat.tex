@@ -40,6 +40,11 @@
 \apptocmd{\part}{\addtocounter{cmusectionline}{1}}
   {}{\ProposalPatchFailure{Part divider transition}}
 
+% Captions containing references are moving arguments. Keep the CMU reference
+% tracking wrapper protected while writing LoF/LoT records, so its loop is
+% executed when typesetting the reference rather than expanded inside a write.
+\protected\gdef\cmu@ref{\@ifstar{\cmu@ref@{*}}{\cmu@ref@{}}}
+
 % These commands are defined by the template at begin-document time.
 \AtBeginDocument{%
   % Bibliography bookmarks need plain text; visible heading styling is kept

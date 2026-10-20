@@ -1,0 +1,28 @@
+% !TeX root = ../../../main.tex
+\begin{table}[!ht]
+\caption{Training Details and Hyperparamters for Experiments.}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Experiment}                    & \textbf{Synthetic Dataset}                                                                                                             \\ \hline
+\textit{Main Network}                  & 2-Layer FCN ReLU Activation                                                                                                            \\
+\textit{Main Network Layer Size}       & (input-dimension)2→16→3(embedding-space)                                                                                               \\
+\textit{Prediction Network}              & Linear Layer with Softmax Activation 3→2                                                                                               \\
+\textit{Temporal Module}               & 1-Layer LSTM 3→3                                                                                                                       \\
+\multirow{2}{*}{\textit{Optimization}} & \multirow{2}{*}{\shortstack[l]{Optimizer: Adam, Learning Rate: 1e-4, \\ Number of Epochs: 20, Batch-Size: 32}} \\
+                                       &                                                                                                                                        \\ \hline
+\textbf{Experiment}                    & \textbf{MIMIC}                                                                                                                         \\ \hline
+\textit{Main Network}                  & 2-Layer FCN ReLU Activation                                                                                                            \\
+\textit{Main Network Layer Size}       & (input-dimension)55→32→32(embedding-space)                                                                                             \\
+\textit{Prediction Network}              & Linear Layer with Softmax Activation 32→3                                                                                              \\
+\textit{Temporal Module}               & 1-Layer LSTM 32→32                                                                                                                     \\
+\textit{Optimization}                  & \shortstack[l]{Optimizer: Adam, Learning Rate: 1e-4, \\ Number of Epochs: 100, Batch-Size: 128}                \\ \hline
+\textbf{Experiment}                    & \textbf{ADNI}                                                                                                                          \\ \hline
+\textit{Main Network}                  & 2-Layer FCN ReLU Activation                                                                                                            \\
+\textit{Main Network Layer Size}       & (input-dimension)21→50→16(embedding-space)                                                                                             \\
+\textit{Prediction Network}              & Linear Layer with Softmax Activation 16→3                                                                                              \\
+\textit{Temporal Module}               & 1-Layer LSTM 16→16                                                                                                                     \\
+\textit{Optimization}                  & \shortstack[l]{Optimizer: Adam, Learning Rate: 1e-4, \\ Number of Epochs: 100, Batch-Size: 128}                \\ \hline
+\end{tabular}
+\ChTwoFloatLabel{ch02:tab:trainingHyperParams}
+\end{table}

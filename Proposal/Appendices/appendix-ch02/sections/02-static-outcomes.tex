@@ -1,0 +1,15 @@
+% !TeX root = ../../../main.tex
+\subsection{Handling the Static Outcome Case}
+\label{ch02:sec:handling-static-outcome}
+
+To train a \ChTwoSmallCaps{Temporal-SCL} model for the static outcome case described in Section~\ref{ch02:sec:problem-setup}, there are some small modifications to what we described for pre-training the encoder (Section~\ref{ch02:sec:learning-the-encoder}) and the joint encoder and temporal network training (Section~\ref{ch02:sec:joint-optimization}).
+
+
+\noindent
+\textbf{Pre-training the encoder.}
+In the dynamic outcome case (i.e., the classification outcome changes over time), we use the procedure stated in Section~\ref{ch02:sec:learning-the-encoder}. However, in the static outcome case (i.e., the classification label is for the final time step only), during the pre-training phase, we only use the snapshot corresponding to the final time step per training time series. This is because we are not sure of what the true labels should be prior to the final time step, so for the pre-training we focus learning the embedding vectors based on time steps where we know the labels.
+
+
+\noindent
+\textbf{Encoder and temporal network training.} Once again, in the dynamic outcome case, we use the procedure stated in Section~\ref{ch02:sec:joint-optimization}. However, in the static outcome case, for the joint optimization phase, we use all snapshots (unlike during pre-training). As a reminder, snapshots that do not correspond to the final time step of a time series has the classification label ``?'' which as stated in Section~\ref{ch02:sec:background} could be thought of as an additional ``unknown'' class. The idea is that now that we are accounting for temporal structure, despite us not knowing the labels prior to the final time step, we still want to encourage temporal smoothness of embedding vectors across time steps.
+
