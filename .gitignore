@@ -17,3 +17,4 @@ __pycache__/
 Proposal/metadata/
 *.vscode
 Proposal/scripts/
+Proposal/build/
