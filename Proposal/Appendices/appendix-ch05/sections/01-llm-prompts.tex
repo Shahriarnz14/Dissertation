@@ -1,0 +1,238 @@
+% !TeX root = ../../../main.tex
+\subsection{LLM Prompts}
+\label{ch05:apd:llm-prompts}
+
+\ChFiveHeadingOnly
+\subsubsection{LLM Prompt to Generate Textual Time Series from PMOA Case Reports}
+\label{ch05:apd:extraction-prompt}
+
+% \begin{tcolorbox}[colback=gray!5, colframe=gray!100, title=LLM prompt to generate textual time series from PMOA case reports, boxrule=2pt]
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title=Prompt,
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={Prompt} % optional continuation note
+]
+You are a physician. Extract the clinical events and the related time stamp from the case report. The admission event has timestamp 0. If the event is not available, we treat the event, e.g. current main clinical diagnosis or treatment with timestamp 0. The events that happened before event with 0 timestamp have negative time, the ones after the event with 0 timestamp have positive time. The timestamp are in hours. The unit will be omitted when output the result. If there is no temporal information of the event, please use your knowledge and events with temporal expression before and after the events to provide an approximation. We want to predict the future events given the events happened in history. For example, here is the case report.\\
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}}\\
+
+Let's find the locations of events in the case report.
+The phrase ‘a 3-day history of fever and rash’ directly places fever and rash 72 hours before admission, so both events receive timestamp \(-72\). The phrase ‘Four weeks ago’ directly places the acne diagnosis and initiation of minocycline treatment 672 hours before admission, so both events receive timestamp \(-672\). The diffuse erythematous or maculopapular eruption with pruritus is described in the admission context and is assigned timestamp 0. DRESS syndrome has no explicit timestamp, so clinical judgment is used to assign timestamp 0. The phrase ‘One day later’ places discharge 24 hours after admission.
+% it shows that four weeks ago of fever and rash, four weeks ago, he was diagnosed with acne and receive treatment. So the event of fever and rash happened four weeks ago, 672 hours, it is before admitted to the hospital, so the time stamp is -672. diffuse erythematous or maculopapular eruption with pruritus was documented on the admission exam, so the timestamp is 0 hours, since it happens right at admission. DRESS syndrome has no specific time, but it should happen soon after admission to the hospital, so we use our clinical judgment to give the diagnosis of DRESS syndrome the timestamp 0. 
+The output should look like:\\
+
+%\vspace{2mm}
+\texttt{18 years old | 0 \\
+male | 0 \\
+admitted to the hospital | 0 \\
+fever | -72 \\
+rash | -72 \\
+acne | -672 \\
+minocycline | -672 \\
+increased WBC count | 0 \\
+eosinophilia| 0 \\
+systemic involvement| 0 \\
+diffuse erythematous or maculopapular eruption| 0 \\
+pruritis | 0 \\
+DRESS syndrome | 0 \\
+fever persisted | 0 \\
+rash persisted | 0 \\
+discharged | 24} \\
+
+Separate conjunctive phrases into their component events and assign them the same timestamp (for example, separation of ‘fever and rash’ into 2 events: ‘fever’ and ‘rash’). If the event has duration, assign the event time as the start of the time interval. Attempt to use the text span without modifications except ‘history of’ where applicable. Include all patient events, even if they appear in the discussion; do not omit any events; include termination/discontinuation events; include the pertinent negative findings, like ‘no shortness of breath’ and ‘denies chest pain’. Show the events and timestamps in rows, each row has two columns: one column for the event, the other column for the timestamp. The time is a numeric value in hour unit. The two columns are separated by a pipe ‘|’ as a bar-separated file. Reply with the table only.
+\end{tcolorbox}
+
+
+\subsubsection{LLM Prompt to Extract Demographics from PMOA Case Reports}
+\label{ch05:apd:demographics-prompt}
+
+\ChFiveRebuttal{The prompt below is reproduced verbatim for reproducibility. Its outputs are described in the manuscript as LLM-extracted sex descriptors and LLM-mapped ethnicity categories, not as verified biological or self-identified attributes.}
+
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title={Prompt},
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={{Prompt}} % optional continuation note
+]
+You are an expert clinician. Extract the following demographic information from the case report: (1) age at case presentation, (2) sex (biologic sex at birth), and (3) ethnicity.  Report the age in years.  Report the sex as Male, Female, otherwise as a custom string, or Not Specified.  Report ethnicity as according to the US Census, otherwise as Not Specified.  For example, here is the case report.\\
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}}\\
+
+% \noindent
+Then the demographic extraction should be:\\
+\texttt{18 | Male | Not Specified} \\
+ 
+Report the demographics with the three columns separated by a pipe '|' as a bar-separated row as above.
+\end{tcolorbox}
+% 
+\subsubsection{LLM Prompt to Extract List of Diagnoses from PMOA Case Reports}
+\label{ch05:apd:diagnosis-prompt}
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title=LLM prompt to extract list of diagnoses from PMOA case reports,
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={Prompt} % optional continuation note
+]
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}} \\
+
+Then the output should look like:\\
+    \texttt{acne} \\
+    \texttt{DRESS syndrome} \\
+
+Rash, leukocytosis, and other findings are not diseases so they are omitted, while acne and DRESS syndrome were both diagnosed, so they are included. Output a list of diagnoses (one per line) from the following case. Place the primary diagnosis first. Include only the list and nothing else.
+
+\end{tcolorbox}
+
+\subsubsection{Timestamp Provenance Audit Prompt}
+\label{ch05:apd:timestamp-provenance-prompt}
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title={Prompt},
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={{Prompt}} % optional continuation note
+]
+You are a physician. Extract all patient-specific clinical events and their related timestamps from the case report.
+
+
+TEMPORAL ANCHOR AND TIMESTAMPS
+
+
+- Assign timestamp 0 to the hospital admission event when admission is described.
+
+- If an admission event is not available, assign timestamp 0 to the current main clinical presentation, diagnosis, or treatment used as the case reference event.
+
+- Events before the timestamp-0 event have negative timestamps, and events after the timestamp-0 event have positive timestamps.
+
+- Express every timestamp as a numeric value in hours and omit the unit from the output.
+
+- If the report does not provide enough temporal information to determine an event time from the text, use surrounding events, narrative order, and clinical knowledge to provide an approximate timestamp.
+
+
+KNOWN FLAG: TEXT-SUPPORTED OR RULE-DETERMINED VS \\
+MODEL-IMPUTED
+
+
+Add a third output column named \texttt{known}. The purpose of this flag is to distinguish timestamps that are supported by the report or fixed annotation rules from timestamps that the model has to impute or guess.
+
+Set \texttt{known} to 1 when the assigned timestamp is supported by the source text or is fixed by the annotation rules. This includes any of the following:
+
+- The text gives an absolute date or time, a duration, or a relative temporal expression that can be converted to hours.
+
+- The text explicitly relates the event to the timestamp-0 event, such as ``at admission'', ``on presentation'', ``before admission'', ``after admission'', or ``hospital day 2''.
+
+- The event itself defines the timestamp-0 anchor.
+
+- A temporal expression in the same sentence, clause, list, paragraph, or immediately preceding sentence clearly governs the event, even when the event does not repeat the temporal phrase.
+
+- The event is one of several findings, treatments, or outcomes described as occurring during the same explicitly timed encounter, examination, procedure, or follow-up.
+
+- The timestamp is assigned by a fixed annotation convention rather than model judgment, such as assigning age and sex to timestamp 0.
+
+Set \texttt{known} to 0 only when the source text does not provide enough temporal evidence for the assigned numeric timestamp and the model must supply the time using clinical judgment, an unstated assumption, narrative order alone, interpolation between other events, or another guess.
+
+Important rules for the \texttt{known} flag:
+
+- Do not set \texttt{known} to 0 merely because the event lacks its own temporal phrase. If the event inherits a clear time from the surrounding text, set \texttt{known} to 1.
+
+- Converting an explicit expression such as ``three days before admission'' to -72 hours is \texttt{known = 1}.
+
+- A vague ordering word such as ``later'' or ``subsequently'' supports event order but not a specific number of hours. If a numeric timestamp must be guessed, set \texttt{known} to 0.
+
+- A timestamp of 0 is not automatically known. Set \texttt{known} to 1 only when timestamp 0 is supported by the text, defines the anchor, or follows a fixed annotation convention. Otherwise, set \texttt{known} to 0.
+
+- Use \texttt{known = 0} only for genuinely model-imputed or guessed timestamps.
+
+
+EXAMPLE CASE REPORT\\
+
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}} \\
+
+
+EXAMPLE REASONING
+
+
+The fixed annotation convention assigns age and sex to timestamp 0, so these rows have \texttt{known = 1} because their times are rule-determined rather than guessed. Admission explicitly defines timestamp 0 and has \texttt{known = 1}. The phrase ``a 3-day history of fever and rash'' directly places fever and rash 72 hours before admission, so both events have timestamp -72 and \texttt{known = 1}. The phrase ``Four weeks ago'' directly places the acne diagnosis and start of minocycline treatment 672 hours before admission, so both events have timestamp -672 and \texttt{known = 1}. Increased WBC count, eosinophilia, systemic involvement, and the DRESS syndrome diagnosis have no textual evidence that determines a specific numeric time; assigning them timestamp 0 requires clinical judgment, so they have \texttt{known = 0}. The phrase ``persisted through admission'' explicitly links persistent fever and rash to admission. The diffuse eruption and pruritus are described in the same admission-context sentence, so these events inherit timestamp 0 from that textual context. These events therefore have \texttt{known = 1}. ``One day later'' directly places discharge 24 hours after admission, so discharge has timestamp 24 and \texttt{known = 1}.
+
+
+EXAMPLE OUTPUT\\
+
+
+\texttt{18 years old | 0 | 1} \\
+\texttt{male | 0 | 1} \\
+\texttt{admitted to the hospital | 0 | 1} \\
+\texttt{fever | -72 | 1} \\
+\texttt{rash | -72 | 1} \\
+\texttt{acne | -672 | 1} \\
+\texttt{minocycline | -672 | 1} \\
+\texttt{increased WBC count | 0 | 0} \\
+\texttt{eosinophilia | 0 | 0} \\
+\texttt{systemic involvement | 0 | 0} \\
+\texttt{diffuse erythematous or maculopapular eruption | 0 | 1} \\
+\texttt{pruritus | 0 | 1} \\
+\texttt{DRESS syndrome | 0 | 0} \\
+\texttt{fever persisted | 0 | 1} \\
+\texttt{rash persisted | 0 | 1} \\
+\texttt{discharged | 24 | 1} \\
+
+
+EVENT EXTRACTION RULES
+
+
+- Separate conjunctive phrases into their component events and assign them the same timestamp. For example, separate ``fever and rash'' into the two events ``fever'' and ``rash''.
+
+- If an event has a duration, assign the event time as the start of the time interval.
+
+- Use the source text span without modification whenever possible, except that ``history of'' may be added where needed to preserve meaning.
+
+- Include all patient-specific events, even when they appear in the discussion.
+
+- Include termination or discontinuation events and pertinent negative findings such as ``no shortness of breath'' and ``denies chest pain''.
+
+- Do not include general medical statements, literature discussion, or events referring to people other than the index patient.
+
+
+OUTPUT FORMAT
+
+
+Return one event per row with exactly three pipe-separated columns in this order:\\
+\texttt{event | time | known} \\
+
+The time must be numeric and expressed in hours without a unit. The known value must be either 0 or 1. Do not use the pipe character within an event description. Return only the rows. Do not include a header, table title, explanation, Markdown, or code fences.
+\end{tcolorbox}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Evaluation Metrics %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

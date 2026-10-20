@@ -1,0 +1,38 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Diagnosis Distribution Analysis}
+\label{ch05:diagnosis-distribution-analysis}
+
+To characterize diagnostic coverage, we prompted the LLM to act as an expert physician and list patient-specific diagnoses for each case report. 
+The prompt asked the model to extract final diagnostic labels (e.g., ``acne'', ``DRESS syndrome'') rather than isolated clinical findings (e.g., ``rash'', ``leukocytosis''), to place the primary diagnosis first, and to output one diagnosis per line without explanatory text (full prompt in Supplementary Material, Section~\ref{ch05:apd:diagnosis-prompt}).
+
+Free-text diagnoses were then standardized to the Unified Medical Language System (UMLS) using the ScispaCy entity linker (\texttt{en\_core\_sci\_lg}) with the UMLS knowledge base. 
+\ChFiveRebuttal{
+Each complete extracted diagnosis string was supplied directly to the UMLS candidate generator, with candidate selection designed to avoid fragmentation and improve canonical concept assignment (Supplementary Material, Section~\ref{ch05:apd:umls-mapping}).
+}
+
+Figure~\ref{ch05:fig:top_diagnoses} shows the 20 most frequent UMLS-normalized diagnoses in PMOA-TTS. These are dominated by common cardiometabolic and renal conditions, including hypertensive disease, diabetes mellitus and its subtypes, coronary artery disease, dyslipidemia, and chronic kidney disease.
+\ChFiveRebuttal{
+Figure~\ref{ch05:fig:diagnoses} characterizes diagnoses represented within PMOA-TTS; it is not an evaluation of diagnostic recognition. Common diagnoses may appear as comorbidities in reports whose primary focus is a rare or atypical presentation.
+}
+
+We further examined co-occurrence structure using a clustered heatmap of diagnosis pairs (Figure~\ref{ch05:fig:diagnosis_cooccurrence}). The heatmap reveals coherent groupings among related conditions, most notably across diabetes variants, as well as broader co-occurrence patterns among cardiovascular, metabolic, and renal diagnoses. These patterns are consistent with well-established comorbidity relationships (e.g., hypertension with diabetes, or atrial fibrillation with coronary artery disease) and illustrate how the corpus captures clinically meaningful disease constellations.
+
+\ChFiveRebuttal{
+To characterize rare-disease representation more directly, we matched UMLS CUIs associated with extracted diagnoses against disorder-level entities in the Orphanet rare-disease nomenclature \citep{lucano2026orphanet} using exact, validated UMLS mappings. After excluding groups and subtypes of disorders and entities designated as inactive, historical, deprecated, obsolete, or non-rare, the reference contained 5,942 Orphanet disorders. Overall, 41{,}775 of 124{,}349 reports (33.6\%) contained at least one extracted diagnosis mapped to an eligible Orphanet disorder, spanning 2,426 distinct ORPHAcodes. Across all extracted diagnoses, 50,299 of 474,075 mappings (10.6\%) matched the Orphanet reference. These statistics characterize rare-disease representation within PMOA-TTS rather than population prevalence.
+}
+
+%\vspace{-5mm}
+
+\input{Chapters/chapter-05/figures/06}
+
+
+% To contextualize diagnosis frequencies beyond listing the most common conditions, we aggregated LLM-extracted, UMLS-normalized diagnoses into coarse disease groups and compared their prevalence in PMOA-TTS with published U.S.\ general-population prevalence estimates (Supplementary Material, Section \ref{ch05:apd:umls-mapping}, Table \ref{tab:us_disease_prevalence_sources}). Each case report’s diagnosis set was mapped to a predefined group taxonomy (e.g., cardiovascular, cancer, kidney disease, diabetes) derived from public epidemiologic summaries, and prevalence was computed as the fraction of reports containing at least one diagnosis assigned to each group. These estimates are comparable across groups but are not intended to reflect population-level incidence. To support transparency and reproducibility, we provide the source references used for U.S.\ baseline prevalence estimates and the full mapping procedure in Supplementary Material (Section \ref{ch05:apd:umls-mapping}, Table \ref{tab:us_disease_prevalence_sources}).
+
+% As shown in Figure~\ref{fig:disease_prevalence}, PMOA-TTS exhibits systematic enrichment of several disease groups relative to U.S.\ baselines, consistent with known publication biases in case reports toward severe, unusual, or diagnostically complex presentations. Cancer-related diagnoses are markedly overrepresented (35.5\% vs.\ 10.3\%), as are kidney disease (27.8\% vs.\ 14.0\%) and digestive/liver conditions (31.8\% vs.\ 21.0\%). In contrast, conditions that are common in routine
+% care but less frequently the focus of case reports appear underrepresented, including respiratory diseases (24.4\% vs.\ 39.1\%) and oral/dental health (14.2\% vs.\ 42.0\%). Cardiovascular disease remains prevalent in both settings (41.4\% in PMOA-TTS vs.\ 48.6\% baseline), while sepsis,
+% though rare in the general population, is enriched in PMOA-TTS (1.7\% vs.\ 0.5\%), reflecting the critical-illness emphasis of published case narratives. These comparisons are intended as descriptive characterization rather than epidemiologic inference: PMOA-TTS comprises published case reports rather than a population sample, and prevalence estimates depend on diagnosis-to-group mappings that may be imperfect for some concepts. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% Technical validation %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

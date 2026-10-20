@@ -1,0 +1,52 @@
+% !TeX root = ../../../main.tex
+\subsection{Introduction}
+\label{ch05:sec:introduction}
+
+Understanding when clinical events occur is fundamental to modeling patient trajectories, enabling tasks such as process mining, outcome forecasting, and causal inference in medicine \citep{jensen2012mining,noren2010temporal,noroozizadeh2025forecasting}.
+\ChFiveRebuttal{
+Although a case report is a dated document, it does not provide a machine-readable timestamp for each clinical event. Event times are instead expressed within the narrative through relative, coarse, or implicit phrases. PMOA-TTS converts these mentions into normalized event-time tuples for longitudinal analysis.
+}
+While electronic health record (EHR) datasets like MIMIC-III and MIMIC-IV include timestamped structured data and clinical notes \citep{johnson2016mimic,ch05:johnson2023mimic}, they capture only a subset of events (e.g., vital signs, lab results) and still require sophisticated natural language processing to extract temporal information from unstructured text \citep{viani2021temporal,cheng2023typed}.
+
+
+In contrast, published case reports often provide rich narrative descriptions of patient timelines, but the timing of events is typically expressed in relative terms within the free text (e.g., “on day 3 of hospitalization”).
+Efforts in temporal reasoning on clinical text have been hampered by the scarcity of large-scale annotated corpora.
+Earlier initiatives, such as the 2012 i2b2 challenge and Clinical TempEval, focused on temporal relation extraction from clinical notes \citep{sun2013evaluating,bethard2016semeval,galvan2018investigating} but were constrained by small datasets (e.g., 310 documents) from single institutions, limiting model performance and generalizability.
+Systems that rely on metadata timestamps (e.g., admission or discharge dates) fail to capture the fine-grained sequence of clinical events described in text, which is essential for nuanced understanding and prediction.
+There remains a pressing need for large-scale, temporally annotated corpora to support the development and evaluation of models for clinical temporal reasoning.
+
+\ChFiveRebuttal{
+We selected PMC Open Access case reports because they are publicly accessible, clinically detailed narratives that often connect pre-presentation history, diagnostic work-up, treatment rationale, hospitalization, and follow-up within a single document. Their enrichment for rare and atypical presentations provides a demanding setting for temporal extraction, but PMOA-TTS should not be interpreted as a population-representative cohort.
+}
+
+
+Building on our pilot pipeline on 10 case reports \citep{wang2025large}, we introduce the PubMed Open Access Textual Time Series (PMOA–TTS) corpus—a large-scale dataset of 124{,}349 openly available clinical case reports, each annotated with a structured timeline of events.
+Leveraging large language models (LLMs)—specifically \texttt{Llama 3.3 70B} \citep{grattafiori2024llama} and \texttt{DeepSeek-R1} \citep{guo2025deepseek}—we transform each case report into a sequence of \mbox{(clinical event, time)} tuples that capture key clinical events and their relative timing within the patient narrative (Figure \ref{ch05:fig:annotation_ex}).
+To the best of our knowledge, PMOA–TTS constitutes the largest publicly available collection of clinical narratives with explicit temporal event structure.
+% We demonstrate that these temporal annotations enable novel forms of analysis and significantly enhance downstream modeling of patient outcomes. 
+Compared to our prior pilot study \cite{wang2025large}, we expand the manually annotated reference set from 10 to 200 case reports and scale the LLM-annotated timelines from 100 to 124{,}349 reports. 
+
+Building PMOA-TTS requires addressing three challenges at scale: reliably identifying single-patient case reports, extracting timeline events with high fidelity from ambiguous free-text expressions, and rigorously evaluating the resulting annotations. We meet these needs with an LLM-based pipeline that selects relevant narratives beyond metadata filters, resolves relative time language into fine-grained event--time tuples, and enriches each case with structured demographics and diagnoses. 
+% To illustrate downstream value, we also formulate a survival analysis task that operates directly on the extracted textual time series.
+
+
+\input{Chapters/chapter-05/figures/01}
+
+
+
+
+
+
+\ChFiveRebuttal{
+In summary, we (i) introduce the PMOA Textual Time Series (PMOA-TTS) corpus of 124{,}349 single-patient case reports from PubMed Open Access, each annotated with structured clinical timelines extracted using large language models; (ii) develop a scalable pipeline for automatic case identification and prompt-driven extraction of timelines, demographics, and diagnoses, together with a manual evaluation framework; (iii) define and apply complementary validation measures for timeline accuracy, including temporal order concordance (c-index) and the Area Under the Log-Time CDF (AULTC); and (iv) characterize corpus properties (demographics, frequent diagnoses, and co-occurrence structure) to document clinical and demographic breadth.
+}
+% ; and (v) illustrate one reuse pathway by framing survival prediction directly over textual time series.
+
+PMOA–TTS offers several contributions to the biomedical NLP and clinical AI communities. By releasing the largest openly available dataset of temporally structured clinical narratives, this work democratizes access to timeline-based clinical text—an area typically limited to proprietary EHR datasets. The corpus spans a wide range of diagnoses and demographics, supporting research on temporal patterns in diverse and sometimes underrepresented conditions. By making the extraction pipeline, prompting strategies, and evaluation framework publicly available, the project promotes transparency and reproducibility in LLM-based clinical information extraction. These contributions collectively advance the development of models for timeline reconstruction, temporal reasoning, and longitudinal prediction, while lowering the barrier
+to entry for researchers working in resource-limited settings.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Methods %%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

@@ -1,0 +1,75 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{\ChFiveRebuttal{Comparison of models on Event Match Rate (Recall), Event Match Precision, Event Match F1, Concordance, and AULTC with respect to 200 manually annotated case reports across 5 independent runs for each model.}}\ChFiveFloatLabel{ch05:tab:model_comparison}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+
+\footnotesize
+\centering
+\setlength{\tabcolsep}{3pt}
+
+
+\begin{tabular}{lccccc}
+\hline
+\textbf{Model} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{ Recall}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{Precision}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{F1}\end{tabular} &
+\textbf{Concordance} &
+\textbf{AULTC} \\
+\hline
+\texttt{Llama 3.3 70B}
+& 0.673 $\pm$ 0.003
+& 0.757 $\pm$ 0.036
+& 0.712 $\pm$ 0.015
+& 0.846 $\pm$ 0.002
+& 0.721 $\pm$ 0.001 \\
+
+\texttt{DeepSeek-R1}
+& 0.746 $\pm$ 0.008
+& 0.788 $\pm$ 0.006
+& 0.766 $\pm$ 0.005
+& 0.773 $\pm$ 0.010
+& 0.728 $\pm$ 0.004 \\
+
+\texttt{DeepSeek-V3}
+& 0.760 $\pm$ 0.004
+& 0.796 $\pm$ 0.006
+& 0.778 $\pm$ 0.004
+& 0.783 $\pm$ 0.007
+& 0.731 $\pm$ 0.002 \\
+
+\texttt{OpenAI GPT-5}
+& \textbf{0.845 $\pm$ 0.005}
+& 0.756 $\pm$ 0.007
+& \textbf{0.798 $\pm$ 0.003}
+& \textbf{0.902 $\pm$ 0.002}
+& 0.722 $\pm$ 0.001 \\
+
+\texttt{OpenAI O4-mini}
+& 0.748 $\pm$ 0.019
+& 0.814 $\pm$ 0.015
+& 0.779 $\pm$ 0.017
+& 0.846 $\pm$ 0.006
+& \textbf{0.750 $\pm$ 0.002} \\
+
+\texttt{OpenAI O3}
+& 0.733 $\pm$ 0.003
+& 0.837 $\pm$ 0.003
+& 0.782 $\pm$ 0.002
+& 0.898 $\pm$ 0.002
+& 0.737 $\pm$ 0.003 \\
+
+\texttt{OpenAI O1}
+& 0.637 $\pm$ 0.007
+& \textbf{0.873 $\pm$ 0.003}
+& 0.737 $\pm$ 0.005
+& 0.885 $\pm$ 0.002
+& 0.732 $\pm$ 0.002 \\
+\hline
+\end{tabular}
+
+
+\end{ChFiveFloatBody}
+\end{table}

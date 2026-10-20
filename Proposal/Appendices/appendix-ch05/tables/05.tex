@@ -1,0 +1,90 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{
+Inference and generation settings used for textual time series annotation.
+Parameters described as not explicitly set were not supplied in the
+corresponding generation request.
+}\ChFiveFloatLabel{ch05:tab:inference-settings}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+\centering
+
+
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{
+    >{\raggedright\arraybackslash}p{0.18\textwidth}
+    >{\raggedright\arraybackslash}p{0.28\textwidth}
+    >{\raggedright\arraybackslash}p{0.47\textwidth}
+}
+\toprule
+\textbf{Model or configuration} &
+\textbf{Inference framework and precision} &
+\textbf{Generation settings} \\
+\midrule
+
+Llama 3.3 70B Instruct
+(full-corpus annotation) &
+Hugging Face Transformers and PyTorch;
+bfloat16;
+automatic device placement &
+128k-token model context;
+batch size 1;
+\texttt{max\_new\_tokens=8092};
+\texttt{do\_sample=True};
+\texttt{top\_k=1};
+one returned sequence;
+temperature and top-$p$ not explicitly set;
+no explicit generation seed \\
+
+Llama 3.3 70B Instruct
+(technical validation) &
+Hugging Face Transformers and PyTorch;
+bfloat16;
+automatic device placement &
+128k-token model context;
+batch size 1;
+\texttt{max\_new\_tokens=8092};
+\texttt{do\_sample=True};
+\texttt{temperature=1};
+\texttt{top\_k=1};
+one returned sequence;
+no explicit generation seed \\
+
+DeepSeek-R1 &
+DeepSeek-V3 architecture;
+checkpoint configuration specifies bfloat16 with FP8 block quantization &
+163{,}840-position context;
+five independent generation runs using the production textual time series
+prompt \\
+
+DeepSeek-V3 &
+DeepSeek-V3 architecture;
+checkpoint configuration specifies bfloat16 with FP8 block quantization &
+163{,}840-position context;
+five independent generation runs using the production textual time series
+prompt \\
+
+GPT-5 &
+Azure OpenAI Chat Completions;
+provider-managed numerical precision &
+API version \texttt{2024-12-01-preview};
+\texttt{max\_completion\_tokens=16834};
+\texttt{stream=False};
+temperature, top-$p$, and API seed not explicitly set \\
+
+O4-mini, O3, and O1 &
+Azure OpenAI Chat Completions;
+provider-managed numerical precision &
+API version \texttt{2024-12-01-preview};
+\texttt{max\_completion\_tokens=40000};
+\texttt{stream=False};
+temperature, top-$p$, and API seed not explicitly set \\
+
+\bottomrule
+\end{tabular}
+
+\end{ChFiveFloatBody}
+\end{table}

@@ -1,0 +1,68 @@
+% !TeX root = ../../../main.tex
+\begin{figure}[htbp]
+\begin{ChFiveFloatBody}
+
+  \centering
+
+  % ---- Left panel: narrative (boxed) ----
+  \subfloat[{Case narrative with highlighted clinical events}]{\begin{minipage}[t]{0.49\textwidth}
+  %\begin{subfigure}[t]{0.48\linewidth}
+    \begin{tcolorbox}
+    [
+    colback=white,
+    colframe=black!30,
+    arc=2mm,
+    boxrule=0.6pt,
+    left=2mm,right=2mm,top=2mm,bottom=2mm
+    ]
+      \small\raggedright
+      A \hl{52-year-old} \hl{woman} was \hl{admitted to the medical ICU} with \hl{chest pain} and \hl{shortness of breath}. She developed \hl{intermittent fever and fatigue} a couple of weeks prior to admission. Eight hours after hospital and ICU admission, \hl{broad-spectrum antibiotics} were \hl{started for suspected infection}. On hospital admission day 2, she developed \hl{pleuritic pain} and \hl{escalating oxygen requirements}. \hl{CT angiography} was performed two days after admission.
+      
+    \end{tcolorbox}
+    
+    \label{ch05:fig:narrative_box}
+  \end{minipage}}\hfill%
+  % ---- Right panel: event–time table (boxed) ----
+  \subfloat[{Text-ordered event–time tuples.}]{\begin{minipage}[t]{0.49\textwidth}
+  %\begin{subfigure}[t]{0.48\linewidth}
+    \begin{tcolorbox}
+    [
+    colback=white,
+    colframe=black!30,
+    arc=2mm,
+    boxrule=0.6pt,
+    left=2mm,right=2mm,top=2mm,bottom=2mm
+    ]
+      \small\centering
+      \setlength{\tabcolsep}{5pt}
+      \begin{adjustbox}{max width=\linewidth}\begin{tabular}{@{} l r @{}}
+        \toprule
+        \textbf{Event} & \textbf{Time (h)} \\
+        \midrule
+        52-year-old & 0 \\
+        woman & 0 \\
+        admitted to the medical ICU & 0 \\
+        chest pain & 0 \\
+        shortness of breath & 0 \\
+        developed intermittent fever & -336 \\
+        developed fatigue & -336 \\
+        broad-spectrum antibiotics started \\ for suspected infection & 8 \\
+        pleuritic pain developed & 24 \\
+        escalating oxygen requirements & 24 \\
+        CT angiography & 48 \\
+        %Management decisions & 48 \\
+        \bottomrule
+      \end{tabular}\end{adjustbox}
+    \end{tcolorbox}
+    
+    \label{ch05:fig:table_box}
+  \end{minipage}}
+
+  
+  
+  
+
+\end{ChFiveFloatBody}
+\caption{Example case report (left) with text-ordered event-time tuples (right).
+  }\ChFiveFloatLabel{ch05:fig:annotation_ex}
+\end{figure}

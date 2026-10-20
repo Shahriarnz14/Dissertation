@@ -1,0 +1,46 @@
+% !TeX root = ../../../main.tex
+\subsection{UMLS Mapping for Diagnosis Standardization}
+\label{ch05:apd:umls-mapping}
+
+To standardize the diagnoses extracted by LLMs from the case reports, we mapped the free-text diagnoses to concepts in the Unified Medical Language System (UMLS). 
+This process involved the following steps:
+
+\begin{enumerate}
+    \item \textbf{Initial Extraction}: For each case report, we prompted the LLM to extract diagnoses. 
+    This yielded a list of free-text diagnoses for each case report.
+
+    \item \textbf{Entity Linking}: We used ScispaCy's entity linker model 
+    \texttt{(en\_core\_sci\_lg)} with the UMLS knowledge base to map each extracted diagnosis to corresponding UMLS Concept Unique Identifiers (CUIs). 
+    \ChFiveRebuttal{Each complete extracted diagnosis string is now supplied directly to the UMLS candidate generator.}
+
+    \item \textbf{Filtering and Disambiguation}: For each diagnosis, we:
+    \begin{itemize}
+        \item Retained only mappings with a confidence score above 0.85.
+        \item \ChFiveRebuttal{When candidates are tied or near-tied, the selection procedure favors exact normalized canonical-name matches, recognized canonical suffixes, and concepts whose canonical name contains the complete diagnosis phrase.}
+    \end{itemize}
+
+    \item \textbf{Concept Normalization}: After mapping to CUIs, we:
+    \begin{itemize}
+        \item Retrieved the canonical names from UMLS Metathesaurus.
+        % \item Applied semantic type filtering to ensure mapped concepts were of types relevant to diagnoses (e.g., "Disease or Syndrome", "Pathologic Function", "Mental or Behavioral Dysfunction")
+        % \item Grouped synonym concepts where appropriate to reduce redundancy
+    \end{itemize}
+\end{enumerate}
+
+% \input{Scientific_data/Supplementary/US_disease_prevalence}
+
+This mapping process allowed us to standardize the diverse expressions of diagnoses extracted by LLMs into a consistent terminology system, enabling more reliable frequency analysis and co-occurrence patterns. 
+% \textcolor{red}{Jeremy: Quantify the mapping success rate. Any effects of confidence score or justification for threshold? @Shariar}
+Across the full PMOA-TTS corpus, LLM-extracted diagnoses yielded
+$N_{\text{raw}} = 63{,}715$ unique free-text diagnosis strings.
+Of these, $N_{\text{mapped}} = 41{,}216$ ($64.7\%$) were successfully mapped to at least one
+UMLS CUI with a confidence score $\ge 0.85$.
+When weighted by frequency of occurrence, mappings at this threshold covered
+$91.7\%$ of all diagnosis mentions, indicating that commonly occurring clinical
+diagnoses were more likely to receive high-confidence mappings.
+Mapping coverage decreased monotonically with increasing confidence threshold.
+We therefore selected a threshold of 0.85 as a conservative operating point for
+downstream normalization, providing broad coverage of frequently occurring diagnoses
+while maintaining a high-confidence mapping criterion.
+
+

@@ -1,0 +1,94 @@
+% !TeX root = ../../../main.tex
+\begin{figure}[htbp]
+\begin{ChFiveFloatBody}
+
+%\label{fig:json_plus_schema}
+\centering
+
+\begin{minipage}[t]{1\textwidth}
+\centering
+\footnotesize
+%\caption{PMOA--TTS record schema.}
+\begin{adjustbox}{max width=\linewidth}\begin{tabular}{@{} l l >{\raggedright\arraybackslash}p{4cm} @{}}
+\toprule
+\textbf{Field} & \textbf{Type} & \textbf{Description} \\
+\midrule
+\texttt{pmc\_id} & str &
+Folder-level ID (PMC000xxxxxx--PMC011xxxxxx). \\
+
+\texttt{case\_report\_id} & str &
+Filename of the case (e.g., PMC6417290). \\
+
+\texttt{textual\_timeseries} & List[Dict] &
+Sequence of \{"event": str, "time": int\}. \\
+
+\texttt{demographics} & Dict &
+\{"age": str/"Not Specified", "sex": str, "ethnicity": str\}. \\
+
+\texttt{diagnoses} & List[str] &
+List of diagnosis terms extracted per case. \\
+
+% \texttt{death\_info} & Dict &
+% \{"observed\_time": int, "death\_event\_indicator": 0/1\}. \\
+\bottomrule
+\end{tabular}\end{adjustbox}
+\end{minipage}
+\hfill
+
+% ------------------ Left: JSON Example ------------------
+\begin{minipage}[t]{\linewidth}
+\centering
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!70,
+  title=Example JSON entry,
+  boxrule=1pt,
+  enhanced,
+  %breakable,
+  fontupper=\footnotesize
+]
+\begin{verbatim}
+"pmc_id": "PMC006xxxxxx",
+"case_report_id": "PMC6417290",
+
+"textual_timeseries": [
+  {"event": "56 years old", "time": 0},
+  {"event": "male", "time": 0},
+  {"event": "HIV-positive", "time": 0},
+  {"event": "admitted to the hospital", "time": 0},
+  {"event": "knee arthralgia", "time": 0},
+  ...
+  {"event": "postural headache", "time": 48},
+  {"event": "neurological examination", "time": 120},
+  {"event": "persistence of headache", "time": 144},
+  {"event": "brain computed tomography scan",
+   "time": 144},
+  ...
+  {"event": "symptom free", "time": 4320},
+  {"event": "CT scan", "time": 4320},
+  {"event": "no brain shift", "time": 4320}
+],
+"diagnoses": [
+  "HIV",
+  "Knee arthralgia",
+  "Subdural hematoma",
+  "Postdural puncture headache (PDPH)"
+],
+"demographics": {
+  "age": 56,
+  "sex": "Male",
+  "ethnicity": "Not Specified"
+}
+\end{verbatim}
+\end{tcolorbox}
+%\caption{Example JSON entry.}
+\end{minipage}
+%\hfill
+
+
+
+
+
+\end{ChFiveFloatBody}
+\caption{\textbf{top:} PMOA-TTS record schema. \textbf{bottom:} compact example matching the schema above (drawn from our HuggingFace repository (formatted for readability).}\ChFiveFloatLabel{ch05:fig:record_schema}
+\end{figure}

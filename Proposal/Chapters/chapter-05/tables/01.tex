@@ -1,0 +1,39 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{\ChFiveRebuttal{Case-report identification performance by diagnosis and in aggregate on the manually reviewed 100-document evaluation set. Recall is calculated with respect to confirmed single-patient case reports within this evaluation set.}}\ChFiveFloatLabel{ch05:tab:case_report_identification}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+\footnotesize
+\centering
+
+
+% \begin{adjustbox}{max width=0.95\textwidth}
+\begin{tabular}{llcccc}
+\toprule
+Subset & Diagnosis & Precision & Recall & Accuracy & F1 Score \\
+\midrule
+\multirow{6}{*}{PubMed metadata} 
+    & Atrial Fibrillation & 0.84 & 0.94 & 0.80 & 0.89 \\
+    & COVID-19            & 0.94 & 0.89 & 0.85 & 0.92 \\
+    & Diabetes            & 0.85 & 1.00 & 0.85 & 0.92 \\
+    & Hypertension        & 1.00 & 1.00 & 1.00 & 1.00 \\
+    & Sepsis              & 0.95 & 0.95 & 0.90 & 0.95 \\
+\cmidrule(lr){2-6}
+    & \textbf{All Diagnoses} & \text{0.92} & \textbf{0.96} & \text{0.88} & \text{0.94} \\
+\midrule
+\multirow{6}{*}{LLM-Pipeline}
+    & Atrial Fibrillation & 1.00 & 1.00 & 1.00 & 1.00 \\
+    & COVID-19            & 1.00 & 0.89 & 0.90 & 0.94 \\
+    & Diabetes            & 1.00 & 0.94 & 0.95 & 0.97 \\
+    & Hypertension        & 1.00 & 0.95 & 0.95 & 0.97 \\
+    & Sepsis              & 1.00 & 1.00 & 1.00 & 1.00 \\
+\cmidrule(lr){2-6}
+    & \textbf{All Diagnoses} & \textbf{1.00} & \textbf{0.96} & \textbf{0.96} & \textbf{0.98} \\
+\bottomrule
+\end{tabular}
+% \end{adjustbox}
+
+
+\end{ChFiveFloatBody}
+\end{table}

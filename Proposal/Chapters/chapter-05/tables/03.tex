@@ -1,0 +1,81 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{\ChFiveRebuttal{Bootstrap 95\% confidence intervals for Event Match Rate (Recall), Event Match Precision, Event Match F1, Concordance, and AULTC across models evaluated on the 200 manually annotated case reports.}}\ChFiveFloatLabel{ch05:tab:bootstrap_intervals}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+
+\footnotesize
+\centering
+\setlength{\tabcolsep}{3pt}
+
+
+\begin{tabular}{lccccc}
+\hline
+\textbf{Model} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{Recall}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{Precision}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{F1}\end{tabular} &
+\textbf{Concordance} &
+\textbf{AULTC} \\
+&
+\textbf{(95\% CI)} &
+\textbf{(95\% CI)} &
+\textbf{(95\% CI)} &
+\textbf{(95\% CI)} &
+\textbf{(95\% CI)} \\
+\hline
+\texttt{Llama 3.3 70B}
+& [0.647, 0.715]
+& [0.564, 0.835]
+& [0.603, 0.770]
+& [0.819, 0.864]
+& [0.698, 0.746] \\
+
+\texttt{DeepSeek-R1}
+& [0.702, 0.771]
+& [0.760, 0.807]
+& [0.730, 0.789]
+& [0.747, 0.782]
+& [0.707, 0.751] \\
+
+\texttt{DeepSeek-V3}
+& [0.736, 0.795]
+& [0.782, 0.825]
+& [0.758, 0.810]
+& [0.756, 0.813]
+& [0.708, 0.753] \\
+
+\texttt{OpenAI GPT-5}
+& [0.812, 0.866]
+& [0.751, 0.792]
+& [0.780, 0.827]
+& [0.889, 0.911]
+& [0.702, 0.745] \\
+
+\texttt{OpenAI O4-mini}
+& [0.695, 0.764]
+& [0.772, 0.828]
+& [0.732, 0.795]
+& [0.824, 0.868]
+& [0.727, 0.772] \\
+
+\texttt{OpenAI O3}
+& [0.703, 0.765]
+& [0.818, 0.855]
+& [0.756, 0.808]
+& [0.880, 0.915]
+& [0.721, 0.761] \\
+
+\texttt{OpenAI O1}
+& [0.612, 0.686]
+& [0.864, 0.890]
+& [0.717, 0.775]
+& [0.869, 0.900]
+& [0.712, 0.753] \\
+\hline
+\end{tabular}
+
+
+\end{ChFiveFloatBody}
+\end{table}

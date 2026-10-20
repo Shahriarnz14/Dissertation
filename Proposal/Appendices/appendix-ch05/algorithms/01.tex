@@ -1,0 +1,39 @@
+% !TeX root = ../../../main.tex
+\begin{ChFiveAlgorithm}[ht]
+\caption{Recursive Best Match}
+\scriptsize
+\label{ch05:alg:recursive_match}
+\begin{algorithmic}[1]
+\ChFiveAlgRequire Two lists: \texttt{ref} (manually annotated reference events) and \texttt{pred} (predicted events)
+\ChFiveAlgEnsure List of best-matching event pairs
+\ChFiveAlgFunction{MatchEvents}{\texttt{ref}, \texttt{pred}}
+    \ChFiveAlgIf{\texttt{ref} is empty \textbf{or} \texttt{pred} is empty}
+        \ChFiveAlgState \ChFiveAlgReturn \texttt{[]}
+    \ChFiveAlgEndIf
+    \ChFiveAlgState $\texttt{min\_distance} \gets \infty$
+    \ChFiveAlgState $\texttt{best\_pair} \gets \texttt{None}$
+    \ChFiveAlgForAll{$r \in \texttt{ref}$}
+        \ChFiveAlgForAll{$p \in \texttt{pred}$}
+            \ChFiveAlgState $d \gets \texttt{ComputeDistance}(r, p)$
+            \ChFiveAlgIf{$d < \texttt{min\_distance}$}
+                \ChFiveAlgState $\texttt{min\_distance} \gets d$
+                \ChFiveAlgState $\texttt{best\_pair} \gets (r, p)$
+            \ChFiveAlgElsIf{$d = \texttt{min\_distance}$}
+                \ChFiveAlgState $(r^*, p^*) \gets \texttt{best\_pair}$
+                \ChFiveAlgState Get indices (within the annotation files) of $r$, $p$, and also of $r^*, p^*$
+                \ChFiveAlgIf{index of $r <$ index of $r^*$}
+                    \ChFiveAlgState $\texttt{best\_pair} \gets (r, p)$
+                \ChFiveAlgElsIf{index of $r = $ index of $r^*$ \textbf{and} index of $p <$ index of $p^*$}
+                    \ChFiveAlgState $\texttt{best\_pair} \gets (r, p)$
+                \ChFiveAlgEndIf
+            \ChFiveAlgEndIf
+        \ChFiveAlgEndFor
+    \ChFiveAlgEndFor
+    \ChFiveAlgState $(r^*,p^*) \gets \texttt{best\_pair}$
+    \ChFiveAlgState Remove $r^*$ from \texttt{ref}
+    \ChFiveAlgState Remove $p^*$ from \texttt{pred}
+    \ChFiveAlgState $\texttt{result} \gets \texttt{[best\_pair]} + \texttt{MatchEvents}(\texttt{ref}, \texttt{pred})$
+    \ChFiveAlgState \ChFiveAlgReturn $\texttt{result}$
+\ChFiveAlgEndFunction
+\end{algorithmic}
+\end{ChFiveAlgorithm}

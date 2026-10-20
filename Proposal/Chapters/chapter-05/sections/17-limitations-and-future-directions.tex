@@ -1,0 +1,116 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Limitations and Future Directions}
+\label{ch05:sec:limitations-and-future-directions}
+
+Our temporal annotation pipeline has several important limitations. 
+\ChFiveRebuttal{
+First, because published case reports preferentially describe unusual, severe, or diagnostically complex presentations, PMOA-TTS is not representative of routine clinical populations. Analyses of diagnosis frequencies should therefore be interpreted as descriptions of the corpus rather than estimates of disease prevalence.
+}
+\ChFiveRebuttal{
+Demographic fields may contain unsupported inferences, missing-value errors, and category-mapping errors and should not be used as verified patient attributes without source-level review.
+}
+At the same time, we should still note that case reports offer rich, temporally structured narratives with explicit clinical rationale, making them a useful testbed for developing and stress-testing textual time series methods. Our LLM-based framework is designed to be reusable and, in ongoing work, is being adapted to corpora such as MIMIC-IV discharge summaries for future dataset releases.
+
+Second, we model events as minimally modified text spans aligned to the source narrative. This design choice preserves interpretability and facilitates direct comparison with the underlying text but relies on embedding-based matching for evaluation and does not normalize event content to standard clinical ontologies such as UMLS. \ChFiveRebuttal{The free-text representation introduces lexical variation across reports. Synonym-aware retrieval and event-level mappings to controlled vocabularies may be added as downstream views of the data, but the source-faithful span should be retained so that normalization does not remove clinically important context or modifiers.}
+
+Third, representing time with single relative points simplifies annotation and downstream use but cannot fully capture durations or complex temporal relations (e.g., overlapping intervals or recurrent events).
+
+Fourth, our one-to-one recursive event matching strategy emphasizes temporal consistency at the expense of recall, especially when the same clinical concept is expressed multiple times or in conjunctive form.  Alternative matching formulations (e.g., many-to-many or cluster-based matching) could improve coverage but would require more elaborate evaluation protocols. 
+% Finally, the manual reference set comprises 200 cases annotated by a single clinical expert, so we cannot estimate inter-annotator agreement, and all metrics reflect agreement with that expert rather than an adjudicated consensus.
+
+These limitations point to several directions for future work, including ontology-aware event normalization, richer temporal representations (intervals and uncertainty), improved matching algorithms, and extension of the pipeline to diverse EHR-derived note types.
+
+% % \section{Sensitivity to Parts of the LLM Prompt Being Changed} \textcolor{red}{Move to Appendix?}
+
+% We slightly modified the prompt from the preceding section to check for sensitivity to specific parts of the LLM prompt being removed or modified.
+% % For sensitivity analyses with respect to the quality of different prompt strategies for extracting textual time-series (\texttt{DeepSeek R1}) from PMOA case reports, we omitted selected sections of the LLM query prompt
+% % (see Appendix \ref{apd:extraction_prompt} for the full prompt).
+% This led to the following variants:
+% \begin{enumerate}
+%     \item \textbf{No changes}: Original LLM query prompt. % for \texttt{DeepSeek-R1}.
+    
+%     \item \textbf{No role:} Remove the initial sentence \texttt{"You are a physician."}.
+    
+%     \item \textbf{Zero-shot prompting:} Remove the example case report and textual time-series from the prompt. \\
+%     %\item \textbf{No conjunction expansion:} 
+%     \textcolor{teal}{\texttt{An 18-year-old male was admitted to ..}}\\
+%     "Let's find the locations of event in the case report, it shows that ... then the output should look like:"\\
+%     \texttt{18 years old | 0 \\
+%     male | 0 \\
+%     ..}
+
+%     \item \textbf{No conjunction expansion:} Remove the following sentence from the prompt: \texttt{"Separate conjunctive phrases into its component events and assign them the same timestamp (for example, separation of ‘fever and rash’ into 2 events: ‘fever’ and ‘rash’)"}
+    
+%     \item \textbf{Interval:} A query was added to the prompt for extracting the time interval (start and end time of clinical events). The original prompt’s instructions and few-shot examples were modified accordingly. 
+    
+%     \item \textbf{Interval + Type:} A query was added to the prompt for extracting the time interval and i2b2
+%     event type (Interval+Type), where event type is one of: Factual, Possible, Hypothetical, Conditional, Negated, Historical, Uncertain. The original prompt’s instructions and few-shot examples were modified accordingly. 
+% \end{enumerate}
+
+
+
+\input{Chapters/chapter-05/figures/09}
+
+
+
+%%%%%%%%%%%%%%%% Downsteam application : Survival analyses 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section{Downstream Application: Survival Analysis}
+% \label{sec:downstream-application}
+
+% We first evaluated whether the extracted textual time series contain information predictive of time to death by formulating a classical survival analysis task. Many case reports specify whether the patient died and, if so, when (e.g., ``the patient died on hospital day 10''), which enables us to define a time-to-event outcome using the \texttt{death\_info} field. For this task, we evaluate models at predefined cut-off times—specifically at 0 hours (admission), 24 hours (1 day), and 168 hours (1 week)—and use the extracted event history up to each cut-off as input. For each case, the sequence of (event, time) pairs is transformed into a fixed-length embedding using a range of pre-trained language models, including encoder-only transformers (e.g., \texttt{bert-base-uncased}, \texttt{roberta-base}, \texttt{ModernBERT}) and larger decoder-style LLMs (e.g., \texttt{Llama 3.3 70B}, \texttt{DeepSeek-R1} and related distilled variants). We additionally include open-source decoder models with documented training corpora (\texttt{OLMo-2-0325-32B-Instruct}, \texttt{RedPajama-INCITE-7B-Instruct}) and a medically fine-tuned decoder model (\texttt{MediPhi-PubMed}) to examine potential domain-specific benefits and mitigate data-leakage concerns. These embeddings are then used as covariates in standard time-to-event models (DeepSurv and DeepHit) trained to predict survival beyond each cut-off. Model performance is summarized using the time-dependent concordance index to assess alignment between predicted and observed survival times. Detailed preprocessing, censoring, and hyperparameter tuning procedures are described in the Supplementary Material, Section~\ref{apd:survival-analysis-pipeline}.
+
+% %\input{Scientific_data/Supplementary/survival_table}
+
+% %\paragraph{Survival analyses results:}
+% We report results using \texttt{DeepSeek-R1} annotations only (Table~\ref{tab:survival}). Embeddings derived from larger decoder-style LLMs—particularly \texttt{Llama-3.3-70B-Instruct} and \texttt{DeepSeek-R1-Distill-Llama-70B}—yield the highest time-dependent concordance across cut-offs, followed by their smaller variants and then encoder-only baselines such as \texttt{bert-base-uncased}, \texttt{roberta-base}, and \texttt{ModernBERT}. Open-source decoder models with documented training corpora, including \texttt{OLMo-2-0325-32B-Instruct} and \texttt{RedPajama-INCITE-7B-Instruct}, achieve concordance comparable to mid-sized proprietary LLMs, while the medically fine-tuned \texttt{MediPhi-PubMed} performs similarly to or slightly better than general-domain encoders, suggesting a modest benefit from domain-specific adaptation without relying on private EHR data. Across annotation sources and model families, time-dependent concordance values remain well above 0.7 even at the 1-week horizon, indicating that textual representations of clinical event trajectories carry meaningful signal for time-to-death prediction. These results support the viability of text-to-time modeling on PMOA-TTS and highlight that both representation capacity and training data of the underlying language model substantially influence survival analysis performance.
+
+% % \input{Scientific_data/Supplementary/survival_table}
+
+% \begin{table*}[t]
+% \footnotesize
+% \centering
+% \begin{adjustbox}{width=\textwidth}
+% \begin{threeparttable}
+% \caption{Time-dependent concordance (mean $\pm$ standard deviation across 5 experimental runs) index across embedding models and survival modeling approaches at different time thresholds for DeepSeek-R1 annotations.}
+% \label{tab:survival}
+% \begin{tabular}{lcccccc}
+% \toprule
+% \multirow{2}{*}{\textbf{Embedding Model}} &
+% \multicolumn{2}{c}{\textbf{Time Threshold = 0h}} &
+% \multicolumn{2}{c}{\textbf{Time Threshold = 24h}} &
+% \multicolumn{2}{c}{\textbf{Time Threshold = 168h}} \\
+% \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+%  & \textbf{DeepHit} & \textbf{DeepSurv} & 
+%    \textbf{DeepHit} & \textbf{DeepSurv} &
+%    \textbf{DeepHit} & \textbf{DeepSurv} \\
+% \midrule
+
+% DeepSeek-R1-Distill-Llama-70B     & 0.815 $\pm$ 0.010 & 0.812 $\pm$ 0.013 & 0.815 $\pm$ 0.012 & 0.818 $\pm$ 0.009 & 0.810 $\pm$ 0.012 & 0.812 $\pm$ 0.014 \\
+% DeepSeek-R1-Distill-Llama-8B      & 0.806 $\pm$ 0.015 & 0.803 $\pm$ 0.011 & 0.809 $\pm$ 0.013 & 0.806 $\pm$ 0.011 & 0.802 $\pm$ 0.010 & 0.809 $\pm$ 0.011 \\
+% Llama-3.1-8B-Instruct             & 0.815 $\pm$ 0.008 & 0.813 $\pm$ 0.010 & 0.817 $\pm$ 0.010 & 0.811 $\pm$ 0.007 & 0.808 $\pm$ 0.014 & 0.809 $\pm$ 0.011 \\
+% Llama-3.3-70B-Instruct            & \textbf{0.822 $\pm$ 0.004} & \textbf{0.817 $\pm$ 0.011} & \textbf{0.821 $\pm$ 0.010} & \textbf{0.819 $\pm$ 0.005} & \textbf{0.819 $\pm$ 0.009} & \textbf{0.822 $\pm$ 0.009} \\
+% ModernBERT-base                   & 0.718 $\pm$ 0.011 & 0.729 $\pm$ 0.008 & 0.733 $\pm$ 0.010 & 0.738 $\pm$ 0.011 & 0.725 $\pm$ 0.013 & 0.729 $\pm$ 0.009 \\
+% ModernBERT-large                  & 0.653 $\pm$ 0.014 & 0.667 $\pm$ 0.009 & 0.655 $\pm$ 0.015 & 0.665 $\pm$ 0.017 & 0.643 $\pm$ 0.011 & 0.662 $\pm$ 0.003 \\
+% roberta-base                      & 0.743 $\pm$ 0.013 & 0.746 $\pm$ 0.008 & 0.742 $\pm$ 0.014 & 0.748 $\pm$ 0.006 & 0.744 $\pm$ 0.009 & 0.747 $\pm$ 0.010 \\
+% deberta-v3-small                  & 0.739 $\pm$ 0.010 & 0.736 $\pm$ 0.010 & 0.730 $\pm$ 0.019 & 0.758 $\pm$ 0.006 & 0.733 $\pm$ 0.012 & 0.751 $\pm$ 0.006 \\
+% roberta-base                      & 0.757 $\pm$ 0.017 & 0.756 $\pm$ 0.013 & 0.760 $\pm$ 0.012 & 0.758 $\pm$ 0.014 & 0.761 $\pm$ 0.009 & 0.762 $\pm$ 0.011 \\
+% % \midrule
+% BioClinical-ModernBERT-base       & 0.696 $\pm$ 0.013 & 0.708 $\pm$ 0.017 & 0.689 $\pm$ 0.010 & 0.717 $\pm$ 0.013 & 0.713 $\pm$ 0.022 & 0.724 $\pm$ 0.018 \\
+% BioClinical-ModernBERT-large      & 0.637 $\pm$ 0.012 & 0.646 $\pm$ 0.007 & 0.629 $\pm$ 0.012 & 0.647 $\pm$ 0.023 & 0.626 $\pm$ 0.030 & 0.647 $\pm$ 0.022 \\
+% MediPhi-PubMed                    & 0.780 $\pm$ 0.015 & 0.738 $\pm$ 0.007 & 0.767 $\pm$ 0.016 & 0.781 $\pm$ 0.009 & 0.782 $\pm$ 0.018 & 0.784 $\pm$ 0.022 \\
+% OLMo-2-0325-32B-Instruct          & 0.800 $\pm$ 0.011 & 0.797 $\pm$ 0.006 & 0.785 $\pm$ 0.015 & 0.790 $\pm$ 0.021 & 0.789 $\pm$ 0.025 & 0.800 $\pm$ 0.027 \\
+% RedPajama-INCITE-TB-Instruct      & 0.778 $\pm$ 0.014 & 0.742 $\pm$ 0.015 & 0.771 $\pm$ 0.015 & 0.763 $\pm$ 0.008 & 0.791 $\pm$ 0.019 & 0.798 $\pm$ 0.018 \\
+% \bottomrule
+
+% \end{tabular}
+% \end{threeparttable}
+% \end{adjustbox}
+% \end{table*}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%% Usage Notes %%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

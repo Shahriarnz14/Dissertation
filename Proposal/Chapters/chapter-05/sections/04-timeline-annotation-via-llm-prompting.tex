@@ -1,0 +1,43 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Timeline Annotation via LLM Prompting}
+\label{ch05:sec:timeline-annotation}
+
+\ChFiveHeadingOnly
+\paragraph{Textual Time Series (TTS)}
+\label{ch05:sec:textual-time-series}
+
+We use large language models (LLMs; \texttt{LLaMA\~3.3\~70B}, \texttt{DeepSeek-R1}) to convert PubMed Open Access (PMOA) case reports into \emph{textual time series} (TTS). A textual time series is defined as an ordered sequence of clinical event–time pairs, where each event is represented as a short free-text span and each timestamp is a numeric value measured in hours relative to a case-specific reference time.
+\ChFiveRebuttal{
+The reference event is an anchor for the timeline rather than its boundary. For the LLM extraction, hospital admission is assigned $t=0$ when it is described. If admission is not described, the current clinical presentation that frames the case, such as the main diagnosis or treatment, is assigned $t=0$. Events before and after this reference event receive negative and positive timestamps, respectively. Thus, a phrase such as ``three days before admission'' is represented as $-72$ hours, whereas an event on hospital day 2 is represented as $+24$ hours. Depending on the source report, the resulting TTS may cover an acute encounter or a longitudinal course extending over months or years.
+}
+
+In this work, a clinical event refers to any health-related mention that can stand alone semantically and is directly relevant to the patient’s course. This includes symptoms and signs, diagnoses, procedures and diagnostic tests, treatments and medication administrations, major clinical states, and outcomes. Explicitly stated pertinent negatives and termination events (such as “no shortness of breath” or “antibiotics discontinued”) are also included. 
+Demographic attributes that appear in the narrative, such as age and sex are also extracted as clinical events with reference time (t=0) as the timestamp. We exclude purely contextual text that does not describe the index patient, such as general background statements or literature discussion.
+
+% To preserve clinical nuance, we retain minimally edited, context-rich text spans rather than restricting events to short phrases. In contrast to span-based temporal annotation methods (e.g., \cite{sun2013evaluating,uzuner20112010}) and i2b2-style guidelines that often limit events to short prepositional phrases, our approach allows events to include sufficient surrounding context to accurately convey meaning (for example, retaining “pain in chest that radiates substernally” as a single event). Conjunctive mentions are separated into individual events when doing so improves clarity, and semantic modifiers that alter meaning—such as negation, uncertainty, or intent (e.g., “planned”)—are preserved in the event string so that intended actions are not conflated with actions that occurred. 
+
+\ChFiveRebuttal{
+PMOA-TTS uses source-faithful, span-based events in the tradition of i2b2 clinical concept annotation, while allowing enough surrounding context for an event to remain clinically interpretable, in contrast to span-based temporal annotation methods (e.g., \cite{sun2013evaluating,uzuner20112010}) and i2b2-style guidelines that often limit events to short prepositional phrases. This is necessary because the timelines include symptoms, findings, procedures, treatments, outcomes, pertinent negatives, uncertainty, and intent in addition to diagnoses. For example, retaining ``pain in chest that radiates substernally'' preserves information that would be lost if the event were reduced to a generic chest-pain code; similarly, retaining ``planned'' distinguishes an intended procedure from one that occurred.
+}
+Conjunctive mentions are separated into individual events when doing so improves clarity.
+
+Natural-language time expressions are normalized into hour units: coarse expressions such as “hospital day 2” are converted using 24-hour increments from the reference point, interval expressions are represented using the start of the interval, and vague temporal phrases are resolved to approximate offsets that are consistent with narrative ordering and surrounding cues. The goal of this normalization is to produce a usable relative timeline rather than an exact reconstruction of clock time.
+
+The above specifications define the intended representation of textual time series. The LLM extraction prompt used in our pipeline (Supplementary Material, Section~\ref{ch05:apd:extraction-prompt}) implements this specification by instructing the model to output a structured sequence of \mbox{(clinical event, time)} tuples. Events are kept in free-text form to retain clinical specificity rather than being normalized to a fixed ontology. On average, each case report yields 46 events, and the full corpus comprises over 5.6 million timestamped events, making it the largest publicly available resource of this type in clinical NLP.
+
+
+\paragraph{Gold Standard Annotations}
+\label{ch05:sec:gold-standard-annotations}
+
+We constructed a gold-standard reference set of 200 manually annotated case reports, consisting of 190 cases randomly sampled from PMOA–TTS and 10 cases from our prior pilot study. All annotations were performed by a single clinical expert following a detailed annotation guideline designed to preserve fidelity to the original narrative while producing event representations suitable for temporal evaluation.
+
+Annotators marked exact text spans corresponding to clinical events without rewriting or paraphrasing, with a small number of controlled exceptions specified in the guideline. First, conjunctive findings (e.g., “nausea and vomiting”) were permitted to be split into individual events when clinically meaningful. Second, when needed to supply context, annotators could prepend short clarifying phrases such as “history of” to ensure that extracted events were interpretable as stand-alone findings. Beyond these two exceptions, events were expected to remain faithful to the wording and granularity of the source text.
+
+To promote consistency, annotators were then instructed to ensure that each event was semantically self-contained (e.g., using “SCC of the lung” rather than “SCC” to avoid ambiguity with other
+entities such as cutaneous squamous cell carcinoma or sickle cell crisis). Related findings were disambiguated when necessary, duplicate mentions of the same event were avoided even when they appeared in multiple sections of a report, and pertinent negative or termination events (e.g., “no shortness of breath” or “denies chest pain”) were included when explicitly stated. These conventions were applied uniformly across all 200 annotated case reports.
+
+Each annotated event was assigned a timestamp relative to a standardized case reference point. By definition, this reference point was the time of admission. If an explicit admission time was not stated, the encounter date (the earliest unambiguous point of primary clinical evaluation within the case narrative) was used as the reference time. For temporal expressions that described intervals, the start time of the interval was recorded. All timestamps were expressed in hours relative to the reference time (t=0).
+
+These manually produced timelines serve as the reference standard for evaluating LLM-generated annotations in subsequent sections.
+% \ChFiveRebuttal{To contextualize agreement with the single-expert reference set, we also analyzed a separate 140-case report subset of PMOA-TTS involving patients who took GLP-1 RA(Glucagon-like Peptide Receptor Agonists) medications. Two clinically-trained annotators independently constructed event-time timelines for this subset using the same annotation framework.}
+

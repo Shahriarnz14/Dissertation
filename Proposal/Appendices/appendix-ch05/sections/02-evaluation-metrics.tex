@@ -1,0 +1,158 @@
+% !TeX root = ../../../main.tex
+\subsection{Evaluation Metrics}
+\label{ch05:apd:evaluation-metrics}
+
+We evaluated textual time series extracted from PMOA case reports along three dimensions:
+(i) semantic alignment between predicted and manually annotated events (event match recall, precision, and F1),
+(ii) agreement in temporal ordering (temporal concordance), and
+(iii) agreement in timestamp values (time discrepancy).
+Each dimension captures a distinct property of timeline quality.
+
+\subsubsection{Event Match Rate (Recall, Precision, and F1)}
+\label{ch05:apd:event-match-rate}
+
+To assess how well predicted clinical events align with reference events, we use a recursive
+best-match strategy adapted from prior work~\cite{wang2025large} as shown in Algorithm~\ref{ch05:alg:recursive_match}. At each step, the method
+identifies the closest unmatched pair of predicted and reference events using a text-similarity
+metric, retains the pair if it satisfies a distance threshold, and removes both events before
+proceeding. \textbf{Algorithm \ref{ch05:alg:recursive_match}} provides pseudocode for this recursive matching procedure.
+This strategy produces a one-to-one alignment between reference and predicted events that is
+efficient and well-suited to timelines of differing lengths. 
+
+In our final evaluation, we also implement a globally optimal one-to-one matching procedure based on the Linear Assignment Problem, solved using the Jonker–Volgenant (LAPJV) algorithm \citep{jonker1987shortest}. We construct a rectangular cost matrix of pairwise cosine distances between predicted and reference events and enforce a distance threshold by assigning infeasible pairs a prohibitively large cost. LAPJV then computes a minimum-cost assignment under these constraints, yielding a globally optimal one-to-one alignment. This provides a principled benchmark against the recursive heuristic while preserving the same matching constraints. Unlike the recursive best-match heuristic, which greedily selects local minima, the LAPJV formulation optimizes the full matching jointly, ensuring global optimality under the same one-to-one and distance constraints. A detailed sensitivity analysis of LAPJV-based matching with respect to the distance threshold,
+including trade-offs between event match recall, temporal concordance, and timestamp accuracy, is presented in Appendix~\ref{ch05:apd:lapjv-matching}. 
+
+We evaluated several similarity measures—including Levenshtein distance, BERT-based
+embeddings, and PubMedBERT embeddings—and found cosine similarity using PubMedBERT
+sentence embeddings to perform best. A cosine distance threshold of 0.1 is used to determine
+whether a predicted event is considered a semantic match.
+
+% Under this procedure, the event match rate is defined as:
+% \[
+% \text{Match Rate} =
+% \frac{\#\{\text{reference events with a matched prediction}\}}
+%      {\#\{\text{reference events}\}},
+% \]
+% which measures the proportion of reference events that are successfully recovered.
+
+\ChFiveRebuttal{
+We evaluate event identification using event match recall, precision, and F1. Let $M$ denote the number of one-to-one semantic matches after assignment and application of the cosine-distance threshold, $N_{\mathrm{manual}}$ the number of manually annotated events, and $N_{\mathrm{model}}$ the number of model-generated events. Event match recall is defined as $M/N_{\mathrm{manual}}$, event match precision as $M/N_{\mathrm{model}}$, and event match F1 as the harmonic mean of precision and recall. Precision therefore penalizes additional model-generated events that remain unmatched under the one-to-one alignment, complementing recall, which measures the proportion of manually annotated events recovered.
+}
+
+% We provide pseudocode for the best match procedure between two lists of strings (Algorithm \ref{ch05:alg:recursive_match}).  For each list, we use the text order, \emph{i.e.}, the order of the events in the annotation files, to break embedding distance ties.  We use the cosine similarity for the distance calculation using sentence transformer embeddings from \texttt{S-PubMedBert-MS-MARCO}.
+
+
+\input{Appendices/appendix-ch05/algorithms/01}
+
+
+
+% \begin{table}[ht!]
+% \vspace{-3.5mm}
+% \centering
+% \caption{Bootstrap 95\% confidence intervals for Match Rate, Concordance, and AULTC across models evaluated on the 200 manually annotated case reports.
+% %\jeremy{suggest being consistent about number of sigfigs in results (see table 2)}
+% }
+% \label{tab:bootstrap_intervals}
+% \begin{tabular}{lccc}
+% \hline
+% \textbf{Model} & \textbf{Match Rate (95\% CI)} & \textbf{Concordance (95\% CI)} & \textbf{AULTC (95\% CI)} \\
+% \hline
+% \texttt{Llama 3.3 70B}      & [0.642, 0.718] & [0.833, 0.861] & [0.701, 0.754] \\
+% \texttt{DeepSeek-R1}        & [0.694, 0.773] & [0.783, 0.818] & [0.708, 0.752] \\
+% \texttt{DeepSeek-V3-0324}   & [0.727, 0.791] & [0.792, 0.821] & [0.718, 0.758] \\
+% \texttt{OpenAI GPT5}        & [0.805, 0.866] & [0.882, 0.898] & [0.706, 0.749] \\
+% \texttt{OpenAI O4-mini}     & [0.692, 0.767] & [0.826, 0.852] & [0.732, 0.769] \\
+% \texttt{OpenAI O3}          & [0.699, 0.766] & [0.888, 0.907] & [0.728, 0.765] \\
+% \texttt{OpenAI O1}          & [0.599, 0.677] & [0.872, 0.895] & [0.716, 0.755] \\
+% \hline
+% \end{tabular}
+% \vspace{-3.5mm}
+% \end{table}
+
+
+\subsubsection{Temporal Concordance}
+\label{ch05:apd:temporal-concordance}
+
+Temporal ordering accuracy is quantified using the concordance index (c-index), which
+measures agreement in the ordering of pairs of matched events.
+Let $t^{\text{ref}}_i$ and $t^{\text{pred}}_i$ denote the reference and predicted timestamps for
+matched event $i$.
+
+\ChFiveRebuttal{
+Comparable pairs are formed within each report from matched events with usable timestamps. Pairs with equal manual-reference timestamps are excluded from the concordance denominator. Among the remaining pairs, equal model timestamps receive 0.5 credit. We report the summed number of comparable pairs, the number and percentage of manual-reference ties among all eligible pairs, and the number and percentage of model ties among comparable pairs for each model.
+}
+
+The c-index is:
+\[
+\text{c-index}
+=
+\frac{1}{N}
+\sum_{\substack{i<j\\
+t^{\text{ref}}_i \neq t^{\text{ref}}_j}}
+\left[
+\mathds{1}\!\left\{
+(t^{\text{ref}}_i-t^{\text{ref}}_j)
+(t^{\text{pred}}_i-t^{\text{pred}}_j)>0
+\right\}
++
+\frac{1}{2}
+\mathds{1}\!\left\{
+t^{\text{pred}}_i=t^{\text{pred}}_j
+\right\}
+\right],
+\]
+where $N$ is the number of comparable pairs. Higher values indicate stronger preservation of reference ordering.
+
+\ChFiveRebuttal{
+In our analysis of 200 manually annotated benchmark, manual-reference ties accounted for 13.81\%--15.37\% of all eligible pairs, while LLM annotation ties occurred in 14.16\%--34.70\% of comparable pairs (Table \ref{ch05:tab:concordance_pairs_ties}). Counts were summed across documents, and percentages were calculated from the corresponding summed counts. Manual-reference tie rates differ across models because each model yields a different set of matched events with usable timestamps.
+}
+
+
+\input{Appendices/appendix-ch05/tables/01}
+
+
+\subsubsection{Time Discrepancy and AULTC}
+\label{ch05:apd:aultc}
+
+For each matched event, we measure timestamp accuracy using the absolute time error
+$\Delta t_i = |t^{\text{pred}}_i - t^{\text{ref}}_i|$.  
+Because timestamp discrepancies can vary across several orders of magnitude, we evaluate
+errors on a log scale:
+\[
+x_i = \log(1 + \Delta t_i).
+\]
+
+To characterize timestamp accuracy across the dataset, we compute the empirical CDF (constructed over log-time discrepancies pooled across all matched events in the 200-case gold standard):
+\[
+F(x) = \frac{1}{k} \sum_{i=1}^{k} \mathds{1}\{x_i \le x\},
+\]
+where $k$ is the total number of matched events across all annotated cases.
+
+\ChFiveRebuttal{
+AULTC is computed over semantically matched event pairs only and therefore measures timestamp accuracy conditional on successful event alignment. Unmatched events do not enter the empirical CDF or AULTC and are evaluated separately by the event-extraction metrics. A single common $S_{\max}$ is used to normalize AULTC for all models and runs, avoiding model-specific rescaling.
+}
+
+We then summarize the overall discrepancy using the Area Under the Log-Time CDF (AULTC):
+\[
+\text{AULTC} =
+\frac{1}{\log(1+S_{\max})}
+\left[
+\sum_{i=1}^{k}(x_{(i)} - x_{(i-1)})\frac{i}{k}
++
+\big( \log(1+S_{\max}) - x_{(k)} \big)
+\right],
+\]
+where $x_{(i)}$ are the sorted log discrepancies and $S_{\max}$ is the common maximum observed absolute error across all models and runs being compared.
+AULTC ranges from 0 to 1, with higher values indicating closer alignment between predicted
+and reference timestamps.
+
+Finally, we stratify timestamp errors by temporal distance (e.g., within 1 hour, 1 day, 1 week,
+1 year) to examine how accuracy varies across clinically meaningful time scales.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% UMLS mapping %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

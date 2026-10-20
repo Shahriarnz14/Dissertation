@@ -1,0 +1,75 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{\ChFiveRebuttal{Inter-LLM comparison under LAPJV-based event matching (threshold = 0.1), evaluated on 200 manually annotated case reports across five runs per model.}}\ChFiveFloatLabel{ch05:tab:model_comparison_lapjv}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+
+\footnotesize
+\centering
+\setlength{\tabcolsep}{3pt}
+
+
+\begin{tabular}{lccccc}
+\hline
+\textbf{Model} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{Recall}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{Precision}\end{tabular} &
+\begin{tabular}{c}\textbf{Event Match}\\\textbf{F1}\end{tabular} &
+\textbf{Concordance} &
+\textbf{AULTC} \\
+\hline
+\texttt{Llama 3.3 70B}
+& 0.676 $\pm$ 0.003
+& 0.761 $\pm$ 0.036
+& 0.715 $\pm$ 0.015
+& 0.848 $\pm$ 0.003
+& 0.720 $\pm$ 0.001 \\
+
+\texttt{DeepSeek-R1}
+& 0.750 $\pm$ 0.008
+& 0.793 $\pm$ 0.006
+& 0.771 $\pm$ 0.006
+& 0.773 $\pm$ 0.007
+& 0.727 $\pm$ 0.004 \\
+
+\texttt{DeepSeek-V3}
+& 0.764 $\pm$ 0.005
+& 0.801 $\pm$ 0.005
+& 0.782 $\pm$ 0.004
+& 0.777 $\pm$ 0.009
+& 0.730 $\pm$ 0.002 \\
+
+\texttt{OpenAI GPT-5}
+& \textbf{0.851 $\pm$ 0.006}
+& 0.761 $\pm$ 0.007
+& \textbf{0.803 $\pm$ 0.003}
+& \textbf{0.903 $\pm$ 0.004}
+& 0.722 $\pm$ 0.001 \\
+
+\texttt{OpenAI O4-mini}
+& 0.752 $\pm$ 0.019
+& 0.818 $\pm$ 0.015
+& 0.783 $\pm$ 0.017
+& 0.845 $\pm$ 0.006
+& \textbf{0.750 $\pm$ 0.002} \\
+
+\texttt{OpenAI O3}
+& 0.738 $\pm$ 0.003
+& 0.842 $\pm$ 0.002
+& 0.786 $\pm$ 0.002
+& 0.900 $\pm$ 0.005
+& 0.737 $\pm$ 0.003 \\
+
+\texttt{OpenAI O1}
+& 0.640 $\pm$ 0.007
+& \textbf{0.878 $\pm$ 0.003}
+& 0.740 $\pm$ 0.005
+& 0.881 $\pm$ 0.003
+& 0.731 $\pm$ 0.002 \\
+\hline
+\end{tabular}
+
+
+\end{ChFiveFloatBody}
+\end{table}

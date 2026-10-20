@@ -1,0 +1,42 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Common error types observed across LLM-generated temporal annotations.}\ChFiveFloatLabel{ch05:tab:error_taxonomy}
+\ChFiveTableBodyStart
+\begin{ChFiveFloatBody}
+
+\centering
+
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{9cm}}
+\toprule
+\textbf{Error Type} & \textbf{Description and Examples} \\
+\midrule
+
+\textbf{Event granularity mismatch} 
+& Models differ in splitting vs.\ compressing multi-component statements. 
+For example, medications may appear as three separate events (``rifampicin'', ``clofazimine'', ``dapsone'') or as one combined entry. \\[6pt]
+
+\textbf{Near-duplicate events} 
+& Multiple paraphrased versions of the same clinical concept assigned to the same timestamp, such as 
+``diagnosed with lepromatous leprosy’’ and 
+``skin biopsy confirmed lepromatous leprosy.’’ \\[6pt]
+
+\textbf{Temporal normalization variability} 
+& Large differences in converting narrative expressions (e.g., ``two months before admission’’) to numerical timestamps, with offsets ranging from $-1464$ to $-1344$ hours and occasional scaling errors (e.g., $-144$ hours). Long-range events (e.g., transplant plan, ICU readmission, death) also vary by hundreds of hours across models. \\[6pt]
+
+\textbf{Intent vs.\ occurrence confusion} 
+& Some models omit modality markers such as ``planned,'' converting intended future events into events marked as completed. 
+The timestamp itself may be reasonable; the error lies in the event label. \\[6pt]
+
+\textbf{Phrasing and specificity variation} 
+& Models differ in the level of detail used in event descriptions.  
+Some outputs retain clinically precise phrases (e.g., ``mural thickening of the terminal ileum’’), while others produce generic events (e.g., ``abdominal abnormality’’). \\[6pt]
+
+\textbf{Long-range timestamp degradation} 
+& Accuracy decreases for events far from the admission anchor, with larger dispersion in timestamp predictions for events weeks or months after presentation. \\
+\bottomrule
+\end{tabular}
+
+
+\end{ChFiveFloatBody}
+\end{table}

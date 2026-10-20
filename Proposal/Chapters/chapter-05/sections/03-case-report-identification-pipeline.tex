@@ -1,0 +1,33 @@
+% !TeX root = ../../../main.tex
+\begingroup\raggedright
+\subsubsection{Case Report Identification Pipeline}
+\label{ch05:sec:case-report-identification-pipeline}
+
+\ChFiveRebuttal{
+We obtained the source corpus from the PubMed Central Open Access Subset using the NCBI FTP bulk-download service available at the time of collection. Specifically, we used the 12 plain-text baseline archives in \texttt{oa\_bulk/oa\_noncomm/txt} dated 17 December 2024, with filenames ranging from \texttt{oa\_noncomm\_txt.PMC000xxxxxx.baseline.2024-12-17.tar.gz} to \texttt{oa\_noncomm\_txt.PMC011xxxxxx.baseline.2024-12-17.tar.gz}, downloaded from the then-current endpoint \url{https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_bulk/oa_noncomm/txt/}. After unpacking the archives, we extracted article content between the ``\texttt{==== Body}'' and ``\texttt{==== Ref}'' markers. Candidate reports were identified using the case-insensitive regular expressions \texttt{case (report|presenta)} and \texttt{year-? ?old}. We then retained documents for which \texttt{Llama 3.3 70B Instruct} returned \texttt{1} to the single-patient case-count prompt. Each released record retains its source PMCID.
+}
+
+\ChFiveRebuttal{
+The source files were drawn from the non-commercial-use collection of the PMC Open Access Subset. Reuse conditions vary by article and are governed by the license statement attached to each source article; the source PMCID is retained for every PMOA-TTS record to preserve provenance and license traceability.
+}
+
+This filter yields 145,571 candidate documents likely to be case reports or case series. 
+\ChFiveRebuttal{
+The regular expressions serve as deterministic candidate-generation criteria that define the document pool considered for corpus construction; PMOA-TTS does not claim exhaustive retrieval of every possible single-patient case report in PMOA.
+}
+For the single-patient case-count step, the model is prompted with: ``\texttt{You are a physician. Determine the number of case reports in the following manuscript. Return 0 if it is not a case report. Reply only with the number and nothing else.}'', followed by the document body.
+\ChFiveRebuttal{
+The pipeline selected 124{,}699 source articles as single-patient case reports. Of these, 124{,}349 produced valid event-time rows. 350 outputs were excluded because they could not be parsed into the required schema.
+}
+This two-stage process results in a final dataset of \ChFiveRebuttal{124{,}349} single-patient case reports (Figure~\ref{ch05:fig:flowchart}).
+
+We compared our LLM-based case report identification method with PubMed's metadata-based labeling using a carefully designed benchmark. We created a dataset of 100 reports across five diagnoses—Diabetes, Sepsis, Hypertension, COVID-19, and Atrial Fibrillation—with 10 reports per diagnosis from each method. A clinician manually reviewed and labeled each report to verify whether it described exactly one case.
+\ChFiveRebuttal{
+Because this evaluation set was constructed from documents surfaced by at least one of the two identification approaches, recall is computed with respect to manually confirmed single-patient case reports within this evaluation set and should not be interpreted as corpus-level sensitivity over all PMOA documents.
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par\endgroup

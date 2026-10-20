@@ -1,0 +1,36 @@
+% !TeX root = ../../../main.tex
+\ChFiveAbstract
+{
+Clinical narratives encode temporal dynamics essential for modeling patient trajectories, yet large-scale temporally annotated resources are scarce. We introduce PMOA-TTS, a corpus of 124{,}349 single-patient PubMed Open Access case reports converted into structured textual timelines of (event, time) pairs using a scalable large-language-model pipeline (\texttt{Llama 3.3 70B} and \texttt{DeepSeek-R1}). The corpus comprises over 5.6 million timestamped events, alongside extracted demographics and diagnoses. Technical validation uses a clinician-curated gold set and three measures: semantic event matching, temporal concordance (c-index), and alignment error summarized with Area Under the Log-Time CDF (AULTC). We benchmark alternative prompting and model choices and provide documentation to support reproduction. 
+\ChFiveRebuttal{
+PMOA-TTS provides a large, publicly available resource for developing and evaluating methods for clinical timeline extraction and temporal reasoning from narrative text.
+}
+% PMOA–TTS enables research on timeline extraction, temporal reasoning, survival modeling and event forecasting from narrative text, and offers broad diagnostic and demographic coverage. 
+Data and code are openly available in public repositories.
+% PMOA–TTS dataset is hosted on Hugging Face Datasets at \url{https://huggingface.co/datasets/snoroozi/pmoa-tts}. Our full codebase, including preprocessing scripts, prompt templates, and evaluation pipelines,
+% is available at: \url{https://github.com/jcweiss2/pmoa_tts}. 
+}.
+
+%\ChFiveKeywords{keyword1, Keyword2, Keyword3, Keyword4}
+\ChFiveKeywords{clinical natural language processing, temporal information extraction, textual time series, large language models, PubMed Open Access case reports}
+
+
+
+% Background & Summary
+% Methods
+% Data Records
+% Data Overview (optional)
+% Technical Validation
+% Usage Notes (optional)
+% Data Availability
+% Code Availability
+% References
+% Author Contributions
+% Competing Interests
+% Acknowledgements (optional)
+% Funding
+% Ethics statement* 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Introduction %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
