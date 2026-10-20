@@ -1,0 +1,100 @@
+\textbf{Clinical Narrative Datasets.} Large-scale clinical text data such as those in MIMIC-III \cite{johnson2016mimic} and MIMIC-IV \cite{johnson2023mimic} have played a pivotal role in clinical NLP research. However, their limitations include a single-institution scope and the absence of temporal event annotations in free-text notes. In contrast, our PMOA–TTS corpus spans a wide range of clinical specialties and institutions globally and provides explicit temporal event sequences extracted from case narratives. %, filling a critical gap in temporal clinical NLP resources.
+
+\textbf{Biomedical Language Models.} Transformer-based models such as BioBERT \cite{lee2020biobert}, PubMedBERT \cite{gu2021domain}, and Clinical-T5 \cite{lehman2023clinical} have advanced domain-specific understanding of biomedical texts. Still, they are not optimized for temporal reasoning. Our work leverages instruction-tuned LLMs—Llama 3.3 \cite{grattafiori2024llama} and DeepSeek R1 \cite{guo2025deepseek}—to directly generate structured event timelines from unstructured narratives, circumventing the need for intermediate classification steps.
+
+\textbf{Temporal NLP Tasks.} Temporal information extraction is essential in clinical NLP for modeling patient histories and disease progression. While prior efforts, such as the i2b2 2012 challenge \cite{sun2013evaluating}, laid foundational work, progress has been constrained by data scarcity. PMOA–TTS supports timeline extraction at scale and introduces novel evaluation metrics like AULTC, bridging the gap between event extraction and downstream temporal modeling (e.g., survival prediction).
+
+\textbf{Domain-Specific LLMs.} LLMs enable prompt-driven, zero-shot approaches for complex information extraction in healthcare.
+Domain-adapted models like Med-PaLM \cite{singhal2025toward}, GatorTron \cite{yang2022gatortron}, and BioMedLM \cite{bolton2024biomedlm} extend these capabilities to healthcare applications, with mixed results across health-related tasks.
+For our pipeline, we apply Llama 3.3 and DeepSeek to tasks including timeline generation and diagnosis identification. %We quantify how LLM annotation quality affects downstream models, emphasizing the importance of model selection and prompt design in clinical applications.
+A more detailed discussion %about the different categories
+is presented in Appendix \ref{apd:related_works}.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \paragraph{Clinical Narrative Datasets:}Large clinical text corpora have driven significant advancements in biomedical NLP. The MIMIC-III \cite{johnson2016mimic} and MIMIC-IV \cite{johnson2023mimic} databases, which contain de-identified ICU records, are widely used resources, offering clinical notes and structured data for hundreds of thousands of patient stays. These datasets feature timestamped events (e.g., lab tests and interventions) that have supported sequential modeling and outcome prediction \cite{harutyunyan2019multitask, sheikhalishahi2020benchmarking}.
+% However, they are limited to a single institutional setting, and their free-text notes lack temporal event annotations.
+% In contrast, our PMOA–TTS corpus encompasses case reports from diverse institutions and specialties worldwide, providing a rich, varied distribution of patient scenarios.
+% Moreover, prior to our work, no large-scale open-access corpus existed that includes extracted temporal sequences from clinical narratives.
+% Smaller annotated datasets for clinical temporal reasoning, such as the i2b2 2012 Temporal Relations challenge \cite{sun2013evaluating}, THYME \cite{styler2014temporal}, and MedTimeML \cite{reeves2013detection}, are limited in size (a few hundred documents) and require special access.
+% By contrast, PMOA–TTS dramatically scales the availability of temporally annotated clinical narratives—by two orders of magnitude—and is freely accessible, facilitating LLM-based approaches.
+
+% %\vspace{-2mm}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \paragraph{Biomedical Language Models:}The success of transformer-based language models has driven the development of domain-specific variants for biomedicine. Encoder-only models such as BioBERT \cite{lee2020biobert}, PubMedBERT \cite{gu2021domain}, and BioELECTRA \cite{kanakarajan2021bioelectra}, pretrained on PubMed abstracts and full-text articles, achieve strong performance on biomedical NLP benchmarks by capturing domain-specific terminology and semantics.
+% \cite{peng2020empirical} extended this line by incorporating clinical notes (from MIMIC-III) into pretraining to bridge biomedical literature and clinical text.
+% More recent models—BioGPT \cite{luo2022biogpt} and Clinical-T5 \cite{lehman2023clinical}—adapt the decoder-only and encoder-decoder architectures for biomedical understanding and generation. While these models provide strong static text representations, modeling temporal information in clinical narratives remains challenging, as it requires capturing the sequence and timing of events, not just contextual semantics \cite{zhou2021clinical, cui2025timer}.
+
+% Several recent efforts have explored adapting language models for clinical timeline tasks. Temporal relation extraction has combined rule-based and machine learning methods \cite{wang2025large}, while sequence-to-sequence and classification approaches have been used to link events with time expressions \cite{lee2016uthealth, tourille2017temporal, alfattni2020extraction, moharasan2019extraction}.
+% In contrast, our work uses large, instruction-tuned models—Llama 3.3 \cite{grattafiori2024llama} and DeepSeek R1 \cite{guo2025deepseek}—to directly generate structured timeline annotations from raw text, bypassing explicit link classification.
+% We also present an end-to-end pipeline capable of processing hundreds of thousands of documents, demonstrating the scalability of LLMs for large-scale temporal annotation.
+
+% %\vspace{-2.5mm}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \paragraph{Temporal NLP Tasks:}Beyond the clinical domain, temporal information extraction has been explored in newswire and narrative text (e.g., the TimeBank corpus \cite{pustejovsky2003timebank}, TempEval challenges \cite{verhagen2010semeval}, and temporal evaluation benchmarks \cite{chu2023timebench}).
+% These typically involve identifying time expressions, events, and temporal relations (before/after) to construct timelines.
+% In the clinical domain, understanding patient timelines has clear importance for tasks like disease progression modeling and treatment effect monitoring \cite{noroozizadeh2023temporal, belden2019designing}.
+% The 2012 i2b2 challenge \cite{sun2013evaluating} established baseline techniques for extracting events, temporal expressions, and relations from discharge summaries, which have been extended by subsequent works on clinical timeline visualization and timeline reconstruction \cite{moharasan2019extraction, leeuwenberg2020towards, frattallone2024using}.
+% While those efforts advanced the field, progress has been limited by data availability.
+% Our PMOA TTS dataset contributes to temporal NLP by providing a large-scale testbed specifically focused on clinical case narratives.
+% It also enables new problem formulations; for instance, we treat timeline extraction as a structured generation task using LLMs, and we evaluate temporal extraction quality with novel metrics like Area Under the Log-Time Curve (AULTC).
+% Moreover, we show how the extracted timelines can feed into downstream temporal modeling (survival analysis), connecting information extraction with predictive analytics.
+% This bridges the gap between temporal NLP and clinical outcome modeling, an intersection that has been relatively under-explored.
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \paragraph{Domain-Specific LLMs:}The rise of large language models (LLMs) has enabled zero-shot and few-shot information extraction without task-specific training. Models like GPT-3/4 \cite{brown2020language, achiam2023gpt}, LLaMA \cite{touvron2023llama}, and DeepSeek \cite{guo2025deepseek} can follow prompts to generate structured outputs, including in medical contexts. Domain-adapted variants—such as Med-PaLM \cite{singhal2025toward}, GatorTron \cite{yang2022gatortron}, and BioMedLM \cite{bolton2024biomedlm}—extend these capabilities specifically for healthcare applications.
+
+% LLMs have shown promise on tasks like clinical concept extraction \cite{bhagat2024large}, medical question answering \cite{singhal2025toward}, and discharge summary generation \cite{patel2023chatgpt}. In our work, we leverage Llama 3.3 \cite{grattafiori2024llama} and DeepSeek \cite{guo2025deepseek} for complex annotation tasks—including identifying single-patient case reports, extracting timeline events, and assigning diagnoses—using only carefully crafted prompts. We evaluate and compare these models’ performance in our timeline extraction pipeline, contributing insights into LLM capabilities and limitations in temporal reasoning. We also emphasize the importance of annotation quality: LLM outputs may introduce noise that affects downstream modeling \cite{omiye2024large}. By quantifying annotation accuracy and its impact on survival prediction, we highlight the need for prompt refinement and model improvements to ensure reliable LLM use in high-stakes clinical applications.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \paragraph{Clinical Narrative Datasets:} 
+% Large corpora of clinical text have enabled significant advances in biomedical NLP.
+% The MIMIC-III \cite{johnson2016mimic} and MIMIC-IV \cite{johnson2023mimic} databases of de-identified hospital ICU records are among the most widely used resources, containing clinical notes and structured data for hundreds of thousands of patient stays.
+% These datasets include timestamped events such as lab tests and interventions, which have been used for sequential modeling and outcome prediction \cite{harutyunyan2019multitask, sheikhalishahi2020benchmarking}.
+% However, they are limited to a single institutional setting, and the free-text notes in MIMIC are not annotated for temporal event structures.
+% In contrast, our PMOA TTS corpus draws from published case reports across diverse institutions and specialties worldwide, providing a broad distribution of patient scenarios.
+% Additionally, prior to our work, no large open-access corpus existed with extracted temporal sequences from narrative texts.
+% Smaller annotated corpora for clinical temporal reasoning have been developed, such as the i2b2 2012 Temporal Relations challenge corpus \cite{sun2013evaluating}, the THYME corpus of oncology notes \cite{styler2014temporal}, and MedTimeML \cite{reeves2013detection}, but these contain only a few hundred documents and require special access.
+% PMOA TTS dramatically scales up the availability of temporally annotated clinical narratives (by two orders of magnitude in document count) and is freely usable, facilitating
+% %data-hungry large
+% LLM approaches.
+
+% \paragraph{Biomedical Language Models:} 
+% The success of transformer language models pretrained on large corpora has encouraged the creation of domain-specific models for biomedicine.
+% BioBERT \cite{lee2020biobert}, PubMedBERT \cite{gu2021domain}, and BioELECTRA \cite{kanakarajan2021bioelectra} are encoder-only transformer models trained on PubMed abstracts and full-text articles, achieving strong results on biomedical NLP benchmarks by capturing domain-specific terminology and semantics.
+% \cite{peng2020empirical} further incorporates clinical notes (MIMIC-III) into pretraining, bridging biomedical literature and clinical text.
+% Recent advancements include BioGPT \cite{luo2022biogpt} and Clinical-T5 \cite{lehman2023clinical}, which extend the decoder-only and encoder-decoder paradigms to biomedical text understanding and generation.
+% These models provide powerful text representations for static biomedical text understanding.
+% However, modeling temporal information in narratives poses additional challenges, as it requires capturing event order and timing, not just context at the sentence or document level \cite{zhou2021clinical, cui2025timer}.
+% Some recent works attempt to adapt language models for clinical timeline tasks.
+% For example, approaches for temporal relation extraction in clinical text have combined rule-based and learned methods \cite{wang2025large}, and sequence-to-sequence and classification strategies have been applied to link events with time expressions \cite{lee2016uthealth, tourille2017temporal, alfattni2020extraction, moharasan2019extraction}.
+% Our work differs in that we leverage large instruction-tuned models—specifically Llama 3.3 \cite{grattafiori2024llama} and DeepSeek R1 \cite{guo2025deepseek}—to directly generate structured timeline annotations from text, rather than classifying links.
+% We also introduce an end-to-end pipeline that can process hundreds of thousands of documents, demonstrating the scalability of LLMs for corpus-wide annotation.
+
+% \paragraph{Temporal NLP Tasks:} 
+% Beyond the clinical domain, temporal information extraction has been explored in newswire and narrative text (e.g., the TimeBank corpus \cite{pustejovsky2003timebank}, TempEval challenges \cite{verhagen2010semeval}, and temporal evaluation benchmarks \cite{chu2023timebench}).
+% These typically involve identifying time expressions, events, and temporal relations (before/after) to construct timelines.
+% In the clinical domain, understanding patient timelines has clear importance for tasks like disease progression modeling and treatment effect monitoring \cite{noroozizadeh2023temporal, belden2019designing}.
+% The 2012 i2b2 challenge \cite{sun2013evaluating} established baseline techniques for extracting events, temporal expressions, and relations from discharge summaries, which have been extended by subsequent works on clinical timeline visualization and timeline reconstruction \cite{moharasan2019extraction, leeuwenberg2020towards, frattallone2024using}.
+% While those efforts advanced the field, progress has been limited by data availability.
+% Our PMOA TTS dataset contributes to temporal NLP by providing a large-scale testbed specifically focused on clinical case narratives.
+% It also enables new problem formulations; for instance, we treat timeline extraction as a structured generation task using LLMs, and we evaluate temporal extraction quality with novel metrics like Area Under the Log-Time Curve (AULTC).
+% Moreover, we show how the extracted timelines can feed into downstream temporal modeling (survival analysis), connecting information extraction with predictive analytics.
+% This bridges the gap between temporal NLP and clinical outcome modeling, an intersection that has been relatively under-explored.
+
+% \paragraph{Domain-Specific LLMs:} 
+% The recent emergence of large language models (LLMs) has opened avenues for zero-shot and few-shot information extraction without task-specific training.
+% Models such as GPT-3/4 \cite{brown2020language, achiam2023gpt}, LLaMA \cite{touvron2023llama}, and DeepSeek \cite{guo2025deepseek} demonstrate the ability to follow prompts and generate structured outputs, including in the medical domain.
+% Domain-adapted models like Med-PaLM \cite{singhal2025toward}, GatorTron \cite{yang2022gatortron}, and BioMedLM \cite{bolton2024biomedlm} further extend these capabilities specifically for healthcare applications.
+% Researchers have begun to apply LLMs to tasks like clinical concept extraction \cite{bhagat2024large}, medical question answering \cite{singhal2025toward}, and discharge summary generation \cite{patel2023chatgpt} with promising results.
+% In this work, we leverage LLMs—specifically Llama 3.3 \cite{grattafiori2024llama} and DeepSeek \cite{guo2025deepseek}—to perform complex annotation tasks (identifying case reports, extracting timeline events, and also downstream identifying diagnosis for each case report) by simply providing carefully designed prompts.
+% We compare these LLM variants in our pipeline for their efficacy in timeline extraction, contributing to understanding the capabilities and limitations of current LLMs on temporal reasoning tasks.
+% Additionally, we highlight the need for high-quality LLM annotations: since these models are not perfect, their output can introduce noise that impacts downstream models \cite{omiye2024large}.
+% By quantifying LLM annotation accuracy and its effect on a survival prediction task, we underscore the importance of improving LLM-based extraction (through better prompts or model improvements) for high-stakes clinical applications.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

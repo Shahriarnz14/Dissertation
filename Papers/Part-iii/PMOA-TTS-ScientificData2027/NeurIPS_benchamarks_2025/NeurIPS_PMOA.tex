@@ -1,0 +1,232 @@
+\documentclass{article}
+
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2025
+
+
+% ready for submission
+%\usepackage{neurips_2025}
+
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+% \usepackage[dandb]{neurips_2025}
+\PassOptionsToPackage{numbers,sort&compress}{natbib}
+\usepackage[preprint]{neurips_2025}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2025}
+
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2025}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{adjustbox}
+\usepackage[most]{tcolorbox}
+\newtheorem{remark}{Remark}
+\usepackage{enumitem}
+\usepackage{dsfont}
+\usepackage{array}
+
+\usepackage{chngcntr}
+\usepackage{apptools}
+\AtAppendix{%
+  \counterwithin{figure}{section}
+  \counterwithin{table}{section}
+}
+
+\usepackage{titlesec}
+\titlespacing*{\paragraph}{0pt}{0.5ex plus .2ex minus .2ex}{0.5em}
+%\titlespacing*{\section}{0pt}{1ex plus 0.2ex minus 0.2ex}{1ex}
+% \usepackage{titlesec}
+% \titlespacing*{\section}{0pt}{1.2ex plus 0.5ex minus 0.2ex}{0.6ex}
+% \titlespacing*{\subsection}{0pt}{1.2ex plus 0.5ex minus 0.2ex}{0.6ex}
+% \titlespacing*{\paragraph}{0pt}{1.2ex plus 0.5ex minus 0.2ex}{0.6ex}
+
+% \usepackage[toc,page,header]{appendix}
+% \usepackage{minitoc}
+% \renewcommand \thepart{}
+% \renewcommand \partname{}
+
+\setlength{\abovedisplayskip}{5pt} % Adjust space before equations
+\setlength{\belowdisplayskip}{5pt} % Adjust space after equations
+
+\title{Temporally annotated textual time series from PubMed Open Access clinical case reports}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+
+\author{%
+Shahriar Noroozizadeh$^{1,2}$\thanks{These authors contributed equally to this work.} \quad
+Sayantan Kumar$^{3}$\footnotemark[1] \quad
+George H.~Chen$^{2,1}$ \quad
+Jeremy C. Weiss$^{3}$ \\
+$^1$Machine Learning Department, School of Computer Science, Carnegie Mellon University \\
+$^2$Heinz College of Information Systems and Public Policy, Carnegie Mellon University \\
+$^3$National Library of Medicine, National Institutes of Health \\
+\texttt{\{snoroozi, georgechen\}@cmu.edu}, 
+\texttt{\{sayantan.kumar, jeremy.weiss\}@nih.gov}
+}
+
+% \author{%
+%   Shahriar Noroozizadeh\thanks{contributed equally to the work} \\
+%   Machine Learning Department, School of Computer Science\\
+%   Heinz College of Information Systems and Public Policy \\
+%   Carnegie Mellon University\\
+%   Pittsburgh, PA, USA \\
+%   \texttt{snoroozi@cs.cmu.edu} \\
+%   %examples of more authors
+%   \And
+%   Sayantan Kumar\footnotemark[1] \\
+%   National Library of Medicine \\
+%   National Institutes of Health \\
+%   Bethesda, MD, USA \\
+%   \texttt{sayantan.kumar@nih.gov} \\
+%   \And
+%   George Chen \\
+%   Machine Learning Department, School of Computer Science\\
+%   Heinz College of Information Systems and Public Policy \\
+%   Carnegie Mellon University\\
+%   Pittsburgh, PA, USA
+%   \texttt{georgechen@cmu.edu} \\
+%   \And
+%   Jeremy C. Weiss \\
+%   National Library of Medicine \\
+%   National Institutes of Health \\
+%   Bethesda, MD, USA \\
+%   \texttt{jeremy.weiss@nih.gov}
+% }
+
+%\newcommand{\nosection}[1]{\section*{#1}}
+
+
+\begin{document}
+
+% \doparttoc % Tell to minitoc to generate a toc for the parts
+% \faketableofcontents % Run a fake tableofcontents command for the partocs
+
+% \part{} % Start the document part
+
+
+\maketitle
+
+
+\begin{abstract}
+\input{NeurIPS_benchamarks_2025/Sections/00_abstract}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:intro}
+\input{NeurIPS_benchamarks_2025/Sections/01_intro}
+
+\vspace{-.5em}
+\section{Related Works}
+\vspace{-.5em}
+\label{sec:related_works}
+\input{NeurIPS_benchamarks_2025/Sections/02_related_works}
+
+\section{Methods}
+\label{sec:methods}
+\input{NeurIPS_benchamarks_2025/Sections/03_methods}
+
+\section{Results}
+\label{sec:results}
+\input{NeurIPS_benchamarks_2025/Sections/04_results}
+
+% \vspace{-.5em}
+\section{Discussion and Conclusion}
+% \vspace{-.5em}
+\label{sec:discussion}
+\input{NeurIPS_benchamarks_2025/Sections/05_discussion}
+
+\clearpage
+\section*{Acknowledgments}
+This research was supported in part by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health. This work utilized the computational resources of the NIH HPC Biowulf cluster.
+
+%\bibliographystyle{plainnat} % or another style like unsrtnat
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+
+% \renewcommand{\thefigure}{A.\arabic{figure}}
+% \setcounter{figure}{0}
+
+% \clearpage
+% \input{NeurIPS_benchamarks_2025/Sections/z1_neurips_checklist}
+\clearpage
+% \addcontentsline{toc}{section}{Appendix} % Add the appendix text to the document TOC
+% \part{Appendix} % Start the appendix part
+% \parttoc % Insert the appendix TOC
+
+\section*{Appendix}
+
+This Appendix provides supplementary material supporting the main text, including implementation details, additional evaluations, and methodological clarifications. It is intended to enhance reproducibility and transparency by including full prompt templates, evaluation procedures, metric definitions, model settings, and examples. It also extends the main findings with additional analyses such as prompt ablation studies, threshold sensitivity, UMLS normalization, and forecasting on condition-specific subsets. The Appendix is organized into thematic sections, each described below.
+
+\textbf{Appendix~\ref{apd:related_works}: Related Works.} This section briefly reviews prior work in clinical timeline extraction, including benchmarks like i2b2 and THYME. It situates PMOA–TTS within this context and highlights the lack of large-scale open-access corpora for temporal clinical NLP.
+
+\textbf{Appendix~\ref{apd:llm_prompts}: Prompt Templates for Annotation Tasks.} This section includes the full prompt used for timeline extraction, including detailed instructions and few-shot examples. It also presents the LLM prompts used for extracting demographics and diagnoses from case reports, which are essential for downstream characterization.
+
+\textbf{Appendix~\ref{apd:example_annotations}: Comparing LLM Annotations.} Here, we show example outputs from different LLMs alongside manual annotations to highlight differences in event span selection and temporal alignment. These side-by-side examples help illustrate the semantic variation across models.
+
+\textbf{Appendix~\ref{apd:ltcdf}: Log-Time Cumulative Distribution Function.} This section introduces the AULTC (Area Under the Log-Time CDF) metric for evaluating absolute timestamping error. It explains how this metric captures the cumulative deviation between predicted and reference times on a log-transformed scale.
+
+\textbf{Appendix~\ref{apd:recursive_match}: Recursive Best Match Procedure.} We describe the recursive algorithm used to align predicted and reference events during evaluation. The method ensures one-to-one matching using semantic similarity scores and resolves ties based on event order.
+
+\textbf{Appendix~\ref{apd:choosing_match_threshold}: Varying the Event Match Distance Threshold.} This section explores the sensitivity of evaluation metrics (match rate, concordance, AULTC) to different cosine similarity thresholds for event matching. The analysis helps quantify trade-offs between match precision and coverage.
+
+\textbf{Appendix~\ref{apd:umls_mapping}: UMLS Mapping for Diagnosis Standardization.} We describe the process of linking free-text diagnoses to standardized UMLS concepts using ScispaCy. This mapping enables systematic analysis of disease frequency and co-occurrence patterns across the corpus.
+
+\textbf{Appendix~\ref{apd:survival_analysis}: Survival Analysis Task on PMOA-TTS.} This section details the setup and hyperparameters for the survival prediction task using textual time series embeddings. It includes information on model architectures, embedding strategies, training regimes, and evaluation metrics.
+
+\textbf{Appendix~\ref{apd:forecasting}: Forecasting Task on the Sepsis Subset of PMOA-TTS.} We reproduce results from a prior study using a subset of sepsis case reports to demonstrate forecasting of future clinical events. These findings serve as a proof-of-concept for temporal prediction using PMOA–TTS.
+
+\textbf{Appendix~\ref{apd:compute_resources}: Computational Resources for Reproducibility.} This section outlines the hardware and compute environment used for LLM inference, survival modeling, and evaluation. It includes GPU types, inference times, and total compute hours for each major pipeline stage.
+
+\textbf{Appendix~\ref{apd:prompt_ablation}: Sensitivity to the Quality of LLM Prompts.} We evaluate how the inclusion or removal of specific prompt components (e.g., role definition, examples, conjunction splitting) affects model performance. The section includes quantitative comparisons across prompt variants.
+
+\textbf{Appendix~\ref{apd:broader_impact}: Broader Impact.} This section discusses both the potential benefits and risks associated with the release of PMOA–TTS. Topics include improved accessibility and modeling capabilities, as well as concerns about bias, data quality, and misuse in clinical contexts.
+
+
+
+%\addcontentsline{toc}{section}{Appendix}
+%\tableofcontents
+
+\input{NeurIPS_benchamarks_2025/Sections/related_work_apd}
+\input{NeurIPS_benchamarks_2025/Sections/a1_appendix}
+
+\clearpage
+
+
+
+\end{document}

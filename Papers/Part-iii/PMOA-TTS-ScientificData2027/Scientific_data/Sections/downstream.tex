@@ -1,0 +1,71 @@
+To demonstrate the utility of the PMOA-TTS corpus for clinical prediction tasks, we implemented two downstream applications: survival analysis and event forecasting. \textcolor{red}{Jeremy: This section has not been refactored yet to describe survival (and not next-event forecasting).}
+
+\subsection{Survival analyses}
+
+We developed a survival analysis framework to evaluate the prognostic value of textual information encoded in the time series for time until death prediction. 
+Our approach follows a two-stage process:
+
+% \begin{itemize}
+%     \item \textcolor{red}{We also did survival for additional open source and medically fine-tuned models}
+%     \item \textcolor{red}{Big table and detailed description of methods (task description, models) and results take up too much space. Push most methods in Appendix?. Only describe summarized models in main?}
+% \end{itemize}
+
+\subsubsection{Pipeline}
+
+\begin{enumerate}
+\item \textbf{Embedding Extraction}: Each textual time series is converted to a textual context in the format \texttt{"(time) clinical event [SEP] ... [SEP] (time) clinical event [SEP]"} and processed using various pre-trained language models to obtain dense vector representations. 
+For encoder models (BERT, RoBERTa, ModernBERT, etc.), we extract the \texttt{[CLS]} token embedding, while for decoder models (LLaMA, DeepSeek), we compute the mean-pooled embedding over all non-padding tokens.
+
+\item \textbf{Survival Modeling}: These embeddings serve as covariates for two survival models:
+\begin{itemize}
+    \item \textbf{DeepSurv} \citep{katzman2018deepsurv}: A neural network generalization of the Cox proportional hazards model.
+    \item \textbf{DeepHit} \citep{lee2018deephit}: A multi-task neural network jointly modeling discrete hazard and survival functions.
+\end{itemize}
+\end{enumerate}
+
+We evaluated the performance of the survival models using two metrics: the time-dependent concordance index \citep{antolini2005time}, which measures the model’s ability to correctly rank survival times, and the integrated Brier score (IBS), which captures overall calibration and discrimination over time. 
+
+To ensure reliable estimates, we conducted experiments across five random seeds.
+For each seed, we performed a train-validation-test split with proportions of 64\%, 16\%, and 20\%, respectively. 
+
+All survival times were right-censored at a fixed cutoff (\texttt{max\_right\_censoring\_time}=1 year) to maintain consistency across samples. 
+Only samples with positive survival times after censoring were included for model training and evaluation.
+
+We tuned hyperparameters independently for each combination of language model and survival model. 
+For DeepSurv and DeepHit, we searched over the following hyperparameter grid:
+\begin{itemize}
+    \item \texttt{num\_nodes}: \{64, 128, 256, 512, 1024, 2048, 4096\}
+    \item \texttt{dropout}: \{0.1, 0.5\}
+    \item \texttt{epochs}: 2000 (with early stopping)
+\end{itemize}
+
+For each configuration, the model was trained on the training set and evaluated on the validation set using the time-dependent concordance index. 
+The configuration yielding the highest validation time-dependent concordance was selected, and the corresponding model was then evaluated on the held-out test set. 
+This process was repeated for each random seed.
+We report the mean and standard deviation of the concordance-index and IBS across the five seeds for each combination of language model and survival model. 
+
+\paragraph{Computational resources:}
+For embedding generation in the survival modeling task, decoder models (\texttt{LLaMA}, \texttt{DeepSeek}) used mean-pooled hidden states, and encoder models (e.g., PubMedBERT) used \texttt{[CLS]} embeddings. Survival models (DeepSurv, DeepHit) were trained using PyTorch on single NVIDIA GeForce RTX 4090. Each training run optimizing across the hyperparamater grid for the validation set took on average 195 minutes. Hyperparameter search across seeds, dropout values, and hidden node counts resulted in 48 GPU-hours total compute.
+
+%\input{Scientific_data/Supplementary/survival_table}
+
+\subsubsection{Survival Analysis Results for Different Annotations}
+We report results from both \texttt{DeepSeek} and \texttt{Llama 3.3} (\texttt{L33}) annotations in Table~\ref{survival_table}. Note that these annotation sources differ in construction and granularity. As such, the absolute concordance values are not directly comparable across annotation types.
+However, a consistent trend is observed across both: embeddings obtainted from larger LLMs, particularly \texttt{Llama-3.3-70B-Instruct} and \texttt{DeepSeek-70B}, generally achieve higher concordance scores, followed by their smaller variants and traditional transformer models like \texttt{BERT} and \texttt{RoBERTa}. 
+This suggests that higher-capacity models may better encode the temporal progression patterns captured in textual time series, regardless of the specific annotation strategy used.
+
+The relatively high time-dependent concordance values across both annotation sources indicate that textual representations of clinical event trajectories contain meaningful signal for survival prediction. This finding supports the viability of text-to-time modeling as a research direction. Future work can explore improved ways to encode textual time series--beyond simple embedding extraction and the triplet-based approach from \cite{oufattolemeds}--with the goal of enhancing survival analysis performance and better understanding which modeling strategies are most effective for textual time series. Additionally, these representations could eventually support alignment with structured data or serve as input to multimodal models in downstream clinical tasks. More broadly, these results suggest that clinical language models may serve as a foundation for temporal reasoning beyond survival analysis.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Next event forecasting}
+
+The utility of textual time series for next event forecasting tasks has also been demonstrated on a smaller cohort of sepsis patients in one of our parallel works (accepted at a peer-reviewed conference) \cite{noroozizadeh2025forecasting}. Specifically, the forecasting task formulated two specific forecasting tasks:
+\begin{itemize}
+    \item Next Event Timing (F1): Given a history of (clinical\_event, time) tuples, predicting whether the
+next k events will occur within specific time windows (1 hour, 1 day, 1 week).
+\item Event Ordering (Concordance): Given a history of (clinical\_event, time) tuples, predicting the
+correct temporal ordering of the next k events.
+\end{itemize}
+
+For further information regarding the methodological details experimental results of the forecasting task on the sepsis subset of PMOA-TTS, we encourage the reader to refer to the preprint version of our conference paper \cite{noroozizadeh2025forecasting}.

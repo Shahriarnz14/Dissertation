@@ -1,0 +1,30 @@
+\begin{table*}[tb!]
+%\footnotesize
+\caption{Comparison of approaches by test-set forecasting performance of the ensuing $k=8$ events. \textbf{All models are trained/fine-tuned on text-ordered data. \textcolor{red}{For our own reference, 0.5 value means model is not learning at all}}}
+\label{tab:results}
+\small
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+% & c-index & F1 ($0 < t \leq 24$) & F1 ($0 < t \leq 168$) & F1 ($0 < t \leq 8760$) \\
+& \multicolumn{4}{c}{\textit{T2S2} (Llama 3.3)} & \multicolumn{2}{c}{sepsis-10}\\
+& F1(1h) & F1(1d) & F1(1w) & c-index & F1(1d) & c-index\\
+% & \multicolumn{3}{c}{i2m4} & \multicolumn{3}{c}{sepsis-10} & \multicolumn{3}{c}{sepsis-100} \\
+% \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+% \textbf{Model} & Event & c-index & AULTC & Event & c-index & AULTC & Event & c-index & AULTC \\
+\midrule
+\textbf{LLM-MLP head} &&&& &&\\
+\quad DS-L3.3 70B & 0.045 & 0.467& 0.803 & 0.602 & & \\
+\quad L3.3 70B   & 0.066 & 0.463 & 0.809 & 0.614 & & \\
+\quad DS-L3.1 8B & & & & & & \\
+\quad L3.1 8B & & & & & & \\
+\textbf{BERT-MLP head} &&&& &&\\
+\quad BERT & 0.127 & 0.606 & 0.891 & \textcolor{red}{0.5} & 0.405 & \textcolor{red}{0.5}\\
+\quad RoBERTa & 0.132 & 0.523 & 0.861 & \textcolor{red}{0.5} & 0.346 & \textcolor{red}{0.5}\\
+\quad DeBERTa-small  & 0.243 & 0.601 & 0.894 & 0.56 & 0.392 & 0.517\\
+%\quad DeBERTa-large   &&&& &&\\
+\quad ModernBERT-base & 0.19 & 0.619 & 0.902 & 0.574 & 0.379 & 0.541\\
+\quad ModernBERT-large & 0.206 & 0.610 & 0.894 & 0.541 & 0.378 & 0.498\\
+\bottomrule
+\end{tabular}
+\end{table*}

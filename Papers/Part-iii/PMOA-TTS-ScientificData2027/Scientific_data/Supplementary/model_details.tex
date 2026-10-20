@@ -1,0 +1,146 @@
+\section{Model and Inference Configuration}
+\label{sec:supp-model-configuration}
+
+Seven large language models were evaluated for textual time series annotation:
+Llama 3.3 70B Instruct, DeepSeek-R1, DeepSeek-V3, GPT-5, O4-mini, O3,
+and O1. The exact checkpoint identifiers and Azure deployment names are
+reported in Table~\ref{tab:model-identifiers}. Llama 3.3 70B Instruct and
+DeepSeek-R1 were also used to produce the full-corpus annotations. Each model
+was evaluated across five independent generation runs using the textual time
+series prompt in Supplementary Section~A.1. The revised technical-validation
+results were calculated on 190 case reports after excluding the 10 pilot cases
+used during method development.
+
+Table~\ref{tab:inference-settings} summarizes the recorded inference
+configuration. Llama 3.3 70B Instruct was run using Hugging Face Transformers
+and PyTorch with bfloat16 weights and automatic device placement. The Azure
+OpenAI models were queried through the Chat Completions interface using API
+version \texttt{2024-12-01-preview}. Temperature, top-$p$, and generation seeds
+were not explicitly specified for the Azure models. In all API-based runs, the
+complete extraction prompt and case-report text were submitted together as a
+single user message, and responses were generated without streaming.
+
+\begin{table}[tbp]
+\centering
+\caption{
+Exact model identifiers and Azure OpenAI deployment names used for textual
+time series annotation.
+}
+\label{tab:model-identifiers}
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{p{0.31\linewidth} p{0.61\linewidth}}
+\toprule
+\textbf{Model} &
+\textbf{Checkpoint identifier or API deployment} \\
+\midrule
+
+Llama 3.3 70B Instruct &
+\texttt{meta-llama/Llama-3.3-70B-Instruct} \\
+
+DeepSeek-R1 &
+\texttt{deepseek-ai/DeepSeek-R1-0528} \\
+
+DeepSeek-V3 &
+\texttt{deepseek-ai/DeepSeek-V3-0324} \\
+
+GPT-5 &
+Azure OpenAI deployment \texttt{gpt-5} \\
+
+O4-mini &
+Azure OpenAI deployment \texttt{o4-mini} \\
+
+O3 &
+Azure OpenAI deployment \texttt{o3} \\
+
+O1 &
+Azure OpenAI deployment \texttt{o1} \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[!htbp]
+\centering
+\caption{
+Inference and generation settings used for textual time series annotation.
+Parameters described as not explicitly set were not supplied in the
+corresponding generation request.
+}
+\label{tab:inference-settings}
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{
+    p{0.18\textwidth}
+    p{0.28\textwidth}
+    p{0.47\textwidth}
+}
+\toprule
+\textbf{Model or configuration} &
+\textbf{Inference framework and precision} &
+\textbf{Generation settings} \\
+\midrule
+
+Llama 3.3 70B Instruct
+(full-corpus annotation) &
+Hugging Face Transformers and PyTorch;
+bfloat16;
+automatic device placement &
+128k-token model context;
+batch size 1;
+\texttt{max\_new\_tokens=8092};
+\texttt{do\_sample=True};
+\texttt{top\_k=1};
+one returned sequence;
+temperature and top-$p$ not explicitly set;
+no explicit generation seed \\
+
+Llama 3.3 70B Instruct
+(technical validation) &
+Hugging Face Transformers and PyTorch;
+bfloat16;
+automatic device placement &
+128k-token model context;
+batch size 1;
+\texttt{max\_new\_tokens=8092};
+\texttt{do\_sample=True};
+\texttt{temperature=1};
+\texttt{top\_k=1};
+one returned sequence;
+no explicit generation seed \\
+
+DeepSeek-R1 &
+DeepSeek-V3 architecture;
+checkpoint configuration specifies bfloat16 with FP8 block quantization &
+163{,}840-position context;
+five independent generation runs using the production textual time series
+prompt \\
+
+DeepSeek-V3 &
+DeepSeek-V3 architecture;
+checkpoint configuration specifies bfloat16 with FP8 block quantization &
+163{,}840-position context;
+five independent generation runs using the production textual time series
+prompt \\
+
+GPT-5 &
+Azure OpenAI Chat Completions;
+provider-managed numerical precision &
+API version \texttt{2024-12-01-preview};
+\texttt{max\_completion\_tokens=16834};
+\texttt{stream=False};
+temperature, top-$p$, and API seed not explicitly set \\
+
+O4-mini, O3, and O1 &
+Azure OpenAI Chat Completions;
+provider-managed numerical precision &
+API version \texttt{2024-12-01-preview};
+\texttt{max\_completion\_tokens=40000};
+\texttt{stream=False};
+temperature, top-$p$, and API seed not explicitly set \\
+
+\bottomrule
+\end{tabular}
+\end{table*}

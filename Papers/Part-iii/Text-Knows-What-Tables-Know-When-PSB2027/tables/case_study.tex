@@ -1,0 +1,48 @@
+Figure~\ref{fig:motivation_multimodal_alignment} illustrates the qualitative behavior of the pipeline using a synthetic stroke-alert case. The narrative supplies clinically decisive phenotype details, including lobar hemorrhage location, hematoma volume, aphasia, plegia, command following, absence of intraventricular hemorrhage or hydrocephalus, and repeat-CT stability. The structured rows provide sparse but precise temporal anchors, including admission time and IV andexanet alfa administration. The text-only scaffold recovers the reversal event but places it shortly after the initial CT at approximately \(+1.5\)h; retrieval-augmented calibration links the event to the medication-administration row and shifts reversal to \(+6.5\)h relative to admission.
+
+\begin{tcolorbox}[
+    breakable,
+    colback=white,
+    colframe=black!45,
+    title=\textbf{Pipeline output: calibrated event timeline},
+    fonttitle={\fontsize{8pt}{11pt}\selectfont\bfseries}
+]
+\scriptsize
+\setlength{\parindent}{0pt}
+
+\newcommand{\vignetteRow}[3]{%
+\noindent
+\begin{minipage}[t]{0.47\linewidth}\raggedright #1\end{minipage}\hfill
+\begin{minipage}[t]{0.10\linewidth}\raggedleft #2\end{minipage}\hfill
+\begin{minipage}[t]{0.37\linewidth}\raggedright #3\end{minipage}\par\vspace{1.5pt}
+}
+
+\vspace{-6pt}
+
+\noindent
+\begin{minipage}[t]{0.47\linewidth}\raggedright \textbf{Event}\end{minipage}\hfill
+\begin{minipage}[t]{0.10\linewidth}\raggedleft \textbf{Time (h)}\end{minipage}\hfill
+\begin{minipage}[t]{0.37\linewidth}\raggedright \textbf{Source / calibration note}\end{minipage}
+
+\vspace{2pt}
+\hrule
+\vspace{3pt}
+
+\vignetteRow{Last known well at 0730}{-5.5}{Text clock time relative to admission}
+\vignetteRow{Found down at home}{-1.0}{Text-derived estimate}
+\vignetteRow{67 years old}{0.0}{Text, admission context}
+\vignetteRow{Atrial fibrillation}{0.0}{Text, admission context}
+\vignetteRow{Admitted/brought in as stroke alert}{0.0}{\textbf{Table}, anchored by admission row at 1300}
+\vignetteRow{Dense right arm plegia}{0.0}{Text, anchored to admission}
+\vignetteRow{Follows commands}{0.0}{Text, anchored to admission}
+\vignetteRow{Initial CT showed intracerebral hemorrhage}{0.5}{Text-derived estimate}
+\vignetteRow{Estimated hematoma volume $\sim$55 mL}{0.5}{Text, anchored to initial CT}
+\vignetteRow{Left frontal lobar location of hemorrhage}{0.5}{Text, anchored to initial CT}
+\vignetteRow{Reversal agent was administered}{6.5}{\textbf{Table}, corrected by IV andexanet alfa at 1930}
+\vignetteRow{Repeat CT was stable}{8.5}{Text, inferred sequentially post-reversal}
+
+% \vspace{2pt}
+\hrule
+\end{tcolorbox}
+
+% This case illustrates the asymmetry motivating the workflow. Text is necessary to recover clinically meaningful phenotype information, while structured rows calibrate selected time-sensitive events when relevant counterparts exist. The resulting trajectory could support human-reviewed cohort definition or eligibility logic by preserving narrative-only clinical details while grounding treatment timing in structured evidence. For example, ENRICH-style screening depends on features that are not available from structured rows alone, including hematoma volume, lobar location, neurological deficits, absence of IVH/hydrocephalus, repeat-imaging stability, and the timing of eligibility relative to last-known-well.

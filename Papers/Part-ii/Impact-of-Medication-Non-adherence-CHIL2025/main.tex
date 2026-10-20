@@ -1,0 +1,309 @@
+
+\PassOptionsToPackage{noend}{algpseudocode} % optional, if using options
+\PassOptionsToPackage{x11names,dvipsnames}{xcolor}
+%\documentclass[gray]{jmlr} % test grayscale version
+%\documentclass[tablecaption=bottom]{jmlr}% journal article
+\documentclass[pmlr,twocolumn,10pt]{jmlr} % W&CP article
+
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+%\usepackage{rotating}% for sideways figures and tables
+%\usepackage{longtable}% for long tables
+
+% The booktabs package is used by this sample document
+% (it provides \toprule, \midrule and \bottomrule).
+% Remove the next line if you don't require it.
+
+\usepackage{booktabs}
+% The siunitx package is used by this sample document
+% to align numbers in a column by their decimal point.
+% Remove the next line if you don't require it.
+%\usepackage[load-configurations=version-1]{siunitx} % newer version 
+\usepackage{siunitx}
+\usepackage{enumitem}  
+\usepackage{multirow} 
+\usepackage[capitalise]{cleveref}
+\newcommand{\crefrangeconjunction}{--}
+\usepackage{microtype}
+\usepackage{bm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+% \usepackage{dblfloatfix}
+\usepackage{adjustbox}
+
+% The lineno package is required for denoting line
+% numbers for paper review.
+\usepackage[switch]{lineno}
+% \usepackage[dvipsnames]{xcolor}
+
+% The following command is just for this sample document:
+% \newcommand{\cs}[1]{\texttt{\char`\\#1}}% remove this in your real article
+
+% The following is to recognise equal contribution for authorship
+\newcommand{\equal}[1]{{\hypersetup{linkcolor=black}\thanks{#1}}}
+
+\newcommand{\bftab}{\fontseries{b}\selectfont}
+
+
+% Define an unnumbered theorem just for this sample document for
+% illustrative purposes:
+\theorembodyfont{\upshape}
+\theoremheaderfont{\scshape}
+\theorempostheader{:}
+\theoremsep{\newline}
+\newtheorem*{note}{Note}
+
+% change the arguments, as appropriate, in the following:
+\jmlrvolume{287}
+% \jmlrpages{573--609}
+\jmlryear{2025}
+\jmlrsubmitted{} % LEAVE UNSET
+\jmlrpublished{} % LEAVE UNSET
+\jmlrworkshop{Conference on Health, Inference, and Learning (CHIL) 2025}
+
+% The optional argument of \title is used in the header
+% \title[The Impact of Medication Non-adherence on Adverse Outcomes]{The Impact of Medication Non-adherence on Adverse Outcomes: Evidence from Schizophrenia Patients via Survival Analysis}
+% \title[Causal Survival Analysis: The Impact of Medication Non-adherence on Adverse Outcomes]{Causal Survival Analysis to Assess the Impact of Medication Non-adherence on Adverse Outcomes Timing: \linebreak Evidence from Schizophrenia Patients}
+\title[Causal Survival Analysis: The Impact of Medication Non-adherence on Adverse Outcomes]{The Impact of Medication Non-adherence on Adverse Outcomes: \linebreak Evidence from Schizophrenia Patients via Survival Analysis}
+% \title[Causal Survival Analysis: The Impact of Medication Non-adherence on Adverse Outcomes]{Causal Survival Analysis of the Impact of Medication Non-Adherence on Adverse Outcome Timing: \linebreak Evidence from Schizophrenia Patients}
+% \title[Causal Survival Analysis: The Impact of Medication Non-adherence on Adverse Outcomes]{Causal Survival Analysis for Medication Non-Adherence Impact on Adverse Outcome Timing: Evidence from Schizophrenia Patients}
+
+% Anything in the title that should appear in the main title but 
+% not in the article's header or the volume's table of
+% contents should be placed inside \titletag{}
+
+%\title{Title of the Article\titletag{\thanks{Some footnote}}}
+
+
+% Use \Name{Author Name} to specify the name.
+% If the surname contains spaces, enclose the surname
+% in braces, e.g. \Name{John {Smith Jones}} similarly
+% if the name has a "von" part, e.g \Name{Jane {de Winter}}.
+% If the first letter in the forenames is a diacritic
+% enclose the diacritic in braces, e.g. \Name{{\'E}louise Smith}
+
+% \thanks must come after \Name{...} not inside the argument for
+% example \Name{John Smith}\nametag{\thanks{A note}} NOT \Name{John
+% Smith\thanks{A note}}
+
+% Anything in the name that should appear in the title but not in the 
+% article's header or footer or in the volume's
+% table of contents should be placed inside \nametag{}
+
+% Two authors with the same address
+% \author{%
+%  \Name{Author Name1\nametag{\thanks{A note}}} \Email{abc@sample.com}\and
+%  \Name{Author Name2} \Email{xyz@sample.com}\\
+%  \addr Address
+% }
+
+% Three or more authors with the same address:
+% \author{%
+%  \Name{Author Name1} \Email{an1@sample.com}\\
+%  \Name{Author Name2} \Email{an2@sample.com}\\
+%  \Name{Author Name3} \Email{an3@sample.com}\\
+%  \Name{Author Name4} \Email{an4@sample.com}\\
+%  \Name{Author Name5} \Email{an5@sample.com}\\
+%  \Name{Author Name6} \Email{an6@sample.com}\\
+%  \Name{Author Name7} \Email{an7@sample.com}\\
+%  \Name{Author Name8} \Email{an8@sample.com}\\
+%  \Name{Author Name9} \Email{an9@sample.com}\\
+%  \Name{Author Name10} \Email{an10@sample.com}\\
+%  \Name{Author Name11} \Email{an11@sample.com}\\
+%  \Name{Author Name12} \Email{an12@sample.com}\\
+%  \Name{Author Name13} \Email{an13@sample.com}\\
+%  \Name{Author Name14} \Email{an14@sample.com}\\
+%  \addr Address
+% }
+
+% Authors with different addresses and equal first authors:
+\author{%
+\Name{Shahriar Noroozizadeh} \Email{snoroozi@cmu.edu}\\
+\addr Carnegie Mellon University, USA 
+\AND
+\Name{Pim Welle} \Email{pdw@andrew.cmu.edu}\\
+\addr Allegheny County Department of Human Services, USA \\
+\addr Carnegie Mellon University, USA 
+\AND
+\Name{Jeremy C. Weiss} \Email{jeremy.weiss@nih.gov}\\
+\addr National Institutes of Health, USA 
+\AND
+\Name{George H. Chen} \Email{georgechen@cmu.edu}\\
+\addr Carnegie Mellon University, USA 
+\vspace{-1.5em}
+% \AND
+% % footnotemark[1] is to refer to the \equal footnote
+% \Name{Anonymous First Author 2}\footnotemark[1] \Email{def@sample.com}\\
+% \addr University Y, Country 2
+% \AND
+% \Name{Anonymous Last Author} \Email{ghi@sample.com}\\
+% \addr University Z, Country 3
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% Remove the \linenumbers in the final version %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \linenumbers % Activate line numbering
+
+\begin{document}
+% \vspace{-2cm}
+\maketitle
+% \begin{abstract}
+% This study aims to quantify the association between non-adherence to antipsychotic medications and adverse outcomes among individuals with schizophrenia. We frame this problem in the context of survival analysis, looking at the time until the earliest of several types of adverse outcomes (early death, involuntary hospitalization, jail booking)---we refer to this time duration as the \mbox{adverse} event time. We apply standard causal inference tools (T-learner, S-learner, and nearest neighbor matching) with various survival models to estimate individual and average treatment effects in terms of differences in mean adverse event times, where the treatment corresponds to medication non-adherence.
+% We repeat our analysis using different amounts of longitudinal information available per individual (3, 6, 9, and 12 months).
+% Using real data from Allegheny county's administrative records, our results show strong evidence that medication non-adherence is associated with earlier adverse outcomes, advancing the onset of an adverse event by approximately~1 to~4 months.
+% Ablation studies confirm that risk scores provided by the county account for key confounders, as their removal amplifies the estimated effects of non-adherence. Finally, subgroup analyses by medication formulation (injectable vs.~oral) and by specific medication type consistently show that non-adherence is associated with earlier adverse outcomes. 
+% These findings underscore the clinical importance of medication adherence in delaying severe psychiatric crises and show that integrating survival analysis with causal inference tools can yield policy-relevant insights in complex healthcare settings. We caution that although we use causal inference tools, we only make associative claims; we discuss the validity of some assumptions that would enable us to rigorously convert our claims into causal ones.
+% \end{abstract}
+\begin{abstract}
+This study quantifies the association between non-adherence to antipsychotic medications and adverse outcomes in individuals with schizophrenia. 
+We frame the problem using survival analysis, focusing on the time to the earliest of several adverse events (early death, involuntary hospitalization, jail booking).
+We extend standard causal inference methods (T-learner, S-learner, nearest neighbor matching) to utilize various survival models to estimate individual and average treatment effects, where treatment corresponds to medication non-adherence. 
+Analyses are repeated using different amounts of longitudinal information (3, 6, 9, and 12 months). 
+Using data from Allegheny County in western Pennsylvania, we find strong evidence that non-adherence advances adverse outcomes by approximately~1 to~4 months. 
+Ablation studies confirm that county-provided risk scores adjust for key confounders, as their removal amplifies the estimated effects. 
+Subgroup analyses by medication formulation (injectable vs.~oral) and medication type consistently show that non-adherence is associated with earlier adverse events. 
+These findings highlight the clinical importance of adherence in delaying psychiatric crises and show that integrating survival analysis with causal inference tools can yield policy-relevant insights. 
+We caution that although we apply causal inference, we only make associative claims and discuss assumptions needed for causal interpretation.
+\end{abstract}
+
+
+
+% \vspace{-1em}
+\paragraph*{Data and Code Availability}
+This paper utilizes administrative data from the Allegheny County Department of Human Services in the United States. 
+% \textcolor{red}{For the purposes of peer review, we have anonymized the specific county and the full department name.} The dataset consists of de-identified records, where part of the de-identification process involved coarsening the time resolution to the month level. %, %, where personally identifiable information (PII) has been removed,
+% and its time resolution has been intentionally coarsened to the month level.
+Due to confidentiality agreements, the dataset is not publicly available.
+
+The implementation of our proposed method is available at our GitHub repository: \linebreak
+\url{https://github.com/Shahriarnz14/causal-meta-learner-survival-analysis}.
+
+% \vspace{-2em}
+\paragraph*{Institutional Review Board (IRB)}
+This study does not require IRB approval, as it conducts secondary analysis of de-identified data provided by the Allegheny County Department of Human Services.
+
+\setlength{\abovedisplayskip}{3pt plus 1pt}
+\setlength{\belowdisplayskip}{3pt plus 1pt}
+\setlength{\abovedisplayshortskip}{2pt plus 1pt}
+\setlength{\belowdisplayshortskip}{2pt plus 1pt}
+
+% \vspace{-1em}
+\section{Introduction}
+\label{sec:intro}
+% \vspace{-0.25em}
+\input{Sections/01_intro}
+
+% \vspace{-1em}
+\section{Related Work}
+\label{sec:related_works}
+% \vspace{-0.25em}
+\input{Sections/02_related_works}
+
+% \vspace{-1em}
+\section{Methods}
+\label{sec:methods}
+% \vspace{-0.25em}
+
+% \vspace{-1em}
+\subsection{Data Description}
+\label{sec:methods_data}
+% \vspace{-0.25em}
+\input{Sections/03_methods_01_Data}
+
+% \vspace{-1em}
+\subsection{Prediction Setup}
+\label{sec:methods_prediction}
+% \vspace{-0.25em}
+\input{Sections/03_methods_02_Prediction}
+
+% \vspace{-1em}
+\subsection{Survival Analysis Models}
+\label{sec:methods_survival}
+% \vspace{-0.25em}
+\input{Sections/03_methods_03_Survival}
+
+% \vspace{-1em}
+\subsection{Causal Inference Setup}
+\label{sec:methods_causal}
+% \vspace{-0.25em}
+\input{Sections/03_methods_04_Causal}
+
+% \vspace{-1em}
+\subsection{Evaluation Metrics}
+\label{sec:eval_metrics}
+% \vspace{-0.25em}
+\input{Sections/03_methods_05_Evaluation}
+
+% \vspace{-1em}
+\section{Experiments and Results}
+\label{sec:experiments_results}
+% \vspace{-0.25em}
+\input{Sections/04_experiments_and_results}
+
+% \vspace{-1.5em}
+\section{Discussion}
+\label{sec:discussion}
+% \vspace{-0.5em}
+\input{Sections/05_discussion}
+
+% \vspace{-1.5em}
+\newpage
+\section*{Acknowledgments}
+\label{sec:acknowledgments}
+% \vspace{-0.5em}
+This research was supported in part by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health (NIH).
+G. H. C. was supported by NSF CAREER award \#2047981.
+S. N. was supported by Carnegie Mellon University TCS Presidential Fellowship, and Natural Sciences and Engineering Research Council of Canada (NSERC) PGS-D award.
+S.N was also supported in part by an appointment to the National Library of Medicine Research Participation Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health. 
+ORISE is managed by ORAU under DOE contract number DE-SC0014664. 
+All opinions expressed in this paper are the authors' and do not necessarily reflect the policies and views of NIH, NLM,
+DOE, or ORAU/ORISE.
+
+The authors would also like to thank Mr. Ethan Goode, Dr. Brian Kovak, Dr. Eli Ben-Michael, Dr. Akshaya Jha, Dr. Edward Kennedy, and Dr. Zachary Lipton for helpful discussions.
+
+% \clearpage
+\bibliography{references}
+
+\clearpage
+
+\appendix
+\section*{Appendix}
+\label{apd:outline}
+\input{Sections/zz_appendix_0_outline}
+
+\clearpage
+\section{Causal Derivations and Assumptions}
+\label{apd:causal_derivations}
+\input{Sections/zz_appendix_a_causal_derivations}
+\newpage
+
+\clearpage
+\section{Full Experimental Results}
+\label{apd:full_results}
+\input{Sections/zz_appendix_b_full_results}
+\newpage
+
+\clearpage
+\section{Medication Subgroup Analysis}
+\label{apd:medication_subgroup_analysis}
+\input{Sections/zz_appendix_c_medication_subgroup_analysis}
+\newpage
+
+\clearpage
+\section{Dataset Information}
+\label{apd:dataset_information}
+\input{Sections/zz_appendix_d_data_information}
+\newpage
+
+\clearpage
+\section{Preprocessing and Modeling Hyperparameters}
+\label{apd:preprocessing_and_modeling_hyperparameters}
+\input{Sections/zz_appendix_e_preprocessing_and_modeling}
+
+
+% \input{Sections/zz_appendix}
+
+\end{document}

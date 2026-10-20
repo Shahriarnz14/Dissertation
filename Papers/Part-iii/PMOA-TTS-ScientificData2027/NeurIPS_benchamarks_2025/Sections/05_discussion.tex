@@ -1,0 +1,62 @@
+\vspace{-2mm}
+This work introduces PMOA–TTS, a large-scale corpus of 124,699 temporally annotated clinical case reports generated using large language models (LLMs). Our method transforms unstructured narratives into structured temporal sequences, addressing a key challenge in biomedical NLP. Evaluation against expert annotations shows that LLM-based extraction achieves high accuracy in event detection and temporal ordering, enabling scalable clinical timeline analysis. Our LLM-based pipeline for identifying case reports outperforms traditional metadata filtering, marking a methodological advancement with wider applicability. With near-perfect precision (1.00) and high recall (0.96), it reliably selects genuine single-patient case reports—crucial for preserving the integrity of downstream temporal analyses. These results indicate that LLM-based filtering can improve corpus quality across other medical document types where metadata alone falls short.
+
+Comparative analysis of LLMs reveals key differences in temporal reasoning. DeepSeek models—especially DeepSeek-R1—show stronger semantic alignment with expert annotations in event matching. Our results highlight complex interactions between concordance and time discrepancy metrics, with the event matching threshold significantly influencing which events are included in concordance evaluations. Stratified analysis also shows that all models perform worse on events further from the reference point, indicating a crucial area for future improvement.
+
+Our diagnosis mapping and demographic profiling support the creation of curated cohorts from the full corpus. Researchers can easily construct disease-specific (e.g., diabetes, hypertension, atrial fibrillation) or demographic-based subgroups for targeted temporal studies without needing new data. For example, they can analyze progression in rare diseases or compare timelines across different populations. With over 5.6 million temporally annotated events, the corpus enables statistically robust analyses across a wide range of clinical conditions.
+
+Downstream survival modeling shows that LLMs vary in how effectively they encode temporal information from clinical narratives. Decoder-based models (LLaMA, DeepSeek) consistently outperform encoder-based ones (BERT variants) across time horizons and modeling methods. LLaMA-3.3-70B-Instruct achieves the highest concordance, indicating that larger models better capture temporal complexity. While the differences between survival frameworks (DeepSurv vs. DeepHit) are minor, the language model choice significantly impacts prediction accuracy. This analysis showcases just one application of PMOA–TTS, underscoring its value for diverse temporal prediction tasks. Our reference to concurrent work \citep{noroozizadeh2025forecasting} on temporal forecasting underscores both the potential and limitations of clinical narrative prediction. The underperformance of general-purpose LLMs highlights the need for models tailored to temporal reasoning. PMOA–TTS provides a robust testbed for advancing such models, spanning a broad spectrum of clinical conditions beyond domains like sepsis. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Limitations and Future Directions.}
+This study has several key limitations. First, we model events as minimally modified text spans to preserve alignment with the source text, which facilitates interpretability but relies heavily on embedding-based comparison and forgoes normalization to clinical ontologies. Second, representing time with single relative points simplifies annotation but limits expressiveness, especially in cases where durations or implicit temporal relationships are critical. Third, our one-to-one recursive event matching strategy prioritizes temporal consistency, but at the cost of reduced recall, particularly when events are expressed as conjunctive or split mentions. These design choices emphasize precision and contextual grounding but leave room for enhancements in coverage and temporal fidelity. Future work could incorporate LLM ensembling, prompt engineering, or active learning-based fine-tuning to further improve event-time extraction. Ultimately, we envision the PMOA–TTS corpus as a valuable foundation for downstream applications such as forecasting, process discovery, and AI-augmented clinical reasoning. By introducing a large, publicly available resource with detailed temporal annotations, this work enables scalable investigations of disease progression and time-based phenotypes, with the potential to generalize to other clinical documents and specialized temporal tasks. A more detailed discussion about the positive and negative societal impacts of our work have been presented in Appendix \ref{apd:broader_impact}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This work introduces PMOA TTS, a comprehensive corpus of 124,699 clinical case reports temporally annotated through large language models. 
+% Our approach transforms unstructured narrative text into structured temporal sequences, addressing a critical gap in biomedical natural language processing. 
+% Through rigorous evaluation against expert annotations, we demonstrate that LLM-driven extraction achieves high fidelity in both event identification and temporal ordering, opening new possibilities for clinical temporal reasoning at scale.
+
+% The superior performance of our LLM-based case report identification pipeline compared to traditional metadata filtering represents a methodological advancement with broader implications. 
+% By achieving near-perfect precision (1.00) while maintaining high recall (0.96), our approach ensures the corpus consists almost exclusively of true single-patient case reports. 
+% This quality control is essential for downstream applications, as contamination with multi-patient reports or non-case material would compromise any temporal analysis. 
+% Our findings suggest that similar LLM-based filtering could improve corpus creation across other medical document types where metadata alone proves insufficient.
+
+% The comparative evaluation of different LLM variants reveals important nuances in their temporal reasoning capabilities. 
+% Our analysis shows that DeepSeek models, particularly DeepSeek-R1, achieve higher accuracy in event matching based on semantic similarity to expert annotations. 
+% When examining concordance indices and time discrepancy metrics, we observe complex interrelationships between these measures. 
+% It is important to note that the event matching threshold directly influences which events are considered for concordance evaluation--a methodological consideration that affects interpretation of these results. 
+% The stratified time discrepancy analysis further reveals that all models face increasing challenges with events temporally distant from the reference point, highlighting an area for focused improvement in future work on clinical timeline extraction.
+
+% The comprehensive diagnosis mapping and demographic characterization of our corpus enables the creation of curated subset cohorts from the full 124,699 case collection. 
+% Researchers can extract disease-specific subcohorts (e.g., diabetes, hypertension, atrial fibrillation) for targeted temporal analysis, or demographic-specific cohorts based on age, sex, or available ethnicity information. 
+% This capability allows for specialized studies across different medical domains without requiring new data collection efforts. 
+% For example, one could isolate all cases of a particular rare disease to study its typical progression timeline, or compare temporal patterns between different demographic groups with the same condition. 
+% The scale of our corpus--over 5.6 million temporally-annotated clinical events--provides sufficient sample sizes for such subdivided analyses while maintaining statistical power.
+
+
+% The downstream survival analysis reveals important patterns in how different language models encode temporal information from clinical narratives. 
+% Our results demonstrate that decoder-based models (LLaMA, DeepSeek) consistently outperform encoder-based models (BERT variants) across all time thresholds and modeling approaches. 
+% LLaMA-3.3-70B-Instruct achieves the highest concordance indices, suggesting that larger models with more parameters may better capture the complex relationships in clinical time series. 
+% While the differences between survival modeling approaches (DeepSurv and DeepHit) are minimal, the choice of underlying embedding model substantially impacts predictive performance. 
+% This survival analysis showcases just one potential use case of the PMOA TTS dataset, opening new paths for modeling temporal clinical information across various predictive tasks and medical domains.
+% % The modest improvements observed with increasing observation windows (from 0h to 168h) suggest that additional temporal context provides incremental but valuable information for outcome prediction.
+
+
+% Our reference to parallel work \citep{noroozizadeh2025forecasting} on forecasting highlights both the potential and challenges of temporal prediction from clinical narratives.
+% The difficulties faced by out-of-the-box LLMs in this domain underscore the need for specialized approaches that can better leverage temporal structure. 
+% The PMOA TTS corpus provides an ideal testbed for developing such methods, spanning a diverse range of conditions beyond the previously studied sepsis cases.
+
+% The significance of this work extends beyond the immediate results. 
+% By providing a large-scale resource with explicit temporal annotations, we enable new research directions in clinical temporal reasoning, from mining typical disease progression patterns to identifying temporal clinical phenotypes. 
+% The methodology demonstrated here for temporal annotation could also be extended to other types of clinical documents or adapted for more specialized temporal extraction tasks.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

@@ -1,0 +1,71 @@
+\begin{table*}[tb!]
+\scriptsize
+\caption{Comparison of event match rate (Event), median concordance ($c$), median absolute error (MAE), and area under the log-time curve (AULTC) across Llama-3.3-70B-Instruct prompt variants: no role-playing (no role), no conjunction expansion (no expansion), zero-shot, interval, and interval with i2b2 event typing (Interval + Type), for i2m4, \texttt{sepsis-40}, and \texttt{sepsis-100}.}
+\label{tab:sens}
+\footnotesize
+\centering
+
+\begin{tabular}{l>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}}
+\toprule
+
+& \multicolumn{4}{c}{i2m4}
+& \multicolumn{4}{c}{\texttt{sepsis-40}}
+& \multicolumn{4}{c}{\texttt{sepsis-100}} \\
+
+\cmidrule(lr){2-5}
+\cmidrule(lr){6-9}
+\cmidrule(lr){10-13}
+
+\textbf{Model}
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC \\
+
+\midrule
+
+L3.3 70B
+& {\bftab 0.43} & 0.768 & {\bftab 7} & {\bftab 0.805}
+& {\bftab 0.76} & 0.908 & 24 & 0.742
+& 0.69 & 0.920 & 7 & {\bftab 0.796} \\
+\\
+
+\textbf{Ablations} \\
+No role
+& 0.40 & 0.734 & 8 & 0.800
+& 0.75 & 0.920 & 24 & 0.749
+& 0.69 & 0.908 & 8 & 0.792 \\
+
+No expansion
+& 0.38 & 0.768 & 8 & 0.797
+& 0.76 & 0.909 & 24 & {\bftab 0.774}
+& 0.69 & 0.923 & 7 & 0.795 \\
+
+Zero-shot
+& 0.30 & 0.737 & 9 & 0.794
+& 0.64 & {\bftab 0.940} & 24 & 0.746
+& 0.59 & {\bftab 0.943} & 12 & 0.786 \\
+\\
+
+\textbf{Augments} \\
+Interval
+& 0.43 & 0.740 & 8 & 0.798
+& 0.74 & 0.924 & 24 & 0.737
+& {\bftab 0.70} & 0.902 & 10 & 0.789 \\
+
+Interval+Type
+& 0.39 & {\bftab 0.775} & 8 & 0.803
+& 0.71 & 0.911 & 28 & 0.730
+& 0.68 & 0.906 & {\bftab 6} & 0.794 \\
+
+\bottomrule
+\end{tabular}
+\end{table*}

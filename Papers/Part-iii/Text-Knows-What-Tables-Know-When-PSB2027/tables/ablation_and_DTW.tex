@@ -1,0 +1,126 @@
+\begin{table}[h] 
+\setlength{\tabcolsep}{3pt} \renewcommand{\arraystretch}{1.08} 
+\tbl{\rebuttal{\textbf{(A)} DeepSeek V3.2 scaffold and calibration-stage ablations with bootstrap 95\% confidence intervals. \textbf{(B)} Retrieval calibration compared with sentence-embedding and lexical Dynamic Time Warping (DTW) alignments.}}
+% \tbl{(\textbf{A}) Ablation results for DeepSeek V3.2 (bootstrap with 95\% confidence intervals). Bold indicates the best value in each metric--setting column. The ``update central timeline only'' condition yields a single final timeline and is therefore undefined for the unimodal setting. (\textbf{B}) Retrieval-based calibration is compared with explicit temporal alignment using dynamic time warping (DTW). DTW(Sent) uses sentence-transformer embeddings for semantic alignment of text-derived events and structured EHR rows, whereas DTW(Lex) uses deterministic hashed lexical embeddings based on n-grams.} 
+{ 
+\begin{minipage}{\textwidth} 
+\scriptsize 
+\noindent\textbf{A. Scaffold and calibration-stage ablations}\par
+\vspace{2pt}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccc@{}} 
+\hline 
+\multirow{2}{*}{\textbf{Ablation}} 
+& \multicolumn{2}{c}{\textbf{Event match rate}} 
+& \multicolumn{2}{c}{\textbf{Concordance}} 
+& \multicolumn{2}{c}{\textbf{AULTC}} \\ 
+\cline{2-7} 
+& \textbf{Unimodal} 
+& \textbf{Multimodal} 
+& \textbf{Unimodal} 
+& \textbf{Multimodal} 
+& \textbf{Unimodal} 
+& \textbf{Multimodal} \\ 
+\hline 
+single-step 
+& 0.39 [0.35, 0.45] 
+& 0.39 [0.35, 0.44] 
+& 0.70 [0.65, 0.74] 
+& 0.71 [0.65, 0.75] 
+& \textbf{0.78 [0.74, 0.83]} 
+& \textbf{0.77 [0.73, 0.83]} \\ 
+central only 
+& -- 
+& 0.46 [0.42, 0.51] 
+& -- 
+& 0.72 [0.66, 0.77] 
+& -- 
+& 0.75 [0.71, 0.80] \\ 
+final only 
+& \textbf{0.51 [0.46, 0.56]} 
+& \textbf{0.52 [0.46, 0.58]} 
+& 0.68 [0.64, 0.72] 
+& 0.69 [0.64, 0.72] 
+& 0.72 [0.67, 0.78] 
+& 0.73 [0.69, 0.78] \\ 
+central + final 
+% & 0.49 [0.43, 0.56] 
+% & 0.49 [0.43, 0.56] 
+% & \textbf{0.77 [0.73, 0.81]} 
+% & \textbf{0.74 [0.70, 0.80]} 
+% & \textbf{0.77 [0.73, 0.81]} 
+% & \textbf{0.70 [0.64, 0.78]}\\ 
+& 0.49 [0.43, 0.56]
+& 0.49 [0.43, 0.56]
+& \textbf{0.74 [0.70, 0.80]}
+& \textbf{0.77 [0.73, 0.81]}
+& 0.71 [0.64, 0.78] 
+& \textbf{0.77 [0.73, 0.81]} \\
+\hline 
+\end{tabular*}
+
+\vspace{2pt}
+\noindent\textit{Note:} Central-only, final-only, and central + final correspond to updating the anchor scaffold only, the final timeline only, or both stages, respectively. The central-only condition yields a single final timeline and is undefined for the unimodal setting.
+\vspace{5pt}
+
+\noindent\textbf{B. Retrieval calibration vs. explicit temporal alignment (Dynamic Time Warping)}
+
+\vspace{2pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}l*{9}{c}@{}}
+\hline
+\multirow{2}{*}{\textbf{Model}}
+& \multicolumn{3}{c}{\textbf{Event match rate}}
+& \multicolumn{3}{c}{\textbf{Concordance}}
+& \multicolumn{3}{c}{\textbf{AULTC}} \\
+\cline{2-4}\cline{5-7}\cline{8-10}
+& \textbf{Retrieval}
+& \textbf{DTW(Sent)}
+& \textbf{DTW(Lex)}
+& \textbf{Retrieval}
+& \textbf{DTW(Sent)}
+& \textbf{DTW(Lex)}
+& \textbf{Retrieval}
+& \textbf{DTW(Sent)}
+& \textbf{DTW(Lex)} \\
+\hline
+DeepSeek R1
+& 0.39 & 0.39 & 0.39
+& 0.75 & 0.75 & 0.74
+& 0.79 & 0.80 & 0.79 \\
+
+KimiK2-Instruct
+& 0.25 & 0.26 & 0.26
+& 0.74 & 0.74 & 0.73
+& 0.68 & 0.68 & 0.68 \\
+
+GPT-OSS-120B
+& 0.32 & 0.32 & 0.32
+& 0.75 & 0.73 & 0.73
+& 0.77 & 0.77 & 0.77 \\
+
+DeepSeek V3.2
+& 0.49 & 0.49 & 0.49
+& 0.77 & 0.76 & 0.77
+& 0.77 & 0.77 & 0.77 \\
+
+GLM5
+& 0.33 & 0.33 & 0.33
+& 0.82 & 0.81 & 0.81
+& 0.78 & 0.78 & 0.77 \\
+
+Qwen3.5-397B-A17B
+& 0.40 & 0.40 & 0.40
+& 0.79 & 0.79 & 0.79
+& 0.77 & 0.77 & 0.77 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+
+\vspace{2pt}
+% \noindent\textit{Note:} Central-only, final-only, and central + final correspond to updating the anchor scaffold only, the final timeline only, or both stages, respectively.
+
+\end{minipage}
+}
+\label{tab:ablation_and_DTW}
+\vspace{-12pt}
+\end{table}

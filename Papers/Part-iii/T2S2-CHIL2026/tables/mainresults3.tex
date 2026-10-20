@@ -1,0 +1,72 @@
+\begin{table*}[tb!]
+\small
+\caption{Comparison of event match rate (Event), median concordance ($c$), median absolute error (MAE), and area under the log-time curve (AULTC) across LLMs for i2m4, \texttt{sepsis-40}, and \texttt{sepsis-100} datasets.}
+\label{tab:results}
+\footnotesize
+\centering
+
+\begin{tabular}{l>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}>{\centering\arraybackslash}p{0.5cm}>{\centering\arraybackslash}p{0.65cm}>{\centering\arraybackslash}p{0.6cm}>{\centering\arraybackslash}p{0.9cm}}
+\toprule
+
+& \multicolumn{4}{c}{i2m4}
+& \multicolumn{4}{c}{\texttt{sepsis-40}}
+& \multicolumn{4}{c}{\texttt{sepsis-100}} \\
+
+\cmidrule(lr){2-5}
+\cmidrule(lr){6-9}
+\cmidrule(lr){10-13}
+
+\textbf{Model}
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC
+& \scriptsize Event
+& \scriptsize c
+& \scriptsize MAE
+& \scriptsize AULTC \\
+
+\midrule
+
+GPT-5
+& -- & -- & -- & --
+& {\bftab 0.93} & {\bftab 0.965} & {\bftab 4} & {\bftab 0.822}
+& -- & -- & -- & -- \\
+
+DeepSeek-R1
+& 0.31 & 0.755 & 13 & 0.786
+& 0.79 & 0.892 & 16 & 0.781
+& {\bftab 0.77} & 0.879 & {\bftab 2} & {\bftab 0.812} \\
+
+L3.3 70B
+& {\bftab 0.43} & {\bftab 0.768} & {\bftab 7} & {\bftab 0.805}
+& 0.76 & 0.908 & 24 & 0.742
+& 0.69 & {\bftab 0.920} & 7 & 0.796 \\
+
+L3.1 70B
+& 0.32 & 0.747 & 8 & 0.804
+& 0.66 & 0.931 & 30 & 0.737
+& 0.67 & 0.914 & 6 & 0.794 \\
+
+Mixtral 8x7B
+& 0.31 & 0.745 & 21 & 0.773
+& 0.68 & 0.906 & 48 & 0.710
+& 0.63 & 0.875 & 24 & 0.764 \\
+
+L3.1 8B
+& 0.35 & 0.727 & 26 & 0.738
+& 0.53 & 0.856 & 84 & 0.685
+& 0.66 & 0.772 & 50 & 0.716 \\
+
+BERT 5-CV
+& -- & 0.704 & 34 & 0.520
+& -- & -- & -- & --
+& -- & -- & -- & -- \\
+
+\bottomrule
+\end{tabular}
+\end{table*}

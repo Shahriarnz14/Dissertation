@@ -1,0 +1,132 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Revised Intro %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Healthcare disparities persist globally, with preventable deaths from conditions like sepsis disproportionately affecting underserved populations who often present to under-resourced facilities with limited access to specialized expertise. In these settings, much of the critical diagnostic and prognostic information exists only in unstructured clinical narratives, as comprehensive structured data infrastructure may be unavailable. Automated risk forecasting from textual clinical records could democratize access to expert-level clinical reasoning, particularly in resource-constrained environments where timely specialist consultation is not available.
+
+Clinical risk forecasting is a cornerstone of healthcare decision-making, guiding diagnosis, treatment planning, and resource allocation. While machine learning approaches have shown promise when trained on structured data, much of the clinically meaningful information remains embedded in unstructured text—especially in documents such as case reports and discharge summaries~\citep{seinen2025using}.
+These narratives often contain rich temporal and causal information, but are challenging to use directly due to their free-text format. Importantly, recent work shows that incorporating text alongside structured inputs significantly improves predictive performance~\citep{kline2022multimodal}.
+At the same time, recent studies have shown that large language models (LLMs) struggle with clinical risk estimation out of the box, especially in patient-facing scenarios such as communicating the risk-benefit tradeoffs of surgery~\citep{wongposition}. 
+This motivates a more structured treatment of risk forecasting and survival modeling, especially from unstructured sources such as narrative case reports.
+
+% Among textual sources, retrospective case reports differ from progress notes by providing holistic accounts of clinical trajectories, capturing observed events, clinical reasoning, and temporal progression—making them well-suited for training and evaluating AI models in temporal forecasting. However, their narrative structure interleaves temporally unordered information, making them difficult to apply in forecasting tasks. Without identifying the time of occurrence for each event, models are prone to \emph{causal leakage}---using information not available at the time of prediction.
+Among textual sources, retrospective case reports serve as a rich training ground for developing temporally-aware AI systems that can eventually be deployed on real-time clinical notes. Case reports provide holistic accounts of clinical trajectories with explicit temporal reasoning—exactly the type of structured thinking needed for real-time clinical decision support. However, their narrative structure interleaves temporally unordered information, making them difficult to apply in forecasting tasks. Without identifying the time of occurrence for each event, models are prone to causal leakage—using information not available at the time of prediction. Solving this temporal reasoning challenge in case reports establishes the foundation for deployment in live clinical environments where such capabilities could save lives.
+
+Our framework is validated on real clinical notes from published case reports, with temporal extractions verified by clinical experts. While case reports represent a specific type of clinical documentation, they contain the same temporal reasoning challenges present in all clinical narratives—making our methodology directly applicable to broader clinical text sources.
+
+\begin{figure}[!htbp] % 'r' for right, 'l' for left
+    \centering
+    \includegraphics[width=\linewidth]{AAAI_2026/Figures/annotation_ex.png} % Adjust width
+    \caption{Example case report (left) with temporal representations as timelines (middle) and text-ordered, event-time tuples (right).}
+    \label{fig:annotation_ex}
+    \vspace{-2.5mm}
+\end{figure}
+
+To address the core challenge of causal leakage and temporal misalignment, we develop a forecasting framework that transforms free-text narratives into \emph{textual time series}—sequences of (event, time) tuples that make explicit the temporal structure of patient trajectories.
+Building on the recent annotation schema in~\citeauthor{wang2025large} \citeyearpar{wang2025large}, we propose a hybrid pipeline combining rule-based heuristics and LLM-assisted extraction to recover temporally localized clinical findings. These time-stamped events enable \textit{anytime forecasting} by masking future information at inference time, ensuring temporal validity in clinical predictions. 
+
+% Our approach departs from conventional clinical NLP pipelines focused on named entity recognition or ontology-driven concept mapping~\citep{uzuner20112010}. Instead, we retain free-text spans to preserve contextual nuance that might be lost during standard normalization. While classical temporal relation extraction methods~\citep{zhou2007temporal,sun2013evaluating} emphasize event ordering or overlap, they typically lack absolute temporal grounding needed for forecasting or survival modeling.
+
+One might ask whether large pretrained language models, such as BERT or instruction-tuned LLMs, can already perform forecasting and survival analysis from clinical narratives, given their exposure to biomedical texts~\citep{peng2020empirical,weber2024redpajama}. However, these models have architectural limitations.
+Encoder-based models apply random masking, rarely yielding temporally coherent representations—e.g., in our experiments using the timeline in Figure~\ref{fig:annotation_ex}, the probability of recovering a valid time-ordered mask is $< 0.002\%$. Decoder-style models process text in linear sequence, and thus model events in \emph{text order} rather than \emph{time order}. This mismatch leads to low temporal concordance (e.g., $c=0.23$ in the same figure) and suboptimal forecasting accuracy without task-specific restructuring.
+
+To enable rigorous evaluation of temporally grounded forecasting, our approach reformulates case reports into structured textual time series and masks post-forecast events to prevent causal leakage. While some LLMs may have been exposed to PubMed content during pretraining, our derived (event, time) sequences are not present in the original texts and require temporal restructuring that diverges from the original narrative format—representing a distinct prediction setup not directly seen during pretraining. Additionally, we include evaluations using open-source models with documented training corpora, such as \textit{RedPajama-INCITE}, which explicitly exclude PubMed content. While others, like \textit{OLMo-2}, may include PubMed-derived data, their performance on our temporally restructured inputs helps assess the extent to which models generalize beyond memorization.
+% Additionally, we include evaluations using fully open-source models, to further mitigate pretraining overlap concerns (see \textbf{Appendix}).
+
+We empirically assess this framework across multiple tasks and modeling strategies. Specifically, we benchmark encoder and decoder models---both fine-tuned and prompted versions---on three forecasting tasks: event prediction, survival analysis, and temporal ordering. Our results show no single model dominates across all tasks, highlighting the importance of aligning model architecture with forecasting objectives and temporal representation.
+We further examine how input ordering (time vs. narrative) impacts generalization and ranking accuracy.
+Time ordering improves model performance on ranking tasks, while preserving narrative order enhances transferability across datasets.
+Additionally, we analyze the sensitivity of models to missing historical context by masking portions of patient history. While classification metrics (\emph{e.g.}, F1) degrade under masking, ranking metrics (\emph{e.g.}, concordance index) remain stable—revealing task-specific dependencies on historical completeness. 
+Our work builds on extensive research in clinical NLP and temporal reasoning~\citep{kohane1987temporal, leeuwenberg2020towards, cheng2023typed}, but shifts the emphasis from extraction to downstream clinical forecasting. 
+While prior efforts have focused on entity recognition and temporal relation extraction \citep{zhou2007temporal, uzuner20112010, sun2013evaluating}, few have systematically assessed how such representations influence downstream tasks such as risk prediction and survival modeling. 
+We bridge this gap by formalizing textual time series representations and evaluating their effectiveness for temporally grounded clinical prediction.
+
+\textbf{Contributions.} In summary, this paper makes the following contributions:
+\begin{itemize}[leftmargin=*,itemsep=0pt,parsep=0pt,partopsep=0pt,topsep=0pt]
+    \item \textbf{Annotation and Extraction Pipeline:} Building on prior methods for extracting information from the PubMed Open Access corpus \cite{noroozizadeh2025reconstructing}, this work introduces a pipeline that transforms case reports into textual time series via regex filtering and LLM-assisted extraction, yielding temporally anchored (event, time) tuples while minimizing causal leakage by restricting input to pre-cutoff events.
+
+    \item \textbf{Comprehensive Model Comparison:} 
+    We conduct a comprehensive evaluation of encoder- and instruction-tuned decoder-based models—using both fine-tuned MLP heads and prompting—across event prediction, temporal ordering, and survival analysis tasks. Results show no single model excels universally, underscoring the need to align model choice with the specific forecasting objective.
+
+    \item \textbf{Temporal versus Text Ordering:} 
+    We investigate the impact of annotation order by comparing training on time-ordered versus text-ordered data. Results show that preserving the narrative’s natural order can improve generalization to external datasets, while time-based ordering can enhance ranking performance in certain settings.
+
+    \item \textbf{Sensitivity Analysis of Temporal Masking:} 
+    We conduct systematic dropout experiments by randomly masking parts of the clinical history to assess their impact on forecasting and event ordering. While higher masking levels reduce classification performance (F1), the concordance index remains largely stable, highlighting differing sensitivities of binary prediction and ranking tasks to historical context in textual time series.
+
+    \item \textbf{Methodological Framework for Temporal Clinical Forecasting:} Our approach demonstrates how narrative clinical texts can be systematically converted into structured temporal representations for forecasting tasks, providing a replicable methodology that could potentially be adapted to other clinical text sources, though additional work would be required before real-world deployment.
+\end{itemize}
+
+%By unlocking structured representations from underutilized clinical narratives, our approach paves the way for more interpretable, temporally grounded risk prediction. This can enhance decision support in low-resource settings, improve chronic care planning, and better equip LLMs for clinically meaningful reasoning. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Old Intro (MLHC paper) %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Clinical risk forecasting is a cornerstone problem in health care decision making that guides eligibility and reasoning about interventions.
+% Because risk prediction performs best with access to rich data streams, great lengths are taken to capture the relevant health factors that affect decision making.
+% However, while many forecasting tasks are performed on structured tabular data, evidence suggests that, despite widespread efforts to collect large amount of data in structured format, only a small fraction of structured data overlaps with that documented in text~\citep{seinen2025using}. 
+% Furthermore, empirically we observe that predictions are considerably better when text is integrated~\citep{kline2022multimodal}.
+
+% \begin{figure}[!htbp] % 'r' for right, 'l' for left
+%     \centering
+%     \includegraphics[width=\linewidth]{AAAI_2026/Figures/annotation_ex.png} % Adjust width
+%     \caption{Example case report (left) with temporal representations as timelines (middle) and text-ordered, event-time tuples (right).}
+%     \label{fig:annotation_ex}
+%     \vspace{-5mm}
+% \end{figure}
+
+% A complementary data stream in healthcare comes from the textual data that providers use in documenting their encounters.  Likely the most comprehensive part are the case reports and discharge summaries, which are a sort of ``post-mortem'', retrospective discussion of the relevant factors for decision making and observed progression. 
+% However, without further effort, we are unable to leverage this data stream for forecasting because the times that are documented are interwoven in the narrative passage.
+
+% To construct and learn from 
+% % what is believed to be the most detailed account of 
+% these patient trajectories, this work investigates the development of a forecasting pipeline for textual time series from retrospective analysis of clinical trajectories from case reports.
+% Building on the annotation schema proposed in prior work \cite{wang2025large}, temporally located clinical findings were extracted as lists of (event, time) tuples representing the patient encounter.
+% The mapping from case report to time-localized events allows us to make anytime forecasts by masking those events that occur after the requested forecast time.
+% Without this annotation process, it would be unclear which findings could be used so as to avoid ``causal leakage'' from events occurring in the future.
+
+% Our approach differs from other efforts in the NLP and clinical informatics community and is driven by our particular emphasis on high-performance forecasting and temporally-aware risk characterization.
+% For example, our definition of clinical finding is related to clinical entity and clinical concept definitions from the field of named entity recognition.
+% However, we avoid mapping to a discrete set of entities to increase the availability of contextual information for forecasting, and thus require an alternative annotation guideline~\citep{uzuner20112010}.
+% With respect to our temporal annotations, our approach differs from the classical temporal relations task, which, while capturing relative ordering and overlap of events, makes it difficult to perform risk calculations and multimodal alignments that are functions of time~\citep{kohane1987temporal,zhou2007temporal,sun2013evaluating}.
+
+% We use LLMs to assist us in this task, so it is natural to question whether we need this extraction/annotation step at all, since a multitude of BERT-based and LLM models have consumed these, similar post-mortem reports, and more    during training~\citep{peng2020empirical,weber2024redpajama}.
+% From an architectural perspective, both encoder (BERT-style) and decoder (LLM-style) models will not perform the temporal masking necessary to encode leakage-free embeddings.
+% For BERT models, which use full attention modules with masking, the probability that the random masking recovers a time-ordered representation is vanishingly small (tested empirically on the example timeline in Figure \ref{fig:annotation_ex} (right) with default BERT masking probability of 0.15; probability of a time-ordered masking: 2/100,000). 
+% For decoder models, their causal attention mask means that embeddings are processed in \emph{text-order} rather than \emph{time-order}. 
+% Given that the concordance, the fraction of the time pairwise temporal ordering are correct, between text-ordered and time-ordered events is lower than 1 in most reports (c=0.23 in the example in Figure \ref{fig:annotation_ex}), we would expect suboptimal temporal reasoning capabilities.
+
+% As we will see, we empirically find that these models do not forecast well without further training.
+% If we can address these textual-temporal discrepancies, we expect to be able to substantially improve LLM capabilities at clinical forecasting, which could lead to downstream improvements in clinical temporal reasoning, risk estimation, causal reasoning, and decision making.
+
+% \vspace{-.5em}
+% \subsection{Contributions}
+% \begin{enumerate}
+% \item \textbf{Annotation and Extraction Pipeline:} 
+% Building on previously proposed methods for extracting information from the PubMed Open Access corpus \cite{noroozizadeh2025reconstructing}, this work develops a pipeline that converts case reports into textual time series using both regex-based filtering and LLM-assisted extraction.
+% The pipeline produces temporally localized (event, time) tuples, mitigating potential causal leakage by ensuring that only pre-cutoff events inform forecasts.
+
+% \item \textbf{Comprehensive Model Comparison:} 
+% We rigorously evaluate a broad suite of models across multiple forecasting tasks. 
+% Our study compares instruction-tuned decoder-based models (both via fine-tuning with MLP heads and prompting strategies) against encoder-based models with task-specific fine-tuning. 
+% Experiments on event occurrence prediction, temporal ordering, and survival analysis reveal complementary strengths: no single modeling approach consistently outperforms across all tasks, highlighting the importance of aligning model choice with the specific forecasting objective.
+
+% \item \textbf{Analysis of Temporal versus Text Ordering:} 
+% We perform a detailed investigation into the impact of ordering on performance by contrasting training on time-ordered versus text-ordered annotations. 
+% Our experiments demonstrate that preserving the clinical narrative’s natural order can enhance generalization on external datasets, while explicit time ordering can improve ranking performance under specific conditions.
+
+% \item \textbf{Sensitivity Analysis of Temporal Masking:} 
+% Through systematic dropout experiments, we analyze the effects of randomly masking portions of the clinical history on forecasting accuracy and event ordering. 
+% The findings reveal that while classification performance (F1 score) deteriorates with higher levels of masking, the concordance index remains largely stable—highlighting differing sensitivities of binary prediction and ranking tasks to historical context in our textual time series setup.
+% \end{enumerate}
+
+% \subsection*{Generalizable Insights about Machine Learning in the Context of Healthcare}
+% % \textcolor{red}{TODO}
+% Extensive research has been in the clinical NLP community towards temporal understanding of clinical narratives~\citep{kohane1987temporal,leeuwenberg2020towards,cheng2023typed}.
+% While much has focused on temporal relations, relative-time event tuples facilitate the use of longitudinal and survival models so long as they can use  free-text inputs and outcomes (possibly via mappings to an ontology).
+% Whereas the primary focus in this space is on the entity and temporal extraction tasks, downstream application studies remain infrequent.
+% Our study seeks to close thie gap by applying forecasting methodologies to these data streams to characterize the performance of leading machine learning and NLP approaches.
+% A better empirical understanding of the strength and weakness of these approaches will enable future work to advance improved textual time series methods.  
+% Our investigation also highlights that risk estimation and event anticipation is not optimally captured in LLMs (as we demonstrate in contrasts between fine-tuning and prompt-based strategies), suggesting the need for careful investigation of LLMs when applied to assessment of risk.
+
+

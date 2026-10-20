@@ -1,0 +1,26 @@
+\subsection{Event Match Rate}
+%\textbf{Text Event Match.} 
+To evaluate the alignment between predicted clinical events and reference annotations, we used a recursive best-match strategy adopted from our previous work \citep{wang2025large}. This method pairs events by minimizing string-based distances while avoiding many-to-one mappings. For each reference event, the closest predicted event is selected based on the minimal distance, with text order, \emph{i.e.}, the order of the events in the annotation files, to break distance ties. Once matched, both events are removed from further consideration, and the process continues recursively with the remaining pairs. \textcolor{red}{George: how does this greedy approach do compared to the classical 1955 Hungarian algorithm (we would use this to match predicted clinical events to reference ones, where if there is a mismatch in the numbers, e.g., more reference ones than predicted ones, you just introduce ``empty'' predicted ones that have 0 cost)? Also, is there some way to use an evaluation metric like optimal transport distance?}
+
+We tested several distance metrics, including Levenshtein distance, cosine similarity of \texttt{BERT} (\texttt{bert-base-uncased}) embeddings, and cosine similarity based on sentence embeddings from \texttt{PubMedBERT} (\texttt{S-PubMedBert-MS-MARCO}). Previous validation showed that \texttt{PubMedBERT-based} cosine similarity with a threshold of 0.1 was the most reliable, and we used this metric for our evaluation. The detailed pseudo code of the recursive best match algorithm is provided in Algorithm~\ref{alg:recursive_match}. \textcolor{red}{George: Where does the threshold show up in Algorithm~1? How is the final event match rate defined (is it just the fraction of reference events that are matched, i.e., recall? precision? F1? something else?)?}
+\input{Scientific_data/Supplementary/recursive_best_match_algo}
+
+\subsection{Temporal Concordance}
+%\textbf{Temporal Ordering.} 
+To quantify the accuracy of temporal ordering, we used the concordance index (c-index), which measures the probability that a randomly selected pair of predicted events is correctly ordered in time (so c-index values range from 0 to 1). Higher c-index values indicate better alignment with the reference timeline. Formally, suppose that for a specific case report (corresponding to a single patient) that we have a manual annotation for, after doing the matching described in the previous section, we find that there are a total of $k$ events that matched. For event $i\in\{1,2,\dots,k\}$, we denote the (manually annotated) reference time for event $i$ as $t_i^{\text{ref}}$ and the LLM-extracted time as $t_p^{\text{pred}}$. Then the c-index is calculated as
+\[
+\text{c-index} = \frac{1}{N} \sum_{i,j\in\{1,2,\dots,k\}\text{ s.t.~}i<j} {\mathds{1}\{(t^{\text{ref}}_i - t^\text{ref}_j)(t^{\text{pred}}_i - t^{\text{pred}}_j) > 0\}},
+\]
+where $\mathds{1}\{\cdot\}$ is the indicator function, and $N$ is the number of ``comparable'' pairs (a pair of events $(i,j)$ with $i<j$ is comparable if $t^{\text{ref}}_i \neq t^{\text{ref}}_j$ and $t^{\text{pred}}_i \neq t^{\text{pred}}_j$).
+
+% \vspace{-10pt}
+% \begin{equation}
+% \text{c-index} = \frac{1}{N} \sum_{i<j} \mathbf{1}[(t^r_i - t^r_j)(t^p_i - t^p_j) > 0]
+% \end{equation}
+% \vspace{-10pt}
+
+\subsection{Time Discrepancy}
+%\textbf{Time Discrepancy Analysis.} 
+We evaluated temporal prediction accuracy by measuring the discrepancies between predicted and reference times. Continuing to use notation from the previous section, note that for a specific matched event, the absolute difference in predicted and reference times is $|t_i^{\text{pred}} - t_i^{\text{ref}}|$. If we denote any such absolute time difference as $\Delta t$ (in hours), then we specifically measure the \emph{log-time discrepancy} defined as $\log(1 + \Delta t)$. To summarize these discrepancies, we introduce the Area Under the Log-Time Cumulative Distribution Function (AULTC), which quantifies how quickly the cumulative distribution of log-time discrepancy values rises---higher AULTC values indicate better temporal alignment. The full definition of AULTC is in Appendix \ref{apd:ltcdf}. We also stratified the analysis by different time granularities (hour, day, week, year) to examine how prediction accuracy varies with time from case presentation. \textcolor{red}{George: In constructing the empirical distribution function, do you use log-time discrepancy values across the entire ``gold set''?}
+
+\input{Scientific_data/Supplementary/AULTC}

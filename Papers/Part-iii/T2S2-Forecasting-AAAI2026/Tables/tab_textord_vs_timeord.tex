@@ -1,0 +1,66 @@
+\begin{table*}[ht]
+\centering
+% \resizebox{\linewidth}{!}
+% \scriptsize
+{
+\begin{tabular}{lcccccccc}
+\toprule
+& F1(1h) & F1(1d) & F1(1w) & c-index & F1(1d)-10 & c10 & F1(1d)-100 & c100 \\
+\hline
+\multicolumn{9}{c}{\textbf{\textit{T2S2} (\texttt{DeepSeek-R1})}} \\
+\hline
+\textbf{Text-ordered} & 0.290 & 0.569 & 0.876 & 0.659 & 0.361 & 0.598 & 0.615 & 0.609 \\
+\textbf{Time-ordered} & 0.306 & 0.576 & 0.877 & 0.672 & 0.428 & 0.576 & 0.607 & 0.613 \\
+\hline
+\multicolumn{9}{c}{\textbf{\textit{T2S2} (\texttt{Llama-3.3-70B})}} \\
+\hline
+\textbf{Text-ordered} & 0.311 & 0.648 & 0.898 & 0.586 & 0.423 & 0.526 & 0.662 & 0.541 \\
+\textbf{Time-ordered} & 0.257 & 0.645 & 0.903 & 0.632 & 0.382 & 0.595 & 0.616 & 0.612 \\
+\bottomrule
+\end{tabular}
+}
+% \vspace{-3.5mm}
+\caption{Comparison of text-ordered and time-ordered training for \texttt{DeepSeek-R1} and \texttt{Llama 3.3-70B} annotations on F1 scores and c-index values. 
+% \textbf{Abbreviations}: F1(1d)-10/100: F1 (1 day) for sepsis-10 and sepsis-100 respectively. c10/100: c-index for sepsis-10 and sepsis-100 respectively.
+% \vspace{-0.75em}
+}
+\label{tab:dsr1q_l33_comparison}
+\end{table*}
+
+
+%\input{MLHC_2025/tab_textord_vs_timeord}
+
+% Text-ordered train vs time-ordered train (Note: evaluation always on timeord)
+
+% Best model (from Table 1 and Table 2): 
+%     - ModernBERT base MLP head (for F1)
+%     - ModernBRERT base masking fine-tuned (for concordance)
+    
+% ### Text-ordered train (DSR1Q annotations | L33 annotations)
+% T2S2 test: F1 (1hr) = 0.290 | 0.311
+% T2S2 test: F1 (1day) = 0.569 | 0.648
+% T2S2 test: F1 (7days) = 0.876 | 0.898
+% sepsis10: F1 (1day) = 0.361 | 0.423
+% sepsis100: F1 (1day) = 0.615 | 0.662
+
+% (DSR1Q annotations | L33 annotations)
+% T2S2 test : c-index = 0.659 | 0.586
+% sepsis10 : c-index = 0.598 | 0.526
+% sepsis100 : c-index = 0.609 | 0.541
+
+% ### Time-ordered train (DSR1Q annotations | L33 annotations) - values from Table 1 and Table 2 in overleaf
+% T2S2 test: F1 (1hr) = 0.306 | 0.257
+% T2S2 test: F1 (1day) =  0.576 | 0.645
+% T2S2 test: F1 (7days) = 0.877 | 0.903
+% sepsis10: F1 (1day) = 0.428 | 0.382
+% sepsis100: F1 (1day) = 0.607 | 0.616
+
+% (DSR1Q annotations | L33 annotations)
+% T2S2 test : c-index = 0.672 | 0.632
+% sepsis10 : c-index = 0.576 | 0.595
+% sepsis100 : c-index = 0.613 | 0.612
+
+% Key takeaways:
+%     - Time-ordered training generally improves concordance. 
+%     - F1 scores are not much affected due to time-ordered 
+%       training. Sometimes, text-ordered has better F1. 

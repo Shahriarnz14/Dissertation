@@ -1,0 +1,402 @@
+%\documentclass[wcp,gray]{jmlr} % test grayscale version
+ %\documentclass[wcp]{jmlr}% former name JMLR W\&CP
+\documentclass[pmlr]{jmlr}% new name PMLR (Proceedings of Machine Learning)
+
+\RequirePackage{graphicx}
+ % The following packages will be automatically loaded:
+ % amsmath, amssymb, natbib, graphicx, url, algorithm2e
+ \usepackage{booktabs}
+ %\usepackage{rotating}% for sideways figures and tables
+\usepackage{longtable}% for long tables
+ % The booktabs package is used by this sample document
+ % (it provides \toprule, \midrule and \bottomrule).
+ % 
+ % book quality tables
+
+ % The siunitx package is used by this sample document
+ % to align numbers in a column by their decimal point.
+ % Remove the next line if you don't require it.
+\makeatletter
+\def\set@curr@file#1{\def\@curr@file{#1}} %temp workaround for 2019 latex release
+\makeatother
+\usepackage[load-configurations=version-1]{siunitx} % newer version
+\usepackage{caption}
+
+ % The following command is just for this sample document:
+\newcommand{\cs}[1]{\texttt{\char`\\#1}}
+
+ % Define an unnumbered theorem just for this sample document:
+\theorembodyfont{\upshape}
+\theoremheaderfont{\scshape}
+\theorempostheader{:}
+\theoremsep{\newline}
+\newtheorem*{note}{Note}
+
+\newcommand{\jeremy}[1]{\textcolor{red}{\texttt{JCW: #1}}}
+
+ % change the arguments, as appropriate, in the following:
+\jmlrvolume{[VOLUME \# TBD]}
+\jmlryear{2025}
+\jmlrworkshop{Machine Learning for Healthcare}
+
+% H: Not sure if we need this:
+% Short headings should be running head and authors last names
+% \ShortHeadings{A Really Awesome MLHC Article}{Lastname, PhD and Lastname, MD}
+% \firstpageno{1}
+
+\title[PMOA-TTS: PubMed Open Access Textual Times Series Corpus]{PMOA-TTS: Introducing the PubMed Open Access Textual Times Series Corpus}
+
+% \author{\Name{Shahriar Noroozizadeh$^*$}
+%        \Email{snoroozi@cs.cmu.edu}\\ 
+%        \addr School of Computer Science\\
+%        Carnegie Mellon University\\
+%        Pittsburgh, PA, USA 
+%        \AND
+%        \Name{Sayantan Kumar$^*$}
+%        \Email{sayantan.kumar@nih.gov}\\ 
+%        \addr Division of Intramural Research\\
+%        National Library of Medicine\\
+%        Bethesda, MD, USA
+%        \AND
+%        \Name{Jeremy C. Weiss}
+%        \Email{jeremy.weiss@nih.gov}\\ 
+%        \addr Division of Intramural Research\\
+%        National Library of Medicine\\
+%        Bethesda, MD, USA} 
+
+\author{\Name{Firstname Lastname$^*$}
+       \Email{name@email.edu}\\ 
+       \addr Department\\
+       University\\
+       City, State, Country 
+       \AND
+       \Name{Firstname Lastname$^*$}
+       \Email{name@email.edu}\\ 
+       \addr Department\\
+       University\\
+       City, State, Country 
+       \AND 
+       \Name{Firstname Lastname}
+       \Email{name@email.edu}\\ 
+       \addr Department\\
+       University\\
+       City, State, Country} 
+
+\begin{document}
+
+\maketitle
+
+\def\thefootnote{*}\footnotetext{These authors contributed equally to this work}\def\thefootnote{\arabic{footnote}}
+%text text text\footnote{normal footnote}
+
+\begin{abstract}
+We present the PubMed Open Access Textual Time Series (PMOA-TTS) cohort.
+We apply large language models (LLMs) to annotate 114,699 case reports in the PMOA corpus (latest retrieval date 2024/12/17) for the purposes of locating the clinical events and findings in time relative to case presentation. Whereas the existing PubMed database allows for searching via metadata for case reports, our case report selection strategy has higher sensitivity and specificity for identifying single case reports, and the annotations provide a new way to use Pubmed case reports: temporal analysis. Potential temporal uses for textual time series include forecasting, tracking disease progression, and casual reasoning, to name a few. To address these tasks, LLMs without access to time-ordered information must (i) implicitly order the findings, (ii) make temporal reasoning predictions outside the time range covered by the case, or (iii) transductively apply the corpus for the temporal tasks. We give simple illustrations for the forecasting scenario that LLMs with textual time series annotations outperform LLMs.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+Clinical event timelines are fundamental to medical decision-making, supporting tasks such as patient trajectory visualization, disease progression modeling, and the creation of clinical practice guidelines. While structured electronic health records (EHRs) capture many time-stamped elements, a significant portion of clinically relevant information remains embedded in unstructured text. Case reports, progress notes, and discharge summaries often describe the timing of symptoms, diagnoses, and treatments in relation to the patient’s clinical course. However, extracting and structuring this temporal information from narrative text remains a major challenge.
+
+Despite the rich temporal information embedded in medical case reports, current retrieval systems—like PubMed—primarily rely on metadata-based searches, which offer limited support for temporal queries. As a result, the ability to systematically analyze disease timelines, identify early warning signs, or track treatment outcomes from case reports remains underdeveloped. To enhance temporal reasoning in clinical text, it is essential to align events relative to a reference time, such as the case presentation. Phrases like “six months prior,” “a three-day history of fever,” or “hypertension diagnosed in 2022” serve as key temporal anchors, enabling the reconstruction of event sequences. However, without structured annotations, these implicit timelines remain inaccessible for computational analysis.
+
+\subsection{Contributions}
+
+To address this gap, we introduce the PubMed Open Access Textual Time Series (PMOA-TTS) corpus, a dataset of 114,699 annotated case reports from PubMed Open Access (PMOA), designed to advance temporal analysis in clinical research. By utilizing large language models (LLMs), we systematically extract and structure clinical events in their temporal context, converting unstructured text into an analyzable textual time series. Unlike traditional metadata-based retrieval methods in PubMed, our LLM-driven approach enhances the sensitivity and specificity of case report identification, ensuring a more accurate selection of relevant cases. We validate this improvement through a confusion matrix analysis, demonstrating that while metadata-based searches may yield false positives, our LLM-filtered case reports reduce these errors while maintaining high relevance. Moreover, each case report is temporally ordered, enabling longitudinal studies such as tracking disease progression, forecasting, and causal analysis. Our findings suggest that constructing clinical timelines using LLMs is feasible, particularly in terms of matching and temporally ordering clinical events.
+
+The PMOA-TTS corpus is the first textual time series dataset that covers a wide range of medical conditions, rather than being limited to a single disease. It offers the potential for both LLM-driven and manual categorization of diagnoses. By making PMOA-TTS publicly available, we provide a valuable resource for advancing time-aware clinical NLP research and enabling more accurate and scalable temporal reasoning in biomedical narratives.
+
+\subsection*{Generalizable Insights about Machine Learning in the Context of Healthcare}
+% \textcolor{red}{TODO}
+This work introduces a new corpus from the PubMed Open Access case reports and is the first to provide temporal granularity to the clinical events and concepts of those reports at scale.
+Temporal granularity is a requirement for many types of machine learning analysis, including survival analysis, forecasting, reinforcement learning, and early-warning systems.
+Therefore, the release and validation of this corpus enables new opportunities to better understand health processes with richer time-localized textual features.  
+This work also highlights the usefulness of LLMs for annotating corpora.
+Compared to the deployed-metadata approach, our prompt-based system better extracts single-case reports, and our textual time series annotations provide a source for temporal machine learning on a large-scale corpus.
+This work could be extended to other data repositories, and multimodal approaches could be adopted in cases where access to complementary data streams are available, \emph{e.g.} MIMIC-IV.
+
+% This section is \emph{required}, must keep the above title, and should be the final part of your introduction.  In about one paragraph, or 2-4 bullet points, explain what we should \emph{learn} from reading this paper that might be relevant to other machine learning in health endeavors.
+% For example, a work that simply applies a bunch of existing algorithms to a new domain may be useful clinically but doesn't increase our understanding of the machine learning and healthcare; if that study also investigates \emph{why} different approaches have different performance, that might get us excited!  A more theoretical machine learning work may be in how it enables a new kind of clinical study. \emph{Reviewers and readers will look to evaluate (a) the significance of your claimed insights and (b) evidence you provide later in the work of you achieving that contribution}
+
+\section{Related work}
+The study of clinical time series data has gained significant attention since the widespread adoption of electronic health records (EHRs), with various corpora developed to facilitate research in machine learning, predictive modeling, and healthcare analytics. Several notable datasets have emerged, each catering to specific applications in clinical and biomedical research.
+
+The widely-used corpus, MIMIC, includes de-identified electronic health records (EHRs) from critical care patients.  MIMIC-III and its successor MIMIC-IV provide both structured and textual signals, facilitating studies on patient deterioration, sepsis prediction, and early warning systems.  Our corpus is of similar size, but draws upon medical cases generally, with broader catchment across care location (outpatient, inpatient) and region (global). 
+There are also a number of hospital triage note datasets~\citep{stewart2023applications}. However, in these corpora the text spans are mostly brief snippets describing the chief complaint and history of present illness and lack the contextual detail provided in full case reports.
+
+The PubMed corpus has also used been used for pretraining general biomedical language models and creation of other biomedical tools.
+For example, PubMedBERT was trained specifically on PubMed abstracts and articles, outperforming general-domain language models like BERT in biomedical NLP tasks~\citep{gu2021domain}.
+BlueBERT combines PubMed and clinical notes from MIMIC-III to improve downstream clinical and biomedical text processing~\citep{peng2020empirical}.
+Tools such as PubTator and ReCDS leverage the PubMed corpus to build concept extraction services and summarizations~\citep{wei2024pubtator,zhao2023large}, but none to our knowledge focus on textual time series extraction.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods}
+
+Our pipeline comprised the following parts: dataset extraction, textual time-series annotation and assessment of LLM annotations with respect to matching of clinical events and their timelines (Figure \ref{fig:flowchart}).
+
+\subsection{Dataset extraction}
+
+\sloppy We use the PubMed Open Access (PMOA) repository as our source data, which contains 1.4 million published manuscripts.  
+We used the plain text files from the December 17, 2024 release from the `oa\textunderscore noncomm' folder for noncommercial and commercial use.
+Following the approach in \cite{wang2025large}, we filter each case for the body of the text between the strings \texttt{==== Body} and \texttt{==== Ref}, which are section separators encoded in the PMOA corpus. To ensure relevance, we retain only documents containing a case-insensitive match to the regular expressions \texttt{(case report|case presenta)} and \texttt{year-? ?old}.
+
+To further filter for case reports, we query the LLM (LlaMA 3.3 70B Instruct) with the prompt: \texttt{You are a physician. Determine the number of case reports in the following manuscript. Return 0 if it is not a case report. Reply only with the number and nothing else}, followed by the case body.
+We retain those cases if the response is 1, otherwise we discard them.
+This procedure filters the publications down to 124,699 case reports (Figure \ref{fig:flowchart}).
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.62\columnwidth]{Plots_tables/PMOATTS_flow2.png}
+    \caption{Flowchart of the extraction and annotation pipeline.}
+    \label{fig:flowchart}
+\end{figure}
+
+\subsection{Textual time-series annotations}
+We aimed to leverage LLMs to extract clinical textual time-series from the PMOA case reports. We define a textual time series as a chronologically ordered list of clinical findings, each paired with a timestamp (when available) and associated with a specific patient. A clinical finding refers to a free-text description of a health-related entity or condition that may influence the patient's well-being. Our approach to textual time-series annotation differs from conventional methods (e.g., \cite{sun2013evaluating,uzuner20112010}) by extending the span of extracted text to capture more specific and contextual meanings of clinical findings. Unlike the i2b2 guidelines, we do not limit clinical findings to single prepositional phrases. For example, “pain in chest that radiates substernally” is kept intact to preserve its full meaning. Additionally, coordinated phrases are split into individual findings for clarity, as seen in the transformation of “metastases in the liver and pancreas” into “metastasis in the liver” and “metastasis in the pancreas.”
+
+To generate clinical textual time series from the case reports, we apply the LLM extraction prompt from previous work \cite{noroozizadeh2025reconstructing} and \cite{wang2025large} (See Appendix A). 
+We also apply a diagnosis extraction query using the following prompt:
+\begin{quote}
+\texttt{You are an expert physician.  Output the list of diagnoses that pertain to the patient in the case report. For example, here is the case report.}
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}}
+
+\texttt{Then the output should look like:}\\
+    \texttt{acne} \\
+    \texttt{DRESS syndrome}
+    
+\texttt{Rash, leukocytosis, and other findings are not diseases so they are omitted, while acne and DRESS syndrome were both diagnosed, so they are included.
+Output a list of diagnoses (one per line) from the following case. Place the primary diagnosis first. Include only the list and nothing else.}
+\end{quote}
+
+\subsubsection*{Manual annotations}
+We combine the manual annotations from \cite{wang2025large} and \cite{noroozizadeh2025reconstructing} to contrast the LLM annotations with the labels of the expert physician. The manual annotation process aimed to identify events in line with the ISO-TimeML specification, which includes actions or states inferred to have occurred or held true. Annotators selected exact text spans representing events, with two exceptions to enhance usability: (i) conjunctive lists could be split into individual events, and (ii) the prefix "history of" could be added when contextually appropriate. These adjustments preserved the original text alignment for downstream analysis. Each event was then assigned a time relative to the case reference point (e.g., admission or encounter date), using the start time when an interval was described.
+ 
+\subsection{Demographic sample}
+We selected a random 20\% case report sample to better characterize our population.  We used LLM-based queries to extract the age, sex and ethnicity of our population.
+In contrast to the demographic characterization in \cite{zhao2023large}, our sample is only among single-case case reports, which contain more detailed content than the multi-case reports.  Additionally, our extraction uses prompts rather than regular expressions, and we also request recovery of ethnicity according to the United States Census groups (Prompt in Appendix \ref{apd:demographics_prompt}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% DEMOGRAPHICS
+% # In 10.000 sample,
+% # 52 % male, 47 % female, 1% not specified
+% # US Census ethnicity
+% #   89 % Not Specified
+% #    5 % White/Caucasian
+% #    3 % Asian
+% #    1 % African
+% #    2 % Other
+\noindent
+\begin{minipage}[t]{\textwidth}
+    \begin{minipage}[t]{0.48\columnwidth}
+        \centering
+        % \begin{figure}[htb]
+        \includegraphics[width=\columnwidth]{Plots_tables/125k_age.pdf}
+        % \captionof{figure}{Histogram of Age (years) in the PMOA 20\% sample.}
+        % \label{fig:age}
+        % \end{figure}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\columnwidth}
+        \vspace*{-18em}
+        \centering
+        \input{Plots_tables/demographics_table}
+    \end{minipage}
+    \captionof{figure}{Age, sex, and ethnicity of the PMOA TTS cohort.} %20\% random sample.}
+    \label{fig:demographics}
+\end{minipage}
+
+%--------------------------------------
+\section{Diagnosis - Shahriar}
+
+\section{Results}
+
+\subsection{Demographic characterization of PMOA TTS}
+Our population has median age 45 and is 52\% male, with ethnicity mostly unspecified (Figure \ref{fig:demographics}).
+Notably, ages demonstrate an overabundance at 5-year intervals suggesting rounding practices.  Compared to the ethnic make-up of the US population, the Asian ethnicity is over-represented, reflective of the global publication coverage of PubMed. 
+
+\subsection{Comparing LLM annotated TTS with PMOA metadata}
+
+To evaluate the performance of our case report identification approach, we compare our LLM-Pipeline to PubMed MetaData, where we curated a dataset of 100 reports across 5 different diagnoses: Diabetes, Sepsis, Hypertension, COVID-19, and Atrial Fibrillation.
+
+The selection process was as follows:
+\begin{itemize}
+    \item We used LLaMA to generate a diagnosis for each report identified by the LLM-Pipeline approach. Among the top 10 most frequently occurring diagnoses, we selected five and randomly picked 10 reports for each diagnosis.
+    \item For PubMed MetaData, we used the case report filter on PubMed and ensured that the selected reports were present in the December 17, 2024, PubMed Open Access subset. Similarly, we selected 10 reports per diagnosis.
+    \item The reports from the two approaches were ensured to be unique, resulting in a total of 100 reports (20 for each diagnosis, with 10 from LLM-Pipeline and 10 from PubMed MetaData).
+    \item A clinician manually reviewed each report and labeled the number of case reports present. A report was labeled as 1 if it contained exactly one case report and 0 if it contained none or more than one.
+\end{itemize}
+
+In evaluating the performance of the LLM-pipeline approach, we used clinician-assigned labels as the ground truth and computed several classification metrics. Sensitivity was calculated as the proportion of correctly identified case reports, while specificity represented the proportion of correctly identified non-case reports. Accuracy was defined as the overall proportion of correct classifications. Precision was determined as the proportion of predicted case reports that were correct. Finally, the F1 score, which is the harmonic mean of precision and sensitivity, was also computed to provide a balanced measure of the model's performance.
+
+Table~\ref{tab:diagnosis_results} presents the classification performance for each diagnosis. The LLM-Pipeline approach achieves perfect or near-perfect performance across all diagnoses, with sensitivity and specificity values of 1.00 in multiple cases. In contrast, the PubMed MetaData approach demonstrates high sensitivity but lacks specificity, frequently misclassifying non-case reports as case reports.
+
+Table~\ref{tab:aggregated_results} aggregates results across all diagnoses. The LLM-Pipeline approach achieves an overall accuracy of 0.96, compared to 0.88 for the PubMed MetaData approach. Notably, LLM-Pipeline achieves a specificity of 1.00, correctly rejecting all non-case reports, while PubMed MetaData has a specificity of 0.00, indicating it misclassified all non-case reports as positive. The precision of LLM-Pipeline is 1.00, ensuring that all detected case reports are true positives, whereas PubMed MetaData achieves a precision of 0.92.
+
+These findings highlight the improved precision and specificity of our LLM-Pipeline approach for case report identification.
+\input{Plots_tables/case_report_identification}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Evaluation of clinical textual time-series}
+
+We assessed the textual time-series extracted from PMOA case reports with 3 metrics: event match rate, concordance (c-index) and log-time discrepancy.  The physician annotations of the twenty cases from \cite{frattallone2024using,wang2025large} were used as ground truth.
+
+\subsubsection{Text event match}
+
+A recursive best-match procedure has been previously employed to align predicted and reference clinical findings \cite{wang2025large}. In this approach, event matches are determined based on string similarity to minimize many-to-one (surjective) mappings. For each reference event, the predicted event with the lowest distance is selected, with event order used to resolve ties. Once a match is established, both the reference and predicted events are removed, and the procedure is repeated recursively on the remaining items. Several distance metrics were evaluated, including Levenshtein distance, cosine distance between BERT (bert-base-uncased) embeddings, and cosine distance between sentence embeddings from PubMedBERT (S-PubMedBert-MS-MARCO). Based on prior manual evaluation, the PubMedBERT-based distance with a cosine similarity threshold of 0.1 was found to yield the most reliable matches and was adopted for this work.
+
+The textual alignment of predicted clinical findings were evaluated with respect to manual annotations by a clinical expert across five LLM variants (Figure \ref{cosine_distance_density} left). The cumulative density of cosine distances indicates that DeepSeek-R1 and DeepSeek-R1-UD-IQ1 yield the highest proportion of low-distance matches, with over 80\% of aligned events falling below the 0.1 threshold (Figure \ref{cosine_distance_density}, left), suggesting strong semantic similarity to the reference annotations. In comparison, models like LLaMA3-70B and O1 produce more dispersed distributions, indicating less accurate matching. 
+
+\subsubsection{Temporal ordering}
+
+Among the matched events, we then analyzed their temporal ordering and discrepancies between labeled and predicted timestamps. To quantify this, we used the concordance index (c-index), which measures the probability that a randomly selected pair of predicted findings is correctly ordered in time. Higher c-index values indicate better alignment with the reference timeline. The results (Figure \ref{cosine_distance_density}, right) show that the DeepSeek variants consistently achieve the highest temporal coherence, with median c-index values above 0.95. This indicates strong agreement with the reference event sequences and reinforces the models’ ability to capture both the textual content and temporal structure of clinical findings.
+
+Further, we evaluated the accuracy of temporal ordering by analyzing the discrepancies between labeled and predicted timestamps. The log-time discrepancy was computed as $log(1 + \Delta t)$, where $\Delta t$  represents the absolute time difference (in hours) between predicted and reference timestamps. Cumulative time discrepancy plots were generated to illustrate the proportion of cases falling below specific thresholds.
+
+To assess timestamp accuracy, cumulative distributions of log-scaled time differences between predicted and reference event times were analyzed. DeepSeek variants, particularly DeepSeek-R1, achieve steeper cumulative curves, indicating that a larger proportion of events are predicted with minimal temporal error across scales ranging from hour to year (Figure \ref{time_difference}, left). In contrast, L3.3 70B and DeepSeek-R1-UD-IQ1 show flatter curves, reflecting greater variability in timestamp predictions. When stratified by reference time intervals, the DeepSeek models consistently maintain tighter alignment across all bins, while performance for L3.3 and O1 deteriorates more noticeably as the distance from the reference point increases (Figure \ref{time_difference}, right). These findings highlight the ability of DeepSeek models to reconstruct clinical timelines with both fine-grained and long-range temporal precision.
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots_tables/pmoa241217_man_o34_figs_Part1.pdf} 
+        % \caption{}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots_tables/pmoa241217_man_o34_figs_Part2.pdf} 
+        % \caption{}
+    \end{minipage}
+    \caption{Cumulative density plot of cosine distance, illustrating textual similarity between model outputs and reference annotations across three model versions. A steeper curve at lower distances indicates better event matching (left). Concordance index (c-index) boxplot comparing the temporal ordering accuracy of event predictions among DeepSeek-R1, DeepSeek-R1-UD-IQ1, DeepSeek-V3-0324-UD-IQ1, L3.3 70B-Instruct, and O1. Higher values reflect better alignment with reference event sequences (right).}
+    \label{cosine_distance_density}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots_tables/pmoa241217_man_o34_figs_Part3.pdf}
+        % \caption{}
+    \end{minipage}
+    % \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots_tables/pmoa241217_man_o34_figs_Part4.pdf}
+        % \caption{}
+    \end{minipage}
+    \caption{Cumulative probability plot of time differences (log-scaled), showing the proportion of events captured within various time thresholds. Steeper curves at shorter time discrepancies indicate higher precision in temporal alignment (left). Stratified time discrepancy analysis across different time intervals (hour, day, week, year). The distribution highlights increasing errors for events further removed from the reference timestamp (right).}
+    \label{time_difference}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\section{Discussion and Conclusion}
+
+% In this work, we introduced the PubMed Open Access Textual Time Series (PMOA TTS) corpus, a large-scale dataset of annotated case reports designed to enhance temporal reasoning in clinical narratives. By leveraging large language models (LLMs), we demonstrated significant improvements in event extraction, temporal ordering, and case report identification compared to traditional metadata-based search approaches. Our findings show that the LLM-Pipeline method achieves superior sensitivity, specificity, and precision, ensuring more accurate case selection while minimizing false positives.
+% Furthermore, our evaluation of event matching and temporal alignment confirms that LLMs can effectively reconstruct clinical timelines. Among the tested models, DeepSeek-R1 consistently outperforms other versions, demonstrating the highest concordance and the most precise timestamp alignment. The cumulative probability analysis of temporal discrepancies suggests that while short-term predictions are highly accurate, long-term event alignment remains a challenge, highlighting areas for future improvement.
+% The PMOA TTS corpus represents a significant step forward in time-aware clinical NLP research, providing a robust foundation for applications such as disease progression modeling, forecasting, and causal reasoning. By making this dataset publicly available, we aim to enable further advancements in automated timeline reconstruction, clinical decision support, and longitudinal patient analysis. Future work will focus on refining LLM-driven event extraction, improving long-range temporal reasoning, and expanding the dataset to incorporate additional medical domains.
+
+\section{Discussion and Conclusion}
+
+This work presents PMOA TTS, a novel corpus designed to enable structured temporal reasoning from unstructured biomedical text. By leveraging LLMs for both case report identification and clinical event timeline construction, we demonstrate a scalable pipeline for converting narrative case reports into usable textual time series. Our evaluation shows that LLM-driven annotations achieve high fidelity to expert annotations in both event matching and temporal ordering.
+
+Compared to PubMed's metadata-based retrieval, our approach provides substantially improved specificity, ensuring more accurate identification of true single-case reports. Furthermore, DeepSeek model variants—especially DeepSeek-R1—achieve superior performance in aligning predicted clinical findings with reference annotations, as evidenced by high match rates and strong concordance index values. These findings underscore the feasibility of using LLMs not only for clinical concept extraction but also for modeling fine-grained temporal structure.
+
+\paragraph{Limitations} \textcolor{red}{Need to rephrase under a separate limitations paragraph}
+
+Nonetheless, several challenges remain. While short-term event alignment is robust, the precision of timestamp predictions degrades for events more distant from the case presentation. This highlights the difficulty of long-range temporal reasoning in free text and suggests that incorporating external knowledge or structured priors could improve model calibration. Additionally, the under-specification of demographic variables in many case reports limits analyses involving subgroup stratification or fairness assessments.
+
+The PMOA TTS corpus lays the groundwork for new classes of research questions involving time-aware NLP, including patient trajectory modeling, survival analysis, and temporally-grounded retrieval. Future work will expand this corpus to include more diverse medical domains, refine temporal inference capabilities, and explore the use of LLM-generated timelines in real-world clinical decision support systems.
+
+
+% \section{Acknowledgments}
+%  This research was supported [in part] by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health.
+
+\bibliography{sample}
+
+\newpage
+\appendix
+\section{LLM prompt to generate clinical textual time-series from PMOA case reports}
+
+\begin{quote}
+\texttt{You are a physician. Extract the clinical events and the related time stamp from the case report. The admission event has timestamp 0. If the event is not available, we treat the event, e.g. current main clinical diagnosis or treatment with timestamp 0. The events that happened before event with 0 timestamp have negative time, the ones after the event with 0 timestamp have positive time. The timestamp are in hours. The unit will be omitted when output the result. If there is no temporal information of the event, please use your knowledge and events with temporal expression before and after the events to provide an approximation. We want to predict the future events given the events happened in history. For example, here is the case report.}
+
+\noindent
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}}
+
+\noindent
+\texttt{Let's find the locations of event in the case report, it shows that four weeks ago of fever and rash, four weeks ago, he was diagnosed with acne and receive treatment. So the event of fever and rash happened four weeks ago, 672 hours, it is before admitted to the hospital, so the time stamp is -672. diffuse erythematous or maculopapular eruption with pruritus was documented on the admission exam, so the timestamp is 0 hours, since it happens right at admission. DRESS syndrome has no specific time, but it should happen soon after admission to the hospital, so we use our clinical judgment to give the diagnosis of DRESS syndrome the timestamp 0. then the output should look like:}
+\vspace{2mm}
+\noindent \texttt{18 years old | 0 \\
+male | 0 \\
+admitted to the hospital | 0
+fever | -72 \\
+rash | -72 \\
+acne | -672 \\
+minocycline | -672 \\
+increased WBC count | 0 \\
+eosinophilia| 0 \\
+systemic involvement| 0 \\
+diffuse erythematous or maculopapular eruption| 0 \\
+pruritis | 0 \\
+DRESS syndrome | 0 \\
+fever persisted | 0 \\
+rash persisted | 0 \\
+discharged | 24}
+
+\noindent \texttt{Separate conjunctive phrases into its component events and assign them the same timestamp (for example, separation of ‘fever and rash’ into 2 events: ‘fever’ and ‘rash’). If the event has duration, assign the event time as the start of the time interval. Attempt to use the text span without modifications except ‘history of’ where applicable. Include all patient events, even if they appear in the discussion; do not omit any events; include termination/discontinuation events; include the pertinent negative findings, like ‘no shortness of breath’ and ‘denies chest pain’. Show the events and timestamps in rows, each row has two columns: one column for the event, the other column for the timestamp. The time is a numeric value in hour unit. The two columns are separated by a pipe ‘|’ as a bar-separated file. Skip the title of the table. Reply with the table only.}
+\end{quote}
+
+\clearpage
+\section{Demographics Extraction Prompt}
+\label{apd:demographics_prompt}
+\begin{quote}
+\noindent
+\texttt{
+You are an expert clinician. Extract the following demographic information from the case report: (1) age at case presentation, (2) sex (biologic sex at birth), and (3) ethnicity.  Report the age in years.  Report the sex as Male, Female, otherwise as a custom string, or Not Specified.  Report ethnicity as according to the US Census, otherwise as Not Specified.  For example, here is the case report.}
+    
+% \noindent
+\textcolor{teal}{\texttt{
+An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.
+}}
+    
+% \noindent
+\texttt{
+    Then the demographic extraction should be: 
+}
+
+\noindent\texttt{
+    18 | Male | Not Specified
+}
+    
+\noindent\texttt{
+    Report the demographics with the three columns separated by a pipe '|' as a bar-separated row as above.
+}
+    
+% \noindent
+\texttt{
+Output the demographic row from the following case.
+}
+\end{quote}
+
+
+\section{Example annotations}
+
+In this section, we present an excerpt from PMC4300884, a randomly selected case report from the PMOA TTS corpus. To demonstrate the extraction task and evaluate the performance of the LLM annotators, we compare manual annotations with outputs from the following LLM variants: DeepSeek R1, DeepSeek R1-Quantized, DeepSeek V3, LLaMA 3.3-70B, and O1-Preview.
+
+\begin{quote}
+\textcolor{teal}{\texttt{A 79-year-old man presented with signs and symptoms of a right-sided L5 radiculopathy for approximately 6 months. The patient's medical history was significant for coronary artery disease, hypertension, colon cancer, stomach ulcers, and gout. He rated his leg pain as 8 of 10 and stated that the pain was worse with sitting and changes in position between sitting and standing. There was no complaint of back pain. His history also showed neurogenic claudication symptoms on the right side that improved with rest. \\ Physical examination showed normal motor strength on manual testing and a normal sensory examination. The patient did have reproducible pain with right-sided straight leg raise. X-ray (Fig. 1) and computed tomography (CT) scan (Fig. 2) of his lumbar spine showed a large anterior osteophyte at L5-S1 that appeared to contact the sacral ala.}}
+\end{quote}
+
+%\input{Plots_tables/example_annotation_table}
+
+\end{document}

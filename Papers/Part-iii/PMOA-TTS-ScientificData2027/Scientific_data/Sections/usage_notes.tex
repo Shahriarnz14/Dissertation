@@ -1,0 +1,54 @@
+Our full codebase, including preprocessing scripts, prompt templates, and evaluation pipelines,
+is available at: \url{https://github.com/jcweiss2/pmoa_tts}. Each subdirectory contains its own README.md with detailed instructions and information. Here is the repository structure
+\begin{itemize}
+    \item \texttt{make\_tts}: Scripts and notebooks for constructing the PMOA-TTS dataset from raw case reports.
+    \item \texttt{forecasting\_results}: Code and results for forecasting experiments on the textual time series data.
+    \item \texttt{survival\_analyses}: Tools and analyses for survival prediction tasks using the extracted timelines.
+    \item \texttt{TTS\_evaluation}: Evaluation scripts assessing the quality of the extracted timelines.
+\end{itemize}
+
+\noindent Here are step-by-step directions on how to use the dataset
+
+\begin{enumerate}
+
+\item \textbf{Clone the repository:}
+
+{\small
+\begin{verbatim}
+    git clone https://github.com/jcweiss2/pmoa_tts.git
+    cd pmoa_tts
+\end{verbatim}
+}
+
+\item \textbf{Set up the environment:}
+
+\noindent Ensure you have Python 3.10 or higher installed. It's recommended to use a virtual environment.
+
+{\small
+\begin{verbatim}
+    conda create -n pmoa_tts python=3.10
+    conda activate pmoa_tts
+    conda install pandas scikit-learn numpy tensorboard -c conda-forge
+    conda install pytorch torchvision torchaudio -c pytorch
+    pip install transformers
+    pip install argparse
+    conda install jupyter -c conda-forge
+    pip install sentencepiece
+\end{verbatim}
+}
+
+\item \textbf{Access the PMOA--TTS dataset.} The dataset is available on Hugging Face. You can download it using the \texttt{datasets} library.
+
+{\small
+\begin{verbatim}
+    from datasets import load_dataset
+    dataset = load_dataset("snoroozi/pmoa-tts")
+\end{verbatim}
+}
+
+\end{enumerate}
+
+\paragraph{Responsible reuse and cautions}
+
+The release and use of PMOA–TTS raise important considerations. Although LLMs achieve strong performance, they may still generate inaccurate or hallucinated outputs, and any downstream use of these annotations without further validation could introduce bias or error. The extraction of structured diagnoses, demographics, and clinical events from public text—though non-identifiable—could also lead to misinterpretation or reinforce historical biases if not handled carefully. Furthermore, while the dataset is intended for research, there is a risk of misapplication in high-stakes clinical settings without expert oversight. Lastly, the stylistic and structural differences between case reports and real-world EHR notes may limit the generalizability of findings derived from PMOA–TTS. These limitations underscore the importance of using the corpus responsibly, with clear reporting of model limitations and appropriate safeguards when applied in downstream tasks.
+

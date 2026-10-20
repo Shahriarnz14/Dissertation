@@ -1,0 +1,522 @@
+%\documentclass[wsdraft]{ws-procs11x85}
+
+\documentclass{ws-procs11x85}
+\usepackage{ws-procs-thm}   
+
+\newif\ifshowrebuttalcolor
+
+% \showrebuttalcolortrue 
+\showrebuttalcolorfalse
+
+% comment this line when `amsthm / theorem / ntheorem` package is used
+%\usepackage{natbib}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[breakable]{tcolorbox}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{booktabs}
+%\usepackage[most]{tcolorbox}
+
+\usepackage{adjustbox}
+\usepackage{multirow}
+%\usepackage{natbib}
+
+% \newif\ifshowrebuttalcolor
+% \showrebuttalcolortrue
+
+% \tcbset{
+%   psbbox/.style={
+%     breakable,
+%     colframe=black!45,
+%     boxrule=0.4pt,
+%     arc=1pt,
+%     left=4pt,
+%     right=4pt,
+%     top=3pt,
+%     bottom=3pt,
+%     boxsep=2pt,
+%     before skip=4pt,
+%     after skip=4pt,
+%     fonttitle=\bfseries
+%   }
+% }
+
+\definecolor{rebuttalblue}{RGB}{0, 102, 204}
+
+\newcommand{\rebuttal}[1]{%
+  \ifshowrebuttalcolor
+    \textcolor{rebuttalblue}{#1}%
+  \else
+    #1%
+  \fi
+}
+
+\begin{document}
+
+%\title{TBD}
+\title{Text Knows What, Tables Know When: Clinical Timeline Reconstruction via Retrieval-Augmented Multimodal Alignment}
+
+% \author{First Author$^\dag$ and Second Author}
+
+% \address{University Department, University Name,\\
+% City, State ZIP/Zone, Country\\
+% $^\dag$E-mail: ab\_author@university.com\\
+% www.university\_name.edu}
+
+% \author{Third Author}
+
+% \address{Group, Laboratory, Street,\\
+% City, State ZIP/Zone, Country\\
+% E-mail: an\_author@laboratory.com}
+
+\author{Sayantan Kumar$^{1\ast}$, Shahriar Noroozizadeh$^{2,3\ast}$, Juyong Kim$^{2\ast}$, Jeremy C. Weiss$^{1}$}
+
+\address{
+$^{1}$National Library of Medicine, National Institutes of Health, Bethesda, MD, USA\\
+$^{2}$Machine Learning Department, Kenneth C. Griffin School of Computer Science, \\Carnegie Mellon University, Pittsburgh, PA, USA\\
+$^{3}$Heinz College of Information Systems Management and Public Policy, \\Carnegie Mellon University, Pittsburgh, PA, USA\\
+% $^{\ast}$Equal contribution. E-mail: sayantan.kumar@nih.gov, snoroozi@cs.cmu.edu, juyongk@cs.cmu.edu, jeremy.weiss@nih.gov
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Clinical language models increasingly operate over electronic health records (EHRs), yet patient records are not stored as temporally grounded trajectories. Clinical notes describe symptoms, assessments, and disease progression, but often compress or narratively reorder events. Structured EHR rows provide timestamps for labs, medications, vitals, and procedures, but capture only part of the clinical story. We formulate clinical timeline reconstruction as retrieval-augmented temporal grounding: constructing a patient trajectory by using narrative text for event semantics and structured rows as partial temporal evidence. We introduce a scaffolded workflow that extracts central narrative events, builds an initial temporal scaffold, attaches non-central events, and calibrates timestamps using retrieved structured EHR rows. We evaluate on 40 discharge summaries, including 15 i2b2-derived and 25 MIMIC-IV summaries, each with manual gold-standard timelines and aligned structured EHR data. 
+\rebuttal{Across models, multimodal calibration left event match rates largely unchanged and generally improved temporal performance: mean paired case-level multimodal--unimodal differences were positive in 7 of 12 model-metric comparisons across concordance and AULTC, with none negative. However, uncertainty was substantial given the 40-case sample; paired case-level bootstrap intervals excluded zero only for the DeepSeek V3.2 AULTC improvement.}
+A gap analysis shows that 35.1\% of text-derived events have no structured counterpart. These findings support treating structured EHR data as partial temporal evidence for narrative-derived patient trajectories.
+\end{abstract}
+
+\keywords{Clinical timeline reconstruction; electronic health records; clinical narratives; retrieval-augmented generation; multimodal alignment; large language models}
+
+
+% required, do-not-remove
+\copyrightinfo{$^{\ast}$ These authors contributed equally to this work.\\
+Accepted for oral presentation at the Pacific Symposium on Biocomputing (PSB) 2027.\vspace{1mm}\\
+\copyright\ 2026 The Authors. Open Access chapter published by World Scientific Publishing Company and distributed under the terms of the Creative Commons Attribution Non-Commercial (CC BY-NC) 4.0 License.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.85\textwidth]{plots/TTA-Overview-Figures-PSB.pdf}
+    \vspace{-9pt}
+    \caption{
+    \rebuttal{Motivation for retrieval-augmented temporal grounding using a synthetic stroke-alert case constructed for illustration.}
+    (\textbf{A}) Text-only reconstruction can recover clinically meaningful narrative events, but intermediate event times may remain ambiguous.
+    (\textbf{B}) Retrieved structured EHR rows provide partial temporal evidence that can calibrate text-derived events when clinically relevant, improving temporal placement while preserving narrative event content.
+    }
+    \label{fig:motivation_multimodal_alignment}
+    \vspace{-2mm}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.75em}
+\section{Introduction}
+\vspace{-0.25em}
+
+Time is central to clinical reasoning in critical care.
+% ICU p
+Patients often follow rapidly evolving trajectories, requiring symptoms, physiologic measurements, treatments, and outcomes to be interpreted relative to admission, deterioration, intervention, and recovery. 
+% Sepsis exemplifies this challenge. 
+Sepsis trajectories exemplify this challenge.
+Although Sepsis-3 remains important for trial eligibility and computational phenotyping \cite{kyriazopoulou2021procalcitonin,seymour2019derivation}, 
+% sepsis is better understood as a heterogeneous clinical trajectory than as a single, uniform state. 
+sepsis is better understood as a set of heterogeneous clinical trajectories with a shared dysregulatory response rather than as a single, uniform course. 
+Similar temporal challenges extend across critical illness: risk forecasts depend on when evidence becomes available; treatment-response analyses require distinguishing pre- and post-intervention measurements; and retrospective cohort definitions may change when the timing of symptom onset, diagnostic testing, or treatment initiation is misaligned.
+This increasing focus on temporal structure is evident in early-warning systems \cite{henry2022factors}, studies showing that predictive utility varies with timing \cite{kamran2024evaluation}, and research on the temporal characteristics of sepsis subtypes and progression \cite{noroozizadeh2023temporal}.
+
+
+The growing emphasis on time in critical care reveals an important methodological gap: electronic health records (EHRs) are not organized as temporally grounded patient trajectories. Critical-care repositories such as MIMIC-III/IV \cite{johnson2016mimic,johnson2023mimic} make this challenge explicit by combining structured time-series measurements with narrative clinical documentation. These modalities provide complementary but asymmetric evidence for timeline construction (Figure~\ref{fig:motivation_multimodal_alignment}). Structured rows offer relatively precise temporal information from laboratory results, medications, procedures, vital signs, diagnoses, and administrative events. Clinical narratives, by contrast, provide richer accounts of the patient course, including symptoms, clinician assessments, patient-reported histories, functional status, disease progression, and contextual modifiers. For example, a note describing ``increasing lethargy and peripheral mottling'' may precede an increase in Sequential Organ Failure Assessment (SOFA) scores. Similarly, documented oliguria despite stable creatinine may indicate clinically meaningful states that structured measurements do not fully capture. 
+
+Recent studies point to both the promise and the difficulty of this problem. Multimodal annotation of discharge summaries aligned with structured EHR data demonstrated that access to both modalities can improve the precision of inpatient event timelines, highlighting the value of structured rows as temporal evidence when aligned with the narrative record \cite{frattallone2024using}. At the same time, text-only timeline reconstruction remains challenging in realistic EHR-style notes, where dense event structure, abbreviations, and semi-structured formatting make both event recovery and time assignment difficult \cite{noroozizadeh2026reconstructing, noroozizadeh2026forecasting}. Together, these findings motivate more explicit alignment between text-based and tabular approaches, with the goal of improving temporal precision while preserving the richer event content available in narrative text.\cite{moldwin2021empirical,seinen2025using}
+
+In this work, we investigate whether aligning retrieved structured EHR evidence with text-derived event timelines can improve the temporal precision of reconstructed patient trajectories. Our retrieval-augmented multimodal approach integrates structured rows directly into timeline reconstruction rather than treating textual and tabular data as separate views. The multistep pipeline first identifies temporally informative central events and uses them to create an initial scaffold of the patient trajectory. It then positions additional events relative to this scaffold and refines the resulting timeline using retrieved structured evidence. This decomposition reflects a clinically natural distinction between events that form the backbone of an encounter and those whose timing is best interpreted relative to that backbone. Using this framework, we assess whether and where multimodal alignment improves on text-only timeline reconstruction. Specifically, we examine the effects of introducing structured evidence at different stages of the reconstruction workflow, determine whether improvements are concentrated in temporal metrics rather than event recovery, and analyze which prognostically relevant information appears in text but is missing or delayed in tabular data.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{plots/TTA-Overview-Figure-Model-Updated.pdf}
+    \vspace{-40pt}
+    \caption{
+    Overview of the scaffolded retrieval-augmented timeline reconstruction workflow. The method first extracts central events from the clinical narrative, estimates pairwise temporal relations, and builds an initial central-event scaffold. Retrieved structured EHR rows are then used to calibrate this scaffold. Non-central events are extracted and attached relative to central events, after which a final retrieval-augmented refinement step calibrates the complete timeline.
+    % \textcolor{blue}{Shahriar-update figure to remove symbols if relevant}
+    }
+    \label{fig:pipeline}
+    \vspace{-10pt}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \vspace{-5pt}
+\textbf{Contributions.} In summary, the paper makes the following contributions. \textbf{(i) Temporal grounding formulation:} We formulate clinical timeline reconstruction as retrieval-augmented temporal grounding of narrative-derived patient trajectories using structured EHR evidence. \textbf{(ii) Multimodal scaffolded reconstruction workflow:} We introduce a workflow that uses anchor events as a temporal backbone and retrieved structured rows as partial evidence for timestamp calibration. \textbf{ (iii) Multimodal timeline evaluation:} We evaluate multimodal calibration on 40 discharge summaries with aligned structured EHR rows and manual gold-standard timelines, testing whether structured evidence improves temporal localization more than event recovery. \textbf{(iv) Information missing from tabular data:} We provide an empirical analysis of clinically relevant events that are absent, delayed, or semantically compressed in structured tabular data, motivating why unstructured text is necessary for constructing clinically meaningful patient trajectories.
+% \textcolor{blue}{Shahriar - if you can manage space, feel free to add uncertainty analyses and update relevant sections}
+%\textcolor{blue}{\textbf{(v) When multimodal alignment helps most:} We characterize performance across event types and timestamp-certainty settings, showing that structured data is especially useful as a temporal calibrator when event timing cannot be directly inferred from text.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.75em}
+\section{Related Work}
+\label{sec:related_work}
+\vspace{-0.25em}
+
+\textbf{Clinical temporal information extraction.}
+Clinical timeline reconstruction builds on a long tradition of temporal reasoning and temporal information extraction in medicine \cite{kohane1987temporal,zhou2007temporal}. Early annotation schemes and shared tasks, including i2b2 and THYME, focused on identifying clinical events, time expressions, and temporal relations such as before, after, overlap, and containment \cite{uzuner20112010,sun2013evaluating,sun2013annotating,styler2014temporal}. Systems such as MedTime and cTAKES-temporal operationalized these ideas for clinical notes by extracting time expressions and temporal relations \cite{lin2013medtime,savova2010mayo,lin2016multilayered}. Pre-LLM work also studied patient timelines and longitudinal record summarization, including timeline generation from clinical notes and HARVEST for summarizing longitudinal patient records \cite{nikfarjam2013towards,hirsch2015harvest}. These studies established the importance of temporal structure in clinical narratives, but primarily focused on temporal annotation, relation extraction, or summarization rather than grounding narrative-derived absolute timelines in structured EHR evidence.
+
+\vspace{5pt}
+\noindent
+\textbf{LLM-based clinical timeline reconstruction.}
+Recent work has moved from relation-centered temporal extraction toward absolute event timelines. Leeuwenberg and Moens studied absolute event timeline extraction from English clinical reports, while Frattallone-Llado et al. showed that aligning discharge summaries with structured EHR data can improve inpatient event timeline precision \cite{leeuwenberg2020towards,frattallone2024using}. Textual time-series work has further shown that clinical narratives can be converted into event--time tuples for temporal forecasting, but these approaches are primarily text-only and do not use structured EHR rows as calibration evidence during reconstruction \cite{wang2025large,noroozizadeh2026reconstructing,noroozizadeh2026forecasting, kumar2026temporally}. Recent shared tasks such as ChemoTimelines have renewed interest in patient-level clinical timeline extraction using prompting, fine-tuning, and dictionary-enhanced LLM systems \cite{yao2025chemotimelines,zhang2025uwbionlp}. Our work differs from these efforts by treating timeline reconstruction as multimodal temporal grounding: narrative text supplies event semantics, while structured EHR rows are retrieved as partial temporal evidence for timestamp calibration.
+
+\vspace{5pt}
+\noindent
+\textbf{Asymmetric evidence in structured and narrative EHR data.}
+Clinical machine learning studies have shown that structured and unstructured EHR data encode complementary information for phenotyping, prediction, and patient representation \cite{moldwin2021empirical,liu2022multimodal,seinen2025using}. Structured data provide dense timestamped measurements, but often omit symptoms, functional status, patient-reported histories, and clinical reasoning. Narrative notes preserve this context, but are often retrospective and not organized as chronological trajectories. This asymmetry makes clinical timeline reconstruction different from standard multimodal fusion: the goal is not to merge two complete views of the same event sequence, but to use structured rows as partial temporal evidence for a narrative-derived patient trajectory. Our retrieval-augmented scaffolded workflow is designed for this setting, selecting candidate structured rows for each text-derived event and updating timestamps only when the retrieved evidence is clinically relevant.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.75em}
+\section{Methods}
+\label{sec:methods}
+\vspace{-0.25em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{-0.75em}
+\subsection{Clinical timeline task and dataset}
+\label{sec:data}
+\vspace{-0.25em}
+
+Given a clinical narrative $T$ and associated structured EHR rows $R$, the goal is to reconstruct a textual time series $\hat{S}=\{(e_i,\hat{t}_i)\}_{i=1}^{N}$, where each $e_i$ is a standalone clinical event and each $\hat{t}_i \in \mathbb{R}$ is its predicted timestamp in hours relative to a case-specific reference time. When hospital admission is explicitly described, we use admission as $t=0$; otherwise, we use the earliest documented clinical encounter or presentation in the narrative. Events before the reference time receive negative timestamps, and events after it receive positive timestamps.
+
+A clinical event is any patient-specific health-related mention that is semantically interpretable on its own and temporally locatable, including symptoms and signs, diagnoses, tests, procedures, treatments, medication administrations, major clinical states, outcomes, pertinent negatives, and termination or discontinuation events. Our event representation follows prior textual time-series work \cite{wang2025large,noroozizadeh2026reconstructing,noroozizadeh2025pmoa,kumar2026temporally}, but differs from short-span, concept-centric schemes such as i2b2 \cite{uzuner20112010,sun2013evaluating}. We represent events as standalone clinical findings: spans may include context needed for clinical specificity, conjunctive mentions are split when doing so improves clarity, and modifiers such as negation, uncertainty, severity, laterality, and intent are preserved when they affect event interpretation or temporal placement.
+
+Our evaluation uses \textbf{40 discharge summaries} with manual gold-standard timelines and aligned structured EHR rows: \textbf{15 i2b2-derived discharge summaries} and \textbf{25 MIMIC-IV discharge summaries}. All cases have structured EHR rows aligned to the same hospital encounter. MIMIC-style critical-care records are well suited for this setting because they pair narrative clinical documentation with timestamped structured data, including laboratory values, medication administrations, vital signs, procedures, diagnoses, and administrative events \cite{johnson2016mimic,johnson2023mimic}. For each case, the narrative note provides the source text for event reconstruction, while the structured record provides external temporal evidence. We convert structured-row timestamps to hours relative to the same case-specific reference time used for the narrative timeline. Each structured row $r_m \in R$ is represented as $r_m=(\nu_m,x_m,s_m)$, where $\nu_m$ is the row name or clinical feature, $x_m$ is the observed value when available, and $s_m$ is the timestamp in hours relative to the reference time.
+
+\rebuttal{The 15 i2b2-derived cases were randomly sampled from eligible cases; the 25 MIMIC-IV cases were sampled at the patient level, using the first discharge summary for five randomly sampled patients and one randomly selected summary for 20 others, without enrichment for diagnosis, temporal richness, or encounter complexity. Three medical experts annotated disjoint subsets; every case was annotated once from the note and aligned structured record, so no adjudication or inter-annotator agreement was available (\hyperref[supp:eval-cohort]{Supplementary Material \S\ref*{supp:eval-cohort}}).}
+
+We treat structured rows as temporal evidence rather than gold-standard timeline events. Structured EHR tables contain dense repeated measurements, medication records, and machine-generated entries, many of which are not standalone narrative events. Conversely, clinically meaningful narrative events, such as symptoms, functional status, patient-reported histories, and clinical reasoning, may not have direct structured counterparts. Our method therefore uses structured rows to calibrate text-derived event times when clinically relevant, rather than forcing all structured rows into the reconstructed timeline.
+
+% Each discharge summary is evaluated against a manual gold-standard timeline consisting of clinical events paired with timestamps in hours relative to the case-specific reference time. These annotations provide the reference event content and timing used to assess event recovery, temporal ordering, and absolute timestamp accuracy.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{-0.75em}
+\subsection{Scaffolded retrieval-augmented multimodal timeline reconstruction}
+\label{sec:pipeline}
+\vspace{-0.25em}
+
+Our workflow is designed around three principles. First, it anchors before expanding: the model identifies temporally informative anchor events before reconstructing the full event set. Second, it retrieves candidate structured evidence rather than forcing every narrative event to align to a structured row. Third, \rebuttal{it uses preserve-by-default calibration}: event times are updated only when retrieved structured evidence is clinically relevant and temporally plausible. The workflow proceeds in seven clinically interpretable steps (Figure \ref{fig:pipeline}).\footnote{Step-specific prompts and the full reproducibility pipeline are available in our GitHub repository:\\\url{https://github.com/SayantanKumar/multimodal_textual_tabular_alignment}}
+\vspace{-5pt}
+\begin{enumerate}
+    \item \textbf{Step 1: Extract anchor events.} The model first identifies temporally informative anchor events, also referred to as central events, that define the encounter backbone or serve as temporal referents for other events. Examples include admission, symptom onset, treatment initiation, clinical deterioration, procedures, transfers, and discharge. 
+
+    \item \textbf{Step 2: Estimate timing among anchors.} The model estimates pairwise time differences (in hours) between selected anchor events.
+
+    \item \textbf{Step 3: Build an initial anchor timeline.} The pairwise relations between anchor events are resolved into a provisional timeline backbone in hours relative to the case reference time. When estimates conflict, the model uses higher-confidence relations and the source narrative to construct the initial scaffold.
+
+    \item \textbf{Step 4: Calibrate anchors using structured evidence.} For each anchor event, retrieved structured EHR rows are provided to the calibration model together with the narrative and provisional scaffold. The model updates an anchor time only when the structured row clinically supports the change; otherwise, the text-derived estimate is retained.
+
+    \item \textbf{Step 5: Extract non-anchor supporting events relative to anchors.} After anchor calibration, the model extracts remaining non-anchor events and attaches each event to a referent anchor with a relative time offset and confidence score. These events include symptoms, exam findings, pertinent negatives, severity descriptors, functional status, medication details, and contextual clinical information.
+    
+    \item \textbf{Step 6: Assemble the full timeline.} The calibrated anchor times and relative supporting-event offsets are combined into an initial complete timeline, converting all events into absolute times in hours relative to the case reference time.
+    
+    \item \textbf{Step 7: Refine the complete timeline using structured evidence.} Structured rows are retrieved again for all reconstructed events, not only anchors. The model performs a final conservative calibration pass, updating timestamps when retrieved rows provide clinically consistent temporal evidence and preserving text-derived times otherwise. The output is a temporally grounded textual time series containing clinically meaningful narrative events with calibrated timestamps when structured evidence is relevant.
+\end{enumerate}
+
+\vspace{-10pt}
+\paragraph{Retrieval and calibration module.}
+The same retrieval module is used in Step 4 and Step 7. Structured rows are represented by concatenating the row event name and value; timestamps are excluded from the embedding text and passed separately to the calibration model. Rows with the same event name and value are merged, with timestamps represented in hours relative to the case reference time. We embed event strings and structured-row representations using MedTE (\texttt{mohammadkhodadad/MedTE-cl15-step-8000}), mean-pool and L2-normalize the embeddings, and rank rows by cosine similarity. For each event, we retrieve the top $k=5$ structured rows with no fixed similarity threshold. The calibration model receives each row as \texttt{name | value | time | similarity}. \rebuttal{Calibration follows a preserve-by-default rule: cosine similarity ranks candidates, irrelevant rows are disregarded, the initial time is retained when no relevant evidence justifies a change, and narrative context resolves repeated timestamps or conflicting rows. The complete decision rule appears in \hyperref[supp:calibration-rule]{Supplementary Material \S\ref*{supp:calibration-rule}}.}
+We also evaluated $k=3$, $k=5$, and $k=10$, finding negligible performance differences but increased runtime for larger $k$.
+
+This design treats retrieval as evidence selection rather than forced temporal alignment. Methods such as dynamic time warping assume that two sequences share an approximately comparable event universe and can be aligned through a monotone path. Clinical narratives and structured EHR rows often violate this assumption: many narrative events have no structured counterpart, while structured tables contain dense repeated measurements, medication records, and charted observations that are not standalone narrative events. Our workflow therefore allows structured evidence to calibrate event times when appropriate without requiring every narrative event to have a tabular match.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.75em}
+\subsection{Experimental setup}
+\label{sec:experimental_setup}
+\vspace{-0.25em}
+
+\textbf{Baselines and ablations.} We compare the default scaffolded multimodal workflow against text-only, single-step, stage-specific, and forced-alignment baselines. \textbf{Text-only reconstruction} uses the same scaffolded workflow but removes both structured-EHR calibration steps, testing whether retrieved structured evidence improves temporal localization beyond narrative-only reconstruction. \textbf{Single-step multimodal reconstruction} directly generates a complete timeline from the narrative and retrieved structured rows without constructing an anchor-event scaffold, testing whether the staged anchor/non-anchor decomposition is useful beyond simply adding retrieved evidence to the prompt. To isolate where structured evidence contributes, we compare two stage-specific ablations: \textbf{anchor-only calibration}, which calibrates the anchor scaffold but omits final full-timeline calibration, and \textbf{final-only calibration}, which reconstructs the full timeline from text before applying structured-EHR calibration. The default workflow applies both anchor-stage and final-stage calibration. Finally, \textbf{dynamic time warping (DTW)} serves as a forced temporal-alignment baseline that attempts to align text-derived events with structured rows through sequence alignment rather than retrieval-based evidence selection followed by clinical calibration.
+
+\vspace{5pt}
+\noindent\textbf{Evaluation metrics.} We evaluate predicted timelines along two complementary dimensions: \emph{event recovery} and \emph{temporal localization}, adapted from prior textual time-series work \cite{wang2025large,noroozizadeh2026reconstructing}. Because predicted and reference timelines may differ in length and event wording, we first align predicted events to manually annotated reference events using a recursive best-match procedure. This produces a one-to-one alignment between predicted and reference events while accommodating unequal timeline lengths. \textbf{Event match rate} is the proportion of reference clinical events successfully aligned to a predicted event. Temporal metrics are computed on the matched subset. \textbf{Temporal concordance} (c-index) measures whether the predicted timeline preserves the relative ordering of events in the manual reference. \textbf{Area Under the Log-Time Cumulative Distribution Function (AULTC)} summarizes absolute timestamp discrepancy on a log-transformed time scale, with higher values indicating smaller timestamp errors across clinically meaningful ranges. Because concordance and AULTC are computed only over matched events, they should be interpreted jointly with event match rate. 
+We estimate uncertainty using case-level bootstrap confidence intervals. Each bootstrap sample resamples discharge summaries with replacement and recomputes event matching and timeline metrics, preserving within-case dependence among events. We report 95\% confidence intervals for the reconstruction metrics using 200 bootstrap resamples.
+\rebuttal{For direct multimodal--unimodal comparisons, we additionally used 10,000 paired case-level resamples and report
+confidence intervals for the mean within-case differences in \hyperref[supp:paired-bootstrap]{Supplementary Material \S\ref*{supp:paired-bootstrap}}, \hyperref[tab:supp-paired-bootstrap]{Table~\ref*{tab:supp-paired-bootstrap}}.} 
+\rebuttal{All implementation and reproducibility details are presented in \hyperref[supp:implementation]{Supplementary Material \S\ref*{supp:implementation}}.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \vspace{5pt}
+% \noindent\textbf{Implementation and reproducibility.} All evaluated models are open-weight models run locally through \texttt{llama.cpp}; no proprietary APIs are used. The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B. The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline. On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware. Models were run on NVIDIA A100 GPUs, with GPU count varying by model size. 
+% \rebuttal{The stages differ in complexity: constrained extraction and assembly may
+% be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost–quality tradeoff remains to be evaluated.}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \input{tables/main_table}
+
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[width=0.485\textwidth]{plots/aultc_vs_emr_n40_v2.pdf}
+%     \hfill
+%     \includegraphics[width=0.485\textwidth]{plots/cidx_vs_emr_n40_v2.pdf}
+
+%     \vspace{-4pt}
+%     \begin{minipage}[t]{0.485\textwidth}
+%         \centering
+%         %\footnotesize \textbf{A.} 
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.485\textwidth}
+%         \centering
+%         %\footnotesize \textbf{B.} Concordance
+%     \end{minipage}
+
+%     \vspace{-5mm}
+%     \caption{Temporal performance versus event match rate across event-matching thresholds for unimodal and multimodal variants of each model on the 40-summary evaluation set. (\textbf{Left}) AULTC versus event match rate. (\textbf{Right}) Temporal concordance versus event match rate.}
+%     \label{fig:threshold_sweeps_main}
+%     \vspace{-7.5mm}
+% \end{figure}
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{-0.75em}
+\section{Results}
+\label{sec:results}
+\vspace{-0.25em}
+
+\subsection{\rebuttal{Structured EHR evidence calibrates event timing while preserving event recovery}}
+\label{sec:main_results}
+
+Table~\ref{tab:main_results_threshold_01} summarizes timeline reconstruction performance for text-only reconstruction and multimodal reconstruction with retrieved structured EHR evidence. Across models, multimodal calibration has little effect on event match rate, indicating that structured rows do not primarily expand the set of events recovered from narrative text. Instead, structured evidence primarily affects temporal localization, with effects that vary by model and metric. These results support the role of structured rows as temporal evidence for text-derived events, rather than as a substitute event source.
+
+\rebuttal{
+Mean paired case-level temporal differences generally favored multimodal calibration: 4 of 6 models showed higher concordance and 3 of 6 showed higher AULTC, while no model showed lower performance on either temporal metric. However, uncertainty was substantial: no paired confidence interval for the multimodal--unimodal concordance difference excluded zero, and only DeepSeek V3.2 showed an AULTC interval entirely above zero ((\hyperref[supp:paired-bootstrap]{Supplementary Material \S\ref*{supp:paired-bootstrap}}, \hyperref[tab:supp-paired-bootstrap]{Table~\ref*{tab:supp-paired-bootstrap}})). Performance was generally higher on the i2b2-derived subset, but modality effects were source-dependent ((\hyperref[supp:dataset-stratified]{Supplementary Material \S\ref*{supp:dataset-stratified}}, Tables~\hyperref[tab:supp-i2b2]{\ref*{tab:supp-i2b2}}--\hyperref[tab:supp-mimiciv]{\ref*{tab:supp-mimiciv}})).}
+
+Because event match rate depends on the semantic matching threshold used to align predicted and reference events, we also vary the event-matching threshold and examine the relationship between event recovery and temporal quality. Figure~\ref{fig:threshold_sweeps_main} shows AULTC and concordance as functions of event match rate across thresholds. Across operating points, multimodal reconstruction generally occupies a similar event-recovery range as text-only reconstruction while changing temporal performance, especially AULTC, for several models. This supports the same broad conclusion as Table~\ref{tab:main_results_threshold_01}: retrieved structured rows primarily affect temporal calibration rather than event discovery.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{tables/main_table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.479\textwidth]{plots/aultc_vs_emr_n40_v2.pdf}
+    \hfill
+    \includegraphics[width=0.479\textwidth]{plots/cidx_vs_emr_n40_v2.pdf}
+
+    \vspace{-4pt}
+    \begin{minipage}[t]{0.485\textwidth}
+        \centering
+        %\footnotesize \textbf{A.} 
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.485\textwidth}
+        \centering
+        %\footnotesize \textbf{B.} Concordance
+    \end{minipage}
+
+    \vspace{-8mm}
+    \caption{Temporal performance versus event match rate across event-matching thresholds for unimodal and multimodal variants of each model on the 40-summary evaluation set. (\textbf{Left}) AULTC versus event match rate. (\textbf{Right}) Temporal concordance versus event match rate.}
+    \label{fig:threshold_sweeps_main}
+    \vspace{-3.3mm}
+\end{figure}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{5pt}
+\noindent\textbf{Scaffold ablations.}
+Table~\ref{tab:ablation_and_DTW}A evaluates whether the staged scaffolded workflow is necessary, or whether similar performance can be obtained by generating a complete timeline in one step with retrieved structured rows.  The single-step formulation performs worse than the full scaffolded variant, suggesting that clinical timeline reconstruction benefits from first identifying temporally informative anchor events before reconstructing the full event set. The stage at which structured evidence is introduced also matters. Final-stage calibration yields the highest event match rate, but the strongest temporal metrics are obtained when structured evidence is used both to calibrate the anchor scaffold and to refine the final assembled timeline. This supports the design choice of using structured rows first to stabilize the temporal backbone of the encounter and then to recalibrate the expanded trajectory.
+
+\input{tables/ablation_and_DTW}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{5pt}
+\noindent\textbf{Explicit temporal alignment.}
+% We also compare retrieval-based calibration with dynamic time warping (DTW), an explicit temporal-alignment baseline that aligns text-derived events with structured rows as sequences (Table~\ref{tab:ablation_and_DTW}B). DTW provides modest improvements across most models and metrics, although the differences are small relative to the variability reflected by the bootstrap confidence intervals in the main results. This suggests that explicit alignment can exploit some shared temporal structure, but does not substantially outperform retrieval-based calibration. This is consistent with the task structure: narrative and structured EHR data do not share a one-to-one event universe. Many narrative events lack structured counterparts, while tables contain dense repeated measurements that are not standalone narrative events. Retrieval therefore remains a natural calibration mechanism, selectively incorporating clinically relevant evidence without requiring full sequence-level correspondence.
+We also compare retrieval-based calibration with dynamic time warping (DTW), an explicit temporal-alignment baseline that aligns text-derived events with structured rows as sequences (Table~\ref{tab:ablation_and_DTW}B). The two approaches achieve broadly comparable accuracy: DTW is slightly higher for some model--metric pairs, while retrieval-based calibration is slightly higher for others, and the differences are small relative to the variability reflected by the bootstrap confidence intervals in Table~\ref{tab:main_results_threshold_01}.  \rebuttal{Retrieval and DTW therefore show comparable aggregate accuracy rather than quantitative superiority. Their principal distinction is structural: retrieval presents event-specific candidates and can retain a text-derived estimate when no adequate counterpart exists, whereas DTW imposes monotone sequence alignment across modalities with incomplete and asymmetric event coverage.}
+
+% This suggests that explicit alignment can exploit some shared temporal structure, but does not provide a consistent advantage over retrieval-based calibration.
+
+% The practical advantage of retrieval is that it does not require a forced monotone alignment over two modalities that do not share the same event universe. Many narrative events lack structured counterparts, while structured tables contain dense repeated measurements, medication records, and charted observations that are not standalone narrative events. Retrieval therefore offers a more interpretable calibration mechanism: it selects candidate structured evidence for each text-derived event, allowing the model to update timestamps when the evidence is clinically relevant and preserve the text-derived estimate otherwise.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-1em}
+\subsection{\rebuttal{Complementary coverage of narrative and structured records}}
+\label{sec:gap_results}
+\vspace{-0.25em}
+
+The main reconstruction results show that structured rows can improve event timing when used as calibration evidence. We next ask why structured records cannot simply replace narrative text and then
+\rebuttal{characterize which narrative-derived events are poorly represented in structured EHR data; because this text-to-structure analysis does not assess structured-only events, it supports complementarity rather than completeness of either modality. We compare text-derived timelines against tabular records from the same encounters. }
+% To characterize which clinically relevant information is poorly represented in structured EHR data, we compare text-derived timelines against tabular records from the same encounters. 
+The analysis uses the best-performing LLM-generated event timelines as the textual view, MIMIC structured data as the tabular view, and admission or the case reference time as the shared temporal anchor. For each text-derived event, we retrieve a candidate tabular counterpart using embedding-based similarity matching and evaluate it along two dimensions: semantic adequacy and temporal alignment. Semantic adequacy is assessed using retrieval-augmented scoring on a 0--1 scale, while temporal alignment is measured as the absolute difference in hours between the text-derived timestamp and the matched tabular timestamp. Based on these criteria, each event is classified as \textbf{well captured}, \textbf{complete absence}, \textbf{temporal mismatch}, \textbf{semantic distance}, or \textbf{detail gap}. Table~\ref{tab:gap_analysis} summarizes the distribution of these categories.
+
+\input{tables/gap_analyses_table}
+
+% Across 8,439 text-derived events, only 33.5\% are well captured by structured data, while 35.1\% have no structured counterpart at all. When a structured counterpart exists, its timestamp is often useful: the median temporal discrepancy is 4.3 hours, with 58.4\% of matched events within 6 hours, 69.5\% within 12 hours, and 79.3\% within 24 hours. The missing events are not merely low-value narrative detail; they include symptoms, functional status, temporal qualifiers, patient-reported information, severity descriptions, and clinical context. These findings explain why structured rows are useful for temporal calibration but incomplete as representations of patient trajectories.
+
+Across 8,439 text-derived events, only 33.5\% are well captured by structured data, while 35.1\% have no structured counterpart at all. When a structured counterpart exists, its timestamp is often useful: the median temporal discrepancy is 4.3 hours, with 58.4\% of matched events within 6 hours, 69.5\% within 12 hours, and 79.3\% within 24 hours. The missing events are not merely low-value narrative detail; they include symptoms, functional status, temporal qualifiers, patient-reported information, severity descriptions, and clinical context. Representative complete-absence examples include \textbf{symptom descriptions} such as ``substernal chest pain for 1 day'' and ``developed chest pain''; \textbf{denial statements} such as ``no seizure-like activity'' and ``no deformity''; \textbf{temporal patterns} such as ``pain resolved'' and ``improving clots on LE''; \textbf{severity descriptors} such as ``EF 55\%'' and ``non-small cell lung cancer stage IIIA''; and \textbf{causal or procedural context} such as ``intubated for several days after second surgery'' and ``repair of leak from pouch.'' These findings explain why structured rows are useful for temporal calibration but incomplete as representations of patient trajectories.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-1.em}
+\subsection{Qualitative case study: text supplies phenotype, tables calibrate time}
+\label{sec:vignette_results}
+\vspace{-0.5em}
+
+\input{tables/case_study}
+
+% To illustrate the 7-step pipeline, we present a synthetic acute-care case study. Although not part of the quantitative evaluation, it demonstrates how narrative text and structured rows contribute complementary information to timeline reconstruction.
+
+
+% %%%%%%% INSERT TCOLORBOX
+% \vspace{-.25em}
+% \begin{tcolorbox}[
+%     breakable,
+%     colback=gray!4,
+%     colframe=black!45,
+%     title=\textbf{Input data: narrative text and structured rows},
+%     fonttitle=\fontsize{10}{6}\selectfont,
+%     fontupper=\fontsize{9}{11}\selectfont
+% ]
+% % \footnotesize
+% \textbf{Narrative text.}
+% A 67-year-old man with atrial fibrillation on a direct-acting oral anticoagulant is found down at home and brought in as a stroke alert. Last-known-well time is 0730. He follows commands but is non-verbal/aphasic with dense right arm plegia. Initial CT shows left frontal lobar intracerebral hemorrhage with estimated hematoma volume $\sim$55 mL, with no intraventricular hemorrhage or hydrocephalus. Reversal agent was administered, and repeat CT is stable.
+
+% \vspace{3pt}
+% \textbf{Structured EHR rows.}
+% Admission at 1300; neurosurgery note created/pended at 1900; IV andexanet alfa administered at 1930.
+
+% \vspace{3pt}
+% \textbf{Multimodal complementarity.}
+% The narrative provides phenotype details needed for cohort or eligibility reasoning, including lobar hemorrhage location, hematoma volume, aphasia, plegia, command following, and repeat-CT stability. The structured rows provide sparse but precise temporal anchors, including admission time and the medication-administration time for anticoagulation reversal.
+% \end{tcolorbox}
+
+% %%%%%%% INSERT TCOLORBOX
+% \begin{tcolorbox}[
+%     breakable,
+%     colback=white,
+%     colframe=black!45,
+%     title=\textbf{Pipeline execution: intermediate outputs},
+%     fonttitle=\fontsize{10}{6}\selectfont,
+%     fontupper=\fontsize{9}{11}\selectfont
+% ]
+% % \footnotesize
+% The pipeline uses admission at 1300 as $t=0$, with all output times represented in relative hours.
+
+% \vspace{3pt}
+% \textbf{Steps 1--3: anchor scaffold and text-only initialization.}
+% The pipeline extracts anchor events: last-known-well time, admission, initial CT, reversal, and repeat CT. It then estimates pairwise temporal distances and builds an initial text-only scaffold. Because the narrative gives sequence but not an explicit reversal time, the text-only scaffold places reversal shortly after CT, at approximately $+1.5$h.
+
+% \vspace{3pt}
+% \textbf{Step 4: multimodal calibration of anchor scaffold.}
+% The retrieved structured row \textit{IV andexanet alfa at 1930} is used as temporal evidence. The reversal event is shifted from $+1.5$h to $+6.5$h relative to admission.
+
+% \vspace{3pt}
+% \textbf{Steps 5--6: supporting event extraction and attachment.}
+% Non-anchor clinical details are extracted and attached to anchors. Hematoma volume and lobar location attach to the initial CT event; aphasia and dense right arm plegia attach to admission. These narrative-only phenotype details are preserved even when they have no direct structured counterpart.
+
+% \vspace{3pt}
+% \textbf{Step 7: final retrieval-augmented refinement.}
+% Structured rows are retrieved again for the full event set, and the timeline is refined conservatively. The final trajectory preserves text-derived clinical details while grounding selected timestamps in structured evidence.
+% \end{tcolorbox}
+
+% %%%%%%%%%%%%%%% INSERT TOOLBOX HERE%%%%%%%
+% \begin{tcolorbox}[
+%     breakable,
+%     colback=white,
+%     colframe=black!45,
+%     title=\textbf{Pipeline output: calibrated event timeline},
+%     fonttitle=\fontsize{10}{6}\selectfont,
+%     fontupper=\fontsize{9}{11}\selectfont
+% ]
+% % \footnotesize
+% \setlength{\parindent}{0pt}
+
+% \newcommand{\vignetteRow}[3]{%
+% \noindent
+% \begin{minipage}[t]{0.44\linewidth}\raggedright #1\end{minipage}\hfill
+% \begin{minipage}[t]{0.10\linewidth}\raggedleft #2\end{minipage}\hfill
+% \begin{minipage}[t]{0.42\linewidth}\raggedright #3\end{minipage}\par\vspace{1.5pt}
+% }
+
+% \noindent
+% \begin{minipage}[t]{0.44\linewidth}\raggedright \textbf{Event}\end{minipage}\hfill
+% \begin{minipage}[t]{0.10\linewidth}\raggedleft \textbf{Time (h)}\end{minipage}\hfill
+% \begin{minipage}[t]{0.42\linewidth}\raggedright \textbf{Source / calibration note}\end{minipage}
+
+% \vspace{2pt}
+% \hrule
+% \vspace{3pt}
+
+% \vignetteRow{Last known well at 0730}{-5.5}{Text clock time relative to admission}
+% \vignetteRow{Found down at home}{-1.0}{Text-derived estimate}
+% \vignetteRow{67 years old}{0.0}{Text, admission context}
+% \vignetteRow{Atrial fibrillation}{0.0}{Text, admission context}
+% \vignetteRow{Admitted/brought in as stroke alert}{0.0}{\textbf{Table}, anchored by admission row at 1300}
+% \vignetteRow{Dense right arm plegia}{0.0}{Text, anchored to admission}
+% \vignetteRow{Follows commands}{0.0}{Text, anchored to admission}
+% \vignetteRow{Initial CT showed intracerebral hemorrhage}{0.5}{Text-derived estimate}
+% \vignetteRow{Estimated hematoma volume $\sim$55 mL}{0.5}{Text, anchored to initial CT}
+% \vignetteRow{Left frontal lobar location of hemorrhage}{0.5}{Text, anchored to initial CT}
+% \vignetteRow{Reversal agent was administered}{6.5}{\textbf{Table}, corrected by IV andexanet alfa at 1930}
+% \vignetteRow{Repeat CT was stable}{8.5}{Text, inferred sequentially post-reversal}
+
+% \vspace{2pt}
+% \hrule
+% \end{tcolorbox}
+
+\textbf{}This case illustrates the asymmetry motivating the workflow. Text is necessary to recover clinically meaningful phenotype information, while structured rows calibrate selected time-sensitive events when relevant counterparts exist. The resulting trajectory could support human-reviewed cohort definition or eligibility logic by preserving narrative-only clinical details while grounding treatment timing in structured evidence. 
+For example, the 2024 ENRICH trial comparing surgical evacuation versus medical management had eligibility criteria beyond what would be available in structured data alone\cite{pradilla2024trial}. 
+Structured data could show admission indication (hemorrhagic stroke), medication events (a confirmation proxy), and functional status scores (neurologic and disability level), but the notes contain key additional ENRICH eligibility features and timing: 55 mL hematoma volume ($30<x<80$), left frontal lobar location (lobar/anterior basal ganglionic), aphasia/plegia (new onset of neurological symptoms), no IVH/hydrocephalus and stable repeat imaging (feasibility), as well as localization of the eligibility timing window (within 24 hours of last known well time).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.75em}
+\section{Discussion and Conclusion}
+\label{sec:discussion}
+\vspace{-0.5em}
+
+Our results suggest that the primary benefit of multimodal alignment is temporal calibration rather than event discovery.
+\rebuttal{
+Across models, structured evidence changed event recovery little, while mean paired case-level temporal differences generally favored multimodal calibration: 7 of 12 model--metric comparisons across concordance and AULTC were positive and none were negative. However, uncertainty in the magnitude of these improvements was substantial given the 40-case sample; paired confidence intervals excluded zero only for the DeepSeek V3.2 AULTC improvement. Source-stratified estimates also differed between i2b2-derived and MIMIC-IV cases (\hyperref[supp:paired-bootstrap]{Supplementary Material \S\ref*{supp:paired-bootstrap}} and \hyperref[supp:dataset-stratified]{\S\ref*{supp:dataset-stratified}}).
+Within the text-primary formulation, narrative text defines the candidate event set and structured rows provide partial temporal evidence; the results therefore establish the value of narrative content for events represented in the note, not that narrative is the primary source of all clinically meaningful events.}
+
+% Adding retrieved structured EHR evidence has little effect on event match rate, but more consistently improves temporal localization. This indicates that structured rows are most useful for sharpening when text-derived events occurred, not for replacing narrative event extraction. In this sense, structured EHR data act as partial temporal evidence for narrative-derived patient trajectories, while the narrative remains the primary source of clinically meaningful event content.
+
+The structured-data gap analysis explains why this distinction matters. Structured EHR data is not merely a noisier version of the narrative record; it offers a different view of the patient trajectory. When relevant counterparts exist, their timestamps can anchor timeline calibration. However, many clinically meaningful narrative events are absent, delayed, or semantically compressed in tabular form, including symptoms, functional status, temporal qualifiers, patient-reported information, and clinical context. 
+\rebuttal{These findings characterize
+asymmetric coverage within the present text-primary analysis; they do not assess structured-only events or establish that either source is complete.}
+% Models built only on structured data may therefore miss important patient states even when their timestamps are precise, while models built only on text may recover those states but place them less accurately in time.
+
+The ablation results also support the scaffolded design. One-shot timeline generation requires a model to identify clinical events, infer relative timings, resolve vague temporal expressions, and decide how to use structured evidence in a single step. By first constructing an anchor-event scaffold, the workflow separates the temporal backbone of the encounter from supporting narrative details. This mirrors clinical reasoning, where events such as admission, diagnostic testing, treatment initiation, deterioration, procedures, and discharge provide temporal reference points for interpreting the rest of the patient course. Staged calibration then allows structured evidence to stabilize the backbone before refining the full trajectory.
+
+\vspace{5pt}
+\noindent\textbf{Limitations:} 
+\rebuttal{This study has several limitations. First, event match rates remain modest, so concordance and AULTC measure temporal quality conditional on successful event recovery rather than accuracy over the complete trajectory. Matched events were clinically heterogeneous, but unmatched events more often contained later-course and granular numerical documentation (\hyperref[supp:matched-unmatched]{Supplementary Material \S\ref*{supp:matched-unmatched}}, \hyperref[tab:supp-matched-unmatched]{Table~\ref*{tab:supp-matched-unmatched}}). Second, the 40-case sample provides only high-uncertainty evidence about stability across data sources and clinical
+settings; moreover, each case was annotated once by one of three medically trained annotators, without duplicate annotation or inter-annotator agreement. Third, the framework emits one continuous timestamp per event; when timing is vague or absent, it infers a point estimate from context, and the model-generated certainty flag is uncalibrated (\hyperref[supp:temporal-certainty]{Supplementary Material \S\ref*{supp:temporal-certainty}}, \hyperref[tab:supp-certainty]{Table~\ref*{tab:supp-certainty}}). Fourth, the text-primary design may omit clinically meaningful structured-only events. Structured timestamps also have source-specific semantics and may represent collection, ordering, administration, result availability, device recording, or
+documentation rather than clinical onset. Finally, the seven-call workflow has substantially higher inference cost than the single-step baseline.}
+
+
+% This study has several limitations to consider. \textbf{First}, event match rates remain modest, reflecting the difficulty of extracting standalone clinical events from dense discharge summaries and aligning them to manual timelines; temporal metrics should therefore be interpreted jointly with event recovery, since they are computed only on matched events. \textbf{Second}, although the evaluation includes 40 manually annotated discharge summaries, the benchmark remains modest in scale because multimodal annotation is costly: annotators must inspect and cross-reference narrative summaries and structured EHR tables. Ongoing annotation efforts aim to expand evaluation to a larger and more diverse set of cases. \textbf{Third}, the framework is text-primary: narrative events define the candidate trajectory, while structured rows mainly provide temporal evidence, so clinically meaningful structured-only events absent from the note may be missed. \textbf{Fourth}, structured timestamps require careful interpretation, since chart times, lab draw times, medication administration times, and documentation times may differ from true event onset. \textbf{Finally}, the workflow depends on instruction-tuned LLMs and structured prompts; although we use open-weight models and local inference, model choice, prompting, and runtime costs remain practical considerations.
+
+\vspace{5pt}
+\noindent\textbf{Practical use and clinical impact:} This framework is not intended for autonomous clinical decision-making, but for temporally grounded research and clinician-reviewed workflows. Reconstructed trajectories could support retrospective cohort construction, treatment-window definition, temporal phenotyping, leakage auditing, and downstream trajectory modeling.
+\rebuttal{Future work should evaluate larger, independently annotated cohorts; support interval-valued timestamps, qualitative relations, and explicit time-unknown outputs; develop bidirectional event discovery that preserves source provenance and timestamp semantics; and test stage-specific cost-quality tradeoffs. 
+Overall, the findings support a retrieval-augmented view in which narrative text supplies candidate-event semantics, structured rows provide partial and source-dependent temporal evidence, and preserve-by-default calibration can improve temporal grounding for some events when relevant evidence is available.}
+
+% Future work should expand evaluation across institutions and diseases, assess clinician review of reconstructed timelines, and test whether temporally grounded trajectories improve downstream prediction, causal modeling, and trial-screening tasks. Overall, our findings support a retrieval-augmented view of clinical timeline reconstruction: narrative text provides the clinical event semantics, structured EHR rows provide partial temporal evidence, and aligning them conservatively yields patient trajectories that are more temporally grounded than trajectories reconstructed from either text or tables alone.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-3mm}
+\section*{Acknowledgements}
+This research was supported by the Intramural Research Program of the National Institutes of Health (NIH) and utilized the computational resources of the \href{http://hpc.nih.gov}{NIH HPC Biowulf cluster}. The contributions of the NIH author(s) are considered Works of the United States Government. 
+S.N. was supported in part by the Carnegie Mellon University TCS Presidential Fellowship, and the Natural Sciences and Engineering Research Council of Canada (NSERC) Canada Graduate Research Scholarship --- Doctoral (CGRS D) Fellowship.
+S.N. was also supported in part by an appointment to the National Library of Medicine Research Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health. ORISE is managed by ORAU under DOE contract number DE-SC0014664. 
+The findings and conclusions presented in this paper are those of the authors and do not necessarily reflect the views of the NIH, NLM, DOE, ORAU/ORISE or the U.S. Department of Health and Human Services. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{ws-procs11x85}
+\bibliography{references}
+
+\input{supplementary_material_psb}
+
+\end{document}
+
+%%% \renewcommand\bibname{References\\ {\normalfont\it References can be typed in your preferred bibliography style.}}

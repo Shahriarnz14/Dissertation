@@ -1,0 +1,124 @@
+\subsection{Timestamp Provenance Audit Prompt}
+\label{apd:timestamp-provenance-prompt}
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title={Prompt},
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={{Prompt}} % optional continuation note
+]
+You are a physician. Extract all patient-specific clinical events and their related timestamps from the case report.
+
+\vspace{1em}
+TEMPORAL ANCHOR AND TIMESTAMPS
+\vspace{0.2em}
+
+- Assign timestamp 0 to the hospital admission event when admission is described.
+
+- If an admission event is not available, assign timestamp 0 to the current main clinical presentation, diagnosis, or treatment used as the case reference event.
+
+- Events before the timestamp-0 event have negative timestamps, and events after the timestamp-0 event have positive timestamps.
+
+- Express every timestamp as a numeric value in hours and omit the unit from the output.
+
+- If the report does not provide enough temporal information to determine an event time from the text, use surrounding events, narrative order, and clinical knowledge to provide an approximate timestamp.
+
+\vspace{1em}
+KNOWN FLAG: TEXT-SUPPORTED OR RULE-DETERMINED VS \\
+MODEL-IMPUTED
+\vspace{0.2em}
+
+Add a third output column named \texttt{known}. The purpose of this flag is to distinguish timestamps that are supported by the report or fixed annotation rules from timestamps that the model has to impute or guess.
+
+Set \texttt{known} to 1 when the assigned timestamp is supported by the source text or is fixed by the annotation rules. This includes any of the following:
+
+- The text gives an absolute date or time, a duration, or a relative temporal expression that can be converted to hours.
+
+- The text explicitly relates the event to the timestamp-0 event, such as ``at admission'', ``on presentation'', ``before admission'', ``after admission'', or ``hospital day 2''.
+
+- The event itself defines the timestamp-0 anchor.
+
+- A temporal expression in the same sentence, clause, list, paragraph, or immediately preceding sentence clearly governs the event, even when the event does not repeat the temporal phrase.
+
+- The event is one of several findings, treatments, or outcomes described as occurring during the same explicitly timed encounter, examination, procedure, or follow-up.
+
+- The timestamp is assigned by a fixed annotation convention rather than model judgment, such as assigning age and sex to timestamp 0.
+
+Set \texttt{known} to 0 only when the source text does not provide enough temporal evidence for the assigned numeric timestamp and the model must supply the time using clinical judgment, an unstated assumption, narrative order alone, interpolation between other events, or another guess.
+
+Important rules for the \texttt{known} flag:
+
+- Do not set \texttt{known} to 0 merely because the event lacks its own temporal phrase. If the event inherits a clear time from the surrounding text, set \texttt{known} to 1.
+
+- Converting an explicit expression such as ``three days before admission'' to -72 hours is \texttt{known = 1}.
+
+- A vague ordering word such as ``later'' or ``subsequently'' supports event order but not a specific number of hours. If a numeric timestamp must be guessed, set \texttt{known} to 0.
+
+- A timestamp of 0 is not automatically known. Set \texttt{known} to 1 only when timestamp 0 is supported by the text, defines the anchor, or follows a fixed annotation convention. Otherwise, set \texttt{known} to 0.
+
+- Use \texttt{known = 0} only for genuinely model-imputed or guessed timestamps.
+
+\vspace{1em}
+EXAMPLE CASE REPORT\\
+\vspace{0.2em}
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}} \\
+
+\vspace{1em}
+EXAMPLE REASONING
+\vspace{0.2em}
+
+The fixed annotation convention assigns age and sex to timestamp 0, so these rows have \texttt{known = 1} because their times are rule-determined rather than guessed. Admission explicitly defines timestamp 0 and has \texttt{known = 1}. The phrase ``a 3-day history of fever and rash'' directly places fever and rash 72 hours before admission, so both events have timestamp -72 and \texttt{known = 1}. The phrase ``Four weeks ago'' directly places the acne diagnosis and start of minocycline treatment 672 hours before admission, so both events have timestamp -672 and \texttt{known = 1}. Increased WBC count, eosinophilia, systemic involvement, and the DRESS syndrome diagnosis have no textual evidence that determines a specific numeric time; assigning them timestamp 0 requires clinical judgment, so they have \texttt{known = 0}. The phrase ``persisted through admission'' explicitly links persistent fever and rash to admission. The diffuse eruption and pruritus are described in the same admission-context sentence, so these events inherit timestamp 0 from that textual context. These events therefore have \texttt{known = 1}. ``One day later'' directly places discharge 24 hours after admission, so discharge has timestamp 24 and \texttt{known = 1}.
+
+\vspace{2em}
+EXAMPLE OUTPUT\\
+\vspace{0.2em}
+
+\texttt{18 years old | 0 | 1} \\
+\texttt{male | 0 | 1} \\
+\texttt{admitted to the hospital | 0 | 1} \\
+\texttt{fever | -72 | 1} \\
+\texttt{rash | -72 | 1} \\
+\texttt{acne | -672 | 1} \\
+\texttt{minocycline | -672 | 1} \\
+\texttt{increased WBC count | 0 | 0} \\
+\texttt{eosinophilia | 0 | 0} \\
+\texttt{systemic involvement | 0 | 0} \\
+\texttt{diffuse erythematous or maculopapular eruption | 0 | 1} \\
+\texttt{pruritus | 0 | 1} \\
+\texttt{DRESS syndrome | 0 | 0} \\
+\texttt{fever persisted | 0 | 1} \\
+\texttt{rash persisted | 0 | 1} \\
+\texttt{discharged | 24 | 1} \\
+
+\vspace{1em}
+EVENT EXTRACTION RULES
+\vspace{0.2em}
+
+- Separate conjunctive phrases into their component events and assign them the same timestamp. For example, separate ``fever and rash'' into the two events ``fever'' and ``rash''.
+
+- If an event has a duration, assign the event time as the start of the time interval.
+
+- Use the source text span without modification whenever possible, except that ``history of'' may be added where needed to preserve meaning.
+
+- Include all patient-specific events, even when they appear in the discussion.
+
+- Include termination or discontinuation events and pertinent negative findings such as ``no shortness of breath'' and ``denies chest pain''.
+
+- Do not include general medical statements, literature discussion, or events referring to people other than the index patient.
+
+\vspace{1em}
+OUTPUT FORMAT
+\vspace{.2em}
+
+Return one event per row with exactly three pipe-separated columns in this order:\\
+\texttt{event | time | known} \\
+
+The time must be numeric and expressed in hours without a unit. The known value must be either 0 or 1. Do not use the pipe character within an event description. Return only the rows. Do not include a header, table title, explanation, Markdown, or code fences.
+\end{tcolorbox}

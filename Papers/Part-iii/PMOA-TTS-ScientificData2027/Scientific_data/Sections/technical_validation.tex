@@ -1,0 +1,203 @@
+\subsection{Case Report Identification Performance}
+\label{sec:results_case_identification}
+
+\input{Plots_tables/case_report_identification}
+
+Our evaluation of case report identification methods compared our LLM-Pipeline approach against PubMed's metadata-based filtering across five different diagnoses: Diabetes, Sepsis, Hypertension, COVID-19, and Atrial Fibrillation. 
+Using clinician-assigned labels as ground truth, we computed precision, recall, accuracy, and F1 score for each approach.
+
+The LLM-Pipeline approach demonstrates superior performance with perfect precision (1.00) across all diagnostic categories and also aggregated across all diagnoses (Table~\ref{tab:case_report_identification}), indicating that when our pipeline identifies a document as a single-patient case report, it is always correct \textcolor{red}{Jeremy: modify to not overstate}. In contrast, the PubMed MetaData approach shows more variable precision, ranging from 0.84 for Atrial Fibrillation to 1.00 for Hypertension, with an overall precision of 0.92.
+
+Both methods achieve similar recall (0.96), indicating comparable success in identifying true case reports.
+However, the LLM-Pipeline attains higher overall accuracy (0.96 vs. 0.88), reflecting its superior ability to distinguish both true positives and true negatives. This accuracy gain is largely due to the LLM-Pipeline’s effectiveness in excluding non-single-patient reports, which the PubMed MetaData approach often misclassifies.
+
+Examining performance by diagnostic category reveals that both approaches perform best on Sepsis and Hypertension cases, while showing more variability with Atrial Fibrillation, COVID-19, and Diabetes reports. The LLM-Pipeline maintains consistently high performance across all categories, with F1 scores ranging from 0.94 to 1.00. These findings highlight the significant improvements in precision and overall classification quality offered by our LLM-Pipeline approach for case report identification, ensuring that the PMOA-TTS corpus contains high-quality, single-patient case reports with minimal contamination from multi-patient or non-case report documents.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Evaluation of Clinical Textual Time Series Quality}
+
+We assessed the quality of the extracted textual time series using 200 manually annotated case reports as reference. 
+Each large language model (LLM) was evaluated across five independent runs to account for variability in annotation consistency. 
+Table~\ref{tab:model_comparison} summarizes the results for \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3-0324}, \texttt{LLaMA 3.3 70B}, \texttt{OpenAI O1}, \texttt{OpenAI O3}, \texttt{OpenAI O4-mini}, and \texttt{OpenAI GPT5}, comparing performance across three metrics: Match Rate, Concordance, and AULTC. 
+Among these models, \texttt{OpenAI GPT5} achieved the highest mean Match Rate (0.47 $\pm$ 0.005), while \texttt{OpenAI O3} achieved the highest Concordance (0.891 $\pm$ 0.006), and \texttt{OpenAI O4-mini} achieved the highest AULTC (0.748 $\pm$ 0.003). 
+The standard deviations across runs were generally low, indicating consistent performance within each model across repetitions.
+The standard deviations across runs were generally low, indicating consistent performance within each model across repetitions.
+
+% We evaluated the quality of extracted textual time series using the manually annotated subset as ground truth, comparing seven LLM variants: \texttt{DeepSeek-R1}, 
+% % DeepSeek-R1-UD-IQ1, 
+% \texttt{DeepSeek-V3-0324}, \texttt{LLaMA 3.3 70B}, \texttt{OpenAI O1}, \texttt{OpenAI O3}, \texttt{OpenAI O4-mini}, and \texttt{OpenAI GPT5}. 
+%A comparison of different LLM annotations and sensitivity to different prompt strategies can be found in Appendices \ref{apd:example_annotations} and \ref{apd:prompt_ablation} respectively. 
+
+\begin{table}[h!]
+\centering
+\caption{Comparison of models on Match Rate, Concordance, and AULTC with respect to 200 manually annotated case reports across 5 different runs for each model.}
+\label{tab:model_comparison}
+\begin{tabular}{lccc}
+\hline
+\textbf{Model} & \textbf{Match Rate} & \textbf{Concordance} & \textbf{AULTC} \\
+\hline
+\texttt{LLaMA 3.3 70B}       & 0.675 $\pm$ 0.003 & 0.835 $\pm$ 0.003 & 0.717 $\pm$ 0.001 \\
+\texttt{DeepSeek-R1}         & 0.746 $\pm$ 0.008 & 0.785 $\pm$ 0.010 & 0.726 $\pm$ 0.003 \\
+\texttt{DeepSeek-V3-0324}    & 0.761 $\pm$ 0.004 & 0.791 $\pm$ 0.005 & 0.728 $\pm$ 0.002 \\
+\texttt{OpenAI GPT5}         & \textbf{0.847 $\pm$ 0.005} & 0.883 $\pm$ 0.002 & 0.719 $\pm$ 0.001 \\
+\texttt{OpenAI O4-mini}      & 0.750 $\pm$ 0.019 & 0.842 $\pm$ 0.008 & \textbf{0.748 $\pm$ 0.003} \\
+\texttt{OpenAI O3}           & 0.736 $\pm$ 0.003 & \textbf{0.891 $\pm$ 0.006} & 0.735 $\pm$ 0.003 \\
+\texttt{OpenAI O1}           & 0.638 $\pm$ 0.007 & 0.880 $\pm$ 0.003 & 0.730 $\pm$ 0.001 \\
+\hline
+\end{tabular}
+\end{table}
+
+To quantify uncertainty from a complementary perspective, we also performed a bootstrap analysis based on a single run per model (Table~\ref{tab:bootstrap_intervals}). 
+In this setup, 200 samples were resampled with replacement to estimate 95\% confidence intervals for each metric. 
+The bootstrapped intervals provide an estimate of variability arising from the sampling of annotated case reports rather than from repeated model runs. 
+Together, these two evaluations capture variation both across model executions and across sampled annotations, providing a comprehensive view of model performance stability.
+
+\begin{table}[ht!]
+\centering
+\caption{Bootstrap 95\% confidence intervals for Match Rate, Concordance, and AULTC across models evaluated on the 200 manually annotated case reports.}
+\label{tab:bootstrap_intervals}
+\begin{tabular}{lccc}
+\hline
+\textbf{Model} & \textbf{Match Rate (95\% CI)} & \textbf{Concordance (95\% CI)} & \textbf{AULTC (95\% CI)} \\
+\hline
+\texttt{LLaMA 3.3 70B}      & [0.6420, 0.7176] & [0.8333, 0.8611] & [0.7010, 0.7540] \\
+\texttt{DeepSeek-R1}        & [0.6944, 0.7733] & [0.7825, 0.8175] & [0.7080, 0.7515] \\
+\texttt{DeepSeek-V3-0324}   & [0.7269, 0.7905] & [0.7923, 0.8214] & [0.7178, 0.7581] \\
+\texttt{OpenAI GPT5}        & [0.8047, 0.8661] & [0.8815, 0.8986] & [0.7056, 0.7498] \\
+\texttt{OpenAI O4-mini}     & [0.6921, 0.7672] & [0.8263, 0.8515] & [0.7320, 0.7696] \\
+\texttt{OpenAI O3}          & [0.6986, 0.7654] & [0.8879, 0.9062] & [0.7278, 0.7645] \\
+\texttt{OpenAI O1}          & [0.5990, 0.6772] & [0.8719, 0.8952] & [0.7163, 0.7550] \\
+\hline
+\end{tabular}
+\end{table}
+
+% \begin{itemize}
+%     \item \textcolor{red}{Figure is too big. Push it to Appendix and have a table in main? (like T2S2 paper)}
+% \end{itemize}
+
+
+\subsubsection{Text Event Match Performance}
+%\textbf{Text Event Match Performance.} 
+Figure~\ref{fig:tts_evaluation} (left) shows the cumulative density of cosine distances between model-generated and reference event descriptions. A threshold of 0.1 (vertical line) defines a successful match. \texttt{DeepSeek-R1} (black) and its quantized variant \texttt{DeepSeek-R1-UD-IQ1} (orange) outperform other models, with ~80\% of aligned events falling below the threshold. \texttt{DeepSeek-V3-0324} (light blue) and \texttt{O4-mini} (red) form a second tier, while \texttt{LLaMA 3.3 70B} (green), \texttt{O1} (light yellow), and \texttt{O3} (blue) show more dispersed distributions, with only 70\% of events below the threshold. These analyses highlights clear differences in how well models generate event descriptions that align semantically with expert annotations. The strong performance of \texttt{DeepSeek-R1} and its quantized variant indicates their enhanced ability to model clinical language patterns found in case reports.
+
+
+\subsubsection{Temporal Ordering Performance}
+%\textbf{Temporal Ordering Performance.} 
+Using the cosine distance threshold to identify matched events, we assessed temporal ordering accuracy via the concordance index (c-index).
+As shown in Figure~\ref{fig:tts_evaluation} (right), \texttt{LLaMA 3.3 70B} achieves the highest median c-index (0.96), with \texttt{DeepSeek-V3-0324} and \texttt{DeepSeek-R1} following closely.
+
+\input{Plots_tables/TTS_evaluation_combined}
+
+The relationship between event matching and concordance evaluation is important to consider. Models applying stricter matching thresholds may appear to perform better on concordance by evaluating only the most confidently matched events. In contrast, models matching a broader set of events—including more ambiguous cases—encounter a more difficult ordering task. \texttt{LLaMA 3.3 70B}’s strong performance in temporal ordering is notable given its lower match rate, suggesting it effectively captures relative timing even when its textual matches are less precise.
+\Cref{sec:choosing_match_threshold} discusses how adjusting the event match threshold allows tuning the balance between match coverage and ordering accuracy.
+
+\subsubsection{Time Discrepancy Analysis}
+%\textbf{Time Discrepancy Analysis.} 
+Figure~\ref{fig:tts_evaluation} (left) displays the cumulative probability distribution of time differences (log-scaled) between predicted and reference timestamps, illustrating each model’s timestamping accuracy.
+\texttt{DeepSeek-R1} (black line) shows the steepest curve, indicating that a higher proportion of its predictions are temporally close to the reference points. In contrast, \texttt{LLaMA 3.3 70B} (green line) produces a flatter curve, reflecting greater variation and lower precision in absolute time prediction. The right panel in Figure \ref{fig:tts_evaluation} breaks down performance across time intervals—presentation, 1 hour, 1 day, 1 week, 1 year, and beyond. All models perform well for events near the presentation time, but their accuracy declines as the temporal distance increases. \texttt{DeepSeek} models consistently show stronger performance across intervals, whereas \texttt{LLaMA 3.3 70B} exhibits more noticeable degradation for distant events.
+
+Taken together, this analysis highlights a key distinction: while \texttt{LLaMA 3.3 70B} is more effective at predicting relative event order (concordance), \texttt{DeepSeek models}---particularly \texttt{DeepSeek-R1}---are better at assigning precise timestamps, even for events far from the reference point.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Varying the Event Match Distance Threshold} \textcolor{red}{Move to Appendix with figures?}
+\label{sec:choosing_match_threshold}
+
+We also discuss how adjusting the event match threshold allows tuning the balance between match coverage and ordering accuracy. By varying the event match distance threshold, we obtain different performance characteristics for event match rate, event concordance, and temporal discrepancy (AULTC).  We choose a cosine similarity of 0.1 based on manual review of \texttt{Llama 3.3 70B Instruct} and \texttt{O1} annotations.  Plotting the event match rate versus temporal performance characteristic (concordance and AULTC) when varying the threshold from 0.01 to 0.25, we obtain performance tradeoffs in Figure \ref{fig:threshold_temporal_tradeoff}.
+
+\begin{figure}
+    \centering
+    % \begin{minipage}{0.45\textwidth}
+        % \centering
+        \includegraphics[width=\linewidth]{Plots_tables/event_match_vs_metrics_updated.pdf}
+        % \caption{}
+    % \end{minipage}
+    % \hfill
+    \caption{\textbf{Left:} Concordance by event match rate. Solid circle ($\bullet$) represents threshold of 0.1, with ticks (|) indicating 0.01 increments of the threshold in [0.01, 0.50]. \textbf{Right:} AULTC by event match rate.
+    % \textcolor{red}{Remove \texttt{DSR1-quantized} and replace with \texttt{GPT5}. Rerun on 200?}
+    }
+    \label{fig:threshold_temporal_tradeoff}
+\end{figure}
+
+
+% \begin{figure}
+%     \centering
+%     \begin{minipage}{0.45\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{Plots_tables/match_threshold_concordance_plot.pdf}
+%         % \caption{}
+%     \end{minipage}
+%     % \hfill
+%     \begin{minipage}{0.45\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{Plots_tables/match_threshold_plot.pdf}
+%         % \caption{}
+%     \end{minipage}
+%     \caption{\textbf{Left:} Concordance by event match rate. Solid circle ($\bullet$) represents threshold of 0.1, with ticks (|) indicating 0.01 increments of the threshold in [0.01, 0.25]. \textbf{Right:} AULTC by event match rate.
+%     \textcolor{red}{Remove \texttt{DSR1-quantized} and replace with \texttt{GPT5}. Rerun on 200?}
+%     }
+%     \label{fig:threshold_temporal_tradeoff}
+% \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Annotation quality with prompt variation} \textcolor{red}{Move to Appendix?}
+
+Figure \ref{fig:prompt_ablation} presents sensitivity analyses for different prompt strategies in extracting structured time series from clinical narratives. Each ablation tests the effect of removing specific instructional components or adding structured extraction requirements. We evaluate event-level semantic similarity, timestamp accuracy, and temporal concordance across matched events. 
+
+% \noindent\textcolor{red}{Figure is too large, pushed it to Appendix. Have a table in main like T2S2 paper?}
+
+\subsubsection{Sensitivity to Parts of the LLM Prompt Being Changed} \textcolor{red}{Move to Appendix?}
+\input{Scientific_data/Supplementary/prompt_ablation}
+
+
+\paragraph{Semantic similarity:}
+The cumulative density of cosine distances between matched events reveals that omitting key components of the prompt negatively impacts text alignment (Figure \ref{fig:prompt_ablation}, left). The Interval, \texttt{DSR1}, and Interval+Type prompts consistently show high-quality event matches, with over 80\% of events falling below a cosine distance of 0.1. In contrast, removing role framing (No role) or conjunction splitting (No conjunction) leads to modest degradation. The Zero-shot condition—lacking both examples and guiding instructions—performs markedly worse, with only ~60\% of events under the same similarity threshold.
+
+\paragraph{Temporal concordance:} Concordance index (c-index) measures the agreement between predicted and annotated event ordering (Figure \ref{fig:prompt_ablation}, middle left). The Interval+Type variant achieves the highest median concordance, followed closely by Interval, \texttt{DSR1}, and No role. Removing conjunction expansion reduces ordering consistency slightly, while Zero-shot again yields the lowest performance with a wider spread and multiple outliers (c-index < 0.6), indicating inconsistent temporal sequencing.
+
+\paragraph{Timestamp discrepancy:} Cumulative distributions of time discrepancies from manual annotations further support these findings (Figure \ref{fig:prompt_ablation}, middle right). Structured prompts—especially Interval, \texttt{DSR1}, and Interval+Type—demonstrate tighter timestamp alignment. Ablations involving role removal or conjunction omission produce broader error distributions, and Zero-shot extraction results in substantially larger timestamp mismatches.
+
+When stratified by the time from presentation (e.g., within 1 hour, 1 day, 1 week), prompt differences are most pronounced for events occurring farther from the report anchor (Figure \ref{fig:prompt_ablation}, far right). For immediate events, all prompt versions perform comparably. However, at longer timescales (1 week to "ever"), Interval and Interval+Type maintain superior accuracy, while Zero-shot shows dramatic drops in performance. This suggests that structured prompts are particularly critical for accurate long-range temporal reasoning.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Inter-LLM comparison of temporal annotations} \textcolor{red}{Move to Appendix?}
+%\label{apd:example_annotations}
+
+In this section, we showcase an excerpt from case report with PMC ID 10629858 \citep{abu2023rare}. To demonstrate the extraction task and analyze the performance of various LLM annotators, we compare manual annotations against outputs from several LLM variants: \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3-0324}, \texttt{LLaMA 3.3 70B}, \texttt{OpenAI GPT5}, \texttt{OpenAI O1}, \texttt{OpenAI O3}, and \texttt{OpenAI O4-mini} (Figure \ref{fig:compare_llm_annotations}).
+
+% \noindent\textcolor{red}{Multi-LLM examples go into Appendix \ref{fig:compare_LLM_annotations}}. 
+% \textcolor{red}{Add a table with error types or few example errors (similar to Fig 3 in Jing's AMIA IS paper)}
+%\input{Plots_tables/example_LLM_annotations}
+
+\input{Scientific_data/Supplementary/compare_LLM_TTS_example}
+
+Across annotators, the principal clinical storyline is consistently recovered: antecedent treatment for lepromatous leprosy, hospital presentation with abdominal symptoms and imaging findings, subsequent sepsis with ICU readmission, and death. All models place examination findings and initial presentation at or near the admission anchor ($t{=}0$), assign negative times to pre-admission history, and positive times to later complications, indicating broadly correct temporal polarity and order.
+
+Differences emerge in \textit{event granularity and phrasing}. \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3-0324}, \texttt{LLaMA 3.3 70B}, \texttt{GPT5}, \texttt{O3}, and \texttt{O4-mini} tend to split conjunctions into separate medication events (``rifampicin'', ``clofazimine'', ``dapsone''), whereas \texttt{O1} compresses them into a single treatment line. Near-duplicate entries at the same timestamp (e.g., ``diagnosed with lepromatous leprosy'' and ``skin biopsy confirmed'') appear in \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3-0324}, \texttt{GPT5}, \texttt{O1}, \texttt{O3}, \texttt{O4-mini} (and sometimes \texttt{LLaMA 3.3 70B}). Event specificity also varies: \texttt{DeepSeek-R1}/\texttt{DeepSeek-V3-0324}, \texttt{GPT5}, \texttt{O3}, \texttt{O4-mini}, and \texttt{LLaMA 3.3 70B} more often retain concrete procedures/medications, while \texttt{O1} uses generic descriptors.
+
+We also observe systematic differences in \textit{temporal normalization}. The phrase ``two months before admission'' is mapped to different hour offsets: about $-1464$ by \texttt{DeepSeek-R1} and \texttt{DeepSeek-V3-0324}, $-1440$ by \texttt{GPT5}, \texttt{O3}, and \texttt{O4-mini}, $-1344$ by \texttt{O1}, and $-144$ by \texttt{LLaMA 3.3 70B} (likely a day–hour scaling error). For long-horizon post-admission events, absolute times vary by hundreds of hours across models. The transplant \emph{plan} is placed at $\sim\!672$ h (\texttt{DeepSeek-V3-0324}), $\sim\!1344$ h (\texttt{LLaMA 3.3 70B}), $\sim\!1900$ h (\texttt{O4-mini}), $\sim\!2150$ h (\texttt{O3}), $\sim\!2400$ h (\texttt{GPT5}), $\sim\!2500$ h (\texttt{O1}), and $\sim\!4320$ h (\texttt{DeepSeek-R1}). ICU readmission/sepsis/death also cluster late but with model-specific offsets: $\sim\!4032$ h (\texttt{DeepSeek-V3-0324}), $\sim\!4296$–$4320$ h (\texttt{GPT5}), $\sim\!4260$/$4320$ h (\texttt{O4-mini}), $\sim\!4320$ h (\texttt{O3}, \texttt{DeepSeek-R1}), and $\sim\!3000$ then $4320$ h (\texttt{O1}), whereas \texttt{LLaMA 3.3 70B} assigns earlier times ($\sim\!1344$–$1440$ h). Despite this spread, the relative ordering of major milestones is largely preserved.
+
+A recurrent issue across \emph{all} models is \textit{plan versus action conflation}: statements such as ``planned autologous bone-marrow transplant'' are time-stamped as if they occurred rather than encoded as intent. \textcolor{red}{Jeremy: To clarify, the timestamping of the schedule time for this is fine (it is timestampable and could affect health risk via anticipatory decision-making).  But if the word "planned" is omitted, then it is encoded as occurred rather than intent. So it would be the event string (not the timestamp) that is problematic in this case.} 
+Overall, the models capture the sequence of key events but differ in how they segment conjunctive statements (\texttt{O1} compressed vs.\ others split), handle near-duplicates, and resolve absolute times (month-to-hour mapping and long-range offsets). Although a single case cannot support definitive conclusions, these qualitative trends were observed repeatedly across additional case reports and are consistent with the aggregate metrics in Section 5.2.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Limitations and future directions}
+
+Our temporal annotation pipeline has some important caveats to consider. First, the pipeline relies on case reports from the PubMed Open Access (PMOA) corpus, which often reflect rare or atypical presentations and differ from routine clinical notes (e.g., progress notes, discharge summaries in MIMIC III/IV), potentially limiting the model’s generalizability to real-world health system texts. Compared to routine clinical notes, case reports offer rich, temporally structured narratives with explicit clinical rationale, making them especially useful for evaluating model performance under sparse documentation. Our LLM-assisted pipeline is a generalized framework for temporal annotations of clinical narratives using PubMed case reports as a benchmark with scope of future applications on MIMIC IV discharge summaries.  
+
+Second, we model events as minimally modified text spans to preserve alignment with the source text, which facilitates interpretability but relies heavily on embedding-based comparison and forgoes normalization to standard clinical ontologies like UMLS.
+
+Third, representing time with single relative points simplifies annotation but limits expressiveness, especially in cases where durations or implicit temporal relationships are critical. 
+
+Fourth, our one-to-one recursive event matching strategy prioritizes temporal consistency, but at the cost of reduced recall, particularly when events are expressed as conjunctive or split mentions. These design choices emphasize precision and contextual grounding but leave room for enhancements in coverage and temporal fidelity. Future work could incorporate LLM ensembling, prompt engineering, or active learning-based fine-tuning to further improve event-time extraction.
+
+Finally, the manual reference set comprises 200 cases annotated by a single clinical expert; as a result, we cannot estimate inter-annotator agreement, and evaluation metrics reflect agreement with that expert rather than adjudicated consensus.

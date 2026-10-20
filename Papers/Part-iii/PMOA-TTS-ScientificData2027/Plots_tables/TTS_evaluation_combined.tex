@@ -1,0 +1,58 @@
+% \begin{figure}[!htbp]
+%   \centering
+%   % Scale the entire 2x2 block (caption stays normal size)
+%   \resizebox{0.6\linewidth}{!}{%
+%     \begin{minipage}{\linewidth}
+%       % ---------- Row 1 ----------
+%       \begin{minipage}[t]{.48\linewidth}\vspace{0pt}\centering
+%         \includegraphics[page=1, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+%       \end{minipage}\hfill
+%       \begin{minipage}[t]{.48\linewidth}\vspace{0pt}\centering
+%         \includegraphics[page=2, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+%       \end{minipage}
+
+%       \vspace{4pt} % space between rows (adjust as needed)
+
+%       % ---------- Row 2 ----------
+%       \begin{minipage}[t]{.48\linewidth}\vspace{0pt}\centering
+%         \includegraphics[page=3, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+%       \end{minipage}\hfill
+%       \begin{minipage}[t]{.48\linewidth}\vspace{0pt}\centering
+%         \includegraphics[page=4, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+%       \end{minipage}
+%     \end{minipage}%
+%   }
+%   \caption{Event match cumulative distribution (top left), concordance box plots (top right), log-time discrepancy overall (bottom left), and log-time discrepancy stratified by annotator timestamp (bottom right).}
+%   \label{fig:tts_evaluation}
+%   \vspace{-5mm}
+% \end{figure}
+
+
+
+\begin{figure}[!tbp]
+\centering
+    \begin{minipage}[t]{0.242\textwidth}
+    \centering
+    \includegraphics[page=1, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.242\textwidth}
+    \centering
+    \includegraphics[page=2, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.242\textwidth}
+    \centering
+    \includegraphics[page=3, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.242\textwidth}
+    \centering
+    \includegraphics[page=4, width=\linewidth]{Plots_tables/pmoa_updated_man_figs.pdf}
+    \end{minipage}
+    \caption{Comparison of different LLM for extracting temporal clinical events from case reports. From left to right: (\textbf{A}) event match cumulative distribution function, (\textbf{B}) concordance box plots, (\textbf{C}) time discrepancy from manual annotation timestamps among matched events (overall), and (\textbf{D}) time discrepancy disaggregated by clinician annotator timestamp (time from presentation). 
+    %\textcolor{red}{Have same figure for LAPJV?}
+    }
+    \label{fig:tts_evaluation}
+    \vspace{-10pt}
+\end{figure}

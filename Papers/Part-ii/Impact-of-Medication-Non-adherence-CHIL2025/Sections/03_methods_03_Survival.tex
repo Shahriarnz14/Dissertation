@@ -1,0 +1,29 @@
+To estimate the adverse event time, we consider four survival analysis models that vary in their underlying assumptions and modeling flexibility. 
+These models include both traditional statistical approaches and more recently developed deep learning methods and can be plugged into meta-learning causal inference approaches:
+% Below, we describe the four survival models used in our experiments:
+\begin{enumerate}[itemsep=0pt]
+    \item \textbf{Cox Proportional Hazards (CoxPH)} \citep{cox1972regression} – A semiparametric model that assumes a log-linear relationship between covariates and the hazard function, with a time-invariant hazard ratio:
+    \(
+    h(t \mid \mathbf{Z}_{i\tau}) = h_0(t) \exp(\boldsymbol{\beta}^{\top} \mathbf{Z}_{i\tau}),
+    \)
+    where \( h_0(t) \) is the baseline hazard and \( \boldsymbol{\beta} \) the regression coefficients. CoxPH is widely used for its interpretability and computational efficiency.
+
+    \item \textbf{Random Survival Forest (RSF)} \citep{ishwaran2008random} – A nonparametric ensemble method that extends decision trees to survival data. It constructs multiple survival trees and aggregates them to estimate the survival function:
+    \(
+    \widehat{S}(t \mid \mathbf{Z}_{i\tau}) = \frac{1}{B} \sum_{b=1}^{B} S^{(b)}(t \mid \mathbf{Z}_{i\tau}),
+    \)
+    where \( S^{(b)}(t \mid \mathbf{Z}_{i\tau}) \) is the survival function from the \( b \)-th tree. RSF captures non-linear relationships and complex interactions without parametric assumptions.
+
+    \item \textbf{DeepSurv} \citep{katzman2018deepsurv} – A deep learning extension of CoxPH that replaces its linear assumption with a neural network:
+    \(
+    h(t \mid \mathbf{Z}_{i\tau}) = h_0(t) \exp(f_{\theta}(\mathbf{Z}_{i\tau})),
+    \)
+    where \( f_{\theta} \) is a neural network. DeepSurv learns non-linear covariate effects while maintaining the proportional hazards framework.
+
+    \item \textbf{DeepHit} \citep{lee2018deephit} – A neural network-based model that directly estimates the probability mass function (PMF) of survival time:
+    \(
+    P(T = t \mid \mathbf{Z}_{i\tau}) = f_{\theta}(t, \mathbf{Z}_{i\tau}),
+    \)
+    where \( f_{\theta} \) predicts the likelihood of event occurrence at each time \( t \). DeepHit allows for modeling multimodal survival distributions and competing risks.
+\end{enumerate}
+Our experiments later also uses a Causal Survival Forest (CSF) \citep{cui2023estimating}, which explicitly accounts for treatment effects in survival analysis. However, since a CSF is inherently a causal model that estimates treatment effects, it is not meant for being plugged into a meta-learning causal inference framework. We defer discussing it to the next section, where we describe the causal inference setup we consider. 

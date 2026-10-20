@@ -1,0 +1,29 @@
+\begin{table}[htb!]
+\scriptsize
+\caption{Forecasting performance (event occurrence: F1 and correct event ordering: concordance-index) of the ensuing $k=8$ events. All models are trained/fine-tuned on time-ordered annotations from \texttt{DeepSeek-R1}. \textbf{Bold} values indicate best in category amongst all models.}
+\label{tab:DS_forecasting_clean}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{T2S2 (DeepSeek R1)} & \multicolumn{2}{c}{sepsis-10} & \multicolumn{2}{c}{sepsis-100}\\
+& F1(1h) & F1(1d) & F1(1w) & c-index & F1(1d) & c-index & F1(1d) & c-index\\
+\midrule
+\textbf{LLM-MLP head} &&&&&&&&\\
+DS-L3.3 70B & \textbf{0.075} & 0.482 & \textbf{0.796} & \textbf{0.632} & \textbf{0.397} & \textbf{0.578} & \textbf{0.613} & 0.595 \\
+\textbf{Prompting} &&&&&&&&\\
+L3.3 70B few-shot & \textbf{0.095} & \textbf{0.380} & 0.652 & -- & \textbf{0.360} & -- & 0.452 & -- \\
+\midrule
+\textbf{Encoder-MLP head} &&&&&&&&\\
+ModernBERT-base & \textbf{0.306} & \textbf{0.576} & \textbf{0.877} & \textbf{0.646} & 0.428 & \textbf{0.562} & 0.607 & \textbf{0.558} \\
+\midrule
+\textbf{Encoder-masking-fine-tuned} &&&&&&&&\\
+ModernBERT-base & \textbf{0.186} & 0.449 & \textbf{0.697} & \textbf{0.672} & 0.325 & 0.576 & \textbf{0.503} & 0.613 \\
+\midrule
+\textbf{Encoder-masking-zeroshot} &&&&&&&&\\
+ModernBERT-base & 0.169 & \textbf{0.468} & \textbf{0.804} & 0.496 & \textbf{0.358} & 0.501 & \textbf{0.511} & 0.499 \\
+ModernBERT-large & 0.133 & 0.349 & 0.534 & 0.494 & 0.271 & 0.509 & 0.277 & 0.502 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

@@ -1,0 +1,115 @@
+
+The PMOA–TTS dataset is hosted on Hugging Face Datasets at \url{https://huggingface.co/datasets/snoroozi/pmoa-tts} and is released under \textbf{CC BY-NC-SA 4.0}. The dataset card lists task tags (\texttt{Text Classification, Time Series Forecasting}), modality (\texttt{Text}), format support (\texttt{Parquet via auto-conversion}), language (\texttt{English}), and size (“\texttt{100K–1M}”).
+
+% \paragraph{Repository layout and files}
+
+% At the repository root, the following files are provided: \texttt{README.md}, \texttt{.gitattributes}, the primary corpus file \texttt{tts\_dataset.jsonl}, and three named subsets for case studies: \texttt{tts\_dataset\_case\_study\_100.jsonl}, \texttt{tts\_dataset\_case\_study\_25k\_L33.jsonl}, and \texttt{tts\_dataset\_case\_study\_25k\_DSR1.jsonl}. A \texttt{data/} directory is also present. File descriptions (from the repo listing) indicate that the 25k subsets correspond to Llama~3.3 and DeepSeek\textendash R1 annotation variants, respectively.
+
+\subsection{Dataset Splits}
+\begin{itemize}
+    \item \texttt{train [default]}: The full dataset of 124k single-patient case reports automatically extracted using \texttt{LLaMA 3.3}. This is the default split and contains the primary annotations used in downstream tasks. \textcolor{red}{Jeremy: where can the 125k of DSR1 be accessed?}
+    \item \texttt{case\_study\_100}: A curated benchmark of 100 case reports (88 present in this dataset), used in the paper to evaluate LLM-based vs. metadata-based case report identification. Each sample has been manually reviewed for single-case validity across five different diagnoses.
+    \item \texttt{case\_study\_25k\_L33}: A 25k-case subset of \texttt{LLaMA 3.3}-annotated reports used for downstream survival analysis experiments in the paper. This split is designed to support modeling and evaluation of time-to-event outcomes on a more computationally manageable subset.
+    \item \texttt{case\_study\_25k\_DSR1}: \textcolor{red}{Jeremy: Clarify if this is the same set of case reports as those annotated in the 25k L33 subset.} 
+    A 25k-case subset of \texttt{DeepSeek-R1}-annotated reports used for downstream survival analysis experiments in the paper. The \texttt{textual\_timeseries} and \texttt{death\_info} fields in this split are reconstructed from DeepSeek-R1 outputs, enabling comparative analysis between models across the same patient cohort.
+    \item \texttt{case\_study\_n200}: A benchmark of 200 manually reviewed case reports used for qualitative and quantitative evaluation of various LLM-generated annotations.
+    \item Model-specific splits for the \texttt{case\_study\_n200} subset include:
+    \begin{itemize}
+        \item \texttt{Manual Annotations}
+        \item \texttt{DeepSeek-V3-0324}
+        \item \texttt{LLaMA 3.3 70B}
+        \item \texttt{OpenAI O1}
+        \item \texttt{OpenAI O3}
+        \item \texttt{OpenAI O4-mini}
+        \item \texttt{OpenAI GPT5}
+    \end{itemize}
+    These model-specific splits each contain outputs from $5$ different runs for each model for the same set of 200 manually annotated case reports.
+\end{itemize}
+
+The data repository also has an additional data split \texttt{TTS\_n200\_additional\_models}, a random subset of 200-case reports that bundles the single-expert manual timelines (the reference set) together with parallel LLM-generated textual time series for several additional models, including open weight models like DeepSeekV3, \texttt{DeepSeek-R1 quantized}, \texttt{DeepSeek V3-0324} and proprietary OpenAI models like \texttt{GPT5}, \texttt{O1}, \texttt{O3}, and \texttt{O4-mini}). This split is designed for lightweight benchmarking and cross-model comparison on the same cases without the computational cost of re-annotating the full corpus. For the full 125k release, we provide textual time series produced by \texttt{DeepSeek-R1} and \texttt{LLaMA 3.3 (70B)}; the additional models are released only on the 200-case subset due to resource constraints.
+\textcolor{red}{Jeremy: Are the reruns for L33 and DSR1 also in here?  Were they re-run to measure their variation like these additional models?  Clarify.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Data Fields}
+Each row in the dataset is a JSON object with the following fields:
+% \vspace{-2.5em}
+\begin{table}[!htbp]
+\centering
+\caption{PMOA--TTS record schema.}
+\label{tab:data_schema}
+\begin{tabular}{@{} l l p{0.62\linewidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Type} & \textbf{Description} \\
+\midrule
+\texttt{pmc\_id} & \texttt{str} & Folder-level ID for the PubMed case report (\texttt{PMC000xxxxxx} to \texttt{PMC011xxxxxx}). \\
+\texttt{case\_report\_id} & \texttt{str} & Full filename for the case (e.g., \texttt{PMC6417290}). \\
+\texttt{textual\_timeseries} & \texttt{List[Dict]} & Time series of \texttt{\{"event": str, "time": int\}}. \\
+\texttt{demographics} & \texttt{Dict} & \texttt{\{"age": str or "Not Specified", "sex": str or "Not Specified", "ethnicity": str or "Not Specified"\}}. \\
+\texttt{diagnoses} & \texttt{List[str]} & List of diagnosis terms extracted per case. \\
+\texttt{death\_info} & \texttt{Dict} & \texttt{\{"observed\_time": int, "death\_event\_indicator": 0 or 1\}}. \\
+\bottomrule
+\end{tabular}
+% \vspace{-2.5em}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent Below is a compact example matching the schema above (drawn from our HuggingFace repository (formatted for readability).
+
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title=Example JSON entry,
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={Example JSON entry} % optional continuation note
+]
+
+\begin{verbatim}
+    "pmc_id": "PMC006xxxxxx",
+    
+    "case_report_id": "PMC6417290",
+    
+    "textual_timeseries": [
+        {"event": "56 years old", "time": 0}, 
+        {"event": "male", "time": 0}, 
+        {"event": "HIV-positive", "time": 0}, 
+        {"event": "admitted to the hospital", "time": 0}, 
+        {"event": "knee arthralgia", "time": 0}, 
+        ...
+        {"event": "postural headache", "time": 48}, 
+        ...
+        {"event": "neurological examination", "time": 120}, 
+        ...
+        {"event": "persistence of headache", "time": 144}, 
+        {"event": "brain computed tomography scan", "time": 144}
+        ...
+        {"event": "symptom free", "time": 4320}, 
+        {"event": "CT scan", "time": 4320}, 
+        {"event": "no brain shift", "time": 4320}
+    ],
+    
+    "diagnoses": [
+        "HIV", 
+        "Knee arthralgia", 
+        "Subdural hematoma", 
+        "Postdural puncture headache (PDPH)"
+    ],
+    
+    "death_info": {
+        "observed_time": 4230,
+        "death_event_indicator": 0
+    },
+    
+    "demographics": {
+        "age": 56,
+        "sex": "Male",
+        "ethnicity": "Not Specified"
+    }
+\end{verbatim}
+
+\end{tcolorbox}

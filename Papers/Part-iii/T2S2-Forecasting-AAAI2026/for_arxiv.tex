@@ -1,0 +1,442 @@
+%File: formatting-instructions-latex-2026.tex
+%release 2026.0
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage{aaai2026}  % DO NOT CHANGE THIS
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet}  % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+%
+% These are recommended to typeset algorithms but not required. See the subsubsection on algorithms. Remove them if you don't have algorithms in your paper.
+
+\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{dsfont}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage[most]{tcolorbox}
+\usepackage{url}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{algpseudocode}
+\usepackage{adjustbox} % add this in your preamble
+%
+% These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
+\usepackage{newfloat}
+\usepackage{listings}
+\DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
+\lstset{%
+	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
+	numbers=left,numberstyle=\footnotesize,xleftmargin=2em,% show line numbers, remove this entire line if you don't want the numbers.
+	aboveskip=0pt,belowskip=0pt,%
+	showstringspaces=false,tabsize=2,breaklines=true}
+\floatstyle{ruled}
+\newfloat{listing}{tb}{lst}{}
+\floatname{listing}{Listing}
+%
+% Keep the \pdfinfo as shown here. There's no need
+% for you to add the /Title and /Author tags.
+\pdfinfo{
+/TemplateVersion (2026.1)
+}
+
+%
+% These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
+\usepackage{newfloat}
+\usepackage{listings}
+\DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
+\lstset{%
+	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
+	numbers=left,numberstyle=\footnotesize,xleftmargin=2em,% show line numbers, remove this entire line if you don't want the numbers.
+	aboveskip=0pt,belowskip=0pt,%
+	showstringspaces=false,tabsize=2,breaklines=true}
+\floatstyle{ruled}
+\newfloat{listing}{tb}{lst}{}
+\floatname{listing}{Listing}
+%
+% Keep the \pdfinfo as shown here. There's no need
+% for you to add the /Title and /Author tags.
+% \pdfinfo{
+% /TemplateVersion (2026.1)
+% }
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+
+\title{Forecasting Clinical Risk from Textual Time Series: Structuring Narratives for Temporal AI in Healthcare}
+% \title{Forecasting from Clinical Textual Time Series: Adaptations of the Encoder and Decoder Language Model Families}
+
+\author{
+    %Authors
+    % All authors must be in the same font size and format.
+    Shahriar Noroozizadeh\textsuperscript{\rm 1, 2}\equalcontrib,
+    Sayantan Kumar\textsuperscript{\rm 3}\equalcontrib,
+    Jeremy C. Weiss\textsuperscript{\rm 3}
+}
+
+\affiliations{
+    \textsuperscript{\rm 1}Machine Learning Department, School of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA\\
+    \textsuperscript{\rm 2} Heinz College of Information Systems and Public Policy, Carnegie Mellon University, Pittsburgh, PA, USA\\
+    \textsuperscript{\rm 3} National Library of Medicine, National Institutes of Health, Bethesda, MD, USA\\
+}
+
+
+% REMOVE THIS: bibentry
+% This is only needed to show inline citations in the guidelines document. You should not need it and can safely delete it.
+%\usepackage{bibentry}
+% END REMOVE bibentry
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Clinical case reports encode temporal patient trajectories that are often underexploited by traditional machine learning methods relying on structured data. 
+In this work, we introduce the forecasting problem from textual time series, where timestamped clinical findings---extracted via an LLM-assisted annotation pipeline---serve as the primary input for prediction. 
+We systematically evaluate a diverse suite of models, including fine-tuned decoder-based large language models and encoder-based transformers, on tasks of event occurrence prediction, temporal ordering, and survival analysis. 
+Our experiments reveal that encoder-based models consistently achieve higher F1 scores and superior temporal concordance for short- and long-horizon event forecasting, while fine-tuned masking approaches enhance ranking performance. 
+In contrast, instruction-tuned decoder models demonstrate a relative advantage in survival analysis, especially in early prognosis settings. 
+Our sensitivity analyses further demonstrate the importance of time ordering, which requires clinical time series construction, as compared to text ordering, the format of the text inputs that LLMs are classically trained on. 
+This highlights the additional benefit that can be ascertained from time-ordered corpora, with implications for temporal tasks in the era of widespread LLM use. 
+\end{abstract}
+
+% Uncomment the following to link to your code, datasets, an extended version or similar.
+%
+% \begin{links}
+%     \link{Code}{https://aaai.org/example/code}
+%     \link{Datasets}{https://aaai.org/example/datasets}
+%     \link{Extended version}{https://aaai.org/example/extended-version}
+% \end{links}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Revised Intro %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Healthcare disparities persist globally, with preventable deaths from conditions like sepsis disproportionately affecting underserved populations who often present to under-resourced facilities with limited access to specialized expertise. In these settings, much of the critical diagnostic and prognostic information exists only in unstructured clinical narratives—case reports, discharge summaries, and progress notes—as comprehensive structured data infrastructure may be unavailable~\cite{anzalone2025lower,seinen2025using}. While machine learning approaches have shown promise on structured data, with recent work demonstrating that incorporating text alongside structured inputs significantly improves predictive performance~\citep{kline2022multimodal}, large language models struggle with clinical risk estimation, especially in patient-facing scenarios~\citep{wongposition}.
+This gap highlights the need for automated risk forecasting from textual clinical records that could democratize access to expert-level clinical reasoning, particularly in resource-constrained environments where timely specialist consultation is not available.
+The challenge of LLM risk estimation motivates a structured treatment of risk forecasting and survival modeling from unstructured narrative sources.
+
+Among textual sources, retrospective case reports serve as a rich training ground for developing temporally-aware AI systems that can eventually be deployed on real-time clinical notes. Case reports provide holistic accounts of clinical trajectories with explicit temporal reasoning—exactly the type of structured thinking needed for real-time clinical decision support. However, their narrative structure interleaves temporally unordered information, making them difficult to apply in forecasting tasks. Without identifying the time of occurrence for each event, models are prone to causal leakage—using information not available at the time of prediction. Solving this temporal reasoning challenge in case reports establishes the foundation for deployment in live clinical environments where such capabilities could improve patient outcomes.
+
+\begin{figure*}[!tbp] % 'r' for right, 'l' for left
+    \centering
+    \includegraphics[width=.95\linewidth]{AAAI_2026/Figures/annotation_ex.png} % Adjust width
+    \caption{Example case report (left) with timeline representations (middle) and text-ordered, (event, time) tuples (right).}
+    \label{fig:annotation_ex}
+    % \vspace{-5mm}
+\end{figure*}
+
+One might ask whether large pretrained language models can already perform forecasting from clinical narratives, given their exposure to biomedical texts~\citep{peng2020empirical,weber2024redpajama}. However, these models have architectural limitations for temporal reasoning tasks. Encoder-based models apply random masking that rarely yields temporally coherent representations, while decoder-style models mask text in linear sequence, modeling events in text order rather than time order. 
+Our experiments make these limitations explicit. For instance, on the timeline in Figure \ref{fig:annotation_ex}, the chance of recovering a valid time-ordered mask is below $0.002\%$, and decoder models show low temporal concordance (e.g., $c=0.23$). Without a task-specific restructuring, such factors lead to suboptimal forecasting performance.
+% Our experiments demonstrate these limitations quantitatively---for example, using the timeline in Figure~\ref{fig:annotation_ex}, the probability of recovering a valid time-ordered mask is $<0.002\%$, and decoder models achieve low temporal concordance (e.g., $c=0.23$), leading to suboptimal forecasting accuracy without task-specific restructuring.
+
+To address these temporal reasoning challenges, we develop a forecasting framework that
+%similar to \citet{noroozizadeh2025reconstructing}
+transforms free-text narratives into textual time series---sequences of (event, time) tuples---and makes explicit the temporal structure of patient trajectories. Building on recent annotation work~\citep{wang2025large,noroozizadeh2025pmoa}, we propose a hybrid pipeline combining rule-based heuristics and LLM-assisted extraction to recover temporally localized clinical findings, validated on real clinical notes with expert verification.
+
+Our work builds on extensive research in clinical NLP and temporal reasoning~\citep{kohane1987temporal, leeuwenberg2020towards, cheng2023typed}, but shifts the emphasis from extraction to downstream clinical forecasting. While prior efforts have focused on entity recognition and temporal relation extraction \citep{zhou2007temporal, uzuner20112010, sun2013evaluating}, few have systematically assessed how such representations influence downstream tasks such as risk prediction and survival modeling. We bridge this gap by formalizing textual time series representations and evaluating their effectiveness for temporally grounded clinical prediction.
+
+We empirically assess this framework across multiple tasks and modeling strategies, benchmarking encoder and decoder models—both fine-tuned and prompted versions—on three forecasting tasks: event prediction, survival analysis, and temporal ordering of future clinical events. Our results show no single model dominates across all tasks, highlighting the importance of aligning model architecture with forecasting objectives. We further examine how input ordering (time vs. narrative) impacts generalization and analyze the sensitivity of models to missing historical context through systematic masking experiments.
+
+% \textbf{Contributions.} 
+In summary, this paper makes the following contributions:
+
+(i) \textbf{Annotation and Extraction Pipeline:} Building on prior methods for extracting information from the PubMed Open Access corpus \cite{noroozizadeh2025reconstructing}, this work introduces a pipeline that transforms case reports into textual time series via regular expression filtering and LLM-assisted extraction, yielding temporally anchored (event, time) tuples while minimizing causal leakage by restricting input to past events;
+\mbox{(ii) \textbf{Comprehensive Model Comparison:}} 
+    We conduct a comprehensive evaluation of encoder- and instruction-tuned decoder-based models—using both fine-tuned MLP heads and prompting—across event prediction, temporal ordering, and survival analysis tasks. Results show no single model excels universally, underscoring the need to align model choice with the specific forecasting objective;
+\mbox{(iii) \textbf{Temporal- versus Text- Ordering:}}
+    We investigate the impact of annotation order by comparing training on time-ordered versus text-ordered data. Results show that preserving the narrative's natural order can improve generalization to external datasets, while time-based ordering can enhance ranking performance;
+    %in certain settings.
+\mbox{(iv) \textbf{Sensitivity Analysis of Temporal Masking:}}
+    We conduct systematic dropout experiments by randomly masking parts of the clinical history to assess their impact on forecasting and event ordering. While higher masking levels reduce classification performance (F1), the concordance index remains largely stable, highlighting differing sensitivities of binary prediction and ranking tasks to historical context in textual time series;
+(v) \textbf{Methodological Framework for Temporal Clinical Forecasting:} Our approach demonstrates how narrative clinical texts can be systematically converted into structured temporal representations for forecasting tasks, providing a replicable methodology that could be adapted to other clinical and non-clinical text sources. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Related Work %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+
+\paragraph{Temporal Information Extraction from Clinical Text:}
+Extracting timelines from clinical narratives is a challenging biomedical NLP task. The i2b2 2012 challenge introduced annotated datasets for temporal relation extraction from discharge summaries \citep{uzuner20112010}. Subsequent methods linked clinical events to timestamps or temporal expressions \citep{leeuwenberg2020towards, frattallone2024using}, typically assuming pre-defined event spans. We adopt our prior approach \citep{noroozizadeh2025reconstructing, noroozizadeh2025pmoa} to assign timepoints to findings from full-length case reports, enabling finer temporal resolution. Unlike methods using structured EHR data, we focus solely on text—crucial for sources like PubMed that lack structured metadata. By directly supervising event-time alignment, we overcome limitations of span-based annotations~\citep{rosenbloom2011data}. This aligns with growing emphasis on temporality in sepsis and critical care phenotyping \citep{johnson2018comparative, kamran2024evaluation}, particularly given high missingness rates in structured data \citep{johnson2023mimic,seinen2025using}.
+
+\paragraph{Predictive Modeling with Clinical Text:}
+Clinical text has been used for outcome prediction tasks like mortality and readmission, with models like \textit{ClinicalBERT} achieving high levels of performance on EHR notes \citep{huang2019clinicalbert, gu2021domain}. 
+Text captures complementary information—symptoms and social factors—not found in structured codes. 
+However, traditional approaches using full-text or bag-of-words representations obscure temporal dynamics. 
+Our approach preserves event order within narratives, treating data as time series. This aligns with recent efforts adapting LLMs for time series tasks, such as Time-LLM mapping numeric sequences to tokens \citep{jin2023time}. 
+To our knowledge, this is the first work to forecast from LLM-derived time series in clinical domains. 
+While prior sepsis prediction models rely on vitals or scores like SOFA and SAPS \citep{hou2020predicting, noroozizadeh2023temporal}, our method is complementary—leveraging narrative descriptions that include clinician interpretations and context. 
+This is valuable when case reports or patient histories are available but structured data is sparse or unavailable.
+
+\paragraph{Large Language Models in Healthcare:}
+Recent LLMs such as \texttt{GPT-3} and \texttt{GPT-4} have enabled applications from medical QA to note summarization. These models encode substantial medical knowledge and reasoning capacity—\texttt{GPT-4} demonstrates strong performance on board exams and can support patient record abstraction for quality reporting \citep{boussina2024large}. However, their use in clinical forecasting remains largely unexplored.
+% Out-of-the-box LLMs may hallucinate and lack domain-specific tuning.
+Our benchmark tests LLMs via zero- and few-shot prompting to assess clinical event forecasting from patient narratives, comparing results to fine-tuned models to quantify the gap between general-purpose and task-specific modeling. This contributes evidence that while LLMs hold broad medical knowledge, fine-tuning and structured inputs are often required for clinical reliability \citep{huang2019clinicalbert, gu2021domain}. Some studies suggest domain-specific tuning does not always improve over foundation models \citep{jeong2024medical}, reinforcing the need for task-specific evaluations like ours.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Methods %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods\footnote{Our code can be found at: \url{https://github.com/Shahriarnz14/Textual-Time-Series-Forecasting}.\\
+\hspace*{1.8em}The extended version of this paper, including the full technical appendix, is available in \citet{noroozizadeh2025forecasting}.}}
+
+We next describe our dataset construction and annotation pipeline, define the forecasting and survival prediction tasks, detail the modeling approaches evaluated, and present the sensitivity analyses used to assess robustness (Figure~\ref{fig:flowchart}). 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{AAAI_2026/Figures/ttsforecast_flowchart_updated.pdf}
+    \caption{\textit{T2S2} forecasting analysis pipeline}
+    \label{fig:flowchart}
+    % \vspace{-5mm}
+\end{figure}
+
+\subsection{Dataset Extraction}
+We used the PubMed Open Access (PMOA) Subset (as of April 25, 2024) for our analysis. Following prior work \cite{wang2025large}, we extracted the body of each case by selecting the text between the \texttt{==== Body} and \texttt{==== Ref} delimiters in the PMOA corpus. To maintain relevance, we included only documents with case-insensitive matches to \texttt{(case report|case presenta)} and \texttt{year-? ?old}, an approach shown to be more specific than relying on PubMed metadata \cite{noroozizadeh2025reconstructing}.
+% We utilized the PubMed Open Access (PMOA) Subset (as of April 25, 2024) for our analysis. Building on the method described in prior work \cite{wang2025large}, the body of each case was extracted by selecting the text between the markers \texttt{==== Body} and \texttt{==== Ref}, which serve as section delimiters in the PMOA corpus. To maintain relevance, we include only documents containing case-insensitive matches to \texttt{(case report|case presenta)} and \texttt{year-? ?old}, an approach shown to have higher specificity than PubMed metadata \cite{noroozizadeh2025reconstructing}.
+
+
+Additional filtering was applied to identify potential sepsis-related case reports using the regular expressions \texttt{sepsi|\allowbreak septic} and \texttt{critical|intensive} care. We then used LLM-based queries to extract key attributes, including sepsis diagnosis, patient count, age, and gender. For this step, both \texttt{GPT-4o} and \texttt{Llama-3.1-8B-Instruct} were employed. Reports describing more than one case were excluded. A case report was retained if either model classified it as involving a Sepsis-3 diagnosis.
+
+This multi-step process yielded a total of 2319 Sepsis-3 case reports. From this set, we randomly selected two subsets for evaluation: a group of 10 reports (\textit{sepsis-10}), which underwent expert clinical annotation to serve as a gold standard, and a larger group of 100 reports (\textit{sepsis-100}) as a bronze standard for broader testing based on an alternative annotator (\texttt{O1-preview}; Figure \ref{fig:flowchart}). %We split this data into training (n = ), validation (256), and test (244) sets.
+
+\subsection{Textual Time Series Annotation}
+\label{sec:tts-annotation}
+
+Following \citeauthor{noroozizadeh2025reconstructing} \citeyearpar{noroozizadeh2025reconstructing}, a textual time series case report corpus of Sepsis-3 patients was constructed from the PMOA sepsis reports. A textual time series refers to a sequence of clinical findings, each paired with a timestamp (either absolute or relative to the case presentation time), corresponding to an individual patient. Here, a clinical finding is defined as a free-text expression describing an entity that pertains to or may impact a person's health.
+
+A textual time series differs from conventional approaches to clinical concept annotation (e.g., \cite{sun2013evaluating,uzuner20112010}) in its extension of the text span to better capture the specificity and contextual meaning of each clinical finding. In our work, the interpretation of a clinical finding differs from the i2b2 concept guidelines in the following respects: (1) Clinical findings are not restricted to single prepositional phrases following a markable entity. For instance, instead of splitting “pain in chest that radiates substernally” into less informative parts, we retain the full phrase as a single, complete finding to preserve its meaning and context. (2) To improve clarity, compound phrases are broken into individual findings. For example, “metastases in the liver and pancreas” becomes “metastasis in the liver” and “metastasis in the pancreas.”
+
+We used \texttt{DeepSeek-R1-UD-IQ1} and \texttt{Llama-3.3-70B-Instruct} models to generate clinical textual time series from the 2319 sepsis case reports. We refer to this as \textbf{T}extual \textbf{T}ime-\textbf{S}eries for \textbf{S}epsis (\textit{T2S2}).
+Details on the quality evaluation of LLM-extracted temporal annotations and the prompts used for extraction are provided in Appendix~\ref{apd:tts_validity} and~\ref{TTS_prompt}, respectively.
+Our dataset was split into training (n = 1,795; 80\% train, 20\% validation), testing \textit{T2S2}-test (n = 244), and two external validation sets: \textit{sepsis-10} (n = 10) and \textit{sepsis-100} (n = 90).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Forecasting Tasks}
+Using the timelines extracted from the annotations, we defined two primary forecasting tasks and a survival analysis task as follows:
+
+\paragraph{Event Occurrence Prediction.} 
+Given a prefix of the clinical timeline (all events up to a certain time $t$), the model is tasked with predicting whether each of the immediate next $k$ events occurs within a specified time horizon. 
+This setup is repeated across multiple time cut-offs to simulate an “online” forecasting scenario, where the model must output a binary label for each of the next $k$ events:
+does this event occur within $h$ hours after $t$? 
+Time horizons used include 1 hour, 24 hours (1 day), and 168 hours (1 week). 
+The task is framed as a series of binary classification problems, with one binary decision per event. 
+Evaluation is based on precision, recall, and F1 score, averaged across event positions for each time horizon.
+
+\paragraph{Temporal Ordering Prediction.} 
+This task assesses the model's ability to reconstruct the correct sequence of future events. 
+At each time cut-off $t$, we extract the next $k$ events from the timeline and remove their timestamps. 
+The model must output a permutation of these events that matches their true chronological order.
+This is framed as a ranking task, evaluated by computing the pairwise concordance between the predicted and true orderings (e.g., proportion of correctly ordered pairs). 
+This tests whether the model can infer temporal progression from unordered event content alone.
+
+\paragraph{Survival Analysis for Mortality Time.}  
+We include a classical survival analysis task to model time until death. 
+Many case reports specify whether the patient died and, if so, when (e.g., "the patient died on hospital day 10"), which enables us to define a time-to-event outcome. 
+For this task, we evaluate models at predefined cut-off times--- specifically at 0 hours (admission), 24 hours (1 day), and 168 hours (1 week)--- and use the extracted event history up to each cut-off as input. 
+A survival model is trained to predict the probability of survival over time beyond each cut-off. 
+We evaluate using the time-dependent concordance to measure alignment of the predicted survival times with actual outcomes.
+
+% \vspace{-.5em}
+\subsection{Modeling Approaches}
+% \vspace{-.25em}
+To evaluate performance on the event forecasting and survival prediction tasks, we implement five modeling paradigms: (i) decoder-only large language models (LLMs) with fine-tuned heads, (ii) prompted LLMs without gradient updates (zero- or few-shot), (iii) encoder-only models with task-specific fine-tuned heads, (iv) encoder-masking models with fine-tuning, and (v) encoder-masking models in zero-shot settings. In Appendix~\ref{apd:encoder-forecasting} and~\ref{apd:encoder-survival}, we provide technical details of encoder-based forecasting methods and the survival modeling framework respectively.
+
+\paragraph{(i) Fine-tuned LLMs.}  
+We apply instruction-tuned decoder-only models from the \textit{Llama} and \textit{DeepSeek} families: \textit{Llama-3.3-70B-Instruct}, \textit{Llama-3.1-8B-Instruct}, and their distilled variants \citep{grattafiori2024llama, liu2024deepseek}. We also include open-source models with documented training corpora (\textit{OLMO-32B-Instruct} \citep{olmo20242}, \textit{RedPajama-INCITE-7B-Instruct} \citep{weber2024redpajama}) to address potential data leakage concerns---notably, RedPajama explicitly excludes PubMed from its training data. Additionally, we evaluate a medically fine-tuned decoder model (\textit{MediPhi-PubMed} \citep{corbeil2025modular}) to assess domain-specific benefits.
+
+Each model is paired with a lightweight multilayer perceptron (MLP) head trained for classification or ranking, depending on the task. 
+The input consists of a text-formatted prefix of events (e.g., a clinical timeline up to time $t$), optionally accompanied by an instruction template. 
+The output layer produces task-specific predictions: binary labels for event occurrence or a permutation over $k$ events for ordering. 
+Training is conducted using cross-entropy loss for classification and pairwise ranking loss for ordering.
+
+\paragraph{(ii) Prompted LLMs.}  
+In the zero- or few-shot setting, we use the same LLM architectures as above, but without any fine-tuning. 
+Instead, we supply structured prompts at inference time to guide the model toward task-specific outputs. 
+Each prompt includes: 
+(1) a system instruction establishing the model’s role (e.g., "You are an expert physician."), 
+(2) a user instruction describing the prediction task, and 
+(3) one or more input-output examples in a few-shot format.
+Prompt designs are customized for each task and are detailed in Appendix~\ref{apd:prompts}. Model outputs are parsed to extract binary labels or ordered lists, and errors in generation or ambiguity are excluded from evaluation.
+
+\paragraph{(iii) Fine-tuned Encoder-Only Models.}  
+We also evaluate a range of encoder-based models trained end-to-end on each task. 
+Architectures include general-purpose models (\textit{BERT-base-uncased} \citep{devlin2019bert}, \textit{RoBERTa-base} \citep{liu2019roberta}, \textit{DeBERTa-v3-small} \citep{he2021debertav3}, \textit{ModernBERT-base/large} \citep{warner2024smarter}) and biomedically-pretrained variants (\textit{BioClinical-ModernBERT-base/large} \citep{sounack2025bioclinical}).
+For each model, we append a task-specific MLP head for event occurrence or ordering prediction. 
+The model input is the same flattened prefix of the event sequence used in other settings, tokenized and formatted according to the respective architecture. 
+These models are trained using standard supervised learning objectives and evaluated on the same metrics as other methods: F1 score for event occurrence, and pairwise concordance for temporal ordering. 
+For survival analysis, the final hidden states are passed into a time-to-event prediction head and evaluated using the time-dependent concordance index \citep{antolini2005time}.
+
+\paragraph{(iv, v) Encoder-Masking Models.}
+We adapt masked language modeling (MLM) for our temporal reasoning tasks. For event occurrence, models predict masked tokens (``\texttt{yes}''/``\texttt{no}'') in prompts such as ``Will [event] happen within 24 hours? \texttt{[MASK]}''. For temporal ordering, models predict ``\texttt{before}''/``\texttt{after}'' tokens in prompts comparing event pairs. We evaluate both fine-tuned variants (trained on task-specific objectives) and zero-shot variants (using pretrained MLM capabilities without additional training). This approach leverages the bidirectional context of encoder models while maintaining interpretable predictions through constrained vocabulary.
+
+% \vspace{-.5em}
+\subsection{Sensitivity Analyses}
+% \vspace{-.25em}
+We conduct sensitivity analyses to examine how the temporal structure and completeness of input sequences affect forecasting performance. These analyses probe the robustness of models to changes in event ordering and to varying levels of missing historical information.
+
+\paragraph{Time-ordering Strategies.} We evaluate two strategies for ordering clinical events within textual time series inputs. In the \emph{text-ordered} setting, events are presented in the order they appear in the original case report narratives, preserving the narrative structure produced during extraction. In the \emph{time-ordered} setting, events are sorted chronologically by their documented occurrence time, enforcing strict temporal alignment. This comparison isolates the effect of narrative sequencing versus explicit temporal ordering on model performance. For text-ordered inputs, to prevent causal leakage, events occurring after the forecast cutoff time $t$ are masked for encoder-based models and omitted for decoder models.
+
+\paragraph{Timestep Dropout.} To assess robustness to incomplete patient histories, we introduce a \emph{timestep dropout rate} (TDR), defined as the proportion of input timesteps randomly removed prior to inference. This procedure simulates varying degrees of missing clinical documentation that may arise in deployment settings. We vary TDR from 0\% (full history) to 90\% (severely truncated history) in increments, masking events independently and uniformly at random. This setup enables controlled evaluation of model performance under partial information, probing the extent to which predictive accuracy and event ordering depend on the completeness of historical context.
+
+\input{AAAI_2026/Tables/clean_forecasting_DS_L33_combined}
+
+% Together, these analyses characterize model robustness to disruptions in temporal coherence and input completeness -- two key challenges in real-world deployment scenarios.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Results %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \input{AAAI_2026/Tables/clean_forecasting_DS}
+\section{Results}
+
+In this section, we present results for our three main evaluation settings: event forecast within a subsequent time window, temporal ordering of forecasted events, and survival analysis. We provide sensitivity analyses on the forecasting tasks, examining the effects of temporal ordering and historical context availability in Appendix~\ref{apd:sensitivity_analyses}~and~\ref{apd:masking_l33_dsr1}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{-.5em}
+\subsection{Forecasting Tasks}
+% \vspace{-0.2em}
+\paragraph{Event forecast within next 24 hours: F1 performance.}
+
+Our results show that encoder-based models outperform decoder-based LLMs in event forecasting across both \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} annotations (Table~\ref{tab:forecasting_clean_combined}).
+Forecasting performance across all models is shown in Tables \ref{tab:DS_forecasting} and \ref{tab:L33_forecasting} (Appendix~\ref{apd:full_tables}).
+Encoder models, especially those with a fine-tuned MLP head, achieve substantially higher F1 scores than decoder LLMs, reinforcing the effectiveness of encoder-based representations for forecasting.
+
+%\input{AAAI_2026/Tables/clean_forecasting_DS}
+% \input{AAAI_2026/Tables/clean_forecasting_L33}
+Among decoders, we observe varied performance patterns. \textit{RedPajama-INCITE-7B-Instruct}, whose training excludes PubMed, achieves 0.352 F1 at 24h---better than some decoder models like \textit{MediPhi-PubMed} (0.268) and within the typical decoder performance range, though below top performers like \textit{DeepSeek-Llama-3.3-70B} (0.482). \textit{OLMO-32B-Instruct} performs competitively (0.411), suggesting that open models without biomedical pretraining can still achieve strong temporal forecasting results.
+
+Among encoder models, both general-purpose and biomedically-pretrained variants show strong performance. While \textit{ModernBERT-base} achieves slightly higher F1 scores on internal test sets (0.576 vs 0.559), \textit{BioClinical-ModernBERT-base} demonstrates superior concordance (0.677 vs 0.646 for \textit{DeepSeek-R1}) and notably better generalization to external datasets, with F1 scores of 0.635 and 0.662 on \textit{sepsis-100} compared to 0.607 and 0.626 for the general-purpose variant. This suggests that while both \textit{ModernBERT} architectures are effective, biomedical pretraining particularly enhances temporal reasoning and cross-dataset generalization.
+
+Different training strategies yield distinct performance patterns. The MLP head fine-tuning approach consistently outperforms both fine-tuned masking and zero-shot masking models, particularly in long-horizon forecasting. While \textit{ModernBERT-base} achieves strong F1 scores, \textit{BioClinical-ModernBERT-base} demonstrates the best overall performance when considering both accuracy and generalization. Zero-shot masking models, particularly standard \textit{BERT} and \textit{RoBERTa}, fail to make meaningful predictions at the 1-hour mark. However, \textit{ModernBERT} variants exhibit relatively better zero-shot performance, with \textit{BioClinical-ModernBERT-base} achieving notably higher scores in zero-shot settings (0.246 F1 at 1h), indicating that biomedical pretraining improves out-of-the-box temporal reasoning.
+
+Performance trends remain consistent across forecasting windows. F1 scores improve as the window increases, with 1-hour predictions being most challenging and 168-hour predictions yielding highest scores. Models perform worse on external validation sets than internal \textit{T2S2} test sets, though \textit{BioClinical-ModernBERT} models show the smallest performance degradation, maintaining their advantage in cross-dataset generalization.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Temporal ordering of forecasted events: concordance.}
+
+Encoder models consistently outperform decoders in correctly ranking the order of upcoming events, as measured by concordance (c-index; Table \ref{tab:forecasting_clean_combined}; complete results in Tables~\ref{tab:DS_forecasting} and~\ref{tab:L33_forecasting} for \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} annotations, respectively, with full details in Appendix~\ref{apd:full_tables}. Decoder models with potential biomedical exposure achieve modest concordance (0.618-0.632), while \textit{RedPajama-INCITE-7B-Instruct} without PubMed data in its training corpus performs similarly, suggesting domain-specific knowledge is less critical here than for event prediction. The comparable performance of \textit{RedPajama-INCITE-7B-Instruct} to other general models (with access to PubMed in their pretraining) also provides evidence that the \textit{T2S2} prediction task is distinct from raw PubMed text and assuages causal leakage concerns.
+
+Biomedical pretraining in encoders demonstrates clear advantages, with \textit{BioClinical-ModernBERT-base} achieving the highest concordance (0.677 with an MLP head, 0.676 with fine-tuned masking) and strong performance across datasets. MLP-head training yields superior F1 scores, while fine-tuned masking excels in concordance. \textit{BioClinical-ModernBERT-base} also generalizes well to external datasets (c-index \textgreater0.60), suggesting that biomedical pretraining provides stability in temporal reasoning under dataset shifts.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Survival analysis: model performance across timepoints and cohorts.}
+Tables~\ref{tab:concordance_t2s2_only} and~\ref{tab:concordance_wide} (Appendix~\ref{apd:full_survival}) show time-dependent concordance results where 
+instruction-tuned decoder models clearly outperform encoder-based models. This pattern contrasts with the forecasting tasks (Table~\ref{tab:forecasting_clean_combined}), where encoders excelled. Across both the \textit{T2S2} and \textit{sepsis-100} cohorts, decoder models consistently achieve the strongest results. Notably, \textit{RedPajama-INCITE-7B-Instruct} attains the highest concordance overall (0.76 at 168h, \textit{sepsis-100}) despite lacking any biomedical text in pretraining, while larger models such as \textit{DeepSeek-R1-Llama-70B} and \textit{OLMO-32B-Instruct} also perform robustly. Encoder models---including biomedically fine-tuned variants like \textit{BioClinical-ModernBERT-base}, which is competitive on \textit{sepsis-100} but not on \textit{T2S2}---are generally surpassed by decoder models.
+% Table~\ref{tab:concordance_wide} presents time-dependent concordance across evaluation cohorts (\textit{T2S2}, \textit{sepsis-10}, \textit{sepsis-100}) at multiple observation windows (0h, 24h, 168h), selecting models based on validation concordance. General models, such as \textit{RedPajama-INCITE-7B-Instruct}, show strong survival prediction capabilities even without biomedical exposure (0.76 concordance at 168h, sepsis-100). Meanwhile, biomedical encoders like \textit{BioClinical-ModernBERT-base} consistently perform well, particularly early (0h).
+
+Predictive performance does not universally improve with more observation time. Models evaluated on the \textit{T2S2} cohort, often peak at earlier windows (0h or 24h) rather than at 168h. Meanwhile, the \textit{sepsis-10} cohort experiences clear ceiling effects, with many models achieving perfect concordance (1.00). These results suggest that, unlike the forecasting tasks, survival prediction in our dataset benefits more from the capabilities inherent in large decoder models than from domain-specific pretrained encoders.
+
+% Predictive performance does not universally improve with more observation time. \textit{T2S2} cohort models often peak at earlier windows, while \textit{sepsis-10} experiences ceiling effects. Instruction-tuned decoders excel overall, yet biomedical encoders remain competitive, particularly at admission (0h). Survival prediction thus benefits from both larger decoder models and domain-specific pretraining, each excelling in different temporal contexts.
+
+\input{AAAI_2026/Tables/survival_table}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \vspace{-0.5em}
+% \subsection{Sensitivity analysis}
+% % \vspace{-0.2em}
+% \paragraph{Time-Ordered versus Text-Ordered Training.}
+
+% Table \ref{tab:dsr1q_l33_comparison} shows time-ordering generally improves concordance, particularly for \textit{DeepSeek-R1} annotations, while F1 scores show mixed results. Text-ordering sometimes yields better external dataset performance with \textit{Llama-3.3-70B}, suggesting that preserving the narrative sequence can support accurate classification even when it does not follow temporal order.  These results highlight a trade-off between temporal alignment and narrative coherence for different tasks.
+
+% \input{AAAI_2026/Tables/tab_textord_vs_timeord}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \paragraph{Impact of timestep dropout on F1 and concordance.}
+% Tables~\ref{tab:masking_effects_DS} and~\ref{tab:masking_effects_llama} (Appendix~\ref{apd:masking_l33}) report the effect of timestep dropout on classification and ranking performance. F1 scores decrease monotonically with increasing TDR, with relatively mild degradation up to 30–60\% dropout and sharper declines thereafter. For example, in the \textit{DeepSeek-R1} annotations, T2S2/sepsis-10/sepsis-100 drop from 0.576/0.428/0.607 at TDR = 0\% to 0.423/0.200/0.510 at TDR = 90\%, with sepsis-10 showing the largest relative decline. In contrast, concordance (c-index) remains stable across dropout levels (0.661–0.678), indicating that ranking-based evaluations are less sensitive to history truncation. These trends are consistent for \textit{Llama-3.3} annotations (Appendix~\ref{apd:masking_l33}), suggesting that ranking objectives capture temporal relationships that are more robust to missing historical information than binary classification accuracy of predicting whether an event happens within a time window.
+
+% \begin{table}[t]
+%     \centering
+%     \resizebox{\linewidth}{!}{
+%     \begin{tabular}{lcccccc}
+%         \toprule
+%         \textbf{Timestep drop rate} & F1(1d) & c-index & F1(1d)-10 & c10 & F1(1d)-100 & c100 \\
+%         \hline
+%         0\%  & 0.576 & 0.672 & 0.428 & 0.576 & 0.607 & 0.613 \\
+%         15\% & 0.572 & 0.667 & 0.415 & 0.564 & 0.604 & 0.616 \\
+%         30\% & 0.548 & 0.672 & 0.357 & 0.542 & 0.591 & 0.619 \\
+%         60\% & 0.542 & 0.678 & 0.310 & 0.578 & 0.588 & 0.616 \\
+%         90\% & 0.423 & 0.661 & 0.200 & 0.561 & 0.510 & 0.614 \\
+%         \bottomrule
+%     \end{tabular}
+%     }
+%     \caption{Effect of Randomly Masking History (\textit{DeepSeek-R1} annotations) on F1 and Concordance.
+%     % \vspace{-0.75em}
+%     }
+%     \label{tab:masking_effects_DS}
+%     % \vspace{-1.5em}
+% \end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Discussion and Conclusion%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion and Conclusion}
+
+Our findings highlight the superiority of encoder-based models over decoder-based LLMs for event forecasting, emphasizing the limitations of autoregressive models in structured prediction tasks. Among encoder models, \textit{BioClinical-ModernBERT-base} consistently performs best, achieving superior concordance (0.677 vs 0.646) and better external generalization despite slightly lower internal F1 scores than general-purpose \textit{ModernBERT-base}. MLP-head fine-tuning excels in F1 scores while fine-tuned masking models achieve higher concordance, particularly in long-term forecasting. This suggests that classification and ranking tasks benefit from distinct optimization strategies.
+
+The consistent advantage of biomedically-pretrained models across tasks deserves special attention. While general-purpose models achieve strong internal performance, biomedical pretraining provides crucial benefits for real-world deployment: \textit{BioClinical-ModernBERT} variants show the smallest performance degradation on external datasets and maintain higher zero-shot capabilities (0.246 F1 at 1h vs near-zero for standard \textit{BERT}/\textit{RoBERTa}). This suggests that domain-specific pretraining enhances not just accuracy but also robustness and generalization—critical factors when considering clinical deployment where distribution shifts are common.
+
+The gradual improvement of F1 scores over longer time horizons indicates that event patterns become more predictable over time, whereas short-term forecasting remains challenging due to higher variability. Performance drops on external validation datasets highlight generalization challenges, though \textit{ModernBERT} models exhibit relative robustness. For survival analysis, instruction-tuned LLMs like \textit{Llama-3.3-70B-Instruct} outperform traditional transformer baselines, with several models achieving peak concordance at early timepoints rather than with extended observation.
+
+Our sensitivity analysis reveals several trade-offs: time-ordered training generally improves concordance while text-ordering can yield better F1 scores on externally-annotated datasets. Robustness experiments show F1 scores degrade significantly beyond 60\% timestep dropout, while concordance remains stable, indicating event ranking is less sensitive to partial history than event classification. 
+
+Additional insights into the forecasting results are presented in Appendix~\ref{apd:additional_insights}. Specifically, we summarize two observations that clarify model behavior and apparent anomalies: (i) why decoders fare better on survival but not short-horizon forecasting, and (ii) interpreting very low $F_{1}$ scores and external validation drops.
+
+\textbf{Methodological Contributions and Potential Impact.} Our framework demonstrates how narrative clinical texts can be systematically converted into structured temporal representations for forecasting tasks. The ability to extract temporally structured insights from unstructured clinical text could potentially support clinical decision-making, particularly in settings with limited structured data or specialized expertise. 
+
+Importantly, while consumers frequently consult LLMs about health risk via prompting in chats, this study demonstrates that the prompting approach performs substantially worse in risk prediction than alternative approaches, at least with respect to precision/recall/F1, with prompted LLMs achieving at best 0.460 F1 at 24h compared to 0.653 for fine-tuned encoders.
+Our study highlights several alternative approaches and characterizes their relative performance strengths and weaknesses.
+In addition, our finding that concordance remains stable with 60\% missing context suggests robustness to incomplete documentation scenarios, which highlights the degradation pattern in performance as it relates to context availability. 
+
+Our approach also demonstrates that our language model systems can reliably capture the temporal reasoning that clinicians use in practice based on their clinical documentation. However, additional work would be required to validate performance on real-time clinical data and demonstrate measurable impact on patient outcomes in deployment. Further discussion on societal impact of our work is in Appendix \ref{apd:broader_impact}.
+
+\textbf{Limitations and Future Directions.} 
+Our study has important limitations to consider. First, our pipeline relies on case reports from the PubMed Open Access (PMOA) corpus. Because these reports often highlight rare or atypical presentations and differ from routine clinical notes (e.g., progress notes, discharge summaries), generalizability to real-world health-system text may be limited. However, case reports provide rich, temporally structured narratives with explicit clinical rationale, making them well suited for evaluating model performance under sparse documentation. Accordingly, we present a general framework for textual time series forecasting that uses case reports as an interpretable, temporally rich foundation for method development, with extensions to real-world corpora such as MIMIC discharge summaries. See Appendix~\ref{apd:beyond_pmoa} for a detailed discussion on the generalizability of our pipeline beyond case report details, as well as comparisons with other clinical sources.
+
+Second, while we focused on sepsis due to its clinical relevance and prevalence in case reports, our framework is fundamentally disease-agnostic. Preliminary results from over 125K PMOA case reports across various diagnostic conditions show promising generalization, with future work planned on broader diagnostic categories and real-world corpora such as MIMIC-IV discharge summaries.
+
+Finally, despite mitigation steps (timestamp extraction, temporal masking, external test sets), pretrained language models may still have been exposed to PMOA content. Although they were not trained on our derived \emph{(event, time)} sequences or temporally reordered data, the original narratives could appear in pretraining. Our pipeline applies temporal reordering and masking of future events beyond the prediction cutoff, enforcing a causal structure absent from the originals and yielding a distinct setup that requires reasoning over partial, temporally grounded inputs. 
+% To assess any pretraining exposure, we include \textit{RedPajama-INCITE-7B-Instruct}, an open-source model with a documented PubMed-free corpus; its performance (0.352 F1 at 24h; concordance 0.618), comparable to decoders potentially exposed to PubMed, supports that the T2S2 task is sufficiently distinct from raw PMOA text and mitigates causal leakage concerns.
+While we included \textit{RedPajama-INCITE-7B-Instruct}, an open-source model with a documented PubMed-free corpus for pretraining, and saw its performance (0.352 F1 at 24h; concordance 0.618) was comparable to decoders potentially exposed to PubMed, other strategies supporting the argument that the \textit{T2S2} task is sufficiently distinct from raw PMOA text and mitigates causal leakage concerns could be examined.
+See Appendix~\ref{apd:open_source} for a detailed discussion of how open-source models mitigate potential data leakage, as well as additional forecasting results on 115 case reports published after the pretraining cutoffs of encoder-based models (post-2020).
+
+%Finally, our analysis is limited by the modest size of the high-cost manual annotations collected as a gold standard to calibrate and validate our LLM extraction pipeline. Expanding gold-standard validation across diverse diagnoses could assess the generalizability of our approach and aid in evaluating model robustness, and is a direction for future work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Acknowledgments}
+This research was supported in part by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health. This work utilized the computational resources of the NIH HPC Biowulf cluster. S.N. was supported by Carnegie Mellon University TCS Presidential Fellowship, and Natural Sciences and Engineering Research Council of Canada (NSERC) PGS-D award. S.N. was also supported in part by an appointment to the National Library of Medicine Research Participation Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health. ORISE is managed by ORAU under DOE contract number DE-SC0014664. All opinions expressed in this paper are the authors’ and do not necessarily reflect the policies and views of NIH, NLM, DOE, or ORAU/ORISE.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{AAAI_2026/CameraReady/LaTeX/aaai2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%\section{Supplementary Material}
+\include{AAAI_2026/CameraReady/LaTeX/appendix}
+
+\end{document}

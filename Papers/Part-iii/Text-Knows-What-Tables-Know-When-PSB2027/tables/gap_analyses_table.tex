@@ -1,0 +1,105 @@
+\begin{table}[!t]
+{
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\tbl{Structured-data gap analysis. Each text-derived event is compared with structured EHR counterparts from the same encounter.}
+{
+\begin{adjustbox}{max width=0.9\textwidth}
+\scriptsize
+\begin{tabular}
+{p{0.15\textwidth}p{0.65\textwidth}p{0.16\textwidth}}
+\hline
+\textbf{Category} & \textbf{Definition} & \textbf{Count (\%)} \\
+\hline
+Well captured 
+& Semantically adequate structured counterpart within the temporal window 
+& 2,827 (33.5\%) \\
+
+Complete absence 
+& No structured counterpart identified 
+& 2,963 (35.1\%) \\
+
+Temporal mismatch 
+& Semantically related structured row exists but occurs outside the temporal window 
+& 1,463 (17.3\%) \\
+
+Semantic distance 
+& Retrieved row is not clinically equivalent to the narrative event 
+& 801 (9.5\%) \\
+
+Detail gap 
+& Structured row omits clinically important attributes such as severity, laterality, duration, progression, or functional status 
+& 385 (4.6\%) \\
+\hline
+Total textual events & -- & 8,439 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+}
+\label{tab:gap_analysis}
+}
+\vspace{-1em}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{table}[!h]
+% \setlength{\tabcolsep}{3pt}
+% \renewcommand{\arraystretch}{1.08}
+% \tbl{Structured-data gap analysis. The left panel summarizes gap categories across text-derived events. The right panel lists representative examples among complete-absence events, illustrating that missing tabular content includes clinically meaningful symptoms, temporal patterns, severity descriptors, denials, and causal or procedural context.}
+% {
+% \begin{minipage}{\textwidth}
+% \footnotesize
+
+% \begin{minipage}[t]{0.40\textwidth}
+% \textbf{A. Gap-category distribution}
+
+% \vspace{2pt}
+% \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lc@{}}
+% \hline
+% \textbf{Category} & \textbf{Count (\%)} \\
+% \hline
+% Well captured      & \textcolor{blue}{2,827 (33.5\%)} \\
+% Complete absence   & \textcolor{blue}{2,963 (35.1\%)} \\
+% Temporal mismatch  & \textcolor{blue}{1,463 (17.3\%)} \\
+% Semantic distance  & \textcolor{blue}{801 (9.5\%)} \\
+% Detail gap         & \textcolor{blue}{385 (4.6\%)} \\
+% \hline
+% Total text-derived events & \textcolor{blue}{8,439} \\
+% \hline
+% \end{tabular*}
+% \end{minipage}
+% \hfill
+% \begin{minipage}[t]{0.56\textwidth}
+% \textbf{B. Examples of complete-absence events}
+
+% \vspace{2pt}
+% \begin{tabular}{@{}p{0.28\linewidth}p{0.68\linewidth}@{}}
+% \hline
+% \textbf{Type} & \textbf{Examples} \\
+% \hline
+% Symptoms 
+% & ``substernal chest pain for 1 day''; ``developed chest pain'' \\
+
+% Denials 
+% & ``no seizure-like activity''; ``no deformity''; ``no ecchymosis'' \\
+
+% Temporal patterns 
+% & ``pain resolved''; ``improving clots on LE'' \\
+
+% Severity descriptors 
+% & ``EF 55\%''; ``non-small cell lung cancer stage IIIA''; ``mild inferior wall hypokinesis'' \\
+
+% Causal/procedural context 
+% & ``intubated for several days after second surgery''; ``repair of leak from pouch'' \\
+% \hline
+% \end{tabular}
+% \end{minipage}
+
+% \end{minipage}
+% }
+% \label{tab:gap_analysis}
+% \end{table}
+
+

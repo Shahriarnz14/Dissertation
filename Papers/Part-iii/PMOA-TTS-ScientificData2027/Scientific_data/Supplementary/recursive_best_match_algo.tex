@@ -1,0 +1,40 @@
+% We provide pseudocode for the best match procedure between two lists of strings (Algorithm \ref{alg:recursive_match}).  For each list, we use the text order, \emph{i.e.}, the order of the events in the annotation files, to break embedding distance ties.  We use the cosine similarity for the distance calculation using sentence transformer embeddings from \texttt{S-PubMedBert-MS-MARCO}.
+
+\begin{algorithm}[ht]
+\caption{Recursive Best Match}
+\scriptsize
+\label{alg:recursive_match}
+\begin{algorithmic}[1]
+\Require Two lists: \texttt{ref} (manually annotated reference events) and \texttt{pred} (predicted events)
+\Ensure List of best-matching event pairs
+\Function{MatchEvents}{\texttt{ref}, \texttt{pred}}
+    \If{\texttt{ref} is empty \textbf{or} \texttt{pred} is empty}
+        \State \Return \texttt{[]}
+    \EndIf
+    \State $\texttt{min\_distance} \gets \infty$
+    \State $\texttt{best\_pair} \gets \texttt{None}$
+    \ForAll{$r \in \texttt{ref}$}
+        \ForAll{$p \in \texttt{pred}$}
+            \State $d \gets \texttt{ComputeDistance}(r, p)$
+            \If{$d < \texttt{min\_distance}$}
+                \State $\texttt{min\_distance} \gets d$
+                \State $\texttt{best\_pair} \gets (r, p)$
+            \ElsIf{$d = \texttt{min\_distance}$}
+                \State $(r^*, p^*) \gets \texttt{best\_pair}$
+                \State Get indices (within the annotation files) of $r$, $p$, and also of $r^*, p^*$
+                \If{index of $r <$ index of $r^*$}
+                    \State $\texttt{best\_pair} \gets (r, p)$
+                \ElsIf{index of $r = $ index of $r^*$ \textbf{and} index of $p <$ index of $p^*$}
+                    \State $\texttt{best\_pair} \gets (r, p)$
+                \EndIf
+            \EndIf
+        \EndFor
+    \EndFor
+    \State $(r^*,p^*) \gets \texttt{best\_pair}$
+    \State Remove $r^*$ from \texttt{ref}
+    \State Remove $p^*$ from \texttt{pred}
+    \State $\texttt{result} \gets \texttt{[best\_pair]} + \texttt{MatchEvents}(\texttt{ref}, \texttt{pred})$
+    \State \Return $\texttt{result}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

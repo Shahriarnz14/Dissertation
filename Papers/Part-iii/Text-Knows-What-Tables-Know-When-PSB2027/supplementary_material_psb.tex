@@ -1,0 +1,331 @@
+% Supplementary material for:
+% Text Knows What, Tables Know When: Clinical Timeline Reconstruction via
+% Retrieval-Augmented Multimodal Alignment
+%
+% This file is intended to be included near the end of the main manuscript,
+% before \end{document}, e.g.:
+%   \input{TTA_PSB_supplementary_material_final}
+%
+% Cross-reference labels are provided for every supplementary section and table.
+% Because the main manuscript already loads hyperref, a fully linked reference
+% that preserves the displayed naming can be written as, for example:
+%   \hyperref[supp:paired-bootstrap]{Supplementary Material \S~\ref*{supp:paired-bootstrap}}
+%   \hyperref[tab:supp-paired-bootstrap]{Supplementary Table~\ref*{tab:supp-paired-bootstrap}}
+
+\clearpage
+\begingroup
+
+% Independent supplementary counters preserve the exact S1, S2, ... naming
+% without changing the numbering of main-manuscript sections or tables.
+\newcounter{ttasuppsection}
+\renewcommand{\thettasuppsection}{S\arabic{ttasuppsection}}
+\newcounter{ttasupptable}
+\renewcommand{\thettasupptable}{S\arabic{ttasupptable}}
+
+\newcommand{\TTASuppSection}[2]{%
+  \par\vspace{0.8em}%
+  \refstepcounter{ttasuppsection}\label{#2}%
+  \noindent\textbf{\thettasuppsection. #1}\par\vspace{0.25em}%
+}
+
+\newcommand{\TTASuppTableCaption}[2]{%
+  \refstepcounter{ttasupptable}\label{#1}%
+  \noindent\textbf{Supplementary Table \thettasupptable.} #2\par\vspace{0.35em}%
+}
+
+\phantomsection\label{supp:material}
+\begin{center}
+{\LARGE\bfseries Supplementary Material}\par
+\vspace{0.35em}
+% {\bfseries Text Knows What, Tables Know When: Clinical Timeline Reconstruction via Retrieval-Augmented Multimodal Alignment}\par
+% \vspace{0.35em}
+% Sayantan Kumar *, Shahriar Noroozizadeh *, Juyong Kim *, and Jeremy C. Weiss
+\end{center}
+
+\vspace{0.5em}
+This supplement provides additional methodological details and analyses. Unless otherwise stated, analyses use the event-matching threshold of 0.1 and the event definitions and temporal metrics described in the main manuscript. Higher concordance and AULTC indicate better temporal performance. Calculations use unrounded values and displayed metric values are rounded to two decimal places.
+
+\TTASuppSection{Evaluation cohort and reference timeline construction}{supp:eval-cohort}
+\noindent
+The evaluation set contains 15 i2b2-derived discharge summaries and 25 MIMIC-IV discharge summaries. The i2b2-derived summaries were randomly sampled from eligible cases. The MIMIC-IV summaries were selected in two patient-level batches: for five randomly sampled patients, the first discharge summary was used; for 20 additional randomly sampled patients, one discharge summary was randomly selected. Each MIMIC-IV case therefore represents a distinct patient. Sampling was not conditioned on diagnosis, temporal richness, encounter complexity, or model performance. Eligibility required a discharge summary and structured EHR rows aligned to the same hospitalization; no additional clinical enrichment criteria were applied.
+
+Three clinically trained annotators created the reference timelines across the 40 cases. Each case was assigned to one annotator, who reviewed the discharge summary and structured EHR record aligned to the same hospitalization, identified standalone clinical events using the event definition in the main manuscript, and assigned each event a time in hours relative to admission or the case-specific reference time. Event identity and timestamp were annotated jointly. Each case was annotated once; therefore, there was no overlapping independent annotation set, formal adjudication, or inter-annotator agreement calculation.
+
+\TTASuppSection{Preserve-by-default calibration rule}{supp:calibration-rule}
+\noindent The same retrieval and calibration logic is used for anchor calibration and final full-timeline refinement. For each narrative-derived event, the calibration model receives the event, its initial text-derived time, the source narrative, and the top-k retrieved structured rows. Each row is provided as name $\mid$ value $\mid$ time $\mid$ similarity. Calibration proceeds as follows:
+\begin{enumerate}
+    \item Exclude retrieved rows that are not clinically relevant to the event.
+    \item If no clinically relevant row remains, retain the initial text-derived time.
+    \item If a relevant merged row contains multiple timestamps, use the narrative context to select the most plausible occurrence.
+    \item If relevant rows conflict, select the most clinically relevant and confident candidate.
+    \item Update the event time only when the selected evidence justifies a change; otherwise, preserve the initial time.
+\end{enumerate}
+Cosine similarity determines which rows are retrieved and their order, but it is not an automatic update criterion. The procedure returns one final timestamp per event and does not force every narrative event to align to a structured row.
+
+\TTASuppSection{Paired case-level bootstrap analysis}{supp:paired-bootstrap}
+\vspace{2mm}
+\noindent\textbf{Methods.} We compared multimodal and unimodal reconstruction using a paired case-level bootstrap with 10,000 resamples. In each replicate, the same 40 discharge-summary case IDs were sampled with replacement for both conditions. Event matching and all three evaluation metrics were recomputed within the sampled cases at threshold 0.1. For each metric, we recorded Delta = multimodal - unimodal and calculated the percentile 95\% confidence interval from the 10,000 paired differences. Resampling whole cases preserves dependence among events from the same discharge summary.
+
+\vspace{2mm}\noindent
+\textbf{Results.} The paired differences were generally small and model-dependent. No concordance confidence interval excluded zero. Event match rate decreased slightly for KimiK2-Instruct and increased slightly for Qwen3.5-397B-A17B; the unrounded intervals for these two changes excluded zero, although the displayed bounds round to 0.00. For AULTC, only DeepSeek V3.2 had a confidence interval entirely above zero. Qwen3.5-397B-A17B had a positive AULTC point estimate, but its interval included zero.
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\small
+\vspace{0.3em}
+\TTASuppTableCaption{tab:supp-paired-bootstrap}{Paired case-level bootstrap differences between multimodal and unimodal timeline reconstruction at event-matching threshold 0.1. Values are multimodal minus unimodal point estimates with paired bootstrap 95\% confidence intervals in brackets; positive values favor multimodal reconstruction.}
+\centering
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Model} & \textbf{Delta Event match rate} & \textbf{Delta Concordance} & \textbf{Delta AULTC} \\
+\midrule
+DeepSeek R1 & 0.00 [0.00, 0.00] & 0.00 [-0.02, 0.01] & 0.00 [0.00, 0.00] \\
+KimiK2-Instruct & \textbf{-0.01 [-0.01, 0.00]} & 0.00 [-0.07, 0.06] & 0.00 [-0.01, 0.01] \\
+GPT-OSS-120B & 0.00 [-0.01, 0.01] & 0.01 [-0.01, 0.03] & 0.01 [0.00, 0.03] \\
+DeepSeek V3.2 & 0.00 [0.00, 0.00] & 0.03 [-0.01, 0.08] & \textbf{0.06 [0.02, 0.13]} \\
+GLM5 & 0.00 [0.00, 0.01] & 0.01 [-0.02, 0.03] & 0.00 [-0.01, 0.01] \\
+Qwen3.5-397B-A17B & \textbf{0.02 [0.00, 0.05]} & 0.02 [0.00, 0.05] & 0.03 [0.00, 0.07] \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Each interval is based on 10,000 paired case-level bootstrap resamples. Bold indicates that the unrounded 95\% confidence interval excludes zero. A displayed bound of 0.00 may be slightly above or below zero before rounding. The paired analysis is the primary inferential comparison between modalities.
+\end{minipage}
+\end{minipage}\par\medskip
+
+\TTASuppSection{Characterization of matched and unmatched reference events}{supp:matched-unmatched}
+\vspace{2mm}
+\noindent
+\textbf{Methods.} We analyzed all 8,066 manually annotated reference events in the DeepSeek V3.2 multimodal match file. A reference event was classified as matched when a predicted counterpart was present and the semantic error rate was at most 0.1; events with a missing counterpart or error rate greater than 0.1 were classified as unmatched. Description length was counted using alphanumeric tokens. Temporal position was summarized among events with an available reference time: within 24 hours denotes an absolute time no greater than 24 hours from the case reference, and at least 7 days after denotes a reference time of at least +168 hours. An event was considered numerical when its reference-event text contained at least one digit. We also reviewed matched and unmatched event descriptions qualitatively. Temporal metrics were not calculated for unmatched events because they have no aligned predicted timestamp.
+
+\vspace{2mm}
+\noindent
+\textbf{Results.} Of the 8,066 reference events, 3,931 were matched and 4,135 were unmatched. Among unmatched events, 3,319 had no assigned predicted counterpart and 816 had a candidate counterpart with semantic error greater than 0.1. Both subsets had a median description length of three tokens. Matched events covered diverse clinical categories rather than only admission, discharge, or procedure anchors. Unmatched events were more often located at least seven days after the case reference time and more often contained a numerical value. Qualitative review identified recurring unmatched laboratory and imaging details, medication doses and discharge prescriptions, pertinent negatives, follow-up and functional or social details, and context-dependent fragments that were difficult to recover as standalone events.
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\small
+
+\TTASuppTableCaption{tab:supp-matched-unmatched}{
+Descriptive comparison of matched and unmatched reference events for DeepSeek V3.2
+at event-matching threshold 0.1.
+}
+
+\centering
+\begin{minipage}{0.99\linewidth}
+\centering
+
+\begin{tabular}{@{}p{0.62\linewidth}
+                >{\centering\arraybackslash}p{0.17\linewidth}
+                >{\centering\arraybackslash}p{0.17\linewidth}@{}}
+\toprule
+\textbf{Characteristic} &
+\textbf{Matched} &
+\textbf{Unmatched} \\
+\midrule
+Reference events, $n$ &
+3,931 &
+4,135 \\
+
+Description length, median [IQR] tokens &
+3 [2, 5] &
+3 [2, 6] \\
+
+Within 24 h of the case reference time &
+52.4\% &
+46.5\% \\
+
+At least 7 d after the case reference time &
+19.7\% &
+28.6\% \\
+
+Contains a numerical value &
+18.0\% &
+36.8\% \\
+\bottomrule
+\end{tabular}
+
+\par\vspace{0.3em}
+
+\footnotesize
+\raggedright
+\textit{Note:} Among unmatched events, 3,319 (80.3\%) had no assigned predicted
+counterpart and 816 (19.7\%) had a candidate counterpart with semantic error greater
+than 0.1. Temporal-position percentages are calculated among events with an available
+reference timestamp. This is a descriptive coverage analysis; timestamp error,
+concordance, and AULTC are undefined for unmatched events.
+
+\end{minipage}
+\end{minipage}
+\par\medskip
+
+\TTASuppSection{Dataset-stratified performance}{supp:dataset-stratified}
+\vspace{2mm}\noindent
+\textbf{Methods.} We repeated the primary evaluation separately for the 15 i2b2-derived cases and 25 MIMIC-IV cases using event-matching threshold 0.1. Event match rate, concordance, and AULTC were recomputed within each source and reported separately for unimodal and multimodal reconstruction. Source-specific 95\% confidence intervals were obtained by resampling cases with replacement within each source using the same 200-resample case-level bootstrap procedure as the marginal confidence intervals in the main analysis. These tables provide descriptive source-specific estimates; they are not paired tests of the multimodal-minus-unimodal difference.
+
+\vspace{2mm}\noindent
+\textbf{Results.} Multimodal calibration changed event match rate little within either source. Performance was generally higher on the i2b2-derived subset: five of six models had higher event match rates and all six had higher AULTC than on MIMIC-IV. Temporal shifts were heterogeneous. On i2b2, multimodal calibration produced mostly small AULTC gains and modest concordance changes. On MIMIC-IV, multimodal temporal point estimates were generally unchanged or lower in the supplied source-stratified outputs, with the largest decreases for DeepSeek V3.2 and Qwen3.5-397B-A17B. The broad overlap of the marginal intervals warrants cautious interpretation.
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\TTASuppTableCaption{tab:supp-i2b2}{Performance on the i2b2-derived subset (n = 15) at event-matching threshold 0.1 for unimodal and multimodal timeline reconstruction.}
+\centering
+\scriptsize
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Event match rate}} & \multicolumn{2}{c}{\textbf{Concordance}} & \multicolumn{2}{c}{\textbf{AULTC}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+\textbf{Model} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} \\
+\midrule
+DeepSeek R1 & 0.51 [0.42, 0.61] & 0.51 [0.42, 0.61] & 0.77 [0.71, 0.84] & 0.77 [0.70, 0.83] & 0.82 [0.80, 0.85] & 0.82 [0.80, 0.85] \\
+KimiK2-Instruct & 0.40 [0.33, 0.50] & 0.40 [0.32, 0.50] & 0.73 [0.69, 0.81] & 0.74 [0.70, 0.80] & 0.78 [0.75, 0.80] & 0.78 [0.75, 0.81] \\
+GPT-OSS-120B & 0.53 [0.48, 0.60] & 0.53 [0.48, 0.60] & \textbf{0.80 [0.76, 0.84]} & 0.77 [0.75, 0.83] & 0.80 [0.77, 0.83] & 0.81 [0.79, 0.84] \\
+DeepSeek V3.2 & \textbf{0.62 [0.55, 0.70]} & \textbf{0.62 [0.55, 0.70]} & 0.77 [0.73, 0.82] & 0.79 [0.70, 0.82] & 0.82 [0.79, 0.84] & 0.82 [0.79, 0.85] \\
+GLM5 & 0.28 [0.21, 0.38] & 0.28 [0.21, 0.38] & 0.80 [0.72, 0.88] & \textbf{0.81 [0.76, 0.85]} & \textbf{0.83 [0.79, 0.86]} & \textbf{0.84 [0.80, 0.87]} \\
+Qwen3.5-397B-A17B & 0.61 [0.54, 0.68] & 0.61 [0.54, 0.68] & 0.78 [0.75, 0.84] & 0.78 [0.72, 0.85] & 0.80 [0.78, 0.83] & 0.81 [0.79, 0.84] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Values are point estimates with source-specific case-level bootstrap 95\% confidence intervals in brackets. Bold indicates the largest unrounded point estimate within each metric-modality column. All displayed values are rounded to two decimals.
+\end{minipage}
+\end{minipage}\par\medskip
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\TTASuppTableCaption{tab:supp-mimiciv}{Performance on the MIMIC-IV subset (n = 25) at event-matching threshold 0.1 for unimodal and multimodal timeline reconstruction.}
+\centering
+\scriptsize
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Event match rate}} & \multicolumn{2}{c}{\textbf{Concordance}} & \multicolumn{2}{c}{\textbf{AULTC}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+\textbf{Model} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} \\
+\midrule
+DeepSeek R1 & 0.36 [0.28, 0.45] & 0.36 [0.28, 0.45] & 0.70 [0.68, 0.80] & 0.70 [0.66, 0.80] & \textbf{0.79 [0.75, 0.82]} & \textbf{0.78 [0.75, 0.82]} \\
+KimiK2-Instruct & 0.22 [0.19, 0.26] & 0.21 [0.19, 0.25] & 0.71 [0.59, 0.82] & 0.67 [0.56, 0.82] & 0.64 [0.56, 0.71] & 0.63 [0.56, 0.70] \\
+GPT-OSS-120B & 0.27 [0.24, 0.34] & 0.27 [0.23, 0.34] & 0.70 [0.64, 0.75] & 0.70 [0.65, 0.77] & 0.76 [0.72, 0.80] & 0.74 [0.69, 0.79] \\
+DeepSeek V3.2 & \textbf{0.46 [0.38, 0.55]} & \textbf{0.46 [0.38, 0.55]} & 0.77 [0.70, 0.83] & 0.71 [0.62, 0.77] & 0.76 [0.71, 0.81] & 0.67 [0.58, 0.76] \\
+GLM5 & 0.34 [0.26, 0.41] & 0.33 [0.26, 0.40] & \textbf{0.82 [0.77, 0.85]} & \textbf{0.80 [0.73, 0.83]} & 0.77 [0.71, 0.83] & 0.76 [0.71, 0.82] \\
+Qwen3.5-397B-A17B & 0.35 [0.24, 0.48] & 0.32 [0.22, 0.45] & 0.81 [0.78, 0.83] & 0.78 [0.67, 0.81] & 0.75 [0.72, 0.77] & 0.70 [0.65, 0.75] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Values are point estimates with source-specific case-level bootstrap 95\% confidence intervals in brackets. Bold indicates the largest unrounded point estimate within each metric-modality column. All displayed values are rounded to two decimals.
+\end{minipage}
+\end{minipage}\par\medskip
+
+\TTASuppSection{Sensitivity analysis by model-generated temporal certainty}{supp:temporal-certainty}
+\vspace{2mm}\noindent
+\textbf{Methods.} We performed a post hoc DeepSeek V3.2 analysis using the event-level is\_certain flag derived from the model-generated confidence scores returned with relative-time estimates in the temporal-relation and event-attachment stages. We set is\_certain = 1 for confidence scores from 6 through 9 and is\_certain = 0 otherwise. Within each predicted-event stratum, we calculated the proportion of predicted events that matched a reference event and calculated AULTC over the matched events in that stratum. The matched proportion therefore has a different denominator from the reference-event match rate in the main manuscript. We did not report stratum-specific concordance because filtering to separate certainty strata produces different event-pair populations and does not support a direct comparison.
+
+\vspace{2mm}\noindent
+\textbf{Results.} The within-stratum matched proportion was 0.67 for model-labeled uncertain events and 0.64 for model-labeled certain events. Among matched events, AULTC was 0.76 for the uncertain stratum and 0.84 for the certain stratum. Thus, the certainty flag was associated with better absolute timestamp accuracy conditional on successful matching, but not with a higher probability of matching. The flag is an uncalibrated operational signal and should not be treated as a complete measure of temporal uncertainty.
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\small
+
+\TTASuppTableCaption{tab:supp-certainty}{
+DeepSeek V3.2 sensitivity analysis stratified by the model-generated is\_certain flag.
+}
+\centering
+\begin{minipage}{0.99\linewidth}
+\centering
+
+\begin{tabular}{@{}p{0.42\linewidth}
+                >{\centering\arraybackslash}p{0.36\linewidth}
+                >{\centering\arraybackslash}p{0.14\linewidth}@{}}
+\toprule
+\textbf{is\_certain stratum} &
+\textbf{Within-stratum matched proportion} &
+\textbf{AULTC} \\
+\midrule
+0 (model-labeled uncertain) & 0.67 & 0.76 \\
+1 (model-labeled certain)   & 0.64 & 0.84 \\
+\bottomrule
+\end{tabular}
+
+\par\vspace{0.3em}
+
+\footnotesize
+\raggedright
+\textit{Note:} is\_certain = 1 denotes model-assigned confidence scores from 6 through 9;
+is\_certain = 0 denotes all other scores. AULTC is calculated over matched events within
+each stratum. Concordance is omitted because the filtered strata yield different
+event-pair populations.
+
+\end{minipage}
+\end{minipage}
+\par\medskip
+
+\TTASuppSection{Paired matched-mention sensitivity analysis}{supp:matched-mention}
+\vspace{2mm}\noindent
+\textbf{Methods.} This secondary analysis paired the same manually annotated reference mention across unimodal and multimodal reconstruction. Event recovery was evaluated over all 8,066 reference mentions with exact two-sided McNemar tests. For temporal accuracy, we retained only reference events matched under both conditions, compared paired absolute timestamp errors with two-sided Wilcoxon signed-rank tests, and recomputed AULTC on the same shared matched subset. Wilcoxon calculations used tie correction and dropped zero differences. No multiplicity adjustment was applied. Because mentions are clustered within 40 discharge summaries and event-rich cases contribute more observations, the reported p values are nominal and may be anti-conservative. These analyses are exploratory and secondary to the paired case-level bootstrap in \hyperref[tab:supp-paired-bootstrap]{Supplementary Table~\ref*{tab:supp-paired-bootstrap}}.
+
+\vspace{2mm}\noindent
+\textbf{Results.} Event-recovery differences were small: DeepSeek R1 and DeepSeek V3.2 were unchanged, GPT-OSS-120B changed negligibly, GLM5 and Qwen3.5-397B-A17B increased slightly, and KimiK2-Instruct decreased slightly. On the shared matched subset, AULTC point estimates favored multimodal calibration for DeepSeek V3.2, GPT-OSS-120B, GLM5, and Qwen3.5-397B-A17B; DeepSeek R1 changed negligibly and KimiK2-Instruct decreased. The nominal mention-level p values should not be interpreted as confirmatory evidence because they do not model within-case dependence.
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\small
+\TTASuppTableCaption{tab:supp-mcnemar}{Paired matched-mention event-recovery sensitivity analysis at event-matching threshold 0.1. Values use the same pooled reference mentions under both conditions, with Delta = multimodal minus unimodal.}
+\centering
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Delta} & \textbf{Nominal McNemar p} \\
+\midrule
+DeepSeek R1 & 0.39 & 0.39 & 0.00 & 1.000 \\
+KimiK2-Instruct & 0.26 & 0.25 & -0.01 & $<0.001$ \\
+GPT-OSS-120B & 0.32 & 0.32 & 0.00 & 0.558 \\
+DeepSeek V3.2 & 0.49 & 0.49 & 0.00 & 1.000 \\
+GLM5 & 0.33 & 0.33 & 0.00 & $<0.001$ \\
+Qwen3.5-397B-A17B & 0.38 & 0.40 & 0.02 & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Exact two-sided McNemar tests compare paired match status over all 8,066 reference mentions. Values are rounded to two decimals, so a displayed Delta of 0.00 may reflect a small nonzero unrounded difference. The nominal p values do not account for clustering of mentions within discharge summaries and are reported only as an exploratory sensitivity analysis.
+\end{minipage}
+\end{minipage}\par\medskip
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\small
+\TTASuppTableCaption{tab:supp-wilcoxon}{Paired temporal-accuracy sensitivity analysis on reference events matched under both unimodal and multimodal reconstruction. Delta AULTC = multimodal minus unimodal.}
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Shared matches, n} & \textbf{AULTC (UM)} & \textbf{AULTC (MM)} & \textbf{Delta AULTC} & \textbf{Nominal Wilcoxon p} \\
+\midrule
+DeepSeek R1 & 3,134 & 0.80 & 0.79 & 0.00 & 0.364 \\
+KimiK2-Instruct & 1,999 & 0.68 & 0.68 & -0.01 & $<0.001$ \\
+GPT-OSS-120B & 2,532 & 0.76 & 0.77 & 0.01 & $<0.001$ \\
+DeepSeek V3.2 & 3,930 & 0.71 & 0.77 & 0.06 & $<0.001$ \\
+GLM5 & 2,650 & 0.78 & 0.78 & 0.00 & 0.003 \\
+Qwen3.5-397B-A17B & 3,025 & 0.74 & 0.77 & 0.03 & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Nominal p values are from paired two-sided Wilcoxon signed-rank tests of absolute timestamp error among events matched in both conditions; AULTC is reported on the same shared subset. The tests do not account for clustering within discharge summaries and may be anti-conservative. UM = unimodal; MM = multimodal.
+\end{minipage}
+\end{minipage}\par\medskip
+
+\TTASuppSection{Implementation and reproducibility details}{supp:implementation}
+\noindent
+All evaluated models are open-weight models run locally through \textit{llama.cpp}; no proprietary APIs are used. The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B. The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline. On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware. Models were run on NVIDIA A100 GPUs, with GPU count varying by model size. The stages differ in complexity: constrained extraction and assembly may be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost--quality tradeoff remains to be evaluated.
+
+\TTASuppSection{Overall interpretation of the supplementary analyses}{supp:overall-interpretation}
+\noindent
+Taken together, the supplementary analyses support a qualified interpretation of multimodal calibration. Structured evidence changes event recovery little and does not produce a consistently supported concordance improvement. The clearest paired case-level result is an AULTC gain for DeepSeek V3.2, indicating improved absolute timestamp placement for that model. Source-stratified estimates and the matched-mention sensitivity analysis show that effects vary by model, dataset, metric, and analysis population. Temporal metrics remain conditional on successful event recovery, and the model-generated certainty flag does not fully represent temporal uncertainty. These results therefore support describing the multimodal effects as modest and model-dependent rather than uniform.
+
+\endgroup

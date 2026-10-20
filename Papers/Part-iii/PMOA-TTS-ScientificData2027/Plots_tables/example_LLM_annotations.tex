@@ -1,0 +1,323 @@
+\newcolumntype{P}[1]{>{\raggedright\hangindent=1em\hangafter=1}p{#1}}
+\begin{figure*}[t]
+    Excerpt from \cite{abu2023rare}:
+    \begin{quote}\footnotesize
+    A 57-year-old man recently diagnosed with lepromatous leprosy was confirmed with skin biopsy and had been on treatment (rifampicin/clofazimine/dapsone) for 2 months before admission; he was presented to the hospital with complaints of abdominal distension, constipation, vomiting, and a 10-kg weight loss. On examination, the patient was vitally stable. He had evidence of peripheral lymphadenopathy with a distended abdomen and a positive shifting dullness. A computed tomography scan of his abdomen showed mural thickening of the terminal ileum with significantly enlarged mesenteric lymph nodes, mesenteric fat stranding, and intra-abdominal free fluid, suggesting abdominal granulomatous infection or neoplastic process.
+    \dots 
+    
+    The patient was planned for consolidation by autologous bone marrow transplant. Unfortunately, with the recurrent bacteremia and sepsis that accompanied the patient’s course due to his immunocompromised state, he was re-admitted to the medical ICU for severe sepsis and multiorgan failure and passed away around 6 months after his initial diagnosis with NHL, despite maintaining a remission status.
+    \end{quote}
+
+    % DeepSeek-R1, DeepSeek-R1-UD-IQ1, DeepSeek-V3-
+    % 0324, LLaMA 3.3 70B, OpenAI O1, OpenAI O3, and OpenAI O4-mini
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%% Manual and DeepSeek R1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{Manual annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            57-year-old&0 \\
+            man&0 \\
+            diagnosed with lepromatous leprosy&-1461 \\
+            on treatment&-1461 \\
+            rifampicin&-1461 \\
+            clofazimine&-1461 \\
+            dapsone&-1461 \\
+            presented to the hospital&0 \\
+            abdominal distension&0 \\
+            constipation&0 \\
+            vomiting&0 \\
+            10-kg weight loss&0 \\
+            vitally stable&0 \\
+            peripheral lymphadenopathy&0 \\
+            distended abdomen&0 \\
+            positive shifting dullness&0 \\
+            computed tomography scan of his abdomen&0 \\
+            mural thickening of the terminal ileum&0 \\
+            significantly enlarged mesenteric lymph nodes&0 \\
+            mesenteric fat stranding&0 \\
+            intra-abdominal free fluid&0 \\
+            % Abdominal paracentesis&0 \\
+            re-admitted to the medical ICU&4383 \\
+            severe sepsis&4383 \\
+            multiorgan failure&4383 \\
+            passed away&4383
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{DeepSeek-R1 annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            57 years old & 0 \\
+            male & 0 \\
+            lepromatous leprosy & -1464 \\
+            skin biopsy & -1464 \\
+            rifampicin & -1464 \\
+            clofazimine & -1464 \\
+            dapsone & -1464 \\
+            admitted to the hospital & 0 \\
+            abdominal distension & 0 \\
+            constipation & 0 \\
+            vomiting & 0 \\
+            10-kg weight loss & 0 \\
+            vital stability & 0 \\
+            peripheral lymphadenopathy & 0 \\
+            distended abdomen & 0 \\
+            positive shifting dullness & 0 \\
+            computed tomography scan & 0 \\
+            mural thickening of the terminal ileum & 0 \\
+            enlarged mesenteric lymph nodes & 0 \\
+            mesenteric fat stranding & 0 \\
+            intra-abdominal free fluid & 0 \\
+            abdominal paracentesis & 0 \\
+            plan for autologous bone marrow transplant & 4320 \\
+            recurrent bacteremia & 4320 \\
+            sepsis & 4320 \\
+            readmission to ICU & 4320 \\
+            severe sepsis & 4320 \\
+            multiorgan failure & 4320 \\
+            death & 4320 \\
+            & 
+        \end{tabular}
+    \end{minipage}
+
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%  DeepSeek-V3 and Llama 3.3 70B %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[!htbp]
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{DeepSeek-V3-0324 annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            57 years old & 0 \\
+            male & 0 \\
+            lepromatous leprosy & -1464 \\
+            skin biopsy & -1464 \\
+            rifampicin & -1464 \\
+            clofazimine & -1464 \\
+            dapsone & -1464 \\
+            admitted to the hospital & 0 \\
+            abdominal distension & 0 \\
+            constipation & 0 \\
+            vomiting & 0 \\
+            weight loss & 0 \\
+            peripheral lymphadenopathy & 0 \\
+            distended abdomen & 0 \\
+            positive shifting dullness & 0 \\
+            computed tomography scan & 0 \\
+            mural thickening of the terminal ileum & 0 \\
+            enlarged mesenteric lymph nodes & 0 \\
+            mesenteric fat stranding & 0 \\
+            intra-abdominal free fluid & 0 \\
+            abdominal granulomatous infection & 0 \\
+            neoplastic process & 0 \\
+            abdominal paracentesis & 0 \\
+            autologous bone marrow transplant planned & 672 \\
+            recurrent bacteremia & 672 \\
+            sepsis & 672 \\
+            re-admitted to the medical ICU & 4032 \\
+            severe sepsis & 4032 \\
+            multiorgan failure & 4032 \\
+            passed away & 4032 \\
+            complete metabolic remission & 4032 \\
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{LLaMA 3.3 70B annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            57 years old & 0 \\
+            male & 0 \\
+            lepromatous leprosy & -144 \\
+            skin biopsy & -144 \\
+            rifampicin & -144 \\
+            clofazimine & -144 \\
+            dapsone & -144 \\
+            abdominal distension & 0 \\
+            constipation & 0 \\
+            vomiting & 0 \\
+            weight loss & 0 \\
+            peripheral lymphadenopathy & 0 \\
+            distended abdomen & 0 \\
+            positive shifting dullness & 0 \\
+            mural thickening of the terminal ileum & 0 \\
+            enlarged mesenteric lymph nodes & 0 \\
+            mesenteric fat stranding & 0 \\
+            intra-abdominal free fluid & 0 \\
+            abdominal granulomatous infection & 0 \\
+            neoplastic process & 0 \\
+            autologous bone marrow transplant & 1344 \\
+            recurrent bacteremia & 1344 \\
+            sepsis & 1344 \\
+            multiorgan failure & 1344 \\
+            passed away & 1440 \\
+            & 
+        \end{tabular}
+    \end{minipage}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% GPT5 and O1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[!htbp]
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{GPT5 annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            57-year-old man & 0 \\
+            male & 0 \\
+            recently diagnosed with lepromatous leprosy & -1440 \\
+            skin biopsy confirmed lepromatous leprosy & -1440 \\
+            rifampicin started & -1440 \\
+            clofazimine started & -1440 \\
+            dapsone started & -1440 \\
+            presented to the hospital with complaints of abdominal distension & 0 \\
+            constipation & 0 \\
+            vomiting & 0 \\
+            10-kg weight loss & 0 \\
+            peripheral lymphadenopathy & 0 \\
+            distended abdomen & 0 \\
+            positive shifting dullness & 0 \\
+            computed tomography scan of his abdomen & 6\\
+            mural thickening of the terminal ileum & 6 \\
+            significantly enlarged mesenteric lymph nodes & 6 \\
+            mesenteric fat stranding & 6 \\
+            intra-abdominal free fluid & 6 \\
+            abdominal granulomatous infection or neoplastic process suggested & 6 \\
+            abdominal paracentesis was done & 6 \\
+            recurrent bacteremia & 1200 \\
+            % neoplastic process & 0 \\
+            planned for consolidation by autologous bone marrow transplant & 2400 \\
+            remission status maintained & 4200 \\
+            re-admitted to the medical ICU for severe sepsis and multiorgan failure & 4296 \\
+            passed away & 4320 \\
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{OpenAI O1 annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            % 57 years old & -1440 \\
+            % male & -1440 \\
+            diagnosed with lepromatous leprosy & -1344 \\  
+            confirmed with skin biopsy & -1344 \\  
+            treatment with rifampicin/clofazimine/dapsone & -1344 \\  
+            admitted to the hospital & 0 \\ 
+            vitally stable & 0 \\
+            abdominal distension & 0 \\  
+            constipation & 0 \\  
+            vomiting & 0 \\ 
+            10-kg weight loss & 0 \\   
+            peripheral lymphadenopathy & 0 \\  
+            distended abdomen & 0 \\  
+            positive shifting dullness & 0 \\  
+            computed tomography scan & 0 \\  
+            mural thickening of the terminal ileum & 0 \\  
+            significantly enlarged mesenteric lymph nodes & 0 \\  
+            mesenteric fat stranding & 0 \\  
+            intra-abdominal free fluid & 0 \\  
+            suggesting abdominal granulomatous infection or neoplastic process & 0 \\  
+            abdominal paracentesis & 0 \\ 
+            % Planned for consolidation by autologous bone marrow transplant & 2136  \\
+            % Responded well to chemotherapy & 2280   \\
+            % Attained complete metabolic remission by positron emission tomography/computed tomography & 2280   \\
+            planned for consolidation by autologous bone marrow transplant & 2500 \\  
+            re-admitted to the medical ICU  & 3000 \\  
+            severe sepsis &	3000 \\
+            multiorgan failure & 3000 \\
+            passed away & 4320 \\
+            & 
+        \end{tabular}
+    \end{minipage}
+\end{figure*} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% O3 and O4-mini %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[!htbp]
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{OpenAI O3 annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            lepromatous leprosy diagnosis & -1440 \\
+            skin biopsy confirmed lepromatous leprosy & -1440 \\
+            rifampicin treatment started & -1440 \\
+            clofazimine treatment started & -1440 \\
+            dapsone treatment started & -1440 \\
+            presented to hospital & 0 \\
+            abdominal distension & 0 \\
+            constipation & 0 \\
+            vomiting & 0 \\
+            10-kg weight loss & 0 \\
+            vitally stable & 0 \\
+            peripheral lymphadenopathy & 0 \\
+            distended abdomen & 0 \\
+            positive shifting dullness & 0 \\
+            computed tomography abdomen & 0 \\
+            mural thickening of terminal ileum & 0 \\
+            enlarged mesenteric lymph nodes & 0 \\
+            mesenteric fat stranding & 0 \\
+            intra-abdominal free fluid & 0 \\
+            abdominal granulomatous infection suggested & 0 \\
+            neoplastic process suggested & 0 \\
+            abdominal paracentesis & 0 \\
+            planned autologous bone marrow transplant & 2150 \\
+            % assessment after four cycles & 2208 \\
+            % complete metabolic remission on PET/CT & 2208 \\
+            re‑admission to medical ICU & 4320 \\
+            severe sepsis & 4320 \\
+            multiorgan failure & 4320 \\
+            death & 4320 \\
+            remission status maintained & 4320
+        \end{tabular}
+    \end{minipage}
+    \begin{minipage}[!htbp]{0.49\textwidth}
+    \footnotesize
+        \textbf{OpenAI O4-mini annotation} \\ \\
+        \footnotesize
+        \begin{tabular}{P{0.75\textwidth}r}
+            lepromatous leprosy confirmed with skin biopsy & -1440 \\  
+            rifampicin treatment started & -1440 \\  
+            clofazimine treatment started & -1440 \\  
+            dapsone treatment started & -1440 \\  
+            57 years old & 0 \\  
+            male & 0 \\ 
+            presented to the hospital & 0 \\  
+            complaint of abdominal distension & 0 \\  
+            complaint of constipation & 0 \\  
+            complaint of vomiting & 0 \\  
+            10-kg weight loss & 0 \\  
+            vitals stable & 0 \\  
+            peripheral lymphadenopathy & 0 \\  
+            distended abdomen & 0 \\  
+            positive shifting dullness & 0 \\  
+            mural thickening of the terminal ileum & 0 \\  
+            significantly enlarged mesenteric lymph nodes & 0 \\  
+            mesenteric fat stranding & 0 \\  
+            intra-abdominal free fluid & 0 \\  
+            abdominal paracentesis performed & 2 \\ 
+            plan autologous bone marrow transplant & 1900 \\  
+            %assessment after four cycles of EPOCH & 2256 \\  
+            % response to chemotherapy achieved & 2256 \\  
+            % complete metabolic remission attained by PET/CT &2256 \\  
+            re-admission to medical ICU for severe sepsis and multiorgan failure & 4260 \\
+            death & 4320 \\
+            & 
+        \end{tabular}
+    \end{minipage}
+    \caption{TTS comparison across multiple LLMs}
+    \label{fig:compare_LLM_annotations}
+\end{figure*}
+
+

@@ -1,0 +1,89 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Log-Time Cumulative Distribution Function}
+\label{apd:ltcdf}
+\textcolor{red}{George: In Appendix A, why is there even text regarding non-convexity? Why is this important for the reviewer/reader to know? When training neural nets in practice, I'm under the impression that the vast majority of loss functions used aren't actually convex (for example, even though MSE loss on its own is convex, once you compose it with the rest of a neural net used, the overall loss is usually no longer convex with respect to the neural network parameters/"weights"). I just find this part to be superfluous and to not convey useful theoretical insight. Perhaps I'm missing something?}
+
+Recall the log-time cumulative distribution function is given as follows:
+
+% \subsection{baal}
+% \subsubsection{baal1}
+\[
+   F(x) = \frac{1}{k} \sum_{i=1}^k \mathds{1}\{x_{(i)} \leq x\},
+\]
+where $\mathds{1}$ is the indicator function.
+
+We compute the AULTC as the area under $F(x)$ from $x = 0$ to $x = \log(1 + S_{\text{max}})$, normalized by $\log(1 + S_{\text{max}})$:
+\begin{align*}
+\text{AULTC} &= \frac{1}{\log(1 + S_{\text{max}})} \Bigg[ \sum_{i=1}^k (x_{(i)} - x_{(i-1)}) \frac{i}{k} + (\log(1 + S_{\text{max}}) - x_{(k)}) \times 1 \Bigg]
+\end{align*}
+where $x_{(0)} = 0$. With this definition, AULTC = 1 indicates that discrepancies are zero (perfect recovery), resulting in maximum area $\log(1 + S_{\text{max}})$, and AULTC = 0 indicates that all discrepancies exceed $S_{\text{max}}$, yielding zero area. 
+% The code for the AULTC calculation is given in the function \texttt{ecdf\textunderscore auc2(\dots)} in the Supplementary Materials.
+
+
+\begin{remark}
+The time unit and cutoff $S_\text{max}$ affect the AULTC calculation, so they must be specified when reporting the AULTC.
+\end{remark}
+
+Because of the $\log(1 + \cdot)$ transformation (rather than the $\log(\cdot)$ transformation which is undefined for zero time-error discrepancy), the discrepancies are non-linearly shifted in the log scale.  The non-linear shift adjusts the relative widths of the step function (particularly for small discrepancies) changing the area calculation.  The cutoff $S_\text{max}$ affects the normalization factor.  Therefore, these values should be chosen based on practicalities for the application.  In our case, we chose hours at the time unit because the only sub-hour descriptions reported were several Apgar scores at the minute-level.
+
+\begin{remark}
+    The average log-time discrepancy is non-convex.
+\end{remark}
+This can be seen from the observation that the $\log(1+\cdot)$ function is ``spikier'' than the L1 function. More formally, the log-time discrepancy has a higher curvature around zero error compared to the L1 loss. Consider the second derivatives of the loss functions with respect to the discrepancies $s = |t^p - t^r|$.  For L1 loss $L_1(s) = s$, the second derivative $\frac{d^2 L_1}{ds^2} = 0$ for $s > 0$.
+For the log-time loss, $L_{log}(s) = \log(1 + s)$, the second derivative is $\frac{d^2 L_{log}}{ds^2} = -\frac{1}{(1 + s)^2}$. At $s = 0$, the second derivative is $-1$, while the second derivative of the L1 loss is $0$.
+
+To provide a simple counterexample, define the average log-time discrepancy is given by:
+\[
+L(t^p) = \frac{1}{k} \sum_{i=1}^k \log(1 + \min(|t^p_i - t^r_i|, S_{\text{max}}))
+\]
+To prove that this function is non-convex, we need to show that there exist $t^{p1}, t^{p2}$ and $\lambda \in (0,1)$ such that
+\[
+L(\lambda t^{p1} + (1-\lambda) t^{p2}) > \lambda L(t^{p1}) + (1-\lambda) L(t^{p2})
+\]
+Consider the case where $k=1$, $t^r = 0$, and $S_{\text{max}} = 2$. The loss function is $L(t^p) = \log(1 + \min(|t^p|, 2))$.
+Let $t^{p1} = 0$ and $t^{p2} = 3$. Choose $\lambda = 0.5$.
+Then $\lambda t^{p1} + (1-\lambda) t^{p2} = 0.5 \times 0 + 0.5 \times 3 = 1.5$.
+Now we evaluate the loss function at these points:
+\begin{align*}
+L(t^{p1}) &= L(0) = \log(1 + \min(|0|, 2)) = 0 \\
+L(t^{p2}) &= L(3) = \log(1 + \min(|3|, 2)) = \\
+    & \qquad \log(3) \\
+L(\lambda t^{p1} + (1-\lambda) t^{p2}) &= L(1.5) = \log(2.5)
+\end{align*}
+Now we check the convexity condition:
+\[
+L(1.5) \leq 0.5 L(0) + 0.5 L(3)
+\]
+\[
+\log(2.5) \leq 0.5 \times 0 + 0.5 \times \log(3)
+\]
+\[
+\log(2.5) \leq \log(\sqrt{3})
+\]
+Since $2.5 > \sqrt{3} \approx 1.732$, we have $\log(2.5) > \log(\sqrt{3})$.
+Therefore,
+\[
+L(\lambda t^{p1} + (1-\lambda) t^{p2}) > \lambda L(t^{p1}) + (1-\lambda) L(t^{p2})
+\]
+This proves that the average log-time discrepancy is non-convex.
+This remark illustrates the loss form, in case it is considered for optimization/model training rather than for assessment purposes.
+
+% \begin{figure}[h!]
+%     \centering
+%     \begin{minipage}{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{Plots_tables/tts_length_distribution.pdf}
+%         \caption*{(a) Distribution of time series lengths (in timesteps) across the dataset.}
+%     \end{minipage}\hfill
+%     \begin{minipage}{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{Plots_tables/top_20_common_events.pdf}
+%         \caption*{(b) Most frequently occurring events across all case reports.}
+%     \end{minipage}
+%     \caption{Overview of textual time series characteristics in the dataset.}
+%     \label{fig:tts_stats}
+% \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%

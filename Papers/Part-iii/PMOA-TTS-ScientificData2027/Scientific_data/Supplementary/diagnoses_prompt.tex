@@ -1,0 +1,24 @@
+\subsection{LLM Prompt to Extract List of Diagnoses from PMOA Case Reports}
+\label{apd:diagnosis-prompt}
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title=LLM prompt to extract list of diagnoses from PMOA case reports,
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={Prompt} % optional continuation note
+]
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}} \\
+
+Then the output should look like:\\
+    \texttt{acne} \\
+    \texttt{DRESS syndrome} \\
+
+Rash, leukocytosis, and other findings are not diseases so they are omitted, while acne and DRESS syndrome were both diagnosed, so they are included. Output a list of diagnoses (one per line) from the following case. Place the primary diagnosis first. Include only the list and nothing else.
+
+\end{tcolorbox}

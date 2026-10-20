@@ -1,0 +1,59 @@
+Our findings highlight the superiority of encoder-based models over decoder-based LLMs for event forecasting, emphasizing the limitations of autoregressive models in structured prediction tasks. Despite prompting and fine-tuning, LLMs struggle with short- and medium-term forecasting, reinforcing the need for models optimized for sequence encoding rather than generative token prediction.
+
+Among encoder models, \textit{ModernBERT-base} and \textit{ModernBERT-large} consistently perform best, with MLP-head fine-tuning excelling in F1 scores and fine-tuned masking models achieving higher concordance (c-index), particularly in long-term forecasting. This suggests that classification and ranking tasks benefit from distinct optimization strategies, and a hybrid training approach may further enhance performance.
+
+The gradual improvement of F1 scores over longer time horizons indicates that event patterns become more predictable over time, whereas short-term forecasting remains challenging due to higher variability. This limitation suggests that incorporating temporal modeling techniques, such as recurrent or convolutional structures, could refine short-term predictions while maintaining strong long-range forecasting. Performance drops on external validation datasets (sepsis-10 and sepsis-100) highlight generalization challenges, with models struggling to adapt to shifts in event distributions. While \textit{ModernBERT} models exhibit relative robustness, domain-specific fine-tuning or adaptive learning strategies are needed to bridge this gap.
+
+% Our survival analysis complements the forecasting results, showing that strong predictive performance is often attainable with limited observation windows.
+Our survival analysis complements the event forecasting results by revealing that time-to-event outcomes, such as mortality, can often be predicted with high concordance using limited early observations. This contrasts with event occurrence prediction, where short-term forecasting remains more challenging due to the fine-grained variability and sparsity of near-term clinical events. These differences highlight how task structure—binary classification of discrete events versus modeling a continuous time-to-event distribution—affects the ability to learn from partial trajectories.
+Several models achieve peak concordance at early (0h) or intermediate (24h) timepoints—rather than the full 168h—especially in the \textit{T2S2} and \textit{Sepsis100} cohorts. Instruction-tuned LLMs like \textit{Llama-3.3-70B-Instruct} and \textit{DeepSeek-R1-Distill-Llama-70B} outperform traditional transformer baselines, suggesting that instruction tuning and large-scale pretraining offer significant advantages for modeling time-to-event outcomes from clinical narratives in textual time series.
+
+Sensitivity analyses further highlight the importance of temporal structure and data completeness. When comparing time-ordered and text-ordered training regimes, we find that time-ordered training generally improves concordance, particularly for \textit{DeepSeek-R1} annotations, while text-ordering can yield competitive or better F1 scores on external datasets. 
+This underscores a trade-off between temporal alignment and narrative coherence, with implications for designing learning objectives based on downstream task priorities. 
+Moreover, robustness experiments simulating documentation sparsity reveal that F1 scores degrade significantly as more clinical history is masked, particularly beyond a timestep dropout rate of 60\%. 
+In contrast, concordance remains relatively stable under these conditions, indicating that event ranking is less sensitive to partial history than event classification.
+
+Overall, our results demonstrate that encoder-based models, particularly \textit{ModernBERT}, are well-suited for event forecasting but require enhancements in short-term prediction and cross-domain generalization. 
+In contrast, for survival analysis tasks, we find that instruction-tuned LLMs have more predictive power.
+Future work should explore hybrid training objectives that balance classification and ranking performance, incorporate temporal modeling architectures, and investigate domain adaptation and pretraining strategies that explicitly account for data sparsity and real-world variability that we observe in our textual time series.
+
+\textbf{Clinical Translation and Social Impact Pathways.} 
+Our framework addresses critical gaps in automated clinical decision support that could substantially improve healthcare delivery, particularly in under-resourced settings. 
+The ability to extract temporally structured insights from unstructured clinical text has immediate applications in several high-impact scenarios: 
+(1) \emph{Emergency departments in resource-limited settings} where our temporal forecasting could provide early warning systems for sepsis and other time-critical conditions, potentially reducing preventable mortality; 
+(2) \emph{Telemedicine platforms} where automated risk assessment from clinical narratives could support remote clinicians lacking specialized training; and 
+(3) \emph{Clinical quality improvement} where retrospective analysis of clinical trajectories could identify systematic delays in care delivery.
+
+The modular design of our pipeline—separating temporal extraction from forecasting—enables rapid adaptation to real-world clinical corpora. 
+Our preliminary work on 125K diverse case reports demonstrates disease-agnostic generalization, while the robust performance on external validation sets suggests the framework can handle distributional shifts typical in real clinical deployment. 
+Most critically, our finding that concordance remains stable even with 60\% missing historical context suggests the system could function effectively with incomplete documentation—a common reality in busy clinical environments.
+
+Moving forward, integration with existing electronic health record systems requires minimal infrastructure changes, as our approach works directly with free-text notes already captured in clinical workflows. 
+The next phase involves partnership with healthcare systems to validate performance on live clinical data and demonstrate measurable improvements in patient outcomes.
+
+\textbf{Limitations and Future Directions.} 
+Our study has some important limitations to consider. First, the pipeline relies on case reports from the PubMed Open Access (PMOA) corpus, which often reflect rare or atypical presentations and differ from routine clinical notes (e.g., progress notes, discharge summaries), potentially limiting the model’s generalizability to real-world health system texts. Compared to those texts, case reports offer rich, temporally structured narratives with explicit clinical rationale, making them especially useful for evaluating model performance under sparse documentation (Section 4.4.2). This study develops a general framework for textual time series forecasting, using case reports as an interpretable, temporally rich foundation for method development with potential extensions to real-world clinical corpora like MIMIC discharge summaries.
+
+Second, while we focused on sepsis due to its clinical relevance and prevalence in case reports, our framework is fundamentally disease-agnostic. Preliminary results from over 125K PMOA case reports across various diagnostic conditions show promising generalization, with future work planned on broader diagnostic categories and real-world corpora such as MIMIC-IV discharge summaries.
+
+Third, despite efforts to mitigate causal leakage during training and evaluation (e.g., timestamp extraction, temporal masking, and use of external test sets), pretrained language models may have been exposed to PMOA content. 
+Although these models were not trained on our derived (event, time) sequences or temporally reordered data, it is possible that the original case report narratives—particularly those from the PMOA corpus—were included in their pretraining data.
+In such cases, models would have seen temporally unordered free-text rather than the structured, time-aligned sequences used in our forecasting tasks. Our pipeline applies a series of transformations—including temporal reordering and masking of future events beyond a prediction cutoff—which fundamentally alter the input representation and enforce a causal structure that is not present in the original documents. This creates a distinct prediction setup that requires models to reason over partial, temporally grounded inputs rather than complete narratives. 
+To further assess the impact of pretraining exposure, we include results from \textit{RedPajama-INCITE-7B-Instruct}, an open-source model with a fully documented, PubMed-free training corpus, which still demonstrates competitive forecasting performance. Additionally, we observe performance degradation on held-out external datasets (e.g., Sepsis-10, Sepsis-100), even though their underlying reports may have been accessible during pretraining. This suggests that access to the original narratives is not sufficient to guarantee strong performance under our temporally structured and masked setup, supporting the view that our framework demands generalization beyond memorization.
+
+Finally, only a small subset of our data—the \textit{Sepsis-10} cohort—was manually annotated for gold-standard validation, serving to calibrate and validate our LLM-assisted extraction pipeline. Expanding human validation across diverse diagnoses is essential for ensuring annotation quality and evaluating model robustness, and is a direction for future work.
+
+
+While our current evaluation focuses on case reports, this represents a deliberate methodological choice to establish robust temporal reasoning capabilities before real-world deployment. 
+Case reports provide the interpretable, temporally rich narratives necessary for rigorous model development while avoiding the privacy and access barriers of live clinical data. 
+Our framework's strong performance across diverse case report scenarios and robust handling of missing information provides confidence for translation to real-time clinical notes.
+
+The long-term next steps for clinical translation include: 
+(1) Partnership with healthcare systems to evaluate performance on discharge summaries and progress notes; 
+(2) Integration with clinical decision support systems to provide real-time risk alerts; 
+(3) Validation studies measuring impact on clinical outcomes and decision-making efficiency. 
+Our disease-agnostic framework and documented codebase facilitate rapid adaptation across healthcare contexts, particularly in settings where automated clinical reasoning could address workforce shortages or expertise gaps.
+
+% \textcolor{red}{Minor limitation - do we need this?} Finally, while we do not introduce new learning algorithms, our goal was to benchmark existing encoder and decoder models for forecasting from textual time series. Future work could explore specialized architectures—e.g., time-aware transformers or models with temporal embeddings or memory—to better align with the structure of clinical narratives.
+
+% Taken together, these limitations highlight opportunities to expand this line of research, including improved annotations, broader datasets, novel temporal architectures, and more rigorous evaluations to better support socially impactful clinical forecasting.

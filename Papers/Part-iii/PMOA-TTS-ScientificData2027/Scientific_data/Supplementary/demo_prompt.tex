@@ -1,0 +1,28 @@
+\subsection{LLM Prompt to Extract Demographics from PMOA Case Reports}
+\label{apd:demographics-prompt}
+
+\rebuttal{The prompt below is reproduced verbatim for reproducibility. Its outputs are described in the manuscript as LLM-extracted sex descriptors and LLM-mapped ethnicity categories, not as verified biological or self-identified attributes.}
+
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!100,
+  title={Prompt},
+  boxrule=2pt,
+  enhanced,
+  breakable,                % <-- allows page breaks; starts here even if long
+  before skip=8pt,          % spacing above (optional)
+  after skip=8pt,           % spacing below (optional)
+  pad at break*=2mm,        % padding at page break (optional)
+  fontupper=\scriptsize,
+  title after break={{Prompt}} % optional continuation note
+]
+You are an expert clinician. Extract the following demographic information from the case report: (1) age at case presentation, (2) sex (biologic sex at birth), and (3) ethnicity.  Report the age in years.  Report the sex as Male, Female, otherwise as a custom string, or Not Specified.  Report ethnicity as according to the US Census, otherwise as Not Specified.  For example, here is the case report.\\
+
+\textcolor{teal}{\texttt{An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.}}\\
+
+% \noindent
+Then the demographic extraction should be:\\
+\texttt{18 | Male | Not Specified} \\
+ 
+Report the demographics with the three columns separated by a pipe '|' as a bar-separated row as above.
+\end{tcolorbox}

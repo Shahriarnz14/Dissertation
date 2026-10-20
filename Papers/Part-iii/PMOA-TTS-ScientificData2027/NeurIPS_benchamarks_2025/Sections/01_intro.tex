@@ -1,0 +1,32 @@
+Understanding when clinical events occur is fundamental to modeling patient trajectories, enabling tasks such as process mining, outcome forecasting, and causal inference in medicine \citep{jensen2012mining, noren2010temporal}.
+However, most clinical narratives lack explicit temporal structure. While electronic health record (EHR) datasets like MIMIC-III and MIMIC-IV include timestamped structured data and clinical notes \citep{johnson2016mimic, johnson2023mimic}, they capture only a subset of events (e.g., vital signs, lab results) and still require sophisticated natural language processing to extract temporal information from unstructured text \citep{viani2021temporal, cheng2023typed}.
+
+In contrast, published case reports often provide rich narrative descriptions of patient timelines, but the timing of events is typically expressed in relative terms within the free text (e.g., “on day 3 of hospitalization”).
+Efforts in temporal reasoning on clinical text have been hampered by the scarcity of large-scale annotated corpora.
+Earlier initiatives, such as the 2012 i2b2 challenge and Clinical TempEval, focused on temporal relation extraction from clinical notes \citep{sun2013evaluating, bethard2016semeval, galvan2018investigating} but were constrained by small datasets (e.g., 310 documents) from single institutions, limiting model performance and generalizability.
+Systems that rely on metadata timestamps (e.g., admission or discharge dates) fail to capture the fine-grained sequence of clinical events described in text, which is essential for nuanced understanding and prediction.
+There remains a pressing need for large-scale, temporally annotated corpora to support the development and evaluation of models for clinical temporal reasoning.
+
+In this work, we present the PubMed Open Access Textual Time Series (PMOA–TTS) corpus, a new large-scale dataset comprising 124,699 openly available clinical case reports, each annotated with a structured timeline of events.
+Leveraging large language models (LLMs)—specifically Llama 3.3 \citep{grattafiori2024llama} and DeepSeek R1 \citep{guo2025deepseek}—we transform each case report into a sequence of (clinical event, time) tuples that capture key clinical events and their relative timing within the patient narrative.
+To our knowledge, PMOA–TTS constitutes the largest publicly available collection of clinical narratives with explicit temporal event structure.
+We demonstrate that these temporal annotations enable novel forms of analysis and significantly enhance downstream modeling of patient outcomes.
+
+Building PMOA–TTS requires addressing several challenges: identifying relevant case reports at scale, extracting timeline events with high fidelity, and rigorously evaluating the quality of the generated annotations.
+Rather than relying on naive metadata filters, our LLM-based pipeline accurately identifies single-patient case narratives and resolves ambiguous free-text time expressions to extract fine-grained timelines.
+We further enrich each case with structured patient demographics and diagnostic labels using prompt-driven extraction.
+Finally, we showcase the practical value of PMOA–TTS in a downstream survival analysis task, where models leveraging the extracted textual time series demonstrate strong performance in early outcome prediction.
+
+
+\textbf{Contributions.} In summary, this paper makes the following contributions:
+\begin{itemize}[leftmargin=*,itemsep=0pt,parsep=0pt,partopsep=0pt,topsep=0pt]
+    \item We introduce the PMOA Textual Time Series (PMOA–TTS) corpus, comprising 124,699 single-patient case reports from PubMed Open Access, each annotated with structured clinical timelines extracted using large language models (LLMs).
+    \item We develop a scalable LLM-based pipeline for data extraction and annotation, including automatic identification of case reports, prompting strategies for timeline, demographic, and diagnosis extraction, and a manual evaluation framework to assess annotation quality.
+    \item We quantitatively evaluate the accuracy of the extracted timelines, demonstrating high temporal ordering performance (concordance index $>0.9$) and introducing a novel Area Under the Log-Time Curve (AULTC) metric for analyzing timing precision and errors.
+    \item We examine demographic distributions, frequently occurring diagnoses, and diagnosis co-occurrence patterns in the corpus, highlighting that it has wide clinical and demographic coverage.
+    \item We show how to use the textual time series in downstream modeling by framing a survival prediction task, where incorporating extracted temporal event sequences improves predictive performance.
+\end{itemize}
+
+PMOA–TTS fills a critical gap by providing a large-scale, openly available resource for temporal reasoning in clinical narratives.
+We hope this corpus will enable the development and benchmarking of new models for timeline extraction, temporal question answering, and longitudinal outcome prediction in biomedical NLP.
+

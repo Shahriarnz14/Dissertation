@@ -1,0 +1,98 @@
+For our observational study, we adopt a causal inference framework to quantify the association between medication non-adherence and adverse event time.
+Under the potential outcomes framework, these estimates approximate causal effects if unmeasured confounding is limited and positivity holds.
+To help satisfy some of these assumptions, we apply preprocessing techniques such as trimming, detailed in Appendix~\ref{apd:preprocessing}.
+In Appendix~\ref{adp:from_assoc_to_causal}, we outline the assumptions required for a valid causal interpretation, including those specific to survival analysis.
+
+\paragraph{Restricted Mean Event Time (RMET).}  
+RMET measures the expected time until an adverse event occurs, restricted to a predefined follow-up period.
+Intuitively, it represents the average time a patient remains event-free within the observation window.\footnote{In survival analysis literature, this quantity is commonly referred to as the Restricted Mean Survival Time (RMST), but we adapt the terminology to emphasize its focus on adverse events.}
+For patient \(i\), the RMET is defined as:
+\[
+\bar{T_i} = \mathbb{E}[\widetilde{T_i} | A_{i\tau}, \mathbf{Z}_{i\tau}] = \int_{0}^{M} {S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}) \, du,
+\]
+where \( {S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}) \) is the true survival function and \( M = 96 \) months denotes the maximum follow-up duration. In practice, we replace the true survival function with an estimated version using a survival model from Section~\ref{sec:methods_survival}.
+
+\paragraph{Potential outcomes.} 
+Under the potential outcomes framework, we denote the potential adverse event time under treatment \(a \in \{0,1\}\) by \(\widetilde{T_i}(a)\).
+For potential outcomes, we can then define:
+\[
+\bar{T}_i(a) = \mu_a(\mathbf{Z}_{i\tau}) =\int_{0}^{M} S(u | A_{i\tau} = a, \mathbf{Z}_{i\tau})\, du,
+\]
+and the individual treatment effect (ITE) as:
+\[
+\text{ITE}_i = \bar{T}_i(1) - \bar{T}_i(0).
+\]
+By a standard derivation (see Appendix~\ref{apd:ate-ite}), the average treatment effect (ATE) is given by:
+\(
+\psi = \mathbb{E}\big[\bar{T}_i(1) - \bar{T}_i(0)\big].
+\)
+Finally, we can estimate the ATE empirically as:
+\[
+\widehat{\psi} = \frac{1}{N} \sum_{i=1}^{N}\left(\widehat{\mu}_1(\mathbf{Z}_{i\tau}) - \widehat{\mu}_0(\mathbf{Z}_{i\tau})\right),
+\]
+with
+\(
+\widehat{\mu}_a(\mathbf{Z}_{i\tau}) = \int_{0}^{M} \widehat{S}(u | A_{i\tau} = a, \mathbf{Z}_{i\tau})\, du.
+\)
+
+\paragraph{Causal estimators.}  
+We extend meta-learning approaches (T-learner and S-learner from \citet{kunzel2019metalearners}) and matching methods to survival analysis, with algorithms provided in Appendix~\ref{apd:causal-meta-learner-algorithms}, introducing novel extensions for estimating treatment effects under censoring:
+% Additionally, we employ causal survival forests as a nonparametric baseline.
+\begin{itemize}[itemsep=0pt]
+    \item \textbf{T-Learner:}
+    Fit separate survival models for the treated (\(a=1\)) and control (\(a=0\)) groups. 
+    The survival function is estimated independently for each treatment condition:
+    \(
+    \widehat{S}_a (u | \mathbf{Z}_{i\tau}) = {\widehat{S}(u | A_{i\tau} = a, \mathbf{Z}_{i\tau})},
+    \)
+    yielding two RMET estimators:
+    \(
+    \widehat{\mu}_a (\mathbf{Z}_{i\tau}) = \int_0^{M} \widehat{S}_a (u | \mathbf{Z}_{i\tau}) \, du,
+    \)
+    with \(a\in\{0,1\}\). The ATE is then estimated as:
+    \[
+    \widehat{\psi}_{\text{T-learner}} = \frac{1}{N} \sum_{i=1}^{N} \left( \widehat{\mu}_1 (\mathbf{Z}_{i\tau}) - \widehat{\mu}_0 (\mathbf{Z}_{i\tau}) \right).
+    \]
+
+    \item \textbf{S-Learner:} Fit a single survival model incorporating treatment as an additional covariate:
+    \(
+    \widehat{S}(u | \mathbf{Z}_{i\tau}, A_{i\tau}) = \widehat{S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}).
+    \)
+    The single RMET estimator is then:
+    \(
+    \widehat{\mu} (\mathbf{Z}_{i\tau}, a) = \int_0^{M} \widehat{S}(u | \mathbf{Z}_{i\tau}, a) \, du,
+    \)
+    and the ATE is estimated by plugging \(a=0\text{ and } 1\) in the single estimator:
+    \[
+    \widehat{\psi}_{\text{S-learner}} = \frac{1}{N} \sum_{i=1}^{N} \left( \widehat{\mu} (\mathbf{Z}_{i\tau},1) - \widehat{\mu} (\mathbf{Z}_{i\tau},0) \right).
+    \]
+
+    \item \textbf{Matching (k-Nearest Neighbors)} \citep{stuart2010matching}\textbf{:}  
+    Match individuals based on baseline covariates. 
+    First set: \(
+    \widehat{\mu}_{A_{i\tau}} (\mathbf{Z}_{i\tau}) = \widehat{\mu} (\mathbf{Z}_{i\tau}, A_{i\tau})
+    \).
+    Then for patient \(i\), let \(J_K(i)\) denote the set of \(K\) nearest neighbors from the opposite treatment group. The estimated counterfactual RMET is
+    \[
+    \widehat{\mu}_{1-A_{i\tau}}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}(\mathbf{Z}_{j\tau}, A_{j\tau}),
+    \]
+    and the ATE is estimated as:
+    \footnotesize
+    \[
+    \widehat{\psi}_{\text{match}} = \frac{1}{N} \sum_{i=1}^{N} \left(\widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) - \widehat{\mu}_{1-A_{i\tau}}(\mathbf{Z}_{i\tau})\right)(2A_{i\tau} - 1).
+    \]
+    \normalsize
+    We consider \(K \in \{1,5,20\}\).
+    See Appendix~\ref{apd:matching_derivation} for a more detailed derivation.
+    
+    \item \textbf{Causal Survival Forest (CSF)} \citep{cui2023estimating}\textbf{:} A nonparametric method that estimates heterogeneous treatment effects in censored survival data:
+    % CSF partitions the feature space into homogeneous subgroups and estimates ITEs within each partition:
+    \[
+    \widehat{\theta}_{\text{CSF}}(\mathbf{Z}_{i\tau}) = \widehat{\mu}_1 (\mathbf{Z}_{i\tau}) - \widehat{\mu}_0 (\mathbf{Z}_{i\tau}),
+    \]
+    with the ATE computed as:
+    \[
+    \widehat{\psi}_{\text{CSF}} = \frac{1}{N} \sum_{i=1}^{N} \widehat{\theta}_{\text{CSF}}(\mathbf{Z}_{i\tau}).
+    \]
+    (Appendix~\ref{apd:csf_ate_derivation} provides a more detailed derivation of CSF).
+\end{itemize}

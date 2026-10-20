@@ -1,0 +1,65 @@
+\begin{figure*}[t]
+  \centering
+
+  % ---- Left panel: narrative (boxed) ----
+  \begin{subfigure}[t]{0.49\textwidth}\vspace{0pt}
+  %\begin{subfigure}[t]{0.48\linewidth}\vspace{0pt}
+    \begin{tcolorbox}
+    [
+    colback=white,
+    colframe=black!30,
+    arc=2mm,
+    boxrule=0.6pt,
+    left=2mm,right=2mm,top=2mm,bottom=2mm
+    ]
+      \small\raggedright
+      A \hl{52-year-old} \hl{woman} was \hl{admitted to the medical ICU} with \hl{chest pain} and \hl{shortness of breath}. She developed \hl{intermittent fever and fatigue} a couple of weeks prior to admission. Eight hours after hospital and ICU admission, \hl{broad-spectrum antibiotics} were \hl{started for suspected infection}. On hospital admission day 2, she developed \hl{pleuritic pain} and \hl{escalating oxygen requirements}. \hl{CT angiography} was performed two days after admission.
+      
+    \end{tcolorbox}
+    \caption{Case narrative with highlighted clinical events}
+    \label{fig:narrative_box}
+  \end{subfigure}\hfill%
+  % ---- Right panel: event–time table (boxed) ----
+  \begin{subfigure}[t]{0.49\textwidth}\vspace{0pt}
+  %\begin{subfigure}[t]{0.48\linewidth}\vspace{0pt}
+    \begin{tcolorbox}
+    [
+    colback=white,
+    colframe=black!30,
+    arc=2mm,
+    boxrule=0.6pt,
+    left=2mm,right=2mm,top=2mm,bottom=2mm
+    ]
+      \small\centering
+      \setlength{\tabcolsep}{5pt}
+      \begin{tabular}{@{} l r @{}}
+        \toprule
+        \textbf{Event} & \textbf{Time (h)} \\
+        \midrule
+        52-year-old & 0 \\
+        woman & 0 \\
+        admitted to the medical ICU & 0 \\
+        chest pain & 0 \\
+        shortness of breath & 0 \\
+        developed intermittent fever & -336 \\
+        developed fatigue & -336 \\
+        broad-spectrum antibiotics started \\ for suspected infection & 8 \\
+        pleuritic pain developed & 24 \\
+        escalating oxygen requirements & 24 \\
+        CT angiography & 48 \\
+        %Management decisions & 48 \\
+        \bottomrule
+      \end{tabular}
+    \end{tcolorbox}
+    \caption{Text-ordered event–time tuples.}
+    \label{fig:table_box}
+  \end{subfigure}
+
+  \caption{Example case report (left) with text-ordered event-time tuples (right).
+  }
+  \label{fig:annotation_ex}
+  \vspace{-5mm}
+\end{figure*}
+
+
+

@@ -1,0 +1,76 @@
+\begin{table}[t!]
+\footnotesize
+\centering
+\caption{Case report identification performance per diagnosis and aggregated across all diagnoses.}
+\label{tab:case_report_identification}
+% \begin{adjustbox}{max width=0.95\textwidth}
+\begin{tabular}{llcccc}
+\toprule
+Subset & Diagnosis & Precision & Recall & Accuracy & F1 Score \\
+\midrule
+\multirow{6}{*}{PubMed metadata} 
+    & Atrial Fibrillation & 0.84 & 0.94 & 0.80 & 0.89 \\
+    & COVID-19            & 0.94 & 0.89 & 0.85 & 0.92 \\
+    & Diabetes            & 0.85 & 1.00 & 0.85 & 0.92 \\
+    & Hypertension        & 1.00 & 1.00 & 1.00 & 1.00 \\
+    & Sepsis              & 0.95 & 0.95 & 0.90 & 0.95 \\
+\cmidrule(lr){2-6}
+    & \textbf{All Diagnoses} & \text{0.92} & \textbf{0.96} & \text{0.88} & \text{0.94} \\
+\midrule
+\multirow{6}{*}{LLM-Pipeline}
+    & Atrial Fibrillation & 1.00 & 1.00 & 1.00 & 1.00 \\
+    & COVID-19            & 1.00 & 0.89 & 0.90 & 0.94 \\
+    & Diabetes            & 1.00 & 0.94 & 0.95 & 0.97 \\
+    & Hypertension        & 1.00 & 0.95 & 0.95 & 0.97 \\
+    & Sepsis              & 1.00 & 1.00 & 1.00 & 1.00 \\
+\cmidrule(lr){2-6}
+    & \textbf{All Diagnoses} & \textbf{1.00} & \textbf{0.96} & \textbf{0.96} & \textbf{0.98} \\
+\bottomrule
+\end{tabular}
+% \end{adjustbox}
+\vspace{-5mm}
+\end{table}
+
+
+
+% \begin{table}[!ht]
+%     \footnotesize
+%     \centering
+%     \caption{Case report identification performance per diagnosis}
+%     \label{tab:diagnosis_results}
+%     \begin{tabular}{l l c c c c c}
+%         \hline
+%         Subset & Diagnosis & Sensitivity & Specificity & Accuracy & Precision & F1 Score \\
+%         \hline
+%         PubMed MetaData  & Atrial Fibrillation & 0.94 & 0.00 & 0.80 & 0.84 & 0.89 \\
+%         LLM-Pipeline     & Atrial Fibrillation & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+%         \hline
+%         PubMed MetaData  & COVID-19           & 0.89 & 0.00 & 0.85 & 0.94 & 0.92 \\
+%         LLM-Pipeline     & COVID-19           & 0.89 & 1.00 & 0.90 & 1.00 & 0.94 \\
+%         \hline
+%         PubMed MetaData  & Diabetes           & 1.00 & 0.00 & 0.85 & 0.85 & 0.92 \\
+%         LLM-Pipeline     & Diabetes           & 0.94 & 1.00 & 0.95 & 1.00 & 0.97 \\
+%         \hline
+%         PubMed MetaData  & Hypertension       & 1.00 & 0.00 & 1.00 & 1.00 & 1.00 \\
+%         LLM-Pipeline     & Hypertension       & 0.95 & 0.00 & 0.95 & 1.00 & 0.97 \\
+%         \hline
+%         PubMed MetaData  & Sepsis             & 0.95 & 0.00 & 0.90 & 0.95 & 0.95 \\
+%         LLM-Pipeline     & Sepsis             & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+%         \hline
+%     \end{tabular}
+% \end{table}
+
+% \begin{table}[!ht]
+%     \footnotesize
+%     \centering
+%     \caption{Aggregated case report identification performance across all diagnoses}
+%     \label{tab:aggregated_results}
+%     \begin{tabular}{l c c c c c}
+%         \hline
+%         Subset & Sensitivity & Specificity & Accuracy & Precision & F1 Score \\
+%         \hline
+%         PubMed MetaData  & \textbf{0.96} & 0.00 & 0.88 & 0.92 & 0.94 \\
+%         LLM-Pipeline     & \textbf{0.96} & \textbf{1.00} & \textbf{0.96} & \textbf{1.00} & \textbf{0.98} \\
+%         \hline
+%     \end{tabular}
+% \end{table}

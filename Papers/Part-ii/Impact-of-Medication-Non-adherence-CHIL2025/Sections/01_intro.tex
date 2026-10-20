@@ -1,0 +1,40 @@
+Mental health disorders remain a leading contributor to disability worldwide, incurring substantial individual and societal costs \citep{whiteford2013global, rehm2019global, gbd2022global}. 
+Severe mental illnesses (SMIs) such as schizophrenia, schizoaffective disorder, and bipolar disorder pose particular challenges for long-term management. 
+In these conditions, antipsychotic medications constitute a cornerstone of treatment, mitigating psychotic symptoms, reducing relapse risk, and facilitating social and functional stability \citep{yatham2018canadian, keepers2020american, leucht2012antipsychotic, tiihonen2017real}. 
+Unfortunately, non-adherence to antipsychotic regimens is widespread and has been associated with a host of adverse outcomes, including psychiatric hospitalization, suicidality, homelessness, and involvement with the criminal justice system \citep{ascher2006medication, velligan2009expert, velligan2017psychiatric, correll2018comparison}.
+
+A variety of factors, ranging from medication side effects and associated stigma to cognitive impairment and limited social support, can shape adherence behaviors \citep{kane2016comprehensive, semahegn2020psychotropic}. 
+While it is well-established that non-adherence heightens risks of adverse outcomes, many studies focus on a single outcome (e.g., hospitalization), thereby overlooking broader, multifaceted challenges \citep{walter2019multiple, mok2024multiple}.
+Given the substantial clinical and public health implications of concurrent risks such as mortality, involuntary hospitalization, and criminal justice involvement, a more comprehensive survival framework is needed \citep{chen2022influencing}.
+
+A recent Allegheny County report has underscored rising mortality rates and the considerable burden of involuntary hospitalizations among individuals with SMIs \citep{welle2023involuntary}. 
+Despite highlighting these issues, the report did not isolate or quantify how adherence influences such events.
+Accordingly, there is a need for survival and causal inference methods that account for right-censoring, selection bias, and time-varying exposures in understanding how non-adherence might affect the timing of critical outcomes.
+In the present study, we develop a rigorous, real-world application of these methods to examine the first occurrence of mortality, involuntary hospitalization, or jail booking in a de-identified county dataset.
+Our approach leverages both established survival models and well-studied causal meta-learning techniques, offering a nuanced view of how non-adherence may exacerbate early adverse events in schizophrenia.
+
+The population under study faces a high risk of severe adverse events within a short period.  
+Among 6,827 individuals in our analysis, 19\% experienced an adverse event within the first year, which includes 595 (53\%) involuntary hospitalizations, 434 (38\%) jail bookings, and 100 (9\%) deaths. These figures highlight the urgency of figuring out who might be at risk of experiencing an adverse event and, subsequently, finding interventions for high-risk individuals that would lead to positive outcomes. Our underlying hypothesis is that medication non-adherence is an indicator for whether an individual will experience an adverse event.
+To this end, we aim to rigorously quantify the association between medication non-adherence and adverse event timing. Our hope is that this quantification provides a first step toward future targeted interventions and policy decisions that benefit individuals with schizophrenia.
+
+Our main contributions are summarized as follows:
+\begin{enumerate}[itemsep=0pt]
+    \item \textbf{Longitudinal survival analysis framework for a composite adverse outcome.}
+    Unlike existing investigations that restrict attention to an endpoint defined by a single event, we define a composite adverse event comprised of mortality, involuntary hospitalization, or jail booking. We model the time-to-first-event for this composite outcome; we refer to this time duration as the \emph{adverse event time}. We measure this adverse event time starting from different time origins depending on how much of an individual's longitudinal data we get to observe. Our framework directly extends the longitudinal data analysis approach of \citet{fitzmaurice2009longitudinal} to survival analysis.
+    \item \textbf{Adaptation of standard causal inference methods to survival analysis.}
+    Building on meta-learner strategies (T-learner and S-learner from \citet{kunzel2019metalearners}) and nearest-neighbor matching from causal inference (e.g., \citealt{stuart2010matching}), we quantify the effect of medication non-adherence on differences in mean adverse event times.
+    In contrast to prior causal survival analysis work that often focuses on proportional hazards models or that uses parametric assumptions, our analysis shows how meta-learners can estimate individual and average treatment effects when censoring and time-varying exposures arise.
+
+    \item \textbf{Subgroup and sensitivity analyses.}
+    To illuminate the role of medication adherence across specific treatment contexts, we conduct subgroup analyses by antipsychotic formulation (injectable vs.\ oral) and by specific medication type (based on generic drug name).
+    In addition, we investigate how risk scores provided by the county, serving as proxies for unmeasured confounders, modify both survival predictions and treatment effect estimates.
+    These analyses shed light on model robustness and underscore the importance of rich covariate information in observational studies.
+\end{enumerate}
+Overall, this work demonstrates how established survival and causal inference techniques can be combined to investigate multifaceted, policy-relevant questions about medication adherence in schizophrenia.
+By leveraging de-identified administrative and pharmacy data, we show that non-adherence remains a robust risk factor for earlier occurrences of life-threatening and socially destabilizing outcomes.
+These findings support the clinical importance of promoting medication adherence and contribute methodological guidance for future analyses that seek to address similar real-world complexities.
+
+Our experimental framework is designed to reflect real-world complexities, where medication adherence is naturally non-randomized, making direct counterfactual comparisons infeasible due to confounding, selection bias, immortal time bias, and potential reverse causality. 
+A naive comparison of adherent versus non-adherent groups can lead to biased estimates. 
+By explicitly modeling adherence patterns and incorporating a composite adverse outcome, our study provides a more comprehensive and realistic assessment of a patient's risk of experiencing adverse outcomes due to medication non-adherence. 
+This approach enables us to obtain estimates that are robust, interpretable, and actionable, equipping clinicians and policymakers with the evidence needed to make informed decisions about adherence-promoting interventions.

@@ -1,0 +1,380 @@
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style
+
+%%\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
+%%\documentclass[pdflatex,sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
+%%\documentclass[pdflatex,sn-vancouver-num]{sn-jnl}% Vancouver Numbered Reference Style
+%%\documentclass[pdflatex,sn-vancouver-ay]{sn-jnl}% Vancouver Author Year Reference Style
+%%\documentclass[pdflatex,sn-apa]{sn-jnl}% APA Reference Style
+%%\documentclass[pdflatex,sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+\usepackage{graphicx}
+\usepackage{caption}
+%\usepackage{subfigure}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\usepackage{dsfont}
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+%\usepackage{tcolorbox}
+\usepackage[most]{tcolorbox}
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage[utf8]{inputenc}
+
+\usepackage{soul} % \hl{}
+\sethlcolor{green!18} % soft highlight; adjust if desired
+
+% Timeline drawing
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\usepackage{fancyvrb}      % for Verbatim with inline commands
+\usepackage[T1]{fontenc}   % ensures bold typewriter is available
+\usepackage{lmodern}       % modern fonts (bold tt)
+\usepackage{amsmath}
+\usepackage{cleveref}
+
+% Custom margins: left 2in, right 0.75in, top and bottom 1in (consistent on all pages)
+\geometry{left=5cm, right=1.5cm, top=1.5cm, bottom=1.5cm, asymmetric}
+
+% Override title page font definitions to use left alignment
+\makeatletter
+
+% Redefine fonts to use raggedright instead of titraggedcenter
+\def\Titlefont{\reset@font\fontsize{17bp}{22.5bp}\selectfont\raggedright}%
+\def\SubTitlefont{\reset@font\fontsize{14bp}{16.5bp}\selectfont\raggedright}%
+\def\Authorfont{\reset@font\fontsize{12bp}{14.5bp}\selectfont\boldmath\raggedright}%
+\def\addressfont{\reset@font\fontsize{11bp}{13.5bp}\selectfont\raggedright}%
+\def\abstractheadfont{\reset@font\fontsize{9bp}{11bp}\bfseries\selectfont\raggedright}%
+\def\abstractfont{\reset@font\fontsize{9bp}{11bp}\selectfont\raggedright}%
+
+% Redefine main body text sizes (slightly smaller)
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize{9.5bp}{11.4bp}%
+   \abovedisplayskip 12\p@ \@plus2\p@ \@minus1\p@
+   \abovedisplayshortskip \z@ \@plus3\p@%
+   \belowdisplayshortskip 3\p@ \@plus3\p@ \@minus3\p@%
+   \belowdisplayskip \abovedisplayskip%
+   \let\@listi\@listI}%
+
+\renewcommand\small{%
+   \@setfontsize\small{8.5bp}{10.2bp}%
+   \abovedisplayskip 5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 3\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 4\p@ \@plus2\p@ \@minus2\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip}%
+
+\renewcommand\footnotesize{%
+   \@setfontsize\footnotesize{7bp}{8bp}%
+   \abovedisplayskip 5\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 3\p@ \@plus\p@ \@minus\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip}%
+
+% Redefine section header fonts (smaller)
+\def\sectionfont{\reset@font\fontfamily{\rmdefault}\fontsize{12bp}{14bp}\bfseries\selectfont\raggedright\boldmath}%
+\def\subsectionfont{\reset@font\fontfamily{\rmdefault}\fontsize{10.5bp}{12.5bp}\bfseries\selectfont\raggedright\boldmath}%
+\def\subsubsectionfont{\reset@font\fontsize{9.5bp}{11.5bp}\bfseries\selectfont\raggedright\boldmath}%
+\def\paragraphfont{\reset@font\fontsize{9bp}{11bp}\bfseries\itshape\selectfont\raggedright}%
+
+% Reduce top spacing on title page
+\renewcommand{\@maketitle}{\newpage\null%
+    \if@remarkboxon\vbox to 0pt{\vspace*{-78pt}\hspace*{-18pt}\FMremark}\else\vskip-10pt\fi% Changed from \vskip21pt to \vskip-10pt
+    \hsize\textwidth\parindent0pt%
+    {\hbox to \textwidth{{\Artcatfont\ArtType\hfill}\par}}%
+    \ifx\@title\empty\else%
+        \removelastskip\vskip20pt\nointerlineskip%
+        {\Titlefont\@title\par}%
+    \fi%
+    \ifx\@subtitle\empty\else%
+        \vskip9pt%
+        {{\SubTitlefont\@subtitle\par}}%
+    \fi%
+    \ifnum\aucount>0
+        \global\punctcount\aucount%
+        \vskip20pt%
+        \artauthors\par%
+        {\vskip7pt\addressfont\auaddress\par%
+	 \removelastskip\vskip24pt%
+	\ifnum\emailcnt>0\relax%
+           \ifx\corrauthemail\@empty\else{\ifnum\aucount>1*\fi}%
+	   Corresponding author(s). E-mail(s): \corrauthemail\par\fi%
+	   \ifx\authemail\@empty\else Contributing authors:\ \authemail\fi%
+        \fi%
+        \ifequalcont{\par$^{\dagger}$\@equalconttext\par}\fi%
+	 \removelastskip\vskip24pt%
+        \ifpresentaddress{\par\@presentaddresstext\par}\fi%
+	}%
+     \fi%
+     {\printabstract\par}%
+     {\printkeywords\par}%
+     \ifx\@pacs\empty\else%
+       \loop\ifnum\PacsCount>0%
+          \csname\romannumeral\PacsTmpCnt StorePacsTxt\endcsname\par%
+          \StepDownCounter{\PacsCount}%
+          \StepUpCounter{\PacsTmpCnt}%
+       \repeat%
+    \fi%
+    \removelastskip\vskip36pt\vskip0pt}%
+
+\makeatother
+
+%%%%
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published 
+%%%%  by Springer Nature. The guidance has been prepared in partnership with 
+%%%%  production teams to conform to Springer Nature technical requirements. 
+%%%%  Editorial and presentation requirements differ among journal portfolios and 
+%%%%  research disciplines. You may find sections in this template are irrelevant 
+%%%%  to your work and are empowered to omit any such section if allowed by the 
+%%%%  journal you intend to submit to. The submission guidelines and policies 
+%%%%  of the journal take precedence. A detailed User Manual is available in the 
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
+
+
+% %-------------------------------------------------
+% % Supplementary Material Formatting for sn-jnl
+% %-------------------------------------------------
+
+% \makeatletter
+
+% % Completely suppress the default "Appendix A" title
+% \renewcommand\appendix{\par
+%   \setcounter{section}{0}%
+%   \setcounter{subsection}{0}%
+%   \setcounter{subsubsection}{0}%
+%   \gdef\thesection{S\arabic{section}}%
+%   \gdef\thesubsection{S\arabic{section}.\arabic{subsection}}%
+%   \gdef\thesubsubsection{S\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}%
+%   \renewcommand{\thefigure}{S\arabic{figure}}%
+%   \renewcommand{\thetable}{S\arabic{table}}%
+%   \renewcommand{\theequation}{S\arabic{equation}}%
+% }
+
+% % Remove the automatic "Appendix" heading inserted by the class
+% % \renewcommand\@makechapterhead[1]{}
+% % \renewcommand\@makeschapterhead[1]{}
+
+% \makeatother
+
+
+\begin{document}
+
+\title[Article Title]{Temporally annotated textual time series from PubMed Open Access clinical case reports}
+
+%%=============================================================%%
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% \author*[1,2]{\fnm{Joergen W.} \spfx{van der} \sur{Ploeg} 
+%%  \sfx{IV}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author[1,2]{\fnm{Shahriar} \sur{Noroozizadeh}}\email{snoroozi@cs.cmu.edu}
+\equalcont{These authors contributed equally to this work.}
+
+\author[3]{\fnm{Sayantan} \sur{Kumar}}\email{sayantan.kumar@nih.gov}
+\equalcont{These authors contributed equally to this work.}
+
+\author[2,1]{\fnm{George H.} \sur{Chen}}\email{georgechen@cmu.edu}
+
+\author*[3]{\fnm{Jeremy C.} \sur{Weiss}}\email{jeremy.weiss@nih.gov}
+
+\affil[1]{\orgdiv{Machine Learning Department, School of Computer Science}, \orgname{Carnegie Mellon University}, \city{Pittsburgh}, \state{Pennsylvania}, \country{USA}}
+
+\affil[2]{\orgdiv{Heinz College of Information Systems and Public Policy}, \orgname{Carnegie Mellon University}, \city{Pittsburgh}, \state{Pennsylvania}, \country{USA}}
+
+\affil[3]{\orgdiv{National Library of Medicine}, \orgname{National Institutes of Health}, \orgaddress{%\street{Street},
+\city{Bethesda}, \state{Maryland}, \country{USA}}}
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{
+Clinical narratives encode temporal dynamics essential for modeling patient trajectories, yet large-scale temporally annotated resources are scarce. We introduce PMOA–TTS, a corpus of 124,699 single-patient PubMed Open Access case reports converted into structured textual timelines of (event, time) pairs using a scalable large-language-model pipeline (\texttt{Llama 3.3} and \texttt{DeepSeek-R1}). The corpus comprises over 5.6 million timestamped events anchored to admission, alongside extracted demographics and diagnoses. Technical validation uses a clinician-curated gold set and three measures: semantic event matching, temporal concordance (c-index), and alignment error summarized with Area Under the Log-Time CDF (AULTC). We benchmark alternative prompting and model choices and provide documentation to support reproduction. PMOA–TTS enables research on timeline extraction, temporal reasoning, survival modeling and event forecasting from narrative text, and offers broad diagnostic and demographic coverage. Data and code are openly available in public repositories.
+}
+
+%\keywords{keyword1, Keyword2, Keyword3, Keyword4}
+\keywords{clinical natural language processing, temporal information extraction, textual time series, large language models, PubMed Open Access case reports}
+
+\maketitle
+
+% Background & Summary
+% Methods
+% Data Records
+% Data Overview (optional)
+% Technical Validation
+% Usage Notes (optional)
+% Data Availability
+% Code Availability
+% References
+% Author Contributions
+% Competing Interests
+% Acknowledgements (optional)
+% Funding
+% Ethics statement* 
+
+\vspace{-5mm}
+\section{Background and Summary}\label{sec:intro}
+\input{Scientific_data/Sections/background_summary}
+
+\section{Methods}\label{sec:methods}
+\input{Scientific_data/Sections/methods}
+
+\section{Data Records}\label{sec:data_records}
+\input{Scientific_data/Sections/data_records}
+
+\section{Data Overview}\label{sec:data_overview}
+\textcolor{red}{Push prompts to Appendix, keep results with description. For diagnoses, push prompt and UMLS mapping to Appendix, keep results with description.}
+\input{Scientific_data/Sections/data_overview}
+
+\section{Technical validation} \label{sec:technical_validation}
+\input{Scientific_data/Sections/technical_validation}
+
+\section{Downstream applications} \label{sec:downstream_applications}
+\input{Scientific_data/Sections/downstream}
+
+\section{Usage Notes}\label{sec:usage_notes}
+\input{Scientific_data/Sections/usage_notes}
+
+\section{Data availability}\label{sec:data_availability}
+
+\section{Code availability}\label{sec:data_availability}
+In line with the philosophy of reproducible research, all codes used in this paper, including those for data preprocessing and technical validation, are accessible at \url{https://github.com/jcweiss2/pmoa_tts}. The usage instructions and parameter settings for all codes can be found at this link.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Funding - to be placed in body}
+
+This research was supported in part by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health. This work utilized the computational resources of the NIH HPC Biowulf cluster. S. N. was supported by Carnegie Mellon University TCS Presidential Fellowship, and Natural Sciences and Engineering Research Council of Canada (NSERC) PGS-D award. S.N was also supported in part by an appointment to the National Library of Medicine Research Participation Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health. ORISE is managed by ORAU under DOE contract number DE-SC0014664. All opinions expressed in this paper are the authors’ and do not necessarily reflect the policies and views of NIH, NLM, DOE, or ORAU/ORISE.
+
+\noindent \textcolor{red}{Note there is an optional Acknowledgement section which can be used for acknowledging non-author contributions only and not funding.}
+
+\section*{Author contributions - only in submission portal}
+
+These authors contributed equally: Shahriar Noroozizadeh (S.N.) and Sayantan Kumar (S.K.).
+S.N. and S.K. implemented the pipeline, ran all experiments, curated the data, performed analyses and visualizations, and drafted/revised the manuscript. Jeremy C. Weiss (J.C.W.) conceived the study, guided methodology, contributed to experiments, supervised the project, and secured funding. George Chen (G.C.) contributed to technical discussions and manuscript review. All authors approved the final manuscript.
+
+% \noindent CRediT taxonomy:
+% \begin{itemize}
+%     \item Conceptualization: J.C.W.
+%     \item Methodology: S.N., S.K., J.C.W.
+%     \item Software: S.N., S.K.
+%     \item Validation: S.N., S.K.
+%     \item Formal analysis: S.N., S.K.
+%     \item Investigation: S.N., S.K.
+%     \item Data curation: S.N., S.K.
+%     \item Visualization: S.N., S.K.
+%     \item Writing – original draft: S.N., S.K.
+%     \item Writing – review & editing: S.N., S.K., G.C., J.C.W.
+%     \item Supervision: J.C.W.
+%     \item Funding acquisition / Resources / Project administration: J.C.W.
+% \end{itemize}
+
+\section*{Ethics declaration - only in submission portal}
+The authors declare no competing interests.
+
+%% If you are submitting to one of the Nature Portfolio journals, using the eJP submission   %%
+%% system, please include the references within the manuscript file itself. You may do this  %%
+%% by copying the reference list from your .bbl file, paste it into the main manuscript .tex %%
+%% file, and delete the associated \verb+\bibliography+ commands.                            %%
+%%===========================================================================================%%
+
+\bibliography{NeurIPS_benchamarks_2025/references}% common bib file
+%% if required, the content of .bbl file can be included here once bbl is generated
+%%\input sn-article.bbl
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{appendices}
+\input{Scientific_data/Supplementary/AULTC}
+\end{appendices}
+
+
+% \appendix
+% \newpage
+% \section*{\Large Supplementary Material}
+% \addcontentsline{toc}{section}{Supplementary Material}
+
+% \setcounter{section}{0}
+% \setcounter{figure}{0}
+% \setcounter{table}{0}
+% \setcounter{equation}{0}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{LLM prompts}
+% \input{Scientific_data/Supplementary/TTS_extraction_prompt}
+% \input{Scientific_data/Supplementary/diagnoses_prompt}
+% \input{Scientific_data/Supplementary/demo_prompt}
+
+% %\input{Scientific_data/Supplementary/AULTC}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{TTS Evaluation Metrics}
+% \input{Scientific_data/Supplementary/TTS_evaluation_metrics}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input{Scientific_data/Supplementary/prompt_ablation}
+% \section{Comparing LLM Annotations}
+%\input{Plots_tables/example_LLM_annotations}
+
+% \section{ Sensitivity to the Quality of LLM Prompts}
+% \input{Scientific_data/Supplementary/prompt_ablation}
+
+
+%%===========================================================================================%%
+
+\end{document}
