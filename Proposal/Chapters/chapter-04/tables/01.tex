@@ -1,0 +1,28 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:synthetic-data-causal-config}{\caption{Causal configurations of synthetic datasets. \texttt{RCT} = randomized controlled trial; \texttt{OBS} = observational study; \texttt{50}(\texttt{5}) = 50\%(5\%) treatment rate; \texttt{CPS}= correctly specified propensity score (ignorability satisfied); \texttt{UConf} = unobserved confounding (ignorability violated); \texttt{NoPos} = lack of positivity; \texttt{InfC} = informative censoring (ignorable censoring violated). \ChFourRebuttal{\mbox{\ChFourGrayCheck = held}, \mbox{\ChFourBlackCross = not held}}.}}{
+    \centering
+    
+    
+    
+    
+    \begin{adjustbox}{max width=0.85\linewidth}
+    \begin{tabular}{lcccc}
+        \toprule
+        \makecell[l]{\textbf{Causal}\\\textbf{Configs.}} & \textbf{RCT} &  \makecell[c]{\textbf{Ignorability}} & \makecell[c]{\textbf{Positivity}} & \makecell[c]{\textbf{Ignorable}\\\textbf{Censoring}} \\ 
+        \midrule
+        \texttt{RCT-50} & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourGrayCheck \\
+        \texttt{RCT-5} & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourGrayCheck \\
+        \midrule
+        \texttt{OBS-CPS} & \ChFourBlackCross & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourGrayCheck \\
+        \texttt{OBS-UConf} & \ChFourBlackCross & \ChFourBlackCross & \ChFourGrayCheck & \ChFourGrayCheck \\
+        \texttt{OBS-NoPos} & \ChFourBlackCross & \ChFourGrayCheck & \ChFourBlackCross & \ChFourGrayCheck \\
+        \midrule
+        \texttt{OBS-CPS-InfC} & \ChFourBlackCross & \ChFourGrayCheck & \ChFourGrayCheck & \ChFourBlackCross \\
+        \texttt{OBS-UConf-InfC} & \ChFourBlackCross & \ChFourBlackCross & \ChFourGrayCheck & \ChFourBlackCross \\
+        \texttt{OBS-NoPos-InfC} & \ChFourBlackCross & \ChFourGrayCheck & \ChFourBlackCross & \ChFourBlackCross \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

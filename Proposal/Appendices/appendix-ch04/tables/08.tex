@@ -1,0 +1,29 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:hyperparam-survite}{\caption{Set of hyperparameters SurvITE.}}{
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+
+
+\begin{tabular}{l l}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\ 
+\midrule
+Model width $z_{\text{dim}}, h_{\text{dim1}}, h_{\text{dim2}}$
+& $\{8,16,32\}$ (synthetic, ACTG) or $\{16,32,64\}$ (MIMIC, Twin) \\
+Number of shared layers & 2 \\
+Number of head layers & 2 \\
+Activation function & ReLU \\
+Dropout rate & 0.3 \\
+IPM type & Wasserstein \\
+IPM regularization weight $\beta$ & $10^{-3}$ \\
+Smoothing parameter $\gamma$ & 0 \\
+Learning rate & $10^{-3}$ \\
+Batch size & 256 \\
+Maximum epochs & 5000 \\
+Early stopping & Checked every 100 epochs; stop after 10 non-improving checks \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

@@ -1,0 +1,27 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:hyperparam-outcome-impute-reg}{\caption{Set of hyperparameters for outcome imputation methods}}{
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+% \captionsetup{labelformat=empty}
+ 
+\begin{tabular}{l l}
+\toprule
+\textbf{Regressor} & \textbf{Hyperparameter Grid} \\ \midrule
+Lasso & Alpha: \{0.001, 0.01, 0.1, 1, 10\} \\ \midrule
+Random Forest & 
+\begin{tabular}[t]{@{}l@{}}
+Number of trees: \{50, 100\} \\
+Maximum depth: \{3, 5, None\}
+\end{tabular} \\ \midrule
+XGBoost & 
+\begin{tabular}[t]{@{}l@{}}
+Number of trees: \{50, 100\} \\
+Learning rate: \{0.01, 0.1\} \\
+Maximum depth: \{3, 5\}
+\end{tabular} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

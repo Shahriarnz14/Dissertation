@@ -1,0 +1,221 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:winrate-obs-configs}{\caption{\ChFourRebuttal{Win-rate (\%) of method families by Causal Configuration (observational study settings). 
+Values denote the percentage of times a method appears in the Top-1, Top-3, and Top-5 according to CATE RMSE and ATE Bias across the five survival scenarios for each configuration. }}}{
+\centering
+
+
+
+% Row 1: OBS-CPS and OBS-UConf
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-CPS}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+X-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & \textcolor{gray}{0}   & 20.0 & 20.0 \\
+DR-Learner              & \textcolor{gray}{0}   & 20.0 & 20.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0} \\
+Double-ML               & 20.0 & 40.0 & 80.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0} \\
+Causal Forest           & 20.0 & 20.0 & 40.0 & \textcolor{gray}{0}   & 20.0 & 20.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & 20.0 & 40.0 & 60.0 & \textcolor{gray}{0}   & 60.0 & 80.0 \\
+SurvITE                 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 & 20.0 & 60.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & \textcolor{gray}{0}   & 20.0 & 20.0 & 20.0 & 40.0 & 80.0 \\
+S-Learner-Survival      & 20.0 & 80.0 & 100.0 & 40.0 & 60.0 & 100.0 \\
+Matching-Survival       & 20.0 & 80.0 & 100.0 & 20.0 & 80.0 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-UConf}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & \textcolor{gray}{0}   & 20.0 & 20.0 & \textcolor{gray}{0}   & 20.0 & 40.0 \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & 40.0 \\
+X-Learner               & \textcolor{gray}{0}   & 20.0 & 40.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 60.0 \\
+DR-Learner              & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 & 40.0 & 40.0 \\
+Double-ML               & 20.0 & 60.0 & 80.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+Causal Forest           & 20.0 & 40.0 & 40.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & 20.0 & 40.0 & 60.0 & 40.0 & 60.0 & 60.0 \\
+SurvITE                 & 20.0 & 20.0 & 40.0 & 20.0 & 40.0 & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & \textcolor{gray}{0}   & 20.0 & 20.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 60.0 \\
+S-Learner-Survival      & 20.0 & 60.0 & 80.0 & \textcolor{gray}{0}   & 40.0 & 60.0 \\
+Matching-Survival       & \textcolor{gray}{0}   & 20.0 & 100.0 & 20.0 & 60.0 & 60.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+
+
+
+% Row 2: OBS-NoPos and OBS-CPS-InfC
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-NoPos}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & 20.0 & 40.0 & 60.0 & \textcolor{gray}{0}   & 20.0 & 40.0 \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & 60.0 \\
+X-Learner               & 20.0 & 40.0 & 80.0 & \textcolor{gray}{0}   & 20.0 & 60.0 \\
+DR-Learner              & \textcolor{gray}{0}   & 20.0 & 20.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 \\
+Double-ML               & 40.0 & 60.0 & 60.0 & \textcolor{gray}{0}   & 20.0 & 20.0 \\
+Causal Forest           & \textcolor{gray}{0}   & 20.0 & 40.0 & 20.0 & 20.0 & 20.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & \textcolor{gray}{0}   & 40.0 & 40.0 & 20.0 & 80.0 & 80.0 \\
+SurvITE                 & \textcolor{gray}{0}   & 20.0 & 40.0 & \textcolor{gray}{0}   & 20.0 & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & \textcolor{gray}{0}   & 20.0 & 20.0 & 20.0 & 20.0 & 20.0 \\
+S-Learner-Survival      & 40.0 & 40.0 & 60.0 & \textcolor{gray}{0}   & 20.0 & 80.0 \\
+Matching-Survival       & \textcolor{gray}{0}   & 20.0 & 80.0 & 40.0 & 40.0 & 40.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-CPS-InfC}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0} \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0} \\
+X-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 \\
+DR-Learner              & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & 20.0 & 20.0 & 20.0 \\
+Double-ML               & \textcolor{gray}{0}   & 40.0 & 60.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0} \\
+Causal Forest           & \textcolor{gray}{0}   & 20.0 & 60.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & 40.0 & 60.0 & 60.0 & 20.0 & 40.0 & 80.0 \\
+SurvITE                 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 & 60.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & 20.0 & 20.0 & 80.0 & 40.0 & 60.0 & 80.0 \\
+S-Learner-Survival      & 20.0 & 80.0 & 100.0 & \textcolor{gray}{0}   & 100.0 & 100.0 \\
+Matching-Survival       & 20.0 & 80.0 & 100.0 & \textcolor{gray}{0}   & 60.0 & 80.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+
+
+
+% Row 3: OBS-UConf-InfC and OBS-NoPos-InfC
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-UConf-InfC}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 & 20.0 \\
+X-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & 20.0 \\
+DR-Learner              & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+Double-ML               & \textcolor{gray}{0}   & 40.0 & 60.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+Causal Forest           & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 60.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & 40.0 & 40.0 & 60.0 & \textcolor{gray}{0}   & 20.0 & 100.0 \\
+SurvITE                 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & \textcolor{gray}{0}   & 20.0 & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & 40.0 & 80.0 & 80.0 & 40.0 & 60.0 & 80.0 \\
+S-Learner-Survival      & \textcolor{gray}{0}   & 100.0 & 100.0 & 20.0 & 80.0 & 80.0 \\
+Matching-Survival       & 20.0 & 40.0 & 100.0 & 20.0 & 60.0 & 80.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{\texttt{OBS-NoPos-InfC}}\\[0.25em]
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & \textcolor{gray}{0}   & 20.0 & 40.0 & 20.0 & 20.0 & 20.0 \\
+S-Learner               & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+X-Learner               & \textcolor{gray}{0}   & 20.0 & 40.0 & 20.0 & 20.0 & 20.0 \\
+DR-Learner              & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+Double-ML               & \textcolor{gray}{0}   & 40.0 & 60.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 \\
+Causal Forest           & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+Causal Survival Forests  & 20.0 & 40.0 & 40.0 & 20.0 & 60.0 & 80.0 \\
+SurvITE                 & \textcolor{gray}{0}   & \textcolor{gray}{0}   & 20.0 & \textcolor{gray}{0}   & 40.0 & 60.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & 20.0 & 40.0 & 40.0 & 60.0 & 80.0 & 100.0 \\
+S-Learner-Survival      & 20.0 & 100.0 & 100.0 & \textcolor{gray}{0}   & 40.0 & 60.0 \\
+Matching-Survival       & 40.0 & 60.0 & 100.0 & \textcolor{gray}{0}   & 40.0 & 60.0 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{minipage}
+
+}
+\end{table}

@@ -1,0 +1,39 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:overall-winrate}{\caption{\ChFourRebuttal{Win-rate (\%) of method families across all experimental configurations. 
+\textcolor{black}{Values denote the percentage of times a method appears in the Top-1, Top-3, and Top-5 
+according to CATE RMSE and ATE Bias.}}}}{
+\centering \small
+
+
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc@{\hspace{18pt}}ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method Family}} &
+\multicolumn{3}{c}{\textbf{CATE RMSE}} &
+\multicolumn{3}{c}{\textbf{ATE Bias}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5}
+& \textbf{Top-1} & \textbf{Top-3} & \textbf{Top-5} \\
+\midrule
+\multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+T-Learner               & 2.5  & 12.5 & 30.0 & 2.5 & 15.0 & 32.5 \\
+S-Learner               & \textcolor{gray}{0} & 2.5  & 2.5  & 5.0 & 15.0 & 25.0 \\
+X-Learner               & 2.5  & 12.5 & 35.0 & 5.0 & 17.5 & 40.0 \\
+DR-Learner              & \textcolor{gray}{0} & 7.5  & 22.5 & 5.0 & 12.5 & 30.0 \\
+Double-ML               & 20.0 & 52.5 & 72.5 & 2.5 & 5.0  & 17.5 \\
+Causal Forest           & 7.5  & 17.5 & 42.5 & 2.5 & 7.5  & 27.5 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}}\\
+Causal Survival Forests  & 25.0 & 45.0 & 52.5 & 17.5 & 52.5 & 75.0 \\
+SurvITE                 & 2.5  & 5.0  & 22.5 & 7.5  & 22.5 & 40.0 \\
+\addlinespace % \midrule
+\multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+T-Learner-Survival      & 12.5 & 32.5 & 42.5 & 25.0 & 37.5 & 62.5 \\
+S-Learner-Survival      & 17.5 & 67.5 & 85.0 & 12.5 & 57.5 & 77.5 \\
+Matching-Survival       & 12.5 & 50.0 & 92.5 & 17.5 & 57.5 & 72.5 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+}
+\end{table}

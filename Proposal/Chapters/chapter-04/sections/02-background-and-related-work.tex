@@ -1,0 +1,97 @@
+% !TeX root = ../../../main.tex
+\subsection{Background and Related Work}
+\label{ch04:sec:background}
+
+% We briefly review the problem setup (Section~\ref{sec:setup}), identification assumptions (Section~\ref{sec:indentification_assumptions}), existing evaluation practices (Section~\ref{sec:existing-eval}), and the three families of survival CATE estimators (Section~\ref{sec:overview-methods}).
+We briefly review the problem setup, identification assumptions, existing evaluation practices, and the three families of survival HTE estimators.
+
+% \vspace{-.25em}
+% \subsection{Problem Setup}
+% \label{sec:setup}
+% \vspace{-.25em}
+
+\textbf{Problem setup.}
+For each unit (data point) $i$, we observe covariates $X_i \in \mathcal{X}$, a binary treatment ${W_i \in \{0,1\}}$, and an \ChFourRebuttal{observed,} possibly censored event time $\widetilde{T}_i = \min(T_i, C_i)$ with event indicator $\delta_i = {\ChFourInd\{T_i \leq C_i\}}$, where $\delta_i$ is 1 if the event of interest happened (in which case \ChFourRebuttal{$\widetilde{T}_i$} is the event time) or 0 if the outcome is censored (in which case \ChFourRebuttal{$\widetilde{T}_i$} is the censoring time). Using the standard potential outcomes framework, $T_i(w)$ denotes the potential event time under treatment $w\in\{0,1\}$ with $T_i=T_i(W_i)$.
+% For a user-chosen transformation \(y(\cdot)\), such as restricted mean survival time (RMST) up to a horizon \(h\) (i.e., $y(T_i(w))=\mathbb{E}[\min\{T_i(w), h\}]$), %or survival probability at a fixed horizon,
+We assume that the tuple $(X_i,W_i,T_i(0),T_i(1),C_i)$ is i.i.d.~across different~$i$.
+
+We aim to estimate the \emph{conditional average treatment effect} (CATE) with respect to a transformation of the event time $y(\cdot)$:
+\begin{equation} \label{ch04:eq:cate}
+    \tau(x) := \mathbb{E}\big[ y\big(T_i(1)\big) - y\big(T_i(0)\big) | X_i=x\big],
+\end{equation}
+where $y(\cdot)$ encodes the survival estimand of interest, and the expectation is taken over the randomness of the two potential outcomes. For example, if we want the survival estimand to be the restricted mean survival time (RMST) up to a user-specified time horizon $h>0$, then we would set $y(t):=\min\{t,h\}$. Other choices for estimands are also possible (e.g., % Common choices include the restricted mean survival time (RMST) up to a horizon $h$, the
+median survival time, survival probability at a fixed time). In this paper, we focus on RMST, which is interpretable, robust under censoring, and widely adopted~\citep{shen2018estimating,curth2021survite,ch04:cui2023estimating}, while noting that our benchmark design allows extensions to other estimands, \ChFourRebuttal{and we include example results for survival probabilities in Appendix~\ref{ch04:app:other-estimand-result}}.
+
+% \vspace{-.25em}
+% \subsection{Identification Assumptions} \label{sec:indentification_assumptions}
+% \vspace{-.25em}
+\textbf{Identification assumptions.}
+Identification of $\tau(x)$ relies on the following assumptions~\citep{ch04:cui2023estimating} (and in our benchmark, we examine settings where these assumptions do not hold):
+\begin{itemize}
+    \item (A1) \textit{Consistency}: %For each unit $i$, the observed outcome is the potential outcome under the assigned treatment, i.e., 
+    $T_i = T_i(W_i)$ almost surely.
+    \item (A2) \textit{Ignorability}: %The variation in treatment assignment $W_i$ is as good as random conditional on $X_i$, i.e., 
+    $\{ T_i(0), T_i(1)\} \perp W_i \mid X_i$.
+    \item (A3) \textit{Positivity}: %The probability of receiving treatment (i.e., the propensity score) given $x$ is uniformly bounded away from 0 and 1, i.e., 
+    $\eta_e \leq \mathbb P ({W_i = 1 | X_i=x}) \leq 1 - \eta_e$ for some $\eta_e>0$.
+    \item (A4) \textit{Ignorable censoring}: %Censoring is independent of survival time conditional on covariates and treatment, i.e., 
+    $T_i ~\ChFourIndep~ C_i \mid X_i, \, W_i$.
+    \item (A5) \textit{Censoring positivity}: For horizon $h$, 
+    %censoring cannot always happen conditional on covariates and treatment, i.e., 
+    $\mathbb P ({C_i < h | X_i, \, W_i}) \leq 1 - \eta_C$ for some $0 < \eta_C \leq 1$.
+\end{itemize}
+Violations are common: unmeasured prognostic factors break ignorability, treatment guidelines undermine positivity, and drop-out linked to prognosis induces informative censoring.  
+A central goal of \textsc{SurvHTE‐Bench} is to measure how estimators behave under such violations. % in controlled ways.
+
+
+% \vspace{-.25em}
+% \subsection{Existing Evaluation Practice}
+% \label{sec:existing-eval}
+% \vspace{-.25em}
+\textbf{Existing evaluation practice.}
+Because only one potential outcome is observed per unit, validation typically relies on author-specific simulations. Prior studies vary assumptions in narrow ways: e.g., censoring up to 30\%~\citep{bo2024ameta} or heavy censoring but assuming ignorability~\citep{meir2025heterogeneous}.  
+Consequently, results are not comparable across papers, and estimator robustness under simultaneous assumption violations remains unclear.
+To date, no public benchmark exists with known individual-level ground truth with varying levels of assumption violations and survival distributions. % under a unified protocol. %Our benchmark aims to address this gap in the literature. % motivates the design of our benchmark \textsc{SurvHTE-Bench}.  %, introduced in Section~\ref{sec:bench}.
+
+% \vspace{-.25em}
+% \subsection{Overview of Existing Survival CATE Estimators}
+% \label{sec:overview-methods}
+% \vspace{-.25em}
+\textbf{Overview of existing survival HTE estimators.}
+% \textcolor{red}{George's comment: Be clear about which methods are already proposed and used by others; which are by ourselves (e.g. survival meta-learner, trivial extension etc.)}
+% To date, there are three main streams of causal survival methods: outcome imputation methods, direct-survival CATE models, and survival meta-learners. We describe these below. Our benchmark includes implementations of some representative methods from each of these three main streams. % (we have not exhaustively implemented every possible method).
+% \textcolor{red}{add more estimators literature review.}
+We group existing methods into three families:
+% Existing methods can be grouped into three families:
+\begin{itemize}
+    \item \textit{Outcome imputation methods}~\citep{xu2024estimating,meir2025heterogeneous}: Replace censored times with imputed survival times (e.g., IPCW-based reweighting introduced in \cite{qi2023an}). Then apply standard CATE estimators such as Causal Forests~\citep{athey2019grf}, Double-ML \citep{chernozhukov2018double}, or meta-learners including S(ingle)-, T(wo)-, X(cross)-, D(oubly)R(obust)-learners~\citep{athey2015machine,ch04:kunzel2019metalearners,kennedy2023towards}.\footnote{Standard CATE estimators do not handle censoring. By imputing censored times with survival times as a preprocessing step, we make it appear as if there is no censoring, so standard CATE estimators can be applied.}
+    \item \textit{Direct-survival CATE methods:} Extend causal inference directly to time-to-event outcomes, e.g., targeted learning~\citep{van2011targeted}, 
+    % targeted maximum likelihood estimation~\citep{stitelman2010collaborative,stitelman2011targeted}, 
+    tree-based estimators~\citep{zhang2017mining}, Bayesian approaches~\citep{henderson2020individualized}, SurvITE~\citep{curth2021survite}, or Causal Survival Forests~\citep{ch04:cui2023estimating}.
+    \item \textit{Survival meta-learners}~\citep{xu2023treatment,bo2024ameta,noroozizadeh2025impact}: Adapt S(ingle)-, T(wo)-, or matching-learners to survival outcomes by using survival models such as Random Survival Forests or deep survival models.
+\end{itemize}
+\ChFourRebuttal{While these approaches appear in disparate lines of work, we use the taxonomy above as an organizing lens for our benchmark. In particular, we implement 53 representative methods spanning the three families in a unified, modular framework to enable consistent evaluation across datasets and estimands. We note that several emerging directions fall outside this taxonomy (e.g., generative causal margin modeling~\citep{yang2025frugal} and synthetic-control-based methods~\citep{curth2024cautionary,han2025synthetic}), whose systematic integration we leave for future work.}
+
+\ChFourRebuttal{Additionally, while our benchmark focuses on static treatments under selection on observables, related work addresses HTEs in alternative settings. This includes instrumental variable approaches for survival \citep{tchetgen2015instrumental}, dynamic treatment regimes \citep{rudolph2022estimation,bates2022nonlinear,rudolph2023estimation,cho2023multi}, and Bayesian machine learning approaches \citep{chen2024bayesian}. Additionally, Targeted Maximum Likelihood Estimation-based methods \citep{stitelman2010collaborative,stitelman2011targeted} offer robust estimation for survival parameters, though primarily for average or subgroup effects rather than continuous CATE functions.}
+
+
+%\textcolor{red}{George: Please clearly give a few example of variants that technically have not been previously published but are trivial extensions of existing work. Alternatively state this in Section 3 after when the Survival CATE methods implemented are described.}
+
+% \textbf{Outcome imputation methods.} One stream of research aims to first recover complete data (by replacing censored times with imputed survival times) before applying standard CATE estimators for a non-censored regression outcome~\citep{xu2024estimating,meir2025heterogeneous}. In other words, after imputation, the task becomes standard causal inference of a continuous outcome, allowing various estimation methods to be applied (that are not originally designed for survival analysis). Specifically, we consider applying three imputation methods mentioned in \cite{qi2023an}: (1) \textit{Pseudo-observation}, which replaces censored observations with conditional expected survival times given that the event occurs after the censoring time, effectively extrapolating beyond observed data; (2) \textit{Margin}, which uses conditional survival probabilities across a grid of time points to construct a continuous outcome as the restricted mean survival time; and (3) \textit{IPCW-T} (Inverse Probability of Censoring Weighting for Time), which reweights uncensored observations by the inverse of their probability of not being censored, thereby creating a representative pseudo-population. After applying one of these imputation strategies to handle censoring, we employ established causal inference methods: Causal Forest~\citep{athey2019grf}, double machine learning~\citep{chernozhukov2018double}, and meta-learners~\citep{foster2011subgroup, kunzel2019metalearners, kennedy2023towards}, including S-, T-, X-, and DR-Learners, to estimate CATEs.  % on the completed dataset.
+% % For example, \cite{xu2024estimating} convert potentially censored time-to-event outcomes into standard continuous outcomes by applying censoring unbiased transformation, then various continuous HTE learners (not specifically designed for right-censored survival outcomes).
+% % Similarly, \citep{meir2025heterogeneous} apply an imputation strategy, for example, recursively imputed survival trees by \cite{zhu2012recursively} or imputation with pseudo outcomes introduced in \cite{qi2023an}, to first impute the potential incomplete outcome (due to censoring) to get a complete dataset, then standard HTE learners like Causal Forest~\citep{athey2019grf} can be applied to get HTE estimation on survival time.
+% % \textcolor{red}{From Jeremy's comment: add some high-level explanation for the imputation methods, or maybe do it in the appendix~\ref{app:imputation}?}
+
+% \textbf{Direct-survival CATE models.}
+% A principled framework for estimating treatment effects in survival settings is targeted learning, which leverages semiparametric theory to construct doubly robust and efficient estimators of treatment-specific survival parameters~\citep{van2011targeted}. Extensions of targeted maximum likelihood estimation (TMLE) to time-to-event data allow incorporating machine learning methods for nuisance estimation while maintaining valid inference under censoring~\citep{stitelman2010collaborative,stitelman2011targeted}.
+% Complementing this, a line of nonparametric methods has emerged that directly estimate heterogeneous treatment effects in survival analysis. SurvITE~\citep{curth2021survite} learns treatment-specific survival distributions with neural networks, using balancing losses to reduce confounding. Other methods include Bayesian models~\citep{henderson2020individualized}, tree-based estimators~\citep{zhang2017mining}, and survival forests with censoring-aware splitting criteria~\citep{tabib2020non,cui2023estimating}.
+% In this paper, we adopt the Causal Survival Forests (CSF)~\citep{ch04:cui2023estimating}, a nonparametric, tree-based method that estimates conditional treatment effects while directly handling right censoring. We choose CSF as the representative method of this group because it combines the flexibility of forest-based partitioning with a doubly robust score function that adjusts for treatment assignment and censoring, enabling robust estimation of treatment effect heterogeneity in survival outcomes without strong parametric assumptions. \textcolor{red}{shorten this part}
+
+
+% \textbf{Survival meta-learners.}
+% The survival meta-learner approach has become increasingly popular recently~\citep{xu2023treatment, xu2024estimating}. It directly extend the meta-learner framework to censored outcomes without requiring imputation. These methods leverage survival models to estimate conditional survival functions and derive treatment effects based on these predictions. \citet{bo2024ameta} extended S-Learner, T-Learner, and X-Learner frameworks to handle survival probability estimation for treatment effect analysis. Similarly, \citet{noroozizadeh2025impact} adapted S-Learner, T-Learner, and matching-learner approaches for treatment effect estimation of restricted mean survival time using different base survival models such as Cox proportional hazards model \citep{cox1972regression}, Random Survival Forests \citep{ishwaran2008random}, DeepSurv \citep{katzman2018deepsurv}, and DeepHit \citep{lee2018deephit}. In our benchmark, we focus on these S-, T-, and matching-learner variants for survival data from \citet{noroozizadeh2025impact}, each combined with the three base survival learners mentioned above.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

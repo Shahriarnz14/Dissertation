@@ -1,0 +1,44 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:runtime-comparison}{\caption{Average computation time per dataset per experimental repeat for each causal method. Runtime is reported in seconds with standard deviation across runs.}}{
+  \centering
+  \footnotesize
+  
+  
+  
+  \begin{adjustbox}{max width = 0.6\textwidth}
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Method Class} & \textbf{Method} & \textbf{Runtime (s)} \\
+    \midrule
+
+    \multirow{4}{*}{\makecell[l]{Outcome Imputation Methods: \\ Meta-learners}} 
+      & T-Learner & 2.14 $\pm$ 1.38 \\
+      & S-Learner & 1.84 $\pm$ 1.22 \\
+      & X-Learner & 2.92 $\pm$ 2.42 \\
+      & DR-Learner & 3.34 $\pm$ 1.88 \\
+
+    \midrule
+
+    \multirow{2}{*}{\makecell[l]{Outcome Imputation Methods: \\ Forest / ML-based learners}} 
+      & Double-ML & 5.27 $\pm$ 0.40 \\
+      & Causal Forest & 5.75 $\pm$ 0.40 \\
+
+    \midrule
+
+    \multirow{2}{*}{\makecell[l]{Direct-Survival CATE Methods}} 
+    & Causal Survival Forests & 0.78 $\pm$ 0.06 \\
+    & SurvITE &  43.15 $\pm$ 6.85 \\
+
+    \midrule
+
+    \multirow{3}{*}{Survival Meta-Learners} 
+      & T-Learner-Survival & 31.31 $\pm$ 16.88 \\
+      & S-Learner-Survival & 22.99 $\pm$ 14.23 \\
+      & Matching-Survival & 49.40 $\pm$ 23.25 \\
+
+    \bottomrule
+  \end{tabular}
+  \end{adjustbox}
+}
+\end{table}

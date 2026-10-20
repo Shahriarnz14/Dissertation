@@ -1,0 +1,58 @@
+% !TeX root = ../main.tex
+% Only the selected Chapter 3 manuscript's active additional dependencies.
+\usepackage{bm}
+% The original JMLR class selects algo2e+ruled, then the manuscript loads
+% algorithm for its outer floats. Preserve that functioning combination.
+\usepackage[algo2e,ruled]{algorithm2e}
+\usepackage{algorithm}
+\usepackage[capitalise]{cleveref}
+% Break long reference URLs without editing their bibliographic metadata.
+\usepackage{xurl}
+\definecolor{ChThreeForestGreen}{cmyk}{0.91,0,0.88,0.12}
+\newcommand{\ChThreeBfTab}{\fontseries{b}\selectfont}
+\newenvironment{ChThreeAbstract}
+  {\par\noindent\textbf{Abstract}\par}{\par}
+% JMLR's paragraph headings are unnumbered (including starred disclosures).
+% CMU's paragraph command numbers even the starred form, yielding 3.0.0.1
+% before Introduction. Retain the source's unnumbered heading semantics.
+\newcommand{\ChThreeParagraph}[1]{%
+  \par\medskip\noindent\textbf{#1}\par\nobreak
+}
+% CMU suppresses cleveref's type names globally. Restore the original
+% generated "Tables" and dash for this manuscript's one compressed range,
+% keeping target sorting/deduplication and every number automatic.
+\newcommand{\ChThreeTableRefs}[1]{{%
+  \crefname{table}{Table}{Tables}%
+  \crefrangeformat{table}{Tables~##3##1##4--##5##2##6}%
+  \cref{#1}%
+}}
+\makeatletter
+% cleveref's label wrapper changes following interword space at one approved
+% Chapter 2 label. Keep the original hyperref label outside this manuscript;
+% enable cleveref labels only in Chapter 3 and Appendix B. CMU float labels
+% restore globally, so restore the saved outside writer explicitly at exit.
+\AtBeginDocument{%
+  \let\ChThreeCleverLabel\label
+  \let\label\cref@old@label
+}
+\newcommand{\ChThreeBeginLabels}{%
+  \let\ChThreeOutsideLabel\label
+  \let\label\ChThreeCleverLabel
+}
+\newcommand{\ChThreeEndLabels}{\global\let\label\ChThreeOutsideLabel}
+\newcommand{\ChThreeFigureBody}[1]{%
+  {\centering
+    \begin{adjustbox}{max totalsize={\linewidth}{.64\textheight}}%
+      \begin{minipage}{\linewidth}\centering #1\par\end{minipage}%
+    \end{adjustbox}\par}%
+}
+\newcommand{\ChThreeFloatContents}[3]{%
+  \ifdefstring{\@captype}{table}
+    {#2\cmu@label{#1}{\centering #3\par}}%
+    {\ChThreeFigureBody{#3}#2\cmu@label{#1}}%
+}
+\newcommand{\ChThreeFloatLabel}[1]{\cmu@label{#1}}
+% Exempt only explicitly identified headings that originally led straight
+% into a child heading; no invented transition prose is supplied.
+\newcommand{\ChThreeHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\makeatother

@@ -1,0 +1,23 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:base-dr-learner-propensity}{\caption{DR-Learner propensity score AUC. Note that we use the \href{https://econml.azurewebsites.net/index.html}{\texttt{econml}} package in Python, which by default uses logistic regression for predicting the treatment assignment. Thus, we report the AUC of the treatment prediction by the logistic regression.}}{
+    \centering
+     
+    \begin{adjustbox}{max width = 0.4\textwidth}
+    \begin{tabular}{lc}
+    \toprule
+        \textbf{Causal Configuration} & \textbf{Logistic Regression} \\ 
+    \midrule
+        \texttt{RCT-50} & 0.501$\pm$0.005 \\ 
+        \texttt{RCT-5} & 0.497$\pm$0.011 \\ 
+        \texttt{OBS-CPS} & 0.661$\pm$0.007 \\ 
+        \texttt{OBS-UConf} & 0.548$\pm$0.007 \\ 
+        \texttt{OBS-NoPos} & 0.820$\pm$0.005 \\ 
+        \texttt{OBS-CPS-InfC} & 0.661$\pm$0.007 \\ 
+        \texttt{OBS-UConf-InfC} & 0.548$\pm$0.007 \\ 
+        \texttt{OBS-NoPos-InfC} & 0.820$\pm$0.005 \\ 
+    \bottomrule 
+    \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

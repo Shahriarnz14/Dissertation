@@ -1,0 +1,24 @@
+% !TeX root = ../../../main.tex
+\ChFourStarSection{Reproducibility statement}
+
+% \textcolor{red}{(does not count in page limit): at the end of the main text (before references); reference the parts of the main paper, appendix, and supplemental materials that will help with reproducibility}
+We provide complete resources to reproduce our results across synthetic, semi-synthetic, and real-data settings. 
+(1) \textit{Synthetic data:} The benchmark design and evaluation protocol are described in the main text (Sections~\ref{ch04:sec:bench} and~\ref{ch04:sec:synth_results}), including the 8 causal configurations and 5 survival scenarios (40 datasets total). Extended generation formulas and per-dataset summaries are in Appendix~\ref{ch04:app:synthetic-dataset}; imputation procedures in Appendix~\ref{ch04:app:imputation}; the full list of implemented estimators in Appendix~\ref{ch04:app:exp-setup}; causal method overviews in Appendix~\ref{ch04:app:causal_method_details}; training details and hyperparameter grids in Appendix~\ref{ch04:app:method_settings}; and additional synthetic results/analyses in Appendix~\ref{ch04:app:additional_synthetic_exps}. 
+(2) \textit{Semi-synthetic data:} Setup, statistics, and full results appear in Appendix~\ref{ch04:app:more-semi-syn-data-setup-result} with summary discussion in Section~\ref{ch04:sec:semi-syn-data-experiment}. (3) \textit{Real data:} Processing details and additional analyses are provided in Appendix~\ref{ch04:app:more-real-data-setup-result}; see also Section~\ref{ch04:sec:real-data}. We further study additional censoring mechanisms in Appendix~\ref{ch04:app:informative-censoring-uconf}.
+
+\textbf{Code and instructions.} The full codebase used for all experiments is available at:\url{https://github.com/Shahriarnz14/SurvHTE-Bench}, with scripts and READMEs to reproduce all results in the paper.
+
+\textbf{Datasets.} In the same repository as well as at \url{https://huggingface.co/datasets/snoroozi/SurvHTE-Bench}, we include: (i) the complete synthetic suite (40 datasets from the $8\times5$ design); (ii) the semi-synthetic datasets, comprising the \emph{ACTG (semi-synthetic)} dataset; and (iii) real-data materials for \emph{Twins} and \emph{ACTG~175}. For the semi-synthetic MIMIC resources, because MIMIC-IV requires credentialed access, we provide code to generate these datasets rather than redistributing raw MIMIC data. The MIMIC-IV dataset itself is hosted on PhysioNet at \href{https://physionet.org/content/mimiciv/3.1/}{https://physionet.org/content/mimiciv/3.1/} and is publicly available to researchers upon credentialed approval. All other datasets listed above are included in the supplementary package in preprocessed or generated form, together with scripts to reproduce all splits and metrics.
+
+In addition to enabling replication of our reported results, we intend \textsc{SurvHTE‐Bench} to serve as
+community infrastructure for the evaluation of survival HTE methods. The benchmark is designed
+to be modular and extensible, allowing researchers to incorporate new estimators or datasets while
+preserving comparability. This ensures not only reproducibility of our experiments but also a lasting
+resource for the community, providing a standardized basis for measuring progress in survival causal inference, a resource that has been missing until now, as well as in related areas of machine learning.
+
+% 
+
+
+
+
+

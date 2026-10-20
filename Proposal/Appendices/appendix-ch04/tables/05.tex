@@ -1,0 +1,65 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:baseline-details}{\caption{Breakdown of benchmarked survival-CATE estimator variants used in our experiments. 
+    Each row corresponds to a specific combination of method class, imputation strategy (if applicable), base learner(s), and CATE learner(s). 
+    Cells with numbers in parentheses indicate how many variants are contributed by the method(s) listed in that cell. 
+    The final column reports the total number of method variants constructed using that combination. }}{
+  \centering
+  
+  
+  
+  \begin{adjustbox}{max width = 0.85\textwidth}
+  \renewcommand{\arraystretch}{1.8}\begin{tabular}{ccccc}
+    \toprule
+    \makecell{\textbf{Method Class}} &
+    \makecell{\textbf{Imputation} \\ \textit{(No. options)}} &
+    \makecell{\textbf{Base Learner} \\ \textit{(No. options)}} &
+    \makecell{\textbf{CATE Learner} \\ \textit{(No. options)}} &
+    \makecell{\textbf{No. Variants}} \\
+    \midrule
+
+    \multirow{3}{*}{\makecell[c]{Outcome\\Imputation\\Method}} 
+      & \multirow{3}{*}{\makecell[c]{Pseudo-obs,\\Margin,\\IPCW-T\\\texttt{(3)}}}
+      & \makecell[c]{Lasso Regression,\\Random Forest, XGBoost\\\texttt{(3)}} 
+      & \makecell[c]{Meta-Learners\\ (S-, T-, X-, DR-)\\\texttt{(4)}} 
+      & \textbf{36} \\
+    \cmidrule(r){3-5}
+    & ~
+    & --- 
+    & \makecell[c]{Causal Forest\\\texttt{(1)}}
+    & \textbf{3} \\
+    \cmidrule(r){3-5}
+    & ~ 
+    & --- 
+    & \makecell[c]{Double-ML\\\texttt{(1)}}
+    & \textbf{3} \\
+
+    \midrule
+
+    \makecell[c]{Direct-Survival \\CATE Models}
+    & --- 
+    & ---
+    & \makecell[c]{Causal Survival Forests\\\texttt{(1)}\\SurvITE\\\texttt{(1)}}
+    & \textbf{2} \\
+
+    \midrule
+
+    \makecell[c]{Survival \\ Meta-Learners} 
+    & --- 
+    & \makecell[c]{Random Survival Forests,\\DeepSurv, DeepHit\\\texttt{(3)}} 
+    & \makecell[c]{Survival Meta-Learners\\ (S-, T-, Matching-)\\\texttt{(3)}} 
+    & \textbf{9} \\
+
+    \midrule
+
+    \textbf{Total} 
+    & 
+    & 
+    & 
+    & \textbf{53} \\
+
+    \bottomrule
+  \end{tabular}
+  \end{adjustbox}
+}
+\end{table}

@@ -1,0 +1,108 @@
+% !TeX root = ../../../main.tex
+\begingroup\renewcommand{\ChFourMaxFloatHeight}{.82\textheight}
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:rmst-sensitivity-results}{\caption{CATE RMSE (mean $\pm$ std over 10 repeats) on MIMIC semi-synthetic datasets, comparing RMST estimands at different horizons $h = T_{\max}$ (maximum observed time) and $h = T_{\text{med}}$ (median event time). Best two methods per dataset are \textbf{bolded}.}}{
+    \centering \small
+    
+    
+
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{0.92}
+
+    \begin{adjustbox}{angle=90,max height=0.95\textheight,center}
+    \begin{minipage}{\textheight}
+        \par\noindent\begin{adjustbox}{max width=\linewidth}\begin{minipage}[c]{\linewidth}
+        \centering
+        \begin{adjustbox}{max width=\linewidth}\begin{tabular}{l cc cc cc cc cc}
+        \toprule
+        & \multicolumn{2}{c}{MIMIC-$i$} 
+        & \multicolumn{2}{c}{MIMIC-$ii$}
+        & \multicolumn{2}{c}{MIMIC-$iii$}
+        & \multicolumn{2}{c}{MIMIC-$iv$} 
+        & \multicolumn{2}{c}{MIMIC-$v$} \\ 
+        \cmidrule(lr){2-3}
+        \cmidrule(lr){4-5}
+        \cmidrule(lr){6-7}
+        \cmidrule(lr){8-9}
+        \cmidrule(lr){10-11}
+        \textbf{Method Family} 
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$ \\ \midrule
+        \multicolumn{9}{l}{\textit{Outcome Imputation Methods}} \\
+        T-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & \textbf{7.912 ± 0.046} & \textbf{4.363 ± 0.040} & 7.915 ± 0.043 & \textbf{4.361 ± 0.039} & 7.912 ± 0.043 & 4.361 ± 0.039 & 7.908 ± 0.043 & 4.360 ± 0.039 \\
+        S-Learner & 7.977 ± 0.044 & 4.387 ± 0.040 & 7.968 ± 0.047 & 4.390 ± 0.042 & 7.956 ± 0.050 & 4.387 ± 0.039 & 7.959 ± 0.046 & 4.387 ± 0.039 & 7.958 ± 0.048 & 4.387 ± 0.039 \\ 
+        % X-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & 7.912 ± 0.046 & 4.363 ± 0.040 & 7.915 ± 0.043 & 4.361 ± 0.039 & 7.912 ± 0.043 & 4.361 ± 0.039 & 7.908 ± 0.043 & 4.360 ± 0.039 \\ 
+        X-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & \textbf{7.912 ± 0.046} & \textbf{4.363 ± 0.040} & 7.915 ± 0.043 & \textbf{4.361 ± 0.039} & 7.912 ± 0.043 & 4.361 ± 0.039 & 7.908 ± 0.043 & 4.360 ± 0.039 \\
+        % DR-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & 7.912 ± 0.047 & 4.363 ± 0.040 & 7.911 ± 0.043 & 4.361 ± 0.039 & 7.911 ± 0.043 & 4.361 ± 0.039 & 7.909 ± 0.043 & 4.360 ± 0.039 \\ 
+        DR-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & \textbf{7.912 ± 0.047} & \textbf{4.363 ± 0.040} & 7.911 ± 0.043 & \textbf{4.361 ± 0.039} & 7.911 ± 0.043 & 4.361 ± 0.039 & 7.909 ± 0.043 & 4.360 ± 0.039 \\
+        % Double-ML & 7.954 ± 0.047 & 4.365 ± 0.040 & 7.936 ± 0.045 & 4.357 ± 0.041 & 7.919 ± 0.044 & 4.355 ± 0.040 & 7.917 ± 0.046 & 4.356 ± 0.040 & 7.891 ± 0.050 & 4.354 ± 0.040 \\ 
+        Double-ML & 7.954 ± 0.047 & \textbf{4.365 ± 0.040} & 7.936 ± 0.045 & \textbf{4.357 ± 0.041} & 7.919 ± 0.044 & \textbf{4.355 ± 0.040} & 7.917 ± 0.046 & \textbf{4.356 ± 0.040} & \textbf{7.891 ± 0.050} & \textbf{4.354 ± 0.040} \\
+        Causal Forest & 7.967 ± 0.045 & 4.371 ± 0.039 & 7.949 ± 0.044 & 4.365 ± 0.041 & 7.934 ± 0.043 & 4.365 ± 0.039 & 7.931 ± 0.047 & 4.364 ± 0.040 & 7.909 ± 0.044 & 4.363 ± 0.037 \\ 
+        \addlinespace
+        \multicolumn{9}{l}{\textit{Direct-Survival CATE Methods}} \\
+        % Causal Survival Forests & 7.963 ± 0.057 & 4.376 ± 0.035 & 7.942 ± 0.039 & 4.363 ± 0.038 & 7.929 ± 0.037 & 4.364 ± 0.037 & 7.911 ± 0.051 & 4.357 ± 0.036 & 7.893 ± 0.042 & 4.357 ± 0.035 \\ 
+        Causal Survival Forests & 7.963 ± 0.057 & 4.376 ± 0.035 & 7.942 ± 0.039 & \textbf{4.363 ± 0.038} & 7.929 ± 0.037 & 4.364 ± 0.037 & 7.911 ± 0.051 & \textbf{4.357 ± 0.036} & \textbf{7.893 ± 0.042} & \textbf{4.357 ± 0.035} \\
+        % SurvITE & 7.931 ± 0.050 & 4.381 ± 0.035 & 7.908 ± 0.065 & 4.377 ± 0.038 & 7.906 ± 0.071 & 4.375 ± 0.040 & 7.907 ± 0.058 & 4.374 ± 0.038 & 7.906 ± 0.066 & 4.376 ± 0.037 \\ 
+        SurvITE & \textbf{7.931 ± 0.050} & 4.381 ± 0.035 & \textbf{7.908 ± 0.065} & 4.377 ± 0.038 & \textbf{7.906 ± 0.071} & 4.375 ± 0.040 & 7.907 ± 0.058 & 4.374 ± 0.038 & 7.906 ± 0.066 & 4.376 ± 0.037 \\
+
+        \addlinespace
+        \multicolumn{9}{l}{\textit{Survival Meta-Learners}} \\ 
+        % T-Learner-Survival & 8.007 ± 0.075 & 4.391 ± 0.040 & 7.980 ± 0.233 & 4.477 ± 0.340 & 7.911 ± 0.054 & 4.364 ± 0.034 & 7.902 ± 0.042 & 4.361 ± 0.038 & 7.902 ± 0.046 & 4.360 ± 0.036 \\ 
+        T-Learner-Survival & 8.007 ± 0.075 & 4.391 ± 0.040 & 7.980 ± 0.233 & 4.477 ± 0.340 & 7.911 ± 0.054 & 4.364 ± 0.034 & \textbf{7.902 ± 0.042} & 4.361 ± 0.038 & 7.902 ± 0.046 & 4.360 ± 0.036 \\
+        % S-Learner-Survival & 7.921 ± 0.044 & 4.362 ± 0.039 & 7.912 ± 0.052 & 4.363 ± 0.036 & 7.900 ± 0.045 & 4.361 ± 0.038 & 7.901 ± 0.046 & 4.361 ± 0.037 & 7.897 ± 0.042 & 4.358 ± 0.038 \\ 
+        S-Learner-Survival & \textbf{7.921 ± 0.044} & \textbf{4.362 ± 0.039} & \textbf{7.912 ± 0.052} & \textbf{4.363 ± 0.036} & \textbf{7.900 ± 0.045} & \textbf{4.361 ± 0.038} & \textbf{7.901 ± 0.046} & 4.361 ± 0.037 & 7.897 ± 0.042 & 4.358 ± 0.038 \\
+        Matching Survival & 7.949 ± 0.043 & 4.603 ± 0.140 & 7.935 ± 0.053 & 4.600 ± 0.070 & 7.920 ± 0.047 & 4.652 ± 0.065 & 7.921 ± 0.046 & 4.714 ± 0.086 & 7.912 ± 0.042 & 4.735 ± 0.058 \\ 
+        \bottomrule
+    \end{tabular}\end{adjustbox}
+    \end{minipage}\end{adjustbox}\par
+
+    
+
+    \par\noindent\begin{adjustbox}{max width=\linewidth}\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{adjustbox}{max width=\linewidth}\begin{tabular}{l cc cc cc cc}
+        \toprule
+        & \multicolumn{2}{c}{MIMIC-$vi$} 
+        & \multicolumn{2}{c}{MIMIC-$vii$}
+        & \multicolumn{2}{c}{MIMIC-$viii$}
+        & \multicolumn{2}{c}{MIMIC-$ix$} \\
+        \cmidrule(lr){2-3}
+        \cmidrule(lr){4-5}
+        \cmidrule(lr){6-7}
+        \cmidrule(lr){8-9}
+        \textbf{Method Family} 
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$
+        & $h=T_{\max}$ & $h=T_{\text{med}}$ \\ \midrule
+        \multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
+        T-Learner & 7.184 ± 0.052 & 3.865 ± 0.036 & 7.374 ± 0.067 & 3.772 ± 0.027 & 7.220 ± 0.046 & 3.866 ± 0.031 & 7.354 ± 0.048 & 3.769 ± 0.032 \\ 
+        S-Learner & 7.176 ± 0.048 & 3.873 ± 0.037 & 7.308 ± 0.068 & 3.770 ± 0.026 & 7.197 ± 0.049 & 3.854 ± 0.032 & 7.275 ± 0.061 & 3.747 ± 0.034 \\ 
+        X-Learner & 7.182 ± 0.053 & 3.865 ± 0.036 & 7.318 ± 0.069 & 3.772 ± 0.027 & 7.203 ± 0.045 & 3.866 ± 0.031 & 7.273 ± 0.044 & 3.769 ± 0.032 \\ 
+        % DR-Learner & 7.145 ± 0.054 & 3.854 ± 0.035 & 7.295 ± 0.061 & 3.751 ± 0.026 & 7.167 ± 0.046 & 3.846 ± 0.032 & 7.263 ± 0.045 & 3.737 ± 0.034 \\ 
+        DR-Learner & 7.145 ± 0.054 & \textbf{3.854 ± 0.035} & 7.295 ± 0.061 & 3.751 ± 0.026 & 7.167 ± 0.046 & 3.846 ± 0.032 & 7.263 ± 0.045 & 3.737 ± 0.034 \\
+        % Double-ML & 7.127 ± 0.051 & 3.855 ± 0.038 & 7.259 ± 0.072 & 3.743 ± 0.028 & 7.147 ± 0.049 & 3.849 ± 0.035 & 7.226 ± 0.056 & 3.732 ± 0.033 \\ 
+        Double-ML & \textbf{7.127 ± 0.051} & 3.855 ± 0.038 & \textbf{7.259 ± 0.072} & \textbf{3.743 ± 0.028} & \textbf{7.147 ± 0.049} & 3.849 ± 0.035 & \textbf{7.226 ± 0.056} & \textbf{3.732 ± 0.033} \\
+        Causal Forest & 7.142 ± 0.052 & 3.860 ± 0.035 & 7.288 ± 0.068 & 3.753 ± 0.026 & 7.162 ± 0.047 & 3.852 ± 0.033 & 7.247 ± 0.043 & 3.739 ± 0.029 \\ 
+        \addlinespace
+        \multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
+        % Causal Survival Forests & 7.123 ± 0.048 & 3.850 ± 0.032 & 7.281 ± 0.064 & 3.740 ± 0.025 & 7.149 ± 0.045 & 3.839 ± 0.031 & 7.227 ± 0.054 & 3.725 ± 0.032 \\ 
+        Causal Survival Forests & \textbf{7.123 ± 0.048} & \textbf{3.850 ± 0.032} & \textbf{7.281 ± 0.064} & \textbf{3.740 ± 0.025} & \textbf{7.149 ± 0.045} & \textbf{3.839 ± 0.031} & \textbf{7.227 ± 0.054} & \textbf{3.725 ± 0.032} \\
+        SurvITE & 7.169 ± 0.042 & 3.878 ± 0.034 & 7.286 ± 0.059 & 3.766 ± 0.025 & 7.184 ± 0.043 & 3.859 ± 0.029 & 7.265 ± 0.055 & 3.755 ± 0.031 \\ 
+        \addlinespace
+        \multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
+        T-Learner-Survival & 7.168 ± 0.055 & 3.860 ± 0.039 & 7.332 ± 0.071 & 3.761 ± 0.031 & 7.188 ± 0.040 & 3.861 ± 0.025 & 7.358 ± 0.047 & 3.762 ± 0.026 \\ 
+        % S-Learner-Survival & 7.138 ± 0.048 & 3.856 ± 0.031 & 7.285 ± 0.064 & 3.751 ± 0.024 & 7.163 ± 0.041 & 3.845 ± 0.030 & 7.239 ± 0.055 & 3.735 ± 0.031 \\ 
+        S-Learner-Survival & 7.138 ± 0.048 & 3.856 ± 0.031 & 7.285 ± 0.064 & 3.751 ± 0.024 & 7.163 ± 0.041 & \textbf{3.845 ± 0.030} & 7.239 ± 0.055 & 3.735 ± 0.031 \\
+        Matching Survival & 7.163 ± 0.050 & 4.238 ± 0.038 & 7.340 ± 0.062 & 4.233 ± 0.039 & 7.199 ± 0.043 & 4.255 ± 0.028 & 7.297 ± 0.050 & 4.283 ± 0.063 \\ 
+        \bottomrule
+    \end{tabular}\end{adjustbox}
+    \end{minipage}\end{adjustbox}\par
+    \end{minipage}
+    \end{adjustbox}
+}
+\end{table}
+\endgroup

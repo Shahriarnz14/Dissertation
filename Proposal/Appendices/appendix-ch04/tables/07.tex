@@ -1,0 +1,23 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:hyperparam-csf}{\caption{Set of hyperparameters for Causal Survival Forests}}{
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+% \captionsetup{labelformat=empty}
+ 
+\begin{tabular}{l l}
+\toprule
+\textbf{Parameter} & \textbf{Default Value} \\ \midrule
+Number of trees grown & 2000 \\
+Fraction of data per tree & 0.5 \\
+Variables tried per split & $\min(\lceil\sqrt{p}+20\rceil, p)$ \\
+Minimum samples in a leaf & 5 \\
+Maximum imbalance of splits & 0.05 \\
+Penalty for imbalance at split & 0 \\
+Account for treatment and censoring in split stability & TRUE \\
+Trees per subsample for confidence intervals & 2 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

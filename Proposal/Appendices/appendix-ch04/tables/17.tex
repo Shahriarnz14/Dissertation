@@ -1,0 +1,71 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:base-s-learner}{\caption{S-Learner MAE}}{
+    \centering
+     
+    \begin{adjustbox}{max width = 0.6\textwidth}
+    \begin{tabular}{clccc}
+    \toprule
+        \multirow{2}{*}{\makecell[l]{\textbf{Survival}\\\textbf{Scenario}}} & \multirow{2}{*}{\makecell[l]{\textbf{Causal}\\\textbf{Configuration}}} & \multicolumn{3}{c}{\textbf{Base Regression Model}} \\ 
+        \cmidrule(r){3-5}
+         & & \textbf{Lasso Reg.} & \textbf{Random Forest} & \textbf{XGBoost} \\
+    \midrule
+        \multirow{9}{*}{\texttt{A}}   & \texttt{RCT-50} & 0.661$\pm$0.012 & \ChFourBfTab{0.655$\pm$0.014} & 0.671$\pm$0.013 \\ 
+        ~ & \texttt{RCT-5} & \ChFourBfTab{0.645$\pm$0.011} & 0.649$\pm$0.012 & 0.667$\pm$0.014 \\ 
+        ~ & \texttt{OBS-CPS} & 0.653$\pm$0.011 & \ChFourBfTab{0.646$\pm$0.010} & 0.662$\pm$0.012 \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{0.604$\pm$0.009} & 0.608$\pm$0.009 & 0.620$\pm$0.007 \\ 
+        ~ & \texttt{OBS-NoPos} & 0.657$\pm$0.010 & \ChFourBfTab{0.654$\pm$0.011} & 0.671$\pm$0.013 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & \ChFourBfTab{0.727$\pm$0.018} & 0.730$\pm$0.021 & 0.752$\pm$0.023 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & \ChFourBfTab{0.675$\pm$0.019} & 0.693$\pm$0.023 & 0.713$\pm$0.023 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & \ChFourBfTab{0.724$\pm$0.014} & 0.732$\pm$0.018 & 0.755$\pm$0.02 \\ 
+        \cmidrule(r){2-5}
+        ~ & Total Win & 44 & 36 & 0 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{B}} & \texttt{RCT-50} & 0.33$\pm$0.008 & \ChFourBfTab{0.315$\pm$0.011} & 0.334$\pm$0.015 \\ 
+        ~ & \texttt{RCT-5} & 0.278$\pm$0.006 & \ChFourBfTab{0.277$\pm$0.006} & 0.292$\pm$0.008 \\ 
+        ~ & \texttt{OBS-CPS} & 0.315$\pm$0.011 & \ChFourBfTab{0.307$\pm$0.012} & 0.324$\pm$0.019 \\ 
+        ~ & \texttt{OBS-UConf} & 0.354$\pm$0.007 & \ChFourBfTab{0.341$\pm$0.008} & 0.359$\pm$0.011 \\ 
+        ~ & \texttt{OBS-NoPos} & 0.345$\pm$0.009 & \ChFourBfTab{0.323$\pm$0.011} & 0.341$\pm$0.011 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 0.301$\pm$0.007 & \ChFourBfTab{0.294$\pm$0.006} & 0.309$\pm$0.008 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 0.34$\pm$0.004 & \ChFourBfTab{0.328$\pm$0.005} & 0.347$\pm$0.006 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 0.337$\pm$0.005 & \ChFourBfTab{0.319$\pm$0.006} & 0.337$\pm$0.007 \\ 
+        \cmidrule(r){2-5}
+        ~ & Total Win & 3 & 77 & 0 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{C}} & \texttt{RCT-50} & \ChFourBfTab{1.430$\pm$0.022} & 1.593$\pm$0.025 & 1.738$\pm$0.024 \\ 
+        ~ & \texttt{RCT-5} & \ChFourBfTab{1.403$\pm$0.019} & 1.532$\pm$0.018 & 1.687$\pm$0.027 \\ 
+        ~ & \texttt{OBS-CPS} & \ChFourBfTab{1.409$\pm$0.021} & 1.555$\pm$0.025 & 1.706$\pm$0.028 \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{1.419$\pm$0.023} & 1.563$\pm$0.026 & 1.721$\pm$0.020 \\ 
+        ~ & \texttt{OBS-NoPos} & \ChFourBfTab{1.453$\pm$0.019} & 1.612$\pm$0.024 & 1.755$\pm$0.022 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & \ChFourBfTab{0.931$\pm$0.027} & 1.011$\pm$0.03 & 1.148$\pm$0.045 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & \ChFourBfTab{0.895$\pm$0.033} & 0.966$\pm$0.04 & 1.096$\pm$0.059 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & \ChFourBfTab{0.916$\pm$0.057} & 1.003$\pm$0.067 & 1.123$\pm$0.086 \\ 
+        \cmidrule(r){2-5}
+        ~ & Total Win & 80 & 0 & 0 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{D}} & \texttt{RCT-50} & \ChFourBfTab{0.941$\pm$0.18} & 1.002$\pm$0.202 & 1.082$\pm$0.206 \\ 
+        ~ & \texttt{RCT-5} & \ChFourBfTab{1.016$\pm$0.121} & 1.095$\pm$0.123 & 1.210$\pm$0.248 \\ 
+        ~ & \texttt{OBS-CPS} & \ChFourBfTab{1.031$\pm$0.258} & 1.082$\pm$0.264 & 1.188$\pm$0.345 \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{0.985$\pm$0.34} & 1.015$\pm$0.300 & 1.073$\pm$0.383 \\ 
+        ~ & \texttt{OBS-NoPos} & \ChFourBfTab{0.967$\pm$0.238} & 1.03$\pm$0.249 & 1.107$\pm$0.295 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & \ChFourBfTab{1.146$\pm$0.030} & 1.148$\pm$0.034 & 1.209$\pm$0.044 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 1.179$\pm$0.024 & \ChFourBfTab{1.172$\pm$0.031} & 1.234$\pm$0.032 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & \ChFourBfTab{1.169$\pm$0.026} & \ChFourBfTab{1.169$\pm$0.026} & 1.230$\pm$0.028 \\ 
+        \cmidrule(r){2-5}
+        ~ & Total Win & 48 & 29 & 3 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{E}} & \texttt{RCT-50} & \ChFourBfTab{1.75$\pm$0.186} & 1.906$\pm$0.207 & 2.124$\pm$0.247 \\ 
+        ~ & \texttt{RCT-5} & \ChFourBfTab{1.604$\pm$0.125} & 1.731$\pm$0.133 & 1.901$\pm$0.17 \\ 
+        ~ & \texttt{OBS-CPS} & \ChFourBfTab{1.651$\pm$0.161} & 1.799$\pm$0.201 & 1.990$\pm$0.243 \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{1.630$\pm$0.127} & 1.779$\pm$0.159 & 1.974$\pm$0.212 \\ 
+        ~ & \texttt{OBS-NoPos} & \ChFourBfTab{1.698$\pm$0.139} & 1.856$\pm$0.162 & 2.059$\pm$0.202 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & \ChFourBfTab{0.917$\pm$0.089} & 1.012$\pm$0.113 & 1.140$\pm$0.141 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & \ChFourBfTab{0.968$\pm$0.130} & 1.074$\pm$0.164 & 1.222$\pm$0.237 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & \ChFourBfTab{0.928$\pm$0.060} & 1.012$\pm$0.063 & 1.130$\pm$0.071 \\ 
+        \cmidrule(r){2-5}
+        ~ & Total Win & 80 & 0 & 0 \\ 
+    \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

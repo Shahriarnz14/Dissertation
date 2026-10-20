@@ -1,0 +1,16 @@
+% !TeX root = ../../../main.tex
+\begin{figure}[htbp]
+\ChFourFloatContents{ch04:fig:average_rank_all}{\caption{(top) Borda count rankings of the top 10 estimator variants (out of 53 total), based on CATE RMSE across 40 datasets and averaged over 10 repeats (lower is better). 
+    (bottom) Family-level rankings, where for each dataset the best method variant within each method family is chosen using validation performance and then ranked on the held-out test set.
+        \ChFourRebuttal{Black bands connect methods without statistically significant differences (Wilcoxon signed-rank test, FDR-corrected at $\alpha=0.05$). Shaded regions indicate the standard error of the rank across datasets.}
+    }}{
+    \centering
+    
+    \includegraphics[width=\linewidth]{Chapters/chapter-04/images/figure_results_updated/average_ranks/average_ranking_visualization_method_combination_top_10_total.pdf}
+    
+    \includegraphics[width=0.83\linewidth]{Chapters/chapter-04/images/figure_results_updated/average_ranks/average_ranking_visualization_method_combination_each_abstract_method.pdf}
+    
+     
+    % 
+}
+\end{figure}

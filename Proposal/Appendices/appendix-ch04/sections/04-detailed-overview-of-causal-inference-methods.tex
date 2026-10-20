@@ -1,0 +1,226 @@
+% !TeX root = ../../../main.tex
+\subsection{Detailed Overview of Causal Inference Methods}
+\label{ch04:app:causal_method_details}
+
+This section provides a comprehensive explanation of the causal inference methods evaluated in our benchmark. We begin with outcome imputation methods that transform censored survival data into standard regression problems, followed by direct-survival CATE models specifically designed for right-censored data, and finally survival meta-learners that adapt standard meta-learner frameworks to handle censoring. For each method, we present the theoretical foundation, algorithmic procedure, and specific implementation considerations in the survival analysis context. Our exposition focuses on highlighting the unique characteristics that make each approach suitable for different survival and causal inference scenarios, with particular attention to how these methods handle the challenges posed by censoring and treatment effect heterogeneity.
+
+
+\subsubsection{Outcome imputation methods}
+Meta-learners represent a flexible framework for estimating conditional average treatment effects (CATEs) by decomposing the causal inference problem into standard supervised learning tasks. The key advantage of meta-learners is that they allow practitioners to leverage any out-of-the-box machine learning algorithm as a ``base learner'' while maintaining principled approaches to causal effect estimation. This modularity makes meta-learners particularly attractive in practice, as they can incorporate state-of-the-art ML methods (e.g., random forests, gradient boosting, neural networks) without requiring specialized causal inference implementations. For detailed explanations on meta-learners, one can refer to \citet{ch04:kunzel2019metalearners,kennedy2023towards}. We provide a simplified overview below and largely refer to the documentation of the \href{https://econml.azurewebsites.net/spec/spec.html}{\texttt{econml}} package.
+
+\textbf{T-Learner \citep{ch04:kunzel2019metalearners}.}
+The T-Learner (Two-Learner) adopts the most straightforward approach by fitting separate outcome models for treated and control groups. Given binary treatment $W \in \{0,1\}$, features $X$, and outcome $Y$, the T-Learner:
+
+\begin{enumerate}
+    \item Splits the data by treatment assignment: ${(X^0, Y^0)}$ for controls and ${(X^1, Y^1)}$ for treated units
+    \item Trains separate outcome models (i.e. predicting the outcome $Y$ using features $X$): 
+        \begin{align*}
+            \text{For control units: } \hat{\mu}_0 = M_0(Y^0 \sim X^0)\\
+            \text{For treated units: } \hat{\mu}_1 = M_1(Y^1 \sim X^1)
+        \end{align*}
+    \item Estimates CATE as:
+        \begin{align*}
+            \hat{\tau}(x) = \hat{\mu}_1(x) - \hat{\mu}_0(x)
+        \end{align*}
+\end{enumerate}
+where $M_0$ and $M_1$ can be any regression algorithm. The T-Learner is conceptually simple but can suffer from high variance when treatment groups have different sizes or when the outcome models extrapolate poorly to regions with limited overlap.
+
+\textbf{S-Learner \citep{ch04:kunzel2019metalearners}.} The S-Learner (Single-Learner) takes a unified modeling approach by including treatment assignment as an additional feature. The procedure involves:
+
+\begin{enumerate}
+    \item Training a single model using all available data:
+        \begin{align*}
+            \hat{\mu} = M(Y \sim (X, W))    
+        \end{align*}
+    \item Estimating CATE as: 
+        \begin{align*}
+            \hat{\tau}(x) = \hat{\mu}(x, 1) - \hat{\mu}(x, 0)
+        \end{align*}
+\end{enumerate}
+This approach leverages all available data for training and can be more sample-efficient than the T-Learner. However, it relies heavily on the base learner's ability to capture treatment-feature interactions, and may perform poorly when these interactions are complex or when the treatment effect is small relative to the baseline outcome.
+
+\textbf{X-Learner \citep{ch04:kunzel2019metalearners}.} The X-Learner represents a more sophisticated approach that combines ideas from both T-Learner and inverse propensity weighting. The algorithm proceeds in multiple stages:
+\begin{enumerate}
+    \item Fit initial outcome models:
+        \begin{align*}
+            \hat{\mu}_0 = M_1(Y^0 \sim X^0)\\
+            \hat{\mu}_1 = M_2(Y^1 \sim X^1)
+        \end{align*}
+    \item Compute imputed treatment effects:
+        \begin{align*}
+            \text{For treated units: } \hat{D}^1 = Y^1 - \hat{\mu}_0(X^1) \\
+            \text{For control units: } \hat{D}^0 = \hat{\mu}_1(X^0) - Y^0
+        \end{align*}
+    \item Model treatment effects: 
+        \begin{align*}
+            \hat{\tau}_0 = M_3(\hat{D}^0 \sim X^0)\\ 
+            \hat{\tau}_1 = M_4(\hat{D}^1 \sim X^1)
+        \end{align*}
+    \item Combine estimates using propensity scores: 
+        \begin{align*}
+            \hat{\tau}(x) = g(x)\hat{\tau}_0(x) + (1-g(x))\hat{\tau}_1(x)
+        \end{align*}
+\end{enumerate}
+where $g(x)$ is the estimation for propensity score $P(W=1|X=x)$ and is typically fitted using logistic regression. The X-Learner is particularly effective when treatment groups have different sizes or when treatment effects are heterogeneous, as it explicitly models treatment effect variation and uses propensity weighting for optimal combination.
+
+\textbf{DR-Learner \citep{kennedy2023towards}}. The DR-Learner (Doubly Robust Learner) extends the doubly robust framework to meta-learning by combining outcome modeling with propensity score estimation. The approach constructs doubly robust scores that remain consistent if either the outcome model or propensity model is correctly specified. It includes the following steps:
+\begin{enumerate}
+    \item Fit outcome modeling for each treatment
+        \begin{align*}
+            \hat{\mu}_0 = M_1(Y^0 \sim X^0)\\
+            \hat{\mu}_1 = M_2(Y^1 \sim X^1)
+        \end{align*}
+    \item Construct propensity score modeling
+        \begin{align*}
+            \hat{g} = M_g(W \sim X)
+        \end{align*}
+    \item Construct doubly robust outcomes:
+        \begin{align*}
+            \hat{Y}_{0}^{DR} = \hat{\mu}_0(X) + \frac{(Y - \hat{\mu}_0(X))}{\hat{g}(X)}  \cdot \ChFourInd\{W = 0\} \\
+            \hat{Y}_{1}^{DR} = \hat{\mu}_1(X) + \frac{(Y - \hat{\mu}_1(X))}{\hat{g}(X)}  \cdot \ChFourInd\{W = 1\}
+        \end{align*}
+    \item Final CATE estimation: $\hat{\tau}(x) = \hat{Y}_{1}^{DR} - \hat{Y}_{0}^{DR}$
+\end{enumerate}
+The DR-Learner provides theoretical robustness guarantees and often performs well in practice, particularly when either outcome or treatment assignment can be accurately modeled.
+
+\textbf{Double-ML \citep{chernozhukov2018double}.} Double Machine Learning (Double-ML or DML) represents a principled framework for estimating heterogeneous treatment effects when confounders are high-dimensional or when their relationships with treatment and outcome cannot be adequately captured by parametric models. The key insight of DML is to decompose the causal inference problem into two predictive tasks that can be solved using arbitrary machine learning algorithms while maintaining favorable statistical properties. Specifically, DML assumes the following structural relationships:
+\begin{itemize}
+    \item $Y = \theta(X) \cdot W + g(X, Z) + \epsilon \quad \text{with} \quad \mathbb{E}[\epsilon | X, Z] = 0$
+    \item $W = f(X, Z) + \eta \quad \text{with} \quad \mathbb{E}[\eta | X, Z] = 0$
+    \item $\mathbb{E}[\eta \cdot \epsilon | X, Z] = 0$
+\end{itemize}
+where $Y$ is the outcome, $W$ is the treatment, $X$ are the features of interest for heterogeneity, $Z$ are confounding variables, and $\theta(X)$ is the conditional average treatment effect we aim to estimate.
+The method proceeds by first estimating two nuisance functions:
+\begin{itemize}
+    \item Outcome regression: $q(X, Z) = \mathbb{E}[Y | X, Z]$
+    \item Treatment regression: $f(X, Z) = \mathbb{E}[W | X, Z]$
+\end{itemize}
+These nuisance functions can be estimated using any machine learning algorithm capable of regression (for continuous treatments) or classification (for binary treatments). Popular choices include random forests, gradient boosting, neural networks, or regularized linear models. After obtaining estimates $\hat{q}$ and $\hat{f}$, DML constructs residualized outcomes and treatments:
+\begin{align*}
+    \tilde{Y} = Y - \hat{q}(X, Z)\\
+    \tilde{W} = W - \hat{f}(X, Z)
+\end{align*}
+
+The final step estimates $\theta(X)$ by regressing $\tilde{Y}$ on $\tilde{W}$ and $X$
+\begin{align*}
+    \hat{\theta} = \arg\min_{\theta} \mathbb{E}_n[(\tilde{Y} - \theta(X) \cdot \tilde{W})^2]    
+\end{align*}
+
+
+\textbf{Causal Forest \citep{athey2019grf}.} Causal Forest extends the random forest methodology to directly estimate heterogeneous treatment effects in a non-parametric, data-adaptive manner. Unlike meta-learners that rely on global models, Causal Forest estimates treatment effects locally by learning similarity metrics in the feature space and weighting observations accordingly. Causal Forest builds upon the same structural assumptions as DML but estimates $\theta(x)$ locally for each target point $x$. The method constructs a forest where each tree is grown using a \textbf{causal splitting criterion} that maximizes treatment effect heterogeneity rather than prediction accuracy. For a target point $x$, the treatment effect is estimated by solving:
+\begin{align*}
+    \hat{\theta}(x) = \arg\min_{\theta} \sum_{i=1}^n K_x(X_i) \cdot (\tilde{Y}_i - \theta \cdot \tilde{W}_i)^2
+\end{align*}
+where $K_x(X_i)$ represents the similarity between points $x$ and $X_i$ as determined by how frequently they fall in the same leaf across the forest, and $\tilde{Y}$, $\tilde{W}$ are residuals from nuisance function estimates.
+
+\textbf{Implementation in survival context}
+In our benchmark, meta-learners, Double-ML, and Causal Forest are applied to survival outcomes through outcome imputation methods. We first apply imputation techniques (Pseudo-obs, Margin, or IPCW-T, see Appendix~\ref{ch04:app:imputation} for details) to convert censored survival times into continuous outcomes, then apply the meta-learners described above with various base regression algorithms (Lasso Regression, Random Forest, XGBoost). This two-stage approach allows leveraging the rich ecosystem of causal inference methods developed for continuous outcomes while handling the complexities of censored data.
+
+\subsubsection{Direct-survival CATE methods}
+\textbf{Causal Survival Forests (CSF) \citep{ch04:cui2023estimating}} extends the Causal Forest methodology directly to right-censored survival data by incorporating doubly robust estimating equations from survival analysis. Unlike meta-learners that require outcome imputation, CSF handles censored observations natively while maintaining the adaptive partitioning advantages of tree-based methods.
+CSF builds upon the Causal Forest framework of \citet{athey2019grf} but adapts the splitting criterion and estimation procedure for survival outcomes. For a detailed explanation of the method, please refer to the original paper by \citet{ch04:cui2023estimating}. We provide an overview of the estimation procedures as follows:
+\begin{enumerate}
+    \item \textbf{Nuisance estimation}: Using cross-fitting, estimate nuisance components including:
+        \begin{itemize}
+            \item Propensity scores: $\hat{e}(x) = P(W = 1|X = x)$
+            \item Outcome regression: $\hat{m}(x) = E[y(T)|X = x]$ 
+            \item Censoring survival function: $\hat{S}^C_w(s|x) = P(C \geq s|W = w, X = x)$
+            \item Conditional expectations: $\hat{Q}_w(s|x) = E[y(T)|X = x, W = w, T \wedge h > s]$
+        \end{itemize}
+        where $y(T)$ is a transformation applied on the event time $T$, the same as defined in Eq.\ref{ch04:eq:cate}.
+    \item \textbf{Forest construction}: Build a forest where each tree uses a causal splitting criterion that maximizes treatment effect heterogeneity. The splitting rule targets variation in the doubly robust scores rather than prediction accuracy.
+    \item \textbf{Local estimation}: For a target point $x$, compute forest weights $\alpha(x)$ indicating similarity based on leaf co-occurrence across trees, then estimate the CATE by solving:
+        \begin{align*}
+            \sum \alpha(x) \psi_{\hat{\tau}(x)}(X, y(U), U \wedge h, W, \Delta^h; \hat{e}, \hat{m}, \hat{S}^C_w, \hat{Q}_w) = 0
+        \end{align*}
+        where $\psi$ is the doubly robust score function that adjusts for both treatment assignment and censoring.
+\end{enumerate}
+
+
+\textbf{SurvITE \citep{curth2021survite}} adapts the representation learning paradigm for counterfactual inference to time-to-event data. Unlike methods that rely on local similarity in the covariate space, SurvITE addresses selection bias by learning a shared latent representation where the treated and control distributions are balanced, while simultaneously modeling the censoring mechanism.
+SurvITE builds upon the theoretical bounds of counterfactual regression but incorporates survival-specific loss functions to handle right-censored outcomes without requiring imputation. A brief outline of the method follows:
+\begin{enumerate}
+    \item \textbf{Representation learning}: Map covariates $X$ to a latent representation $\Phi(X)$ via a deep neural network, subject to a discrepancy penalty. The objective is to minimize an Integral Probability Metric (IPM) (e.g., Wasserstein distance or MMD) between the treated and control populations in the latent space:
+        \begin{align*}
+            \text{IPM}(P_{\Phi}(X|W=1), P_{\Phi}(X|W=0)) < \epsilon
+        \end{align*}
+    \item \textbf{Factual loss minimization}: Simultaneously train treatment-specific hypothesis heads ($h_1$ and $h_0$) on top of $\Phi(X)$ using a survival loss function $\mathcal{L}_{surv}$ (discrete-time log-likelihood) that accounts for censoring:
+        \begin{align*}
+            \min_{\Phi, h_0, h_1} \sum_{i=1}^N w_i \mathcal{L}_{surv}(h_{W_i}(\Phi(x_i)), T_i, \Delta_i) + \alpha \cdot \text{IPM}
+        \end{align*}
+    \item \textbf{Effect estimation}: For a target point $x$, the CATE is estimated by passing $x$ through the learned representation and computing the difference between the outputs of the treatment and control heads:
+        \begin{align*}
+             \hat{\tau}(x) = E[y(T)|\Phi(x), W=1] - E[y(T)|\Phi(x), W=0]
+        \end{align*}
+        where the expectation is derived from the predicted survival curves or time-to-event distributions output by $h_1$ and $h_0$.
+\end{enumerate}
+
+
+\subsubsection{Survival Meta-Learners}
+
+\textbf{T-Learner-Survival \citep{bo2024ameta,noroozizadeh2025impact}.}
+The T-Learner can be adapted to right-censored survival data by fitting separate survival models for each treatment group. Let $W \in \{0, 1\}$ denote the treatment indicator, $X$ be the covariate vector, and $T$ the observed survival time with censoring indicator $\delta$, and $h$ the maximum follow-up time.
+
+\begin{enumerate}
+    \item \textbf{Split data by treatment:} Partition the dataset into $(X^0, T^0, \delta^0)$ for $W=0$ and $(X^1, T^1, \delta^1)$ for $W=1$.
+    \item \textbf{Train separate survival models:} Fit a survival model (e.g., Random Survival Forests, DeepSurv, DeepHit) to each group:
+    \begin{align*}
+        \widehat{S}_0(u | x) &= \text{Survival model fitted on } (X^0, T^0, \delta^0) \\
+        \widehat{S}_1(u | x) &= \text{Survival model fitted on } (X^1, T^1, \delta^1)
+    \end{align*}
+    \item \textbf{Estimate restricted mean survival time (RMST):} Compute RMST for each treatment as:
+    \begin{align*}
+        \widehat{\mu}_0(x) = \int_0^h \widehat{S}_0(u|x) du, \quad \widehat{\mu}_1(x) = \int_0^h \widehat{S}_1(u|x) du
+    \end{align*}
+    \item \textbf{Estimate CATE:} For any $x$, estimate treatment effect:
+    \begin{align*}
+        \widehat{\tau}_{\text{T-Learner}}(x) = \widehat{\mu}_1(x) - \widehat{\mu}_0(x)
+    \end{align*}
+\end{enumerate}
+
+\textbf{S-Learner-Survival \citep{bo2024ameta,noroozizadeh2025impact}.}
+The S-Learner adapts by training a single survival model over all data with treatment as a covariate.
+
+\begin{enumerate}
+    \item \textbf{Fit survival model:} Train a survival model over the full dataset using $(X, W)$ as inputs:
+    \begin{align*}
+        \widehat{S}(u | x, w) = \text{Survival model fitted on } ((X, W), T, \delta)
+    \end{align*}
+    \item \textbf{Estimate restricted mean survival time (RMST):} Compute RMST under both treatment conditions:
+    \begin{align*}
+        \widehat{\mu}(x, 0) = \int_0^h \widehat{S}(u|x, 0) du, \quad \widehat{\mu}(x, 1) = \int_0^h \widehat{S}(u|x, 1) du
+    \end{align*}
+    \item \textbf{Estimate CATE:} 
+    \begin{align*}
+        \widehat{\tau}_{\text{S-Learner}}(x) = \widehat{\mu}(x,1) - \widehat{\mu}(x,0)
+    \end{align*}
+\end{enumerate}
+
+\textbf{Matching-Survival \citep{noroozizadeh2025impact}.}
+The Matching-Learner estimates the CATE by imputing the counterfactual Restricted Mean Survival Time (RMST) using matched data points from the opposite treatment group.
+
+\begin{enumerate}
+    \item \textbf{Estimate factual RMST:} Fit a survival model on the full dataset and compute:
+    \begin{align*}
+        \widehat{\mu}_{W_i}(X_i) = \int_0^h \widehat{S}(u | X_i, W_i) du
+    \end{align*}
+    \item \textbf{Find matches:} For each individual $i$, identify $K$ nearest neighbors $J_K(i)$ from the opposite treatment group (\(1-W_i\)).
+    \item \textbf{Estimate counterfactual RMST:} Average factual RMSTs of matched neighbors:
+    \begin{align*}
+        \widehat{\mu}_{1-W_i}(X_i) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{W_j}(X_j)
+    \end{align*}
+    \item \textbf{Estimate CATE:} Compute CATE for each unit:
+    \begin{align*}
+        \widehat{\tau}_{\text{matching}}(X_i) = \big(\widehat{\mu}_{W_i}(X_i) - \widehat{\mu}_{1-W_i} (X_i)\big) \cdot \big(2 W_i - 1 \big)
+    \end{align*}
+\end{enumerate}
+
+This approach makes minimal modeling assumptions beyond nearest-neighbor similarity and is particularly helpful in settings with low overlap or where global models may be misspecified.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \textcolor{red}{Using $h=$ max observed time for synthetic data.}
+

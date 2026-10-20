@@ -1,0 +1,28 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:synthetic-data-ate}{\caption{Average treatment effect (ATE) of synthetic datasets (50,000 samples).}}{
+     
+    
+    \centering
+    \begin{adjustbox}{max width = 0.62\textwidth}
+    % \begin{tabular}{lccccc}
+    \begin{tabular}{lccccc}
+        \toprule
+        & \multicolumn{5}{c}{\textbf{Survival Scenarios}} \\
+        \cmidrule(r){2-6}
+        \textbf{Causal Configurations} & \texttt{A} & \texttt{B} & \texttt{C} & \texttt{D} & \texttt{E} \\
+        \midrule
+        \texttt{RCT-50} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \texttt{RCT-5} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \texttt{OBS-CPS} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \texttt{OBS-UConf} & 0.004 & 0.132 & 0.740 & 0.831 & 0.740 \\ 
+        \texttt{OBS-NoPos} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \texttt{OBS-CPS-InfC} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \texttt{OBS-UConf-InfC} & 0.004 & 0.132 & 0.740 & 0.831 & 0.740 \\ 
+        \texttt{OBS-NoPos-InfC} & 0.163 & 0.125 & 0.750 & 0.724 & 0.754 \\ 
+        \bottomrule
+    \end{tabular}
+    % \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

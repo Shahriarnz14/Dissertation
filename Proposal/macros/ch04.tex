@@ -1,0 +1,56 @@
+% !TeX root = ../main.tex
+% Only active SurvHTE dependencies. Do not import its global math_commands.tex.
+\usepackage{makecell,dsfont,bbm}
+% Retain the source's Inconsolata typewriter family only inside Chapter 4/C.
+\let\ChFourPreviousTT\ttdefault
+\usepackage[scaled=1.]{inconsolata}
+\let\ChFourTypewriter\ttdefault
+\let\ttdefault\ChFourPreviousTT
+\newcommand{\ChFourBegin}{\let\ttdefault\ChFourTypewriter
+  \renewcommand{\theHequation}{ch04.\arabic{appendix}.\arabic{equation}}}
+% Exact used definitions from the selected original preamble/math_commands.tex.
+\newcommand{\ChFourBfTab}{\fontseries{b}\selectfont}
+\newcommand{\ChFourBlackCross}{\ding{55}}
+\newcommand{\ChFourGrayCheck}{\textcolor{gray}{\ding{51}}}
+\newcommand{\ChFourIndep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\ChFourInd}{\mathds{1}}
+\newcommand{\ChFourRebuttal}[1]{\textcolor{black}{#1}}
+\newcommand{\ChFourEqref}[1]{equation~\ref{#1}}
+\newenvironment{ChFourAbstract}{\par\noindent\textbf{Abstract}\par}{\par}
+\newcommand{\ChFourStarSection}[1]{\par\bigskip\phantomsection\expandafter\def\csname @currentlabelname\endcsname{#1}\noindent{\large\bfseries #1}\par\nobreak}
+\newcommand{\ChFourParagraph}[1]{\par\medskip\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChFourHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\makeatletter
+\newcommand{\ChFourLongSection}[1]{{%
+  \let\ChFourOriginalSectionStyle\@subsection@style
+  \def\@subsection@style{\ChFourOriginalSectionStyle\raggedright}%
+  \subsection{#1}}}
+
+\newcommand{\ChFourMaxFloatHeight}{.64\textheight}
+\newcommand{\ChFourFloatBody}[1]{{\centering\let\tabular\cmu@internal@begintabular
+  \begin{adjustbox}{max totalsize={\linewidth}{\ChFourMaxFloatHeight}}
+    \begin{minipage}{\linewidth}\centering#1\par\end{minipage}
+  \end{adjustbox}\par}}
+% Source parent labels without any active textual reference are retained as such.
+\newcommand{\ChFourFloatLabel}[1]{\ifboolexpr{test {\ifstrequal{#1}{ch04:tab:survival-scenarios}} or
+       test {\ifstrequal{#1}{ch04:tab:synthetic-data-censor-rate}} or
+       test {\ifstrequal{#1}{ch04:tab:synthetic-data-treatment-rate}} or
+       test {\ifstrequal{#1}{ch04:tab:synthetic-data-ate}} or
+       test {\ifstrequal{#1}{ch04:fig:synthetic-km-curves}} or
+       test {\ifstrequal{#1}{ch04:fig:cate_mse_grid_scenario_A}} or
+       test {\ifstrequal{#1}{ch04:fig:cate_mse_grid_scenario_B}} or
+       test {\ifstrequal{#1}{ch04:fig:cate_mse_grid_scenario_C}} or
+       test {\ifstrequal{#1}{ch04:fig:cate_mse_grid_scenario_D}} or
+       test {\ifstrequal{#1}{ch04:fig:cate_mse_grid_scenario_E}} or
+       test {\ifstrequal{#1}{ch04:fig:ate_bias_grid_scenario_B}} or
+       test {\ifstrequal{#1}{ch04:fig:ate_bias_grid_scenario_C}} or
+       test {\ifstrequal{#1}{ch04:tab:cate_rmse_prob50}}}
+  {\global\let\cmu@found@label\@true\cmu@internal@label{#1}}
+  {\cmu@label{#1}}}
+\newcommand{\ChFourFloatContents}[3]{\ifdefstring{\@captype}{table}
+  {#2\ChFourFloatLabel{#1}%
+   % Check the parent caption once; makecell and tabularx contain nested tabulars.
+   \cmu@test@custom@caption{\@false}{Chapter 4 table caption must precede its body}%
+   {\let\tabular\cmu@internal@begintabular\ChFourFloatBody{#3}}}
+  {\ChFourFloatBody{#3}#2\ChFourFloatLabel{#1}}}
+\makeatother

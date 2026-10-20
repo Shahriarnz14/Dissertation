@@ -1,0 +1,35 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:semi-syn-dataset-summary}{\caption{Semi-synthetic datasets overview. The last two columns summarize how treatment assignment and event-time generation depend on covariates. \texttt{linear} indicates dependence through a linear predictor with no quadratic or interaction terms; \texttt{non-linear} includes quadratic and/or interaction terms. \texttt{independent} indicates covariate-independent treatment assignment.}}{
+    
+     
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \begin{adjustbox}{max width = \textwidth}
+    \begin{tabular}{@{}lcccccc@{}}
+        \toprule
+        & \makecell{\textbf{Data}\\\textbf{size}} 
+        & \makecell{\textbf{No.}\\\textbf{covariates}} 
+        & \makecell{\textbf{Treatment}\\\textbf{rate}} 
+        & \makecell{\textbf{Censoring.}\\\textbf{rate}} 
+        & \makecell{\textbf{Treatment assignment}\\\textbf{mechanism}} 
+        & \makecell{\textbf{Event time}\\\textbf{mechanism}} \\
+        \midrule
+        ACTG & 2,139 & 23 & 56.15\% & 51.19\% & \texttt{linear} & \texttt{non-linear} \\ 
+        \addlinespace
+        MIMIC-$i$ & 25,170 & 36 & 49.92\% & 88.49\% & \texttt{independent} & \texttt{linear} \\ 
+        MIMIC-$ii$ & 25,170 & 36 & 49.92\% & 81.65\% & \texttt{independent} & \texttt{linear} \\ 
+        MIMIC-$iii$ & 25,170 & 36 & 49.92\% & 74.10\% & \texttt{independent} & \texttt{linear} \\ 
+        MIMIC-$iv$ & 25,170 & 36 & 49.92\% & 66.34\% & \texttt{independent} & \texttt{linear} \\ 
+        MIMIC-$v$ & 25,170 & 36 & 49.92\% & 53.35\% & \texttt{independent} & \texttt{linear} \\ 
+        \addlinespace
+        MIMIC-$vi$ & 25,170 & 36 & 53.54\% & 53.07\% & \texttt{linear} & \texttt{linear} \\ 
+        MIMIC-$vii$ & 25,170 & 36 & 54.26\% & 52.66\% & \texttt{linear} & \texttt{non-linear} \\ 
+        MIMIC-$viii$ & 25,170 & 36 & 50.94\% & 53.26\% & \texttt{non-linear} & \texttt{linear} \\ 
+        MIMIC-$ix$ & 25,170 & 36 & 51.47\% & 52.82\% & \texttt{non-linear} & \texttt{non-linear} \\ 
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+    \par
+}
+\end{table}

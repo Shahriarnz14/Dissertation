@@ -1,0 +1,110 @@
+% !TeX root = ../../../main.tex
+\subsection{\textsc{SurvHTE-Bench}}
+\label{ch04:sec:bench}
+
+
+
+\input{Chapters/chapter-04/tables/01}
+
+
+
+\textsc{SurvHTE-Bench} probes how survival CATE estimators behave when assumptions (A1)--(A5) hold and when they are either mildly or severely violated.  As real data with ground-truth CATEs are scarce, the bulk of our benchmark relies on synthetic datasets. We also include semi-synthetic data (real covariates with simulated treatments and outcomes) and two real-world datasets. %In this section, we describe our synthetic data, semi-synthetic and real datasets included for completeness, the evaluation metrics, and the survival CATE methods implemented. %The end of this section briefly mentions how we handle real data that we later use in our experiments.
+As already stated in Section~\ref{ch04:sec:background}, in this paper we focus on the case where the target estimand is RMST up to a user-specified time horizon~$h$ 
+(other estimands are possible, 
+\ChFourRebuttal{such as survival probability at predefined times, see Appendix~\ref{ch04:app:surv_prob}).}
+% but we defer this to future work).
+Access to all of the datasets, except for those requiring credentialed approval, is provided at: \url{https://huggingface.co/datasets/snoroozi/SurvHTE-Bench}.
+
+
+
+% \textbf{Target estimand.}
+% We adopt RMST up to a user-specified horizon $h$, which summarizes survival on the time scale, remains identifiable under heavy censoring, and is widely interpretable. While our benchmark fixes RMST for comparability, its modular design extends naturally to other estimands. \textcolor{red}{Time permits, discuss in appendix/section5?}.
+
+
+\textbf{Synthetic data.}
+We construct a modular suite of 40 synthetic datasets that systematically vary across two orthogonal axes: (1) causal configuration: treatment mechanism, positivity, confounding, censoring mechanism; (2) survival scenario: event‑time distribution and censoring rate. 
+% \textcolor{red}{Jeremy's comment: ensuring that the reader is aware of the connection of the synthetic datasets and where they originate from/where they have (or have not) been tested. So they understand better what is classical, and which of these settings are new to the benchmark.}
+% To rigorously evaluate CATE estimators for right‐censored outcomes, we construct a modular suite of synthetic datasets that systematically vary across two axes: the causal configurations and the survival scenarios. The design of different survival scenarios builds on \citet{meir2025heterogeneous}, and we expand it in scope and coverage, as well as adding different causal configurations.
+% \textcolor{red}{Argue why each violation reflects a common real‐world challenge. and why not including the other combinations.}
+Crossing 8 causal configurations with 5 survival scenarios yields $8\times5=40$ synthetic datasets, each with binary, time‑fixed treatment, five independently sampled covariates, each distributed as $\text{Uniform}(0,1)$, and up to 50{,}000 units. For each unit~$i$, we generate both $T_i(0)$ and $T_i(1)$, ensuring that ground-truth CATEs are always known. 
+
+
+%\vspace{-1em}
+% \textbf{Causal configurations.} %\label{subsec:causal-configs}
+The 8 \textbf{causal configurations} (Table~\ref{ch04:tab:synthetic-data-causal-config}) include randomized controlled trials (\texttt{RCT-50}, \texttt{RCT-5}) and observational studies with correctly specified propensity scores (i.e., these are known during training) with all confounders observed in estimation (\texttt{OBS-CPS}), unobserved confounding (\texttt{OBS-UConf}), or lack of positivity (\texttt{OBS-NoPos}). Each observational setting has variants with suffix ``\texttt{-InfC}'', where ignorable censoring is replaced by informative censoring, where censoring times depend stochastically on event times. These violations reflect common real-world challenges: unmeasured risk factors in treatment decisions (violating ignorability), treatment imbalance in observational studies (violating positivity), and dropout mechanisms correlated with health outcomes (violating ignorable censoring). We do not model interference (consistency violations) or censoring-positivity violations, which require specialized designs beyond our scope. 
+% , covering the following pathologies: %. They capture different pathologies:
+% \begin{itemize}[leftmargin=1.5em, itemsep=0pt,parsep=0pt,partopsep=0pt,topsep=0pt, label={}]
+% \item \texttt{RCT-50/5}: randomized controlled trials with treatment rates of 50\% and, separately, 5\%.
+% \item \texttt{OBS-CPS}: best-case observational study; ignorability and overlap hold.
+% \item \texttt{OBS-UConf}: adds latent risk factors to treatment assignment and outcome, breaking ignorability.
+% \item \texttt{OBS-NoPos}: treatment selected deterministically with extreme covariates.
+% \item \texttt{InfC} variants: replace ignorable censoring by an exponential rate dependent on event time.
+% \end{itemize}
+Additional variations, such as informative censoring with the censoring time driven by unobserved factors, are included in the Appendix~\ref{ch04:app:informative-censoring-uconf} to illustrate the extensibility of our modular setup.
+
+
+
+
+\input{Chapters/chapter-04/tables/02}
+
+
+%%% move to appendix
+% We vary causal structure along three dimensions. First, treatment $W=1$ is either randomly assigned with probability $p$ (``\texttt{RCT}'' datasets, with $p=0.5$ or $p=0.05$) or drawn from a logistic‐style propensity score (corresponding to an observational study). In the latter ``\texttt{OBS‐$e(X)$}'' configuration, the propensity score $e(X)$ is a smooth function of covariates $X$. For the choice of propensity score, we follow \cite{cui2023estimating} and use Beta distribution with parameter as a function of covariate $X$; in ``\texttt{OBS‐$e(X,U)$}'' we introduce unobserved confounders $U$, which is independently sampled from $\text{Uniform}(0,1)$, into both treatment assignment and outcome models, thereby violating ignorabilitiy assumption. A third observational setting, ``\texttt{OBS‐noOverlap}'', enforces positivity violations by deterministically assigning one treatment level in extreme regions of $X$, and thus violating the positivity assumption. 
+
+% Independently, we can replace the original censoring mechanism with an informative one, sampling censoring times from an exponential distribution whose rate increases linearly with the true event time, thereby inducing dependence between censoring and outcome, and thus violating the ignorable censoring assumption. We do not model interference or spillover effects (i.e. violation of the consistency assumption), which require network‐specific structures beyond our current scope. We do not consider the cases with violating the censoring positivity assumption on censoring as well, because it is not realistic xxx.
+
+
+The 5 \textbf{survival scenarios} (Table~\ref{ch04:tab:synthetic-data-survival-scenario})
+% covering various survival time distributions and censoring regimes.  
+% Scenarios \texttt{A}/\texttt{B} use low censoring rate ($<$30\%) and familiar AFT/Cox models; \texttt{C} and \texttt{E} share a discrete-time Poisson hazard but differ only in administrative censoring (40\% vs $>$70\%); \texttt{E} exhibit high censoring ($>$70\%) with adjusted censoring distribution.
+include Cox proportional hazards (low censoring), accelerated failure time (AFT) models (low and high censoring), and Poisson hazards (medium and high censoring). These distributions cover proportional hazards (Cox) and non-proportional hazards (AFT\footnote{The AFT noise distribution we use (that is additive in log survival time) is Gaussian so that the resulting model does \emph{not} satisfy the proportional hazards assumption (which would require the noise to be Gumbel).}, Poisson), with censoring levels ranging from under 30\% to over 70\%.
+This variety reflects practical challenges like high censoring common in EHR cohorts, accelerated processes in oncology, and discrete hazard approximations in epidemiology. Within each survival scenario, coefficients are tuned so that event times are comparable across different causal configurations.
+Full generation formulas and summary statistics (e.g., censoring rate, treatment rate, ATE) for each dataset are in Appendix~\ref{ch04:app:synthetic-dataset}.
+%%% move to appendix
+% We vary survival‐time generative models as well as censoring rate. We generate potential event times $T(0)$ and $T(1)$ under one of five survival scenarios, including AFT, Cox, and Poisson distributions. The true event time $T$ under the unit's treatment assignment is chosen based on $W$ The five scenarios also cover different levels of censoring rate (low, median, and high). In the informative censoring case, the censoring time is instead generated from an exponential distribution whose rate increases linearly with the true event time. After $T$ and $C$ are sampled, we derive the observed time $Y = \min(T, C)$ and event indicator $\delta = 1(T \leq C)$. Because we generate both potential outcomes, the true CATE $\tau(x) = T(1 | x) - T(0 | x)$ is known. The population-level average treatment effect (ATE) can be obtained by taking the average of CATE across a large sample size.
+
+
+\textbf{Evaluation metrics.}
+Per dataset, averaged over 10 random splits, we report:
+\begin{itemize}
+    \item CATE root mean square error (RMSE): $\sqrt{\frac1n\sum_{i=1}^n (\hat\tau(X_i)-\tau(X_i))^2}$.
+    \item ATE bias: $\frac1n\sum_{i=1}^n\hat\tau(X_i)-\Delta$, where $\Delta$ is the true ATE from the population and can be approximated using the average CATE from a very large sample (i.e., from 50,000 simulated samples).
+    \item Auxiliary imputation accuracy: mean absolute error (MAE) between imputed and true event times.
+    \item Auxiliary regression/survival fit: MAE for regression-based learners, AUC for propensity score models, and the time-dependent C-index \citep{ch04:antolini2005time} for survival models.
+\end{itemize}
+
+
+\textbf{Survival CATE methods implemented.}
+We evaluate the three broad families of survival CATE methods (53 variants total; see Appendix~\ref{ch04:app:exp-setup} for the full list, Appendix~\ref{ch04:app:causal_method_details} for methodological details):
+\begin{itemize}
+    \item \emph{Outcome imputation methods}: meta-learners (S-, T-, X-, DR-Learners) paired with base regression learners (lasso, random forest, XGBoost), plus Double-ML and Causal Forest, each combined with the three imputations (Pseudo-obs, Margin, and IPCW-T \citep{qi2023an}, see Appendix~\ref{ch04:app:imputation} for details). In total, we implement $42$ variants.
+    \item \emph{Direct-survival CATE methods}:
+    We include SurvITE~\citep{curth2021survite} and Causal Survival Forests~\citep{ch04:cui2023estimating}.
+    \item \emph{Survival meta-learners}:
+    S-, T-, and matching-learners paired with survival learners (Random Survival Forests~\citep{ch04:ishwaran2008random}, DeepSurv~\citep{ch04:katzman2018deepsurv}, and DeepHit~\citep{ch04:lee2018deephit}), for a total of \(3\times3=9\) variants.
+\end{itemize}
+% While many of these methods draw from existing literature, to the best of our knowledge, we are the first to systematically categorize them into these three families and implement them in a unified, modular framework.
+% This design facilitates reproducibility, extensibility, and fair comparison across approaches.
+Note that some implemented methods are straightforward extensions of existing ideas despite not having been previously published. For example, \citep{qi2023an} suggested ways of replacing censoring times with imputed survival times for the purposes of model evaluation, but their imputation strategies naturally can be coupled with standard CATE learners to obtain survival CATE estimators. Similarly, pairing meta-learners with different base learners (e.g., lasso regression, XGBoost, or DeepSurv) yields natural yet previously unpublished variants.
+% Full details of each causal methodology appear in Appendix~\ref{ch04:app:causal_method_details}. % \textcolor{red}{Make sure all appendix parts are properly referred to in the main body.}
+
+
+\textbf{Semi-synthetic data.}
+% To bridge synthetic and real data,
+We include 10 semi-synthetic datasets, pairing real covariates (ACTG HIV trial, MIMIC-IV ICU records) with simulated treatments and outcomes, covering moderate to extreme censoring regimes, \ChFourRebuttal{covariate-dependent treatment assignment, and both linear and non-linear (interaction-based) event-time and censoring mechanisms.}
+These datasets preserve realistic feature distributions while retaining ground-truth CATEs. 
+Details are in Section~\ref{ch04:sec:semi-syn-data-experiment}.
+% \textbf{Semi-synthetic data.} 
+% To bridge the gap between controlled synthetic experiments and real-world complexity, we evaluate methods on semi-synthetic datasets that pair real covariate distributions with simulated treatments and outcomes. This approach addresses a critical limitation of purely synthetic data---the potential lack of representativeness in covariate structures---while maintaining ground-truth CATEs for rigorous evaluation.
+
+% We construct six semi-synthetic datasets using real covariates from two sources: (1) \textbf{ACTG semi-synthetic}: Based on 23 covariates from the ACTG HIV clinical trial~\citep{hammer1996atrial}, with treatment and event times simulated following~\citet{chapfuwa2021enabling}. This dataset captures moderate censoring (51\%) with realistic treatment imbalance. (2) \textbf{MIMIC semi-synthetic}: Derived from 36 covariates in the MIMIC-IV ICU database~\citep{johnson2023mimic}, with treatment and outcomes generated following~\citet{meir2025heterogeneous}. We create five variants with censoring rates from 53\% to 88\%, simulating the spectrum from moderate to extreme censoring common in longitudinal EHR studies.
+
+% These datasets preserve real-world covariate correlations, mixed data types, and high dimensionality while enabling controlled evaluation against known treatment effects. Dataset statistics are provided in Appendix~\ref{app:more-semi-syn-data-setup-result}. Details on experimental results are presented in Section~\ref{ch04:sec:semi-syn-data-experiment}.
+
+
+\textbf{Real data.} Finally, we incorporate two real datasets, one with ground truth (for which we can use the same evaluation metrics as with synthetic data) and one without ground truth but with a low censoring rate (for which we compare how models perform on the original dataset vs on the dataset with artificially introduced censoring). These provide opportunities to evaluate how methods behave under real covariate and outcome structures. Details are in Section~\ref{ch04:sec:real-data}.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

@@ -1,0 +1,30 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:synthetic-data-censor-rate}{\caption{Censoring rate of synthetic datasets (50,000 samples). Notice that the censoring rates are different from Table~\ref{ch04:tab:synthetic-data-survival-scenario} under informative censoring due to changes in the censoring distribution.}}{
+     
+    
+    \centering
+    \begin{adjustbox}{max width = 0.62\textwidth}
+    % \begin{tabular}{lccccc}
+    \begin{tabular}{lccccc}
+        \toprule
+        & \multicolumn{5}{c}{\textbf{Survival Scenarios}} \\
+        \cmidrule(r){2-6}
+        \textbf{Causal Configurations} & \texttt{A} & \texttt{B} & \texttt{C} & \texttt{D} & \texttt{E} \\
+        \midrule
+        \texttt{RCT-50} & 0.203 & 0.073 & 0.392 & 0.913 & 0.794 \\ 
+        \texttt{RCT-5} & 0.200 & 0.036 & 0.390 & 0.881 & 0.770 \\ 
+        \midrule
+        \texttt{OBS-CPS} & 0.201 & 0.066 & 0.393 & 0.914 & 0.789 \\ 
+        \texttt{OBS-UConf} & 0.201 & 0.073 & 0.392 & 0.918 & 0.795 \\ 
+        \texttt{OBS-NoPos} & 0.203 & 0.082 & 0.393 & 0.912 & 0.803 \\ 
+        \midrule
+        \texttt{OBS-CPS-InfC} & 0.116 & 0.052 & 0.885 & 0.366 & 0.926 \\ 
+        \texttt{OBS-UConf-InfC} & 0.116 & 0.054 & 0.888 & 0.381 & 0.929 \\ 
+        \texttt{OBS-NoPos-InfC} & 0.116 & 0.058 & 0.891 & 0.403 & 0.932 \\ 
+        \bottomrule
+    \end{tabular}
+    % \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

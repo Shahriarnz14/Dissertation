@@ -1,0 +1,67 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Semi-synthetic data results}
+\label{ch04:sec:semi-syn-data-experiment}
+
+
+To bridge the gap between controlled synthetic experiments and real-world complexity, we evaluate methods on semi-synthetic datasets that pair real covariate distributions with simulated treatments and outcomes. This approach addresses a critical limitation of purely synthetic data---the potential lack of representativeness in covariate structures---while maintaining ground-truth CATEs for rigorous evaluation. These datasets preserve real-world covariate correlations, mixed data types, and high dimensionality while enabling controlled evaluation against known treatment effects.
+
+\textbf{Dataset construction.} We construct 10 semi-synthetic datasets using covariates from two sources (Table~\ref{ch04:tab:semi-syn-dataset-summary} summarizes all datasets).
+\begin{itemize}
+    \item \textbf{ACTG semi-synthetic}: Based on 23 covariates from the ACTG HIV clinical trial~\citep{hammer1996atrial}, with treatment and event times simulated following~\citet{chapfuwa2021enabling}. This dataset exhibits moderate censoring (51\%) with realistic treatment imbalance.
+    % \item \textbf{MIMIC semi-synthetic}: Derived from 36 covariates in the MIMIC-IV ICU database~\citep{johnson2023mimic}, with treatment and outcomes generated following~\citet{meir2025heterogeneous}. \textcolor{red}{modify so that says 5 use this, 4 from others.} We create five variants with censoring rates from 53\% to 88\%, simulating the range from moderate to extreme censoring common in longitudinal EHR studies. \ChFourRebuttal{We also include four additional variants (MIMIC-$vi$-$ix$) that use the same covariates but introduce covariate-dependent treatment assignment and non-linear event-time and censoring mechanisms; these variants maintain similar treatment prevalence (51-54\%) as the first five with balanced censoring (53\%). Full generative details for both of these constructions are provided in Appendix~\ref{app:mimic-i-v} and Appendix~\ref{app:mimic-vi-ix} respectively.}
+    \item \textbf{MIMIC semi-synthetic}: Derived from 36 covariates in the MIMIC-IV ICU database~\citep{johnson2023mimic}. 
+    \ChFourRebuttal{We construct nine MIMIC-based semi-synthetic variants organized into two complementary subsets: 
+    MIMIC-$i$--$v$ follow ~\citet{meir2025heterogeneous} and vary censoring severity from 53\% to 88\% under covariate-independent treatment assignment, covering moderate to extreme censoring regimes common in longitudinal EHR studies. 
+    MIMIC-$vi$--$ix$ reuse the same covariates but introduce covariate-dependent treatment assignment and non-linear (interaction-based) event-time and censoring mechanisms. Full generative details are provided in Appendix~\ref{ch04:app:more-semi-syn-data-setup-result}. 
+    % We report results on MIMIC-$i$--$v$ in the main paper, and include results for MIMIC-$vi$--$ix$ in Appendix~\ref{app:mimic-vi-ix}.
+    }
+\end{itemize}
+
+\textbf{Primary estimand and reporting.} In the main paper, we focus on CATE estimation for RMST evaluated at a large horizon (the maximum observed time in each dataset). Table~\ref{ch04:tab:semi-syn-cate-rmse} reports RMSE on ACTG and the censoring-severity sweep MIMIC-$i$--$v$, which provides a compact view of performance as censoring increases. Results on the remaining MIMIC variants (MIMIC-$vi$--$ix$) under the same RMST estimand, as well as results for additional estimands (horizon-specific survival-probability CATEs and RMST at a shorter horizon), are reported in Appendix~\ref{ch04:app:more-semi-syn-data-setup-result}.
+
+Table~\ref{ch04:tab:semi-syn-cate-rmse} presents CATE RMSE results across semi-synthetic datasets, showing how realistic covariate structure modulates the core performance patterns observed in synthetic experiments. % \ChFourRebuttal{The results for the remaining semi-synthetic datasets, MIMIC-$vi$--$ix$, can be found in Appendix~\ref{app:mimic-vi-ix-results}.}
+
+
+\input{Chapters/chapter-04/tables/03}
+
+
+\textbf{Validation and extension of synthetic findings.} The semi-synthetic results broadly corroborate the synthetic benchmark: In ACTG,  Double-ML achieves the lowest RMSE (10.65), consistent with the advantage of flexible, doubly robust approaches in moderate-dimensional settings with controlled confounding. Across MIMIC-$i$--$v$, methods remain competitive within a narrow band, with survival-oriented approaches (SurvITE and survival meta-learners) frequently among the top performers.
+% Similarly, S-Learner-Survival's consistent top-tier performance across MIMIC variants (appearing as best or second-best on four of five datasets) also agrees with our synthetic benchmark finding that survival meta-learners provide robust performance under challenging censoring conditions. % These consistent patterns across synthetic and semi-synthetic settings demonstrate that our benchmark captures fundamental method characteristics rather than artifacts of synthetic data generation.
+
+\textbf{Censoring sensitivity and stability.} The MIMIC-$i$--$v$ sweep (53\%--88\% censoring) reveals that differences in \emph{stability} can be as important as differences in mean RMSE. For example, S-Learner-Survival remains stable across censoring levels (RMSE range 7.897--7.921), while T-Learner-Survival exhibits increased variability under extreme censoring (e.g., larger standard deviation at 82\% censoring).
+
+% \textbf{Enhanced understanding of censoring sensitivity.} The MIMIC censoring rate range (53\% to 88\%) provides granular validation of synthetic censoring effects while revealing method-specific stability patterns not observable in synthetic experiments. S-Learner-Survival maintains stability across this range (RMSE range: 7.897-7.921), while T-Learner-Survival exhibits instability at extreme censoring ($\pm$0.233 standard deviation at 82\% censoring). This extends synthetic findings by showing that censoring tolerance varies not just between method families but within them, providing more precise guidance for high-censoring scenarios.
+
+% \textbf{\textcolor{red}{Convergence effects in realistic high-dimensional settings.}} The MIMIC results reveal a novel finding absent from synthetic experiments: performance convergence in high-dimensional, realistic covariate spaces. All methods cluster within a narrow RMSE range (7.89-8.01), contrasting with ACTG's broader spread (10.65-12.52). This convergence suggests that while synthetic experiments correctly identify relative method strengths, realistic covariate correlations and mixed data types may compress performance differences, making method selection dependent on secondary factors like stability, interpretability, and computational efficiency.
+
+\textbf{Practical implications.} In these realistic covariate spaces, RMSE differences are often compressed, making method selection depend on secondary considerations such as stability under censoring, interpretability, and computational cost. Overall, the semi-synthetic evaluation suggests: (i) flexible causal methods such as Double-ML remain strong in moderate-dimensional settings with balanced censoring, (ii) survival-oriented methods like SurvITE and survival meta-learners provide robust performance in highly censored EHR-like regimes (MIMIC), and (iii) the choice of method should explicitly consider dataset dimensionality and covariate complexity, not just censoring rates and sample sizes. 
+In Appendix~\ref{ch04:app:more-semi-syn-data-setup-result}, \ChFourRebuttal{we provide details on the data generation process, experiment setup, and additional experiment results on the semi-synthetic.}
+
+
+% Table~\ref{ch04:tab:semi-syn-cate-rmse}.
+
+% \begin{table}[htbp]
+%     \caption{CATE RMSE on semi-synthetic datasets across 10 experimental repeats.}
+%     \label{tab:semi-syn-cate-rmse}
+%     \begin{center}
+%     \begin{adjustbox}{max width = 0.9\textwidth}
+%     \begin{tabular}{lcccccc}
+%     \toprule
+%         \textbf{Method Family} & \textbf{ACTG} & \textbf{MIMIC 1} & \textbf{MIMIC 2} & \textbf{MIMIC 3} & \textbf{MIMIC 4} & \textbf{MIMIC 5} \\ \midrule
+%         T-Learner & 11.257 $\pm$ 0.239 & 7.964 $\pm$ 0.046 & 7.912 $\pm$ 0.046 & 7.915 $\pm$ 0.043 & 7.912 $\pm$ 0.043 & 7.908 $\pm$ 0.043 \\ 
+%         S-Learner & 11.300 $\pm$ 0.221 & 7.977 $\pm$ 0.044 & 7.968 $\pm$ 0.047 & 7.956 $\pm$ 0.050 & 7.959 $\pm$ 0.046 & 7.958 $\pm$ 0.048 \\ 
+%         X-Learner & 11.072 $\pm$ 0.196 & 7.964 $\pm$ 0.046 & 7.912 $\pm$ 0.046 & 7.915 $\pm$ 0.043 & 7.912 $\pm$ 0.043 & 7.908 $\pm$ 0.043 \\ 
+%         DR-Learner & 11.334 $\pm$ 0.225 & 7.964 $\pm$ 0.046 & 7.912 $\pm$ 0.047 & 7.915 $\pm$ 0.043 & 7.911 $\pm$ 0.043 & 7.909 $\pm$ 0.043 \\ 
+%         Double-ML & 10.651 $\pm$ 0.239 & 7.954 $\pm$ 0.047 & 7.936 $\pm$ 0.045 & 7.919 $\pm$ 0.044 & 7.917 $\pm$ 0.046 & 7.891 $\pm$ 0.050 \\ 
+%         Causal Forest & 11.154 $\pm$ 0.175 & 7.967 $\pm$ 0.045 & 7.949 $\pm$ 0.044 & 7.934 $\pm$ 0.043 & 7.931 $\pm$ 0.047 & 7.909 $\pm$ 0.044 \\ 
+%         Causal Survival Forests & 11.674 $\pm$ 0.169 & 7.963 $\pm$ 0.057 & 7.942 $\pm$ 0.039 & 7.929 $\pm$ 0.037 & 7.911 $\pm$ 0.051 & 7.893 $\pm$ 0.042 \\ 
+%         T-Learner-Survival & 11.428 $\pm$ 0.160 & 8.007 $\pm$ 0.075 & 7.980 $\pm$ 0.233 & 7.911 $\pm$ 0.054 & 7.902 $\pm$ 0.042 & 7.902 $\pm$ 0.046 \\ 
+%         S-Learner-Survival & 11.713 $\pm$ 0.237 & 7.921 $\pm$ 0.044 & 7.912 $\pm$ 0.052 & 7.900 $\pm$ 0.045 & 7.901 $\pm$ 0.046 & 7.897 $\pm$ 0.042 \\ 
+%         Matching Survival & 12.523 $\pm$ 0.289 & 7.949 $\pm$ 0.043 & 7.935 $\pm$ 0.053 & 7.920 $\pm$ 0.047 & 7.921 $\pm$ 0.046 & 7.912 $\pm$ 0.042 \\
+%     \bottomrule
+%     \end{tabular}
+%     \end{adjustbox}
+%     \end{center}
+% \end{table}
+
+

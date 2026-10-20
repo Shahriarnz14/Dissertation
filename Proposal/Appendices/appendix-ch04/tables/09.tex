@@ -1,0 +1,34 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:hyperparam-base-surv}{\caption{Set of hyperparameters for Survival Meta-Learners}}{
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+ 
+\begin{adjustbox}{max width = 0.55\textwidth}
+\begin{tabular}{l l c}
+\toprule
+\textbf{Model}         & \textbf{Hyperparameter}             & \textbf{Values} \\ \midrule
+\multirow{3}{*}{RSF}   & Number of estimators                & \{100, 250, 500\}   \\
+                       & Minimum samples per split           & \{5, 10, 20\}       \\
+                       & Minimum samples per leaf            & \{2, 5, 10\}        \\ \midrule
+\multirow{8}{*}{DeepHit} 
+                       & Number of nodes per layer           & \{32, 64, 128, 256\} \\
+                       & Batch normalization                 & \{True, False\}       \\
+                       & Dropout rate                        & \{0.0, 0.1, 0.2, 0.3\} \\
+                       & Learning rate                       & \{0.001, 0.01, 0.05\} \\
+                       & Batch size                          & \{128, 256, 512\}    \\
+                       & Epochs                              & \{200, 512, 1000\}   \\
+                       & Alpha                               & \{0.1, 0.2, 0.3, 0.5\} \\
+                       & Sigma                               & \{0.05, 0.1, 0.2, 0.3\} \\ \midrule
+\multirow{6}{*}{DeepSurv} 
+                       & Number of nodes per layer           & \{32, 64, 128, 256\} \\
+                       & Batch normalization                 & \{True, False\}       \\
+                       & Dropout rate                        & \{0.0, 0.1, 0.2, 0.3\} \\
+                       & Learning rate                       & \{0.001, 0.01, 0.05\} \\
+                       & Batch size                          & \{128, 256, 512\}    \\
+                       & Epochs                              & \{200, 512, 1000\}   \\ \bottomrule
+\end{tabular}
+\end{adjustbox}
+}
+\end{table}

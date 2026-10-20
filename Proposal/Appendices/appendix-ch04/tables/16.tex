@@ -1,0 +1,72 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:impute-eval}{\caption{Evaluation on imputation methods across different survival scenarios and causal configurations. MAE between the imputed and true event times on testing set is reported as mean $\pm$ std. over 10 experimental repeats. ``Total Win'' row counts the number of survival configurations $\times$ random split combinations (8 × 10 = 80) in which each method achieved the lowest MAE, and is calculated within each scenario. The same rule applies to all the tables below in Appendix~\ref{ch04:app:auxiliary-eval-results}.}}{
+    \centering
+    
+    
+    \begin{adjustbox}{max width = 0.6\textwidth}
+    \begin{tabular}{clccc}
+    \toprule
+        \multirow{2}{*}{\makecell[l]{\textbf{Survival}\\\textbf{Scenario}}} & \multirow{2}{*}{\makecell[l]{\textbf{Causal}\\\textbf{Configuration}}} & \multicolumn{3}{c}{\textbf{Imputation Method}}                   \\
+    \cmidrule(r){3-5}
+         &  & \textbf{Pseudo-obs} & \textbf{Margin} & \textbf{IPCW-T} \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{A}}  & \texttt{RCT-50} & \ChFourBfTab{0.437$\pm$0.021} & 0.446$\pm$0.025 & 0.470$\pm$0.027 \\ 
+        ~ & \texttt{RCT-5} & \ChFourBfTab{0.378$\pm$0.027} & 0.387$\pm$0.029 & 0.405$\pm$0.032 \\ 
+        ~ & \texttt{OBS-CPS} & \ChFourBfTab{0.448$\pm$0.014} & 0.459$\pm$0.014 & 0.481$\pm$0.015 \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{0.423$\pm$0.026} & 0.520$\pm$0.028 & 0.455$\pm$0.03 \\ 
+        ~ & \texttt{OBS-NoPos} & \ChFourBfTab{0.411$\pm$0.023} & 0.420$\pm$0.023 & 0.442$\pm$0.025 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 0.390$\pm$0.020 & \ChFourBfTab{0.374$\pm$0.014} & 0.388$\pm$0.014 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 0.369$\pm$0.029 & 0.482$\pm$0.027 & \ChFourBfTab{0.362$\pm$0.028} \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 0.347$\pm$0.023 & \ChFourBfTab{0.336$\pm$0.024} & 0.349$\pm$0.026 \\ 
+    \cmidrule(r){2-5}
+         & Total Win & 51 & 21 & 8 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{B}}  & \texttt{RCT-50} & 0.061$\pm$0.005 & 0.05$\pm$0.003 & \ChFourBfTab{0.048$\pm$0.004} \\ 
+        ~ & \texttt{RCT-5} & 0.027$\pm$0.003 & 0.022$\pm$0.002 & \ChFourBfTab{0.021$\pm$0.003} \\ 
+        ~ & \texttt{OBS-CPS} & 0.052$\pm$0.005 & 0.042$\pm$0.004 & \ChFourBfTab{0.040$\pm$0.003} \\ 
+        ~ & \texttt{OBS-UConf} & 0.058$\pm$0.004 & 0.152$\pm$0.007 & \ChFourBfTab{0.046$\pm$0.004} \\ 
+        ~ & \texttt{OBS-NoPos} & 0.068$\pm$0.008 & 0.057$\pm$0.005 & \ChFourBfTab{0.056$\pm$0.005} \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 0.039$\pm$0.005 & 0.037$\pm$0.005 & \ChFourBfTab{0.036$\pm$0.005} \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 0.040$\pm$0.004 & 0.140$\pm$0.005 & \ChFourBfTab{0.038$\pm$0.004} \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 0.048$\pm$0.007 & 0.046$\pm$0.008 & \ChFourBfTab{0.045$\pm$0.008} \\ 
+    \cmidrule(r){2-5}
+         & Total Win & 0 & 3 & 77 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{C}}  & \texttt{RCT-50} & \ChFourBfTab{0.837$\pm$0.008} & 0.838$\pm$0.008 & 0.841$\pm$0.007 \\ 
+        ~ & \texttt{RCT-5} & 0.803$\pm$0.013 & 0.804$\pm$0.013 & \ChFourBfTab{0.793$\pm$0.009} \\ 
+        ~ & \texttt{OBS-CPS} & 0.829$\pm$0.014 & 0.830$\pm$0.014 & \ChFourBfTab{0.828$\pm$0.014} \\ 
+        ~ & \texttt{OBS-UConf} & \ChFourBfTab{0.835$\pm$0.026} & 2.701$\pm$0.033 & 0.837$\pm$0.027 \\ 
+        ~ & \texttt{OBS-NoPos} & \ChFourBfTab{0.845$\pm$0.014} & \ChFourBfTab{0.845$\pm$0.015} & 0.855$\pm$0.012 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 2.786$\pm$0.079 & \ChFourBfTab{2.090$\pm$0.046} & 2.858$\pm$0.055 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & \ChFourBfTab{2.753$\pm$0.074} & 2.443$\pm$0.023 & 2.852$\pm$0.058 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 2.904$\pm$0.061 & \ChFourBfTab{2.197$\pm$0.045} & 3.006$\pm$0.034 \\ 
+    \cmidrule(r){2-5}
+         & Total Win & 23 & 35 & 22 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{D}}  & \texttt{RCT-50} & 3.303$\pm$0.333 & \ChFourBfTab{2.241$\pm$0.065} & 2.624$\pm$0.054 \\ 
+        ~ & \texttt{RCT-5} & 2.897$\pm$0.257 & \ChFourBfTab{1.845$\pm$0.059} & 2.192$\pm$0.059 \\ 
+        ~ & \texttt{OBS-CPS} & 3.191$\pm$0.449 & \ChFourBfTab{2.109$\pm$0.062} & 2.421$\pm$0.068 \\ 
+        ~ & \texttt{OBS-UConf} & 3.463$\pm$0.706 & \ChFourBfTab{2.361$\pm$0.198} & 2.610$\pm$0.073 \\ 
+        ~ & \texttt{OBS-NoPos} & 3.536$\pm$0.435 & \ChFourBfTab{2.404$\pm$0.074} & 2.853$\pm$0.072 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 1.395$\pm$0.067 & \ChFourBfTab{1.289$\pm$0.064} & 1.366$\pm$0.068 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 1.524$\pm$0.069 & 1.737$\pm$0.054 & \ChFourBfTab{1.511$\pm$0.063} \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 1.689$\pm$0.074 & \ChFourBfTab{1.595$\pm$0.069} & 1.698$\pm$0.073 \\ 
+    \cmidrule(r){2-5}
+        & Total Win & 3 & 68 & 9 \\ 
+    \midrule
+        \multirow{9}{*}{\texttt{E}}  & \texttt{RCT-50} & 2.672$\pm$0.348 & \ChFourBfTab{1.595$\pm$0.019} & 2.033$\pm$0.022 \\ 
+        ~ & \texttt{RCT-5} & 2.238$\pm$0.218 & \ChFourBfTab{1.468$\pm$0.023} & 1.823$\pm$0.023 \\ 
+        ~ & \texttt{OBS-CPS} & 2.446$\pm$0.262 & \ChFourBfTab{1.577$\pm$0.022} & 1.992$\pm$0.032 \\ 
+        ~ & \texttt{OBS-UConf} & 2.531$\pm$0.191 & 2.651$\pm$0.054 & \ChFourBfTab{2.051$\pm$0.031} \\ 
+        ~ & \texttt{OBS-NoPos} & 2.669$\pm$0.288 & \ChFourBfTab{1.639$\pm$0.021} & 2.102$\pm$0.035 \\ 
+        ~ & \texttt{OBS-CPS-InfC} & 3.324$\pm$0.136 & \ChFourBfTab{2.483$\pm$0.05} & 3.491$\pm$0.054 \\ 
+        ~ & \texttt{OBS-UConf-InfC} & 3.346$\pm$0.147 & \ChFourBfTab{2.686$\pm$0.071} & 3.526$\pm$0.036 \\ 
+        ~ & \texttt{OBS-NoPos-InfC} & 3.373$\pm$0.101 & \ChFourBfTab{2.541$\pm$0.038} & 3.648$\pm$0.072 \\  
+    \cmidrule(r){2-5}
+         & Total Win & 0 & 70 & 10 \\ 
+    \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+}
+\end{table}

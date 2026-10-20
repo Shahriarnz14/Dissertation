@@ -1,0 +1,16 @@
+% !TeX root = ../../../main.tex
+\begin{ChFourAbstract}
+
+Estimating heterogeneous treatment effects (HTEs) from right-censored survival data is critical in high-stakes applications such as precision medicine and individualized policy-making. Yet, the survival analysis setting poses unique challenges for HTE estimation due to censoring, unobserved counterfactuals, and complex identification assumptions. Despite recent advances, from Causal Survival Forests to survival meta-learners and outcome imputation approaches, evaluation practices remain fragmented and inconsistent. 
+We introduce \textsc{SurvHTE‐Bench}, the first comprehensive benchmark for HTE estimation with censored outcomes. The benchmark spans (i) a modular suite of synthetic datasets with known ground truth, systematically varying causal assumptions and survival dynamics, 
+% systematically varying key causal assumptions (e.g., ignorability, overlap, informative censoring) and survival dynamics (AFT, Cox, Poisson). 
+(ii) semi-synthetic datasets that pair real-world covariates with simulated treatments and outcomes, and
+(iii) real-world datasets from a twin study (with known ground truth) and from an HIV clinical trial.
+Across synthetic, semi-synthetic, and real-world settings, we provide the first rigorous comparison of survival HTE methods under diverse conditions and realistic assumption violations. 
+\textsc{SurvHTE‐Bench} establishes a foundation for fair, reproducible, and extensible evaluation of causal survival methods. The data and code of our benchmark are available at: \url{https://github.com/Shahriarnz14/SurvHTE-Bench}.
+% will be released publicly on GitHub (for the review process, we have attached our anonymized code as supplemental materials).
+% Dataset and code will be released publicly \textcolor{red}{how?}. 
+% \url{https://github.com/Shahriarnz14/SurvHTE-Bench}.
+\end{ChFourAbstract}
+
+

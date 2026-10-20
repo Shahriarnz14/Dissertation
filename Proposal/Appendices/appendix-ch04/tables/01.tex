@@ -1,0 +1,21 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\ChFourFloatContents{ch04:tab:survival-scenarios}{\caption{Summary of event time and censoring time generation across survival scenarios}}{
+\centering
+ 
+
+\begin{adjustbox}{max width = 0.9\textwidth}
+\begin{tabular}{cccc}
+\toprule
+    \textbf{Scenario} & \textbf{Event Time Distribution} & \textbf{Censoring Mechanism} & \textbf{Censoring Rate} \\
+    \midrule
+    \texttt{A} & Cox (Weibull baseline, $k=0.5$) & $\text{Uniform}(0, 3)$ & Low ($<30\%$) \\
+    \texttt{B} & AFT (Log-normal) & Cox (Weibull baseline, $k=2.0$) & Low ($<30\%$) \\
+    \texttt{C} & Poisson & Piecewise uniform & Medium (30-70\%) \\
+    \texttt{D} & AFT (Log-normal) & Cox (Weibull baseline, $k=2.0$) & High ($>70\%$) \\
+    \texttt{E} & Poisson & Poisson & High ($>70\%$) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+}
+\end{table}
