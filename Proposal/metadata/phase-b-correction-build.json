@@ -1,0 +1,24 @@
+{
+  "working_directory": "Proposal/",
+  "command": [
+    "sh",
+    "scripts/build.sh",
+    "--clean"
+  ],
+  "latexmk_command": [
+    "/Library/TeX/texbin/latexmk",
+    "-gg",
+    "-pdf",
+    "-interaction=nonstopmode",
+    "-halt-on-error",
+    "-file-line-error",
+    "-outdir=build",
+    "main.tex"
+  ],
+  "exit_status": 0,
+  "log": "build/latexmk-phase-b-correction-clean.log",
+  "pdflatex_passes": 3,
+  "post_build_checks_passed": 119,
+  "skeleton_checks_passed": 322,
+  "pdf_sha256": "d0b9088291f175adc15fd574d90af9c6afe387e0511b1cc25a8db42f0c068220"
+}

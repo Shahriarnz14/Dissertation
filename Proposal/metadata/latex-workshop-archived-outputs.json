@@ -1,0 +1,40 @@
+{
+  "reason": "Duplicate single-pass outputs observed while the former editor configuration was still active; retain only build/main.pdf as live output.",
+  "files": [
+    {
+      "from": "Proposal/main.aux",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.aux",
+      "sha256": "28276a582f53e369a4deb7d645ef839c58b069e36c03436b655051276c699e95"
+    },
+    {
+      "from": "Proposal/main.lof",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.lof",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "from": "Proposal/main.log",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.log",
+      "sha256": "ace47e78cf851f72add664b40c0527da880978776cd4dc317775b94d0655d0db"
+    },
+    {
+      "from": "Proposal/main.lot",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.lot",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "from": "Proposal/main.pdf",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.pdf",
+      "sha256": "a9141598613558376a96cfc892ca96727e0509cf3bd4e15c290c7e778dd3d8c7"
+    },
+    {
+      "from": "Proposal/main.synctex.gz",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.synctex.gz",
+      "sha256": "c26dd359f38b9b07e5aa266791da1cd9024b50e1dfce6f8a93ad87fee338f32d"
+    },
+    {
+      "from": "Proposal/main.toc",
+      "to": "Proposal/build/legacy-single-pass/workflow-2026-10-19-main.toc",
+      "sha256": "67f80ff5b359f8f87776b9fd09e244684032d5e8b9ec72e52e218c0e69425a29"
+    }
+  ]
+}

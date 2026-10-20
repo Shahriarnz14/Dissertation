@@ -1,4 +1,5 @@
-# Run from Proposal/; scripts/build.sh also works from another directory.
+# Shared by the native LaTeX Workshop recipe and optional scripts/build.sh.
+# Run latexmk from Proposal/ so this file and the template paths are found.
 $pdf_mode = 1;
 $out_dir = 'build';
 $aux_dir = 'build';

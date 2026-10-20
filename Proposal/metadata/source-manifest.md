@@ -53,4 +53,6 @@ The template example informed document orchestration and front matter. Its sampl
 
 ## Verification boundary
 
+Post-review build selection: additional root-level `Proposal/cmu-thesis.sty` and `Proposal/cmu-style-files/` copies were found to match the original, unpatched template. They are not the configured runtime copies in the table above and were left unchanged. The shared `Proposal/.latexmkrc` prepends `Proposal/template/` to the search path for both native LaTeX Workshop and CLI builds; the build recorder must confirm that all eight actual CMU inputs come from that directory. Separate root-level one-pass `main.*` outputs were archived under `build/legacy-single-pass/`. See the Phase B correction validation report; no scientific source selections or dependencies changed.
+
 `protected-source-hashes.json` records SHA-256 hashes for all 587 pre-existing protected files and their directory inventory before Phase B copying/building. `scripts/verify_sources.py` compares the current protected trees with that snapshot and verifies the documented template copies. This proves file preservation within the captured boundary; it does not prove scientific equivalence of future migrations. No paper content has yet been transformed, and label/citation/macro mappings are currently empty.

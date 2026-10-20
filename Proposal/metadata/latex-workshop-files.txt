@@ -1,0 +1,33 @@
+# Native LaTeX Workshop workflow — October 19, 2026
+# Exact authored-file changes for this request; paths relative to repository root.
+# Historical earlier-phase changes are not included.
+
+ADD .vscode/settings.json
+ADD Proposal/metadata/latex-workshop-archived-outputs.json
+ADD Proposal/metadata/latex-workshop-files.txt
+MODIFY Proposal/.latexmkrc
+MODIFY Proposal/Dissertation-Proposal.code-workspace
+MODIFY Proposal/README.md
+MODIFY Proposal/main.tex
+MODIFY Proposal/metadata/build-artifacts.txt
+MODIFY Proposal/metadata/build-phase-b.json
+MODIFY Proposal/metadata/latex-workshop-validation.json
+MODIFY Proposal/metadata/pdf-review-phase-b.json
+MODIFY Proposal/metadata/progress.md
+MODIFY Proposal/metadata/skeleton-checks.json
+MODIFY Proposal/metadata/source-manifest.md
+MODIFY Proposal/metadata/toc-page-verification.json
+MODIFY Proposal/metadata/transformation-log.md
+MODIFY Proposal/metadata/validation-phase-b.md
+MODIFY Proposal/scripts/build.sh
+MODIFY Proposal/scripts/validate_skeleton.py
+DELETE Proposal/.vscode/settings.json
+
+# Generated files: Proposal/build/main.pdf, main.synctex.gz and compiler outputs,
+# native clean/incremental/SyncTeX logs, refreshed validation JSON and PDF-review PNGs.
+# Full generated-file inventory: Proposal/metadata/build-artifacts.txt.
+# Seven root-level generated outputs were observed and reversibly archived:
+# Proposal/metadata/latex-workshop-archived-outputs.json records all moves/hashes.
+# Protected sources, chapter/appendix modules, title/date/year metadata and copied
+# template compatibility fixes are unchanged. No scientific migration was started.
+

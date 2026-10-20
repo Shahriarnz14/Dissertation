@@ -8,6 +8,7 @@ import json
 import re
 import subprocess
 import sys
+from check_build import inspect_build, metadata_values
 
 proposal = Path(__file__).resolve().parents[1]
 build = proposal / "build"
@@ -37,7 +38,7 @@ for path in tex_files:
     text = path.read_text()
     root = re.search(r"^%\s*!\s*T[Ee]X\sroot\s*=\s*(.*\.tex)$", text, re.M)
     if path == proposal / "main.tex":
-        check(root is None and r"\documentclass[letterpaper,12pt]{article}" in text and not re.search(r"^%.*!\s*TeX\s+program", text, re.M), "Main is the article-class root with no magic program override or root loop")
+        check(root is None and r"\documentclass[letterpaper,12pt]{article}" in text and not re.search(r"^%\s*!\s*T[Ee]X\s(?:program|options)\s*=", text, re.M), "Main is the article-class root, without a root loop or magic program/options overriding the native latexmk recipe")
     else:
         check(root is not None and (path.parent / root.group(1)).resolve() == proposal / "main.tex", f"Root directive resolves to main.tex: {path.relative_to(proposal)}")
     for target in re.findall(r"^\\input\{([^}]+)\}", text, re.M):
@@ -60,7 +61,7 @@ check("Submitted in partial fulfillment of the requirements for the degree of Do
 committee = ["George H. Chen (Co-Chair)", "Jeremy C. Weiss (Co-Chair)", "Zachary C. Lipton", "Vaishnavh Nagarajan"]
 positions = [first.find(x) for x in committee]
 check(all(x >= 0 for x in positions) and positions == sorted(positions), "Committee appears in the required order")
-check("Shahriar Noroozizadeh" in first and "[Dissertation Title]" in first, "Confirmed author and editable title placeholder appear")
+check("Shahriar Noroozizadeh" in first and metadata_values()["ProposalTitle"] in first, "Confirmed author and current editable title appear")
 for number in range(1, 11):
     name = f"chap:ch{number:02d}"
     value, page, target = labels.get(name, (None, None, None))
@@ -84,7 +85,10 @@ check(len(warning_blocks) == 2 and all(any(x in block for x in expected_warnings
 protected_roots = [proposal.parent / name for name in ["Papers", "Chapters", "CMU-PhD-Template"]]
 inputs = [(proposal / line[6:]).resolve() for line in (build / "main.fls").read_text().splitlines() if line.startswith("INPUT ")]
 check(not any(path.is_relative_to(root) for path in inputs for root in protected_roots), "Build reads copied workspace components, not protected source manuscripts")
-result = {"phase": "B", "passed": not errors, "pdf_pages": len(pages), "checks_passed": len(checks), "errors": errors, "checks": checks, "warnings": warning_blocks}
+consistency = inspect_build()
+checks.extend(consistency["checks"])
+errors.extend(consistency["errors"])
+result = {"phase": "B", "passed": not errors, "pdf_pages": len(pages), "checks_passed": len(checks), "errors": errors, "checks": checks, "warnings": warning_blocks, "build_consistency": consistency}
 (build / "validation-skeleton.json").write_text(json.dumps(result, indent=2) + "\n")
 print(f"{'PASS' if not errors else 'FAIL'}: {len(checks)} checks; {len(errors)} errors; {len(warning_blocks)} documented advisories.")
 for error in errors:
