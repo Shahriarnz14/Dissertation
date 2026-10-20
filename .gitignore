@@ -18,3 +18,4 @@ Proposal/metadata/
 *.vscode
 Proposal/scripts/
 Proposal/build/
+*.DS_Store
