@@ -1,0 +1,24 @@
+% !TeX root = ../../../main.tex
+\begin{sloppypar}
+\subsubsection{Related work}
+Numerous critical care and sepsis datasets are available \mbox{(semi-)publicly}, \emph{e.g.}, \cite{thoral2021sharing,pollard2018eicu}, including several with de-identified clinical discharge summaries: MIMIC-III \citep{ch06:johnson2016mimic}
+%,goldberger2000physiobank}
+and MIMIC-IV \citep{ch06:johnson2023mimic}. 
+Sepsis phenotyping (including Sepsis-3) has been conducted using a variety of methods on structured data \citep{johnson2018comparative}, although structured data is often highly missing, leading to suboptimal phenotyping \citep{seinen2025using}.
+Additionally, the timing of sepsis phenotyping is crucial, in that delays in sepsis prediction can nullify predictiveness and lead to burdensome and unhelpful analytic models \citep{kamran2024evaluation}.  
+\end{sloppypar}
+
+Several works have used the i2b2 (a competition subset of MIMIC-II/III) to construct timelines of clinical concepts \citep{leeuwenberg2020towards,ch06:frattallone2024using}.  
+In the case of \cite{leeuwenberg2020towards}, the event spans are already given, and focus on an excerpt of the full discharge summary, so we focus our direct comparison on that of \cite{ch06:frattallone2024using}.
+% Frattallone et al.  
+In contrast to these works, we adopt an annotation process focused on temporal assignment to clinical findings rather than i2b2 clinical concepts \citep{ch06:uzuner20112010}, which allows for greater specificity of the event in the absence of additional context.  
+Additionally, as compared to \cite{ch06:frattallone2024using},
+% Frattallone et al.
+we focus on using text alone for clinical time series construction, which is necessary for the PubMed Open Access Subset since no complementary data source is available.
+
+Broadly in the medical domain, LLMs are showing promise in medical tasks such as summarization \citep{van2024adapted}.
+% ,aali2024benchmark}. 
+In fact, some findings suggest that 
+medical fine-tuning rarely leads to improved performance over the corresponding foundation models \citep{jeong-etal-2024-medical}. 
+In our analysis, we primarily use foundation LLMs and show that their scale and instruction-tuning are central to the performance of the model.  
+

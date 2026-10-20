@@ -1,0 +1,22 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Corpus overview}
+
+% \sloppy 
+Our analysis resulted in T2S2, a new open-access textual time series corpus for Sepsis-3\footnote{Sepsis-3 refers to the Third International Consensus Definitions for Sepsis and Septic Shock \citep{singer2016third}, which define sepsis as a life-threatening organ dysfunction caused by a dysregulated host response to infection.
+In contrast, \texttt{sepsis-40}, \texttt{sepsis-10}, and \texttt{sepsis-100}, introduced in this paper, refer to subsets of sepsis reports drawn from PMOA, with the numbers indicating the subset size.}, 
+comprising 2,139 case reports.  
+Demographically, the corpus includes 58\% male and 42\% female patients, with ages ranging from 0 to 111 and a mean age of 49 (IQR: 32--65).
+
+The \texttt{sepsis-40} subset contains manual clinician annotations for 40 PMOA case reports, yielding a total of $3,229$ manually annotated reference events.
+Within this set, \texttt{sepsis-10} denotes the 10-report subset used in our additional validation analysis for clinician annotation quality review, hallucination audit, multi-pass self-consistency, and sepsis onset analysis.
+The PMCID composition of \texttt{sepsis-40} and \texttt{sepsis-10} is provided in Appendix~\ref{ch06:apd:subset_ids}.
+The \texttt{sepsis-100} subset includes 100 T2S2 case reports that do not overlap with \texttt{sepsis-40}, with annotations provided using GPT-5.
+We use \texttt{sepsis-100} as a bronze-standard proxy-reference set annotated by GPT-5, not as a clinical gold standard; its purpose is to evaluate extraction behavior at a larger scale than the manually annotated subset while avoiding claims of clinician-level ground truth.
+
+{\raggedright
+In Appendix~\ref{ch06:apd:excerpt}, we provide an expanded multi-model annotation example for PMC10629858 (manual annotations, GPT-5, DeepSeek-R1, Llama 3.3, Mixtral 8x7B, and Llama 3.1 8B).
+To complement the aggregate metrics presented in the following sections, Figure~\ref{ch06:fig:fine-grained-t2s2-annotation} shows a representative case report with fine-grained timing (PMC3184014) alongside the corresponding T2S2 event--time annotations from Llama 3.3.\par}
+
+% sepsis-10: PMC3075162, PMC4778217, PMC6238558, PMC7576661, PMC9136437, PMC9355071, PMC9552858, PMC10370906, PMC10556716, and PMC10629858, 
+% \vspace{-2.2em}
+

@@ -1,0 +1,96 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Evaluation of Textual Time Series Corpus for Sepsis}
+\ChSixHeadingOnly
+\paragraph{Quantitative evaluation of extracted annotations}
+\label{ch06:sec:annotation_results_quantitative}
+Following the quantitative evaluation protocol described in Section~\ref{ch06:sec:evaluation_methodology_metrics}, Table~\ref{ch06:tab:results} reports performance across i2m4, \texttt{sepsis-40}, and \texttt{sepsis-100}.
+On the clinician-annotated \texttt{sepsis-40} set, GPT-5 is the strongest annotator across all four metrics, with event match rate 0.93, concordance 0.965, median absolute error 4 hours, and AULTC 0.822.
+DeepSeek-R1 provides the next strongest overall performance on \texttt{sepsis-40}, with higher event recovery and AULTC than Llama 3.3 (event match rate 0.79 vs.\ 0.76; AULTC 0.781 vs.\ 0.742), whereas Llama 3.1 70B and Llama 3.3 show high concordance among their matched events.
+This pattern highlights a recurring tradeoff in the evaluation: models can achieve high temporal ordering among the subset of events they match, while still recovering fewer reference events or producing larger absolute timestamp discrepancies.
+
+The i2m4 results should be interpreted as a cross-schema evaluation rather than a direct in-domain test of T2S2-style extraction.
+All LLM match rates are lower on i2m4, where the reference annotations are legacy i2b2-style temporal concepts rather than standalone clinical findings.
+Among the LLMs, Llama 3.3 performs best on i2m4 across event match rate, concordance, median absolute error, and AULTC, and all LLMs with temporal predictions substantially outperform the BERT 5-CV time-regression baseline on AULTC. However, the low match rates indicate that many clinically meaningful T2S2-style findings are penalized when compared against fragmented concept-level references. 
+In contrast to concordances around 0.76 in i2m4, in \texttt{sepsis-40}, GPT-5 and Llama 3.3 were excellent time-ordering annotators, with concordances of 0.965 and 0.908, respectively.
+
+On \texttt{sepsis-100}, which is a bronze-standard proxy-reference set rather than clinical ground truth, DeepSeek-R1 achieves the highest event match rate, lowest median absolute error, and highest AULTC against the GPT-5 reference, while Llama 3.3 achieves the highest concordance.
+These results should therefore be read as scalable proxy-reference evaluation of extraction behavior, not as an estimate of absolute clinical accuracy.
+
+To better understand the performance differences across datasets, we conducted an error analysis between \texttt{sepsis-10} and i2m4, presented in Appendix~\ref{ch06:apd:error-analysis}.
+This analysis shows that the i2m4 performance gap is driven in part by annotation-ontology mismatch between fragmented i2b2 concepts and the more compositional clinical findings targeted by T2S2.
+
+% Following the quantitative evaluation protocol described in Section~\ref{ch06:sec:evaluation_methodology_metrics}, Table~\ref{ch06:tab:results} reports the performance of various LLMs, with GPT-5, DeepSeek-R1 IQ1, and Llama-3.3-70B-Instruct consistently achieving strong results across all three datasets.
+% In i2m4, all match rates are low (BERT 5-CV is omitted since the method provides the event list \citep{frattallone2024using}), highlighting the difficulty of matching short text spans corresponding to ``concepts'' rather than chaining them at the level of a clinical finding.  
+% Among the matches, Llama 3.3 and DeepSeek R1 performed best for time predictions (trading off event matching with temporal performance), and substantially outperforming the baseline BERT model, particularly with respect to time discrepancy. 
+% However, the overall results on i2m4 were considerably lower than in the PMOA datasets, including in terms of time ordering and time discrepancy. 
+% In contrast to concordances of 0.707 in i2m4, in \texttt{sepsis-40}, GPT-5 and Llama 3.3 were excellent time-ordering annotators, both with concordances of 0.932.
+% To better understand the performance differences across datasets, we conducted an error analysis between \texttt{sepsis-40} and i2m4, which is presented in the Appendix~\ref{ch06:apd:error-analysis}. 
+% This analysis provides additional insight into the factors contributing to variations in model performance for event match rate and c-index across datasets.
+
+
+\input{Chapters/chapter-06/tables/03}
+
+
+To examine the results in greater detail, we show figures of the cumulative distribution function of event matches and concordance boxplots (Figure \ref{ch06:fig:time-disc}) for the \texttt{sepsis-40} dataset. 
+When the function reaches its maximum at the maximum cosine distance, it may be less than 1 because the label events have no events left to match, \emph{i.e.}, the reference method recovered an event that the prediction method did not. 
+The event match rates in Table \ref{ch06:tab:results} correspond to the match rate at the cosine distance threshold in Figure \ref{ch06:fig:time-disc} ($\theta=0.10$).  
+One could adjust the cosine distance threshold, for example, by increasing it to increase matches, at the cost of false positive matches that degrade temporal performance. We provide a systematic threshold analysis over $\theta \in [0.01, 0.5]$ in 0.01 increments in Appendix~\ref{ch06:apd:threshold_sweep}, which demonstrates a clear elbow near $\theta=0.10$ and supports our chosen operating point.
+The concordance box plots (Figure \ref{ch06:fig:time-disc}) show strong performance among the large LLMs, whereas the Llama 3.1 8B and Mixtral 8x7B model performances are much lower, which is a consistent finding throughout our analysis.
+
+% To better visualize the time discrepancies, we plot cumulative time discrepancy plots (Figure \ref{ch06:fig:time-disc}) that show, for example, that 44\% of the GPT-5 annotations are exact time matches and that 80\% are within 1 week of the label timestamp. 
+% Breaking it down further (Figure \ref{ch06:fig:time-disc}, right), we can see that among events occurring within 1 day of presentation (but more than 1 hour), 90\% of GPT-5 annotations are within a 1-week time error. 
+% This drops to 60\% when considering events up to a year from presentation.  
+% % Clearly, the time discrepancy is strongly correlated to the label time's proximity to time of presentation. 
+% Problematically, for labeled events more than 1 year from presentation, only GPT-5 and DeepSeek-R1 ever identify the label time to within 1 year exclusive (Figure \ref{ch06:fig:time-disc}, right).
+To better visualize timestamp discrepancies, we plot cumulative time-discrepancy curves among matched events (Figure~\ref{ch06:fig:time-disc}).
+GPT-5 has the strongest overall time-discrepancy profile, consistent with its median absolute error of 4 hours and highest AULTC in Table~\ref{ch06:tab:results}.
+The disaggregated curves further show that near-admission events are easier to timestamp than events occurring months or years away from presentation.
+This degradation at longer horizons is consistent with the expert qualitative review, which identified ambiguity for events with extended duration and errors in cases requiring chained relative-time reasoning (Appendix~\ref{ch06:apd:clinician_quality_review}).
+This long-horizon degradation is most visible in the bottom subpanels of Figure~\ref{ch06:fig:time-disc} (right), where the strongest models recover a larger fraction of distant events within the correct coarse time scale.
+
+\ChSixParagraph{Sensitivity analysis of prompt components.}
+The sensitivity analysis to our chosen prompt shows that prompt components affect event recovery and temporal metrics in different ways for Llama-3.3-70B-Instruct (Table~\ref{ch06:tab:sens}).
+The full prompt remains a strong and balanced operating point, especially for i2m4, where it obtains the highest event match rate, lowest median absolute error, and highest AULTC.
+On \texttt{sepsis-40}, removing conjunction expansion preserves the event match rate and improves AULTC, while zero-shot prompting yields higher concordance among matched events but substantially reduces event recovery.
+This suggests that high concordance alone can be misleading when fewer or easier-to-order events are matched.
+The interval and interval+type augmentations do not consistently improve performance: interval prompting slightly increases event match rate on \texttt{sepsis-100}, but not on \texttt{sepsis-40}, and the additional type field generally does not improve the overall balance of event recovery and temporal accuracy.
+Together, these results indicate that adding output fields can increase prompt burden and does not necessarily improve the quality of the extracted textual time series across the models used.
+Detailed assessments for the \texttt{sepsis-40} ablations and the i2m4 dataset, analogous to Figure~\ref{ch06:fig:time-disc}, are shown in Appendix~\ref{ch06:apd:add-perf}.
+
+% \ChSixParagraph{Sensitivity analysis of prompt components.} The sensitivity analysis to our chosen prompt shows the relative value of various elements for the Llama-3.3-70B-Instruct model (Table \ref{ch06:tab:sens}). 
+% Our original prompt appears to be the strong performer overall, showcasing the value in particular of few-shot prompting, but also the value of the technical specification of how to treat conjunctions and the modest benefit of role-playing.  
+% Surprisingly, when comparing the main L3.3 70B model responses to the augmentations responses, it appears that requesting timestamp intervals (Interval) modestly increases the event match rate. 
+% However, the temporal performance characteristic degrades, suggesting a possible request overload on the model or an increase in false positive event matches. 
+% % \input{tables/confusions}
+% The performance of the typing method (Interval + Type) is further degraded. Detailed assessments for the \texttt{sepsis-40} ablations and the i2m4 dataset, analogous to Figure \ref{ch06:fig:time-disc}, are shown in Appendix~\ref{ch06:apd:add-perf}. 
+
+
+\input{Chapters/chapter-06/figures/02}
+
+
+An expert qualitative review on \texttt{sepsis-10} ranked manual annotations highest, followed by O1-preview, DeepSeek-R1, and Llama 3.3; the full review protocol, ranking table, and representative error modes are provided in Appendix~\ref{ch06:apd:clinician_quality_review}.
+
+% \vspace{-.75em}
+% \subsubsection{Clinician evaluation of annotation quality}
+% Inspecting the clinical quality of the annotations, we report the mean rank, top-1 fraction, top-1-LLM fraction, and quality level in Table~\ref{tab:sep10review}.
+% This clinician review was conducted before GPT-5 was available, so the OpenAI model included in this review is O1-preview rather than GPT-5.
+% We therefore interpret Table~\ref{tab:sep10review} as an expert qualitative assessment of the annotation styles available at the time of review, while the updated quantitative comparisons in Table~\ref{ch06:tab:results} should be used for current GPT-5 performance.
+% There is a clear performance ordering in the review, with manual annotations ranked highest, O1-preview a close second, followed by DeepSeek-R1 IQ1 and Llama 3.3.
+% While the Llama 3.3 annotations are found to be acceptable a high percentage of the time (90\%), the other Llama and Mistral approaches fail to achieve Acceptable performance in excess of 50\%.
+% Comparing DeepSeek-R1 IQ1 and Llama 3.3, the former has more variable clinician-rated quality (8 of 10 cases rated Acceptable or better), but maintains both higher match rate and AULTC (Table \ref{ch06:tab:results} and Figure \ref{ch06:fig:time-disc} (left and middle right)). 
+% Our clinical reviewer also noted that some Llama 3.3 discrepancies for large time horizons, \emph{i.e.}, years, were large, which is corroborated by the long-horizon subpanels in Figure~\ref{ch06:fig:time-disc}.
+% % Inspecting the clinical quality of the annotations, we report the mean rank, top-1 fraction, top-1-LLM fraction, and quality level in Table \ref{tab:sep10review}. 
+% % Instead of GPT-5, we used O1-preview in the ranking as the model available at the time of this ranking.
+% % There is a clear performance ordering, with O1-preview annotations being a close second to the manual annotations, followed by DeepSeek R1 IQ1 and Llama 3.3.  While the Llama 3.3 annotations are found to be acceptable a high percentage of the time (90\%), the other Llama and Mistral approaches fail to achieve Acceptable performance in excess of 50\%.
+% % Comparing the DeepSeek R1 IQ1 and Llama 3.3 annotations, the former has more variable performance (only 8 of 10 with Acceptable annotations), but maintains both higher match rate and AULTC (Table \ref{ch06:tab:results} and Figure \ref{ch06:fig:time-disc} (left and middle right)).  Our clinical reviewer commented that the Llama 3.3 discrepancies for large time horizons, \emph{i.e.}, years, were large, which is corroborated in Figure \ref{ch06:fig:time-disc} (right, bottom subpanels).
+
+% The annotation review feedback noted a wide variety of errors; here we present several errors modes identified during quality review. \\
+% % (both for human and LLM annotators):
+% \paragraph{Events with duration.} Example: ``10-kg weight loss'' from ``he was presented to the hospital with complaints of abdominal distension, constipation, vomiting, and a 10-kg weight loss.'' This example from case report PMC10629858 references a gradual event that has been ongoing for 2 months. By the annotation guideline for selecting the start time of events with duration, the time -168 (what O1-preview annotates) is correct. However, the event can also be considered as ``history of 10-kg weight loss'' via the ``history of'' guideline with time 0 (what L3.3 70B annotates).  Note, this example could be resolved by interval representations, but we see the annotation quality (particularly the AULTC) degrade when requesting additional fields (Table \ref{ch06:tab:sens} and Figure \ref{fig:sep10ablate-time-disc}).\\
+% \paragraph{Events requiring temporal reasoning or composition.} Example: ``passed away'' from ``he was re-admitted to the medical ICU for severe sepsis and multiorgan failure and passed away around 6 months after his initial diagnosis with NHL, despite maintaining a remission status.'' 
+% This requires a two-step inference, (1) timing of NHL diagnosis, and (2) adding ``around 6 months'' to that time. 
+% While this is a simple example, more complicated chains of relative timings were noted, and possibly relative to other events whose timings are also uncertain. 
+% As black-box methods, there is no explicit probabilistic specification for these chains, and empirically we see variable responses. 
+% % In these cases, there is an absence of ground truth in the narrative. 
+% For this case, the manual annotation is: 4383 (about 6 months), O1-preview gives 4368 (about 6 months), DeepSeek R1 gives 4032 (about 6 months), and L3.3 70B gives: 1440 (about 2 months; compared to other events the temporal ordering is correct, but the relative timing is off by months).
+

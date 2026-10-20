@@ -1,0 +1,67 @@
+% !TeX root = ../../../main.tex
+\subsection{Additional Corpus Validation Details}
+\label{ch06:apd:validation_details}
+
+This appendix provides details for three validation analyses summarized in Section~\ref{ch06:sec:additional_validation_summary}: the \texttt{sepsis-10} hallucination audit, multi-pass self-consistency analysis, and full-corpus cross-model agreement.
+The \texttt{sepsis-10} PMCID composition is provided in Appendix~\ref{ch06:apd:subset_ids}.
+
+\subsubsection{Manual hallucination audit}
+\label{ch06:apd:hallucination_audit_results}
+Because automatically generated corpora can be affected by unsupported or fabricated events, we directly audited the factual grounding of extracted events in 10 sampled PMOA case reports (\texttt{sepsis-10}).
+Across DeepSeek-R1 and Llama-3.3-70B-Instruct, this audit covered 1,517 extracted events.
+Of these, 1,352 events were grounded automatically by conservative lexical matching, while 165 required manual review because they involved transformations such as abbreviation expansion, conjunction splitting, or semantic paraphrasing.
+After manual adjudication of all unresolved cases against the original reports, we identified \textbf{0} hallucinated events (Table~\ref{ch06:tab:hallucination_audit}).
+This result does not prove that hallucinations never occur in the full corpus, but it provides direct evidence that under the extractive formulation used here, unsupported event fabrication was not observed in the audited subset.
+
+
+\input{Appendices/appendix-ch06/tables/03}
+
+
+\ChSixParagraph{Hallucination audit interpretation}
+The hallucination audit was designed to distinguish unsupported event fabrication from valid clinical transformations.
+Events requiring manual review were not automatically considered hallucinations, because T2S2 annotations may legitimately expand abbreviations, split conjunctions, or paraphrase source text into standalone clinical findings.
+For example, an extracted event such as ``PET/CT'' may correspond to the source phrase ``positron emission tomography/computed tomography,'' and an extracted event such as ``clinical deterioration'' may correspond to the source phrase ``deteriorated clinically.''
+Similarly, medication stop events may require combining a causal statement with a later phrase indicating that multiple drugs were stopped.
+After manual review of all unresolved cases in the audited subset, no unsupported events were identified.
+
+
+\FloatBarrier
+\subsubsection{Multi-pass self-consistency}
+\label{ch06:apd:self_consistency_results}
+We next evaluated whether extraction behavior was stable across stochastic generations.
+For each model, Run 1 was treated as the within-model reference and Runs 2--5 were compared against it.
+All four evaluated models showed high self-consistency across repeated generations (Table~\ref{ch06:tab:self_consistency}).
+GPT-5 and Llama 3.3 had particularly high event match rates across runs, while DeepSeek-R1 and O1 also showed stable temporal ordering and AULTC.
+These results suggest that the extracted timelines are not highly sensitive to random seed variation and that the pipeline does not exhibit the low-consistency behavior often associated with hallucinated or unstable generations.
+
+
+\input{Appendices/appendix-ch06/tables/04}
+
+
+\ChSixParagraph{Interpretation of self-consistency}
+The self-consistency analysis evaluates stability of the extraction process across repeated generations.
+High self-consistency does not prove clinical correctness, but low self-consistency would indicate that extracted timelines are sensitive to sampling noise and therefore less reliable as corpus annotations.
+The observed consistency across DeepSeek-R1, Llama 3.3, O1-preview, and GPT-5 suggests that the prompt and extraction schema induce stable behavior across repeated runs.
+
+
+\FloatBarrier
+\subsubsection{Full-corpus cross-model agreement}
+\label{ch06:apd:full_corpus_agreement_results}
+Finally, we evaluated cross-model agreement across all 2,139 T2S2 reports to assess extraction consistency beyond the manually annotated subset.
+Treating DeepSeek-R1 as a proxy reference, Llama-3.3-70B-Instruct achieved an event match rate of 0.79, concordance of 0.87, and AULTC of 0.83 across the full corpus (Table~\ref{ch06:tab:full_corpus_agreement}).
+Because these models differ in architecture and training, this agreement provides a scalable reliability signal that the extracted trajectories are systematic and reproducible across model families.
+We emphasize that this analysis is not a substitute for clinical adjudication, but rather a corpus-scale agreement check complementing the gold-standard \texttt{sepsis-40} evaluation, clinician--clinician agreement, hallucination audit, and self-consistency results.
+
+
+\input{Appendices/appendix-ch06/tables/05}
+
+
+\ChSixParagraph{Interpretation of full-corpus cross-model agreement}
+Full-corpus cross-model agreement complements gold-standard evaluation by estimating whether two independent model families produce similar event--time trajectories across all 2,139 reports.
+This analysis is not intended to replace clinician adjudication and cannot identify all shared model errors.
+However, strong agreement across model families provides evidence that the extraction behavior is systematic at corpus scale rather than being driven by isolated idiosyncratic outputs from a single model.
+
+
+
+
+\FloatBarrier

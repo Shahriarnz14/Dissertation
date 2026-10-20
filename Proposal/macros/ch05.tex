@@ -1,0 +1,45 @@
+% !TeX root = ../main.tex
+% V4-only dependencies; original Springer geometry/font overrides are omitted.
+\usepackage{soul}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\makeatletter
+% Keep algorithm2e's approved public commands intact. Namespace the complete
+% algpseudocode interface while retaining its original implementation.
+\def\ChFiveAlgorithmCommands{Require,Ensure,Function,EndFunction,Procedure,EndProcedure,If,Else,ElsIf,EndIf,For,ForAll,EndFor,While,EndWhile,Repeat,Until,Loop,EndLoop,State,Statex,Return,Comment}
+\@for\ChFiveName:=\ChFiveAlgorithmCommands\do{%
+  \ifcsname\ChFiveName\endcsname
+    \expandafter\let\csname ChFivePrevious\ChFiveName\expandafter\endcsname\csname\ChFiveName\endcsname
+  \fi
+  \expandafter\let\csname\ChFiveName\endcsname\@undefined}
+\usepackage{algpseudocode}
+\@for\ChFiveName:=\ChFiveAlgorithmCommands\do{%
+  \expandafter\let\csname ChFiveAlg\ChFiveName\expandafter\endcsname\csname\ChFiveName\endcsname
+  \ifcsname ChFivePrevious\ChFiveName\endcsname
+    \expandafter\let\csname\ChFiveName\expandafter\endcsname\csname ChFivePrevious\ChFiveName\endcsname
+  \else\expandafter\let\csname\ChFiveName\endcsname\@undefined\fi}
+\let\ChFivePreviousFloatStyle\float@style
+\floatstyle{ruled}
+\newfloat{ChFiveAlgorithm}{htbp}{loachfive}[appendix]
+\let\float@style\ChFivePreviousFloatStyle
+\floatname{ChFiveAlgorithm}{Algorithm}
+\renewcommand{\theChFiveAlgorithm}{\Alph{appendix}.\arabic{ChFiveAlgorithm}}
+\newcommand{\ChFiveBegin}{\renewcommand{\ttdefault}{lmtt}\sethlcolor{green!18}\tcbset{before upper=\raggedright}}
+\newcommand{\ChFiveRebuttal}[1]{#1} % exact selected false-color scientific branch
+\newcommand{\ChFiveAbstract}[1]{\par\noindent\textbf{Abstract}\par\noindent #1}
+\newcommand{\ChFiveKeywords}[1]{\par\noindent\textbf{Keywords:} #1\par}
+\newcommand{\ChFiveParagraph}[1]{\par\medskip\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChFiveStarSection}[1]{\par\bigskip\phantomsection\def\@currentlabelname{#1}\noindent{\large\bfseries #1}\par\nobreak}
+\newcommand{\ChFiveStarSubsection}[1]{\par\medskip\phantomsection\def\@currentlabelname{#1}\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChFivePanelText}[1]{\par{\small\centering #1\par}}
+\newcommand{\ChFiveHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\newcommand{\ChFiveFloatLabel}[1]{\cmu@label{#1}}
+\newcommand{\ChFiveTableBodyStart}{\cmu@test@custom@caption{\@false}{Chapter 5 table caption must precede body}}
+\newenvironment{ChFiveFloatBody}{%
+  \centering\let\tabular\cmu@internal@begintabular
+  \begin{adjustbox}{max totalsize={\linewidth}{.74\textheight}}
+  \begin{minipage}{\linewidth}\centering
+}{\par\end{minipage}\end{adjustbox}\par}
+% The first source gallery has neither caption nor label; no content is invented.
+\newenvironment{ChFiveUncaptionedFigure}{\@float{figure}[p]\singlespacing}{\end@float}
+\makeatother

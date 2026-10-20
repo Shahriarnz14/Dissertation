@@ -1,0 +1,33 @@
+% !TeX root = ../../../main.tex
+\subsection{Phenotyping Prompt}\label{ch06:apd:phenotype-prompt}
+For Sepsis-3 determination, we had a clinician review the discharge summaries and assign each case as meeting the Sepsis-3 definition.  
+To develop a computational approach, we constructed a prompt specific to Sepsis-3, which describes the qSOFA procedure for determining a Sepsis-3 diagnosis, and used it as query to Llama-3.1-8B-Instruct (L3.1 8B) and QwQ-32B-Preview (Qwen).  
+We used the phenotyping prompt:
+
+\begin{tcolorbox}[breakable,
+  colback=yellow!10,
+  colframe=orange!80!black,
+  title=Phenotyping Prompt,
+  boxrule=2pt
+]
+    {You are an expert physician.}  
+    
+    {Determine if the patient described in the following case report has either sepsis or septic shock, as defined by the Sepsis-3 criteria, which correspond to having a} 
+    
+    {(1) suspected or confirmed infection and} 
+    
+    {(2) blood pressure/respiratory rate/mental status abnormalities.} 
+    
+    {If the information is not present, use your best judgment based on the information available.} 
+    
+    {Reply 1 for sepsis, 0 otherwise.} 
+    
+    {Reply with the number 0 or 1 only in \textbackslash\!boxed\{\textbackslash\!n \boxed{<0 $ or $ 1>} \textbackslash\!n\}with no explanation.}
+    
+    {Here is the case:} 
+    
+    {\textless \textbackslash end prefix\textgreater}
+\end{tcolorbox}
+
+
+

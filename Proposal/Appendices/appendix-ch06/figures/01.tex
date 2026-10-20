@@ -1,0 +1,126 @@
+% !TeX root = ../../../main.tex
+\begin{ChSixUncaptionedFigure}
+\begin{ChSixFloatBody}
+
+\centering
+
+\begin{tcolorbox}[
+  enhanced,
+  colback=gray!4,
+  colframe=gray!35,
+  boxrule=0.4pt,
+  arc=2mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm,
+]
+
+{\bfseries Excerpt from \cite{abu2023rare}:}
+
+
+\begin{tcolorbox}[
+  enhanced,
+  colback=blue!3,
+  colframe=blue!60!black,
+  title=\textbf{PMC10629858},
+  fonttitle=\small,
+  % coltitle=black,
+  boxrule=0.8pt,
+  arc=2mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm
+]
+
+\footnotesize
+
+A 57-year-old man recently diagnosed with lepromatous leprosy was confirmed with skin biopsy and had been on treatment (rifampicin/clofazimine/dapsone) for 2 months before admission; he was presented to the hospital with complaints of abdominal distension, constipation, vomiting, and a 10-kg weight loss. On examination, the patient was vitally stable. He had evidence of peripheral lymphadenopathy with a distended abdomen and a positive shifting dullness. A computed tomography scan of his abdomen showed mural thickening of the terminal ileum with significantly enlarged mesenteric lymph nodes, mesenteric fat stranding, and intra-abdominal free fluid, suggesting abdominal granulomatous infection or neoplastic process.
+
+\dots
+
+The patient was planned for consolidation by autologous bone marrow transplant. Unfortunately, with the recurrent bacteremia and sepsis that accompanied the patient’s course due to his immunocompromised state, he was re-admitted to the medical ICU for severe sepsis and multiorgan failure and passed away around 6 months after his initial diagnosis with NHL, despite maintaining a remission status.
+
+\end{tcolorbox}
+
+
+
+\begin{minipage}[t]{0.49\textwidth}\vspace{0pt}
+ % top-align the pair
+\begin{tcolorbox}[ChSix/annobox,title={Manual annotation}]
+\ChSixAnnotationTableStyle
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.78\textwidth} r}
+\toprule
+\textbf{Event} & \textbf{Time} \\
+\midrule
+57-year-old&0 \\
+man&0 \\
+diagnosed with lepromatous leprosy&-1461 \\
+on treatment&-1461 \\
+rifampicin&-1461 \\
+clofazimine&-1461 \\
+dapsone&-1461 \\
+presented to the hospital&0 \\
+abdominal distension&0 \\
+constipation&0 \\
+vomiting&0 \\
+10-kg weight loss&0 \\
+vitally stable&0 \\
+peripheral lymphadenopathy&0 \\
+distended abdomen&0 \\
+positive shifting dullness&0 \\
+computed tomography scan of his abdomen&0 \\
+mural thickening of the terminal ileum&0 \\
+significantly enlarged mesenteric lymph nodes&0 \\
+mesenteric fat stranding&0 \\
+intra-abdominal free fluid&0 \\
+re-admitted to the medical ICU&4383 \\
+severe sepsis&4383 \\
+multiorgan failure&4383 \\
+passed away&4383 \\
+\bottomrule
+\end{tabular}
+\end{tcolorbox}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}\vspace{0pt}
+
+\begin{tcolorbox}[ChSix/annobox,title={GPT-5 annotation}]
+\ChSixAnnotationTableStyle
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.78\textwidth} r}
+\toprule
+\textbf{Event} & \textbf{Time} \\
+\midrule
+57-year-old man & 0 \\
+Male & 0 \\
+Lepromatous leprosy & -1440 \\
+Skin biopsy confirmed lepromatous leprosy & -1440 \\
+Started on rifampicin & -1440 \\
+Started on clofazimine & -1440 \\
+Started on dapsone & -1440 \\
+10-kg weight loss & -720 \\
+Presented to the hospital & 0 \\
+Complaints of abdominal distension & 0 \\
+Complaints of constipation & 0 \\
+Complaints of vomiting & 0 \\
+Patient was vitally stable & 0 \\
+Peripheral lymphadenopathy & 0 \\
+Distended abdomen & 0 \\
+Positive shifting dullness & 0 \\
+Computed tomography scan of abdomen & 6 \\
+Mural thickening of the terminal ileum & 6 \\
+Significantly enlarged mesenteric lymph nodes & 6 \\
+Mesenteric fat stranding & 6 \\
+Intra-abdominal free fluid & 6 \\
+...\\
+Bone marrow examination performed & 96 \\
+...\\
+Re-admitted to the medical ICU & 4380 \\
+Severe sepsis & 4380 \\
+Multiorgan failure & 4380 \\
+Maintaining remission status & 4380 \\
+Passed away & 4392 \\
+\bottomrule
+\end{tabular}
+\end{tcolorbox}
+\end{minipage}
+
+\end{tcolorbox}
+
+\end{ChSixFloatBody}
+\end{ChSixUncaptionedFigure}

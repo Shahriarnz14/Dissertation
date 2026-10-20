@@ -1,0 +1,56 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Additional validation analyses}
+\label{ch06:sec:additional_validation_methods}
+We perform six additional validation analyses: (1) we quantify uncertainty on \texttt{sepsis-40} using document-level bootstrap resampling; (2) we measure inter-annotator agreement (IAA) on five additional case reports independently annotated by two clinicians; (3) using \texttt{sepsis-10}, we evaluate inference of sepsis onset timestamps from narratives (the onset inference prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}); (4) using \texttt{sepsis-10}, we audit extracted events for hallucination by checking whether model-generated findings are grounded in the source report; (5) using the same \texttt{sepsis-10} reports, we evaluate multi-pass self-consistency by re-annotating reports under multiple random seeds; and (6) we estimate full-corpus cross-model agreement between DeepSeek-R1 and Llama-3.3-70B-Instruct across all 2,139 reports. Detailed methods for the hallucination audit, self-consistency, and full-corpus agreement are provided in Appendix~\ref{ch06:apd:validation_details}.
+% We perform six additional validation analyses.
+% First, we quantify uncertainty on \texttt{sepsis-40} using document-level bootstrap resampling.
+% Second, we measure inter-annotator agreement (IAA) on five additional case reports independently annotated by two clinicians.
+% Third, using \texttt{sepsis-10}, we evaluate inference of sepsis onset timestamps from narratives (the onset inference prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}).
+% Fourth, using \texttt{sepsis-10}, we audit extracted events for hallucination by checking whether model-generated findings are grounded in the source report.
+% Fifth, using the same \texttt{sepsis-10} reports, we evaluate multi-pass self-consistency by re-annotating reports under multiple random seeds.
+% Sixth, we estimate full-corpus cross-model agreement between DeepSeek-R1 and Llama-3.3-70B-Instruct across all 2,139 reports.
+% Detailed methods for the hallucination audit, self-consistency, and full-corpus agreement are provided in Appendix~\ref{ch06:apd:validation_details}.
+
+\paragraph{Uncertainty quantification via document-level bootstrap (\texttt{sepsis-40})}
+\label{ch06:sec:bootstrap_methods}
+
+We use nonparametric bootstrap resampling at the \emph{case report} level with 200 bootstrap replicates.
+In each replicate, we sample 40 case reports with replacement from \texttt{sepsis-40} and recompute event match rate, concordance, and AULTC.
+We report percentile-based 95\% bootstrap confidence intervals.
+
+\paragraph{Inter-annotator agreement on additional sepsis reports}
+\label{ch06:sec:iaa_methods}
+Two clinicians independently annotated five sampled T2S2 case reports using the same extraction and timestamping guidelines as \texttt{sepsis-40}.
+We compute clinician--clinician agreement and model--clinician agreement using the same metrics (match rate, concordance, and AULTC), enabling comparison between model disagreement and human disagreement under the evaluation protocol.
+
+\paragraph{Sepsis onset timestamp inference}
+\label{ch06:sec:onset-inference}
+In addition to extracting event--time pairs, we infer an explicit sepsis onset timestamp from narrative cues.
+Given a case report, the onset procedure estimates the earliest time consistent with Sepsis-3 criteria relative to admission ($t=0$), producing two onset estimates based on qSOFA and SOFA-style reasoning when sufficient evidence is available.
+We used GLM-4.6 (2-bit) for this inference.
+The full prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}.
+
+
+\paragraph{Manual hallucination audit}
+\label{ch06:sec:hallucination_audit_methods}
+To directly evaluate whether extracted clinical findings were unsupported by the source text, we performed a two-stage hallucination audit on 10 sampled PMOA case reports.
+We audited the DeepSeek-R1 and Llama-3.3-70B-Instruct outputs because they represent two strong model families used for corpus-scale annotation and agreement analyses.
+First, we applied automated lexical grounding to each extracted event after light normalization, including removal of prompt-induced prefixes such as ``history of'' or ``treated with''.
+The grounding step searched for exact substring matches, ordered token subsequences within a sentence, or unordered token containment in the source report.
+Second, all events that could not be automatically grounded were manually reviewed against the original case report to determine whether they represented unsupported hallucinations or valid clinical transformations, such as abbreviation expansion, decomposition of conjunctions, or semantic paraphrasing.
+
+\paragraph{Multi-pass self-consistency}
+\label{ch06:sec:self_consistency_methods}
+To assess robustness across generations, we re-annotated the same 10 reports used in the hallucination audit using five random seeds for DeepSeek-R1, Llama-3.3-70B-Instruct, OpenAI O1, and GPT-5.
+For each model, Run 1 was treated as the within-model reference and Runs 2--5 were compared against it using the same event match rate, concordance, and AULTC metrics.
+This analysis evaluates whether extracted timelines are stable across stochastic generations rather than being driven by isolated model-specific outputs.
+
+\paragraph{Full-corpus cross-model agreement}
+\label{ch06:sec:full_corpus_agreement_methods}
+To estimate reliability beyond the human-annotated subset, we measured cross-model agreement between DeepSeek-R1 and Llama-3.3-70B-Instruct across the full 2,139-report T2S2 corpus.
+We treated DeepSeek-R1 as the proxy reference and evaluated Llama-3.3-70B-Instruct using event match rate, concordance, and AULTC.
+Because these models differ in architecture and training, agreement across the full corpus provides a scalable proxy for whether the extraction rules are applied consistently across independent model families.
+
+
+
+

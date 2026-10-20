@@ -1,0 +1,37 @@
+% !TeX root = ../../../main.tex
+\subsection{Sepsis onset inference prompt}
+\label{ch06:apd:onset_prompt}
+We estimate sepsis onset time relative to admission ($t=0$) using a prompt that requests two onset times: one using qSOFA and one using SOFA-style reasoning when sufficient evidence is available. The model outputs a two-row bar-separated table with onset timestamps in hours (or NA if criteria are not met).
+
+\begin{tcolorbox}[breakable,
+  colback=yellow!10,
+  colframe=orange!80!black,
+  title=Sepsis Onset Prompt,
+  boxrule=2pt
+]
+    You are an astute physician. 
+    
+    Determine the time of onset of sepsis using two distinct definitions:
+    
+    (1) using qSOFA, and 
+    
+    (2) using SOFA, 
+    
+    relative to the time of admission which has timestamp 0. 
+    
+    If the admission time is not available, treat the event, e.g. current main clinical diagnosis or treatment with timestamp 0. The events happened before event with 0 timestamp have negative time, the ones after the event with 0 timestamp have positive time. The timestamps are in hours. The unit will be omitted when output the result. 
+    
+    If there is no temporal information regarding the onset times, please use your knowledge and events with temporal expression before and after the events to provide an approximation. 
+    
+    Similarly if the numeric quantities in qSOFA/SOFA are not present, use the available text to infer them as needed.
+    
+    Show the sepsis onsets and timestamps in rows, each row has two columns: one column for the sepsis definition used (qSOFA or SOFA), the other column for the timestamp. 
+    
+    The time is a numeric value in hour unit. If criteria is not met, set the time to NA. The two columns are separated by a pipe $|$ as a bar-separated file. Skip the title of the table. Create the table from the following case:
+    
+
+    {\textless \textbackslash end prefix\textgreater}
+
+\end{tcolorbox}
+
+

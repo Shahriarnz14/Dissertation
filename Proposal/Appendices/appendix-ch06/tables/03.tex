@@ -1,0 +1,35 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Manual hallucination audit on 10 PMOA case reports. Automated lexical grounding used exact substring, ordered token subsequence, or unordered token containment after normalization. Events not grounded automatically were manually reviewed against the source report. Manual review identified 0 hallucinated events.}\ChSixFloatLabel{ch06:tab:hallucination_audit}
+\ChSixTableBodyStart
+\begin{ChSixFloatBody}
+
+\centering
+\small
+
+
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{3}{c}{DeepSeek-R1} & \multicolumn{3}{c}{L3.3 70B} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+PMOA case ID & Events & Auto-grounded & Manual review & Events & Auto-grounded & Manual review \\
+\midrule
+PMC10370906 & 59 & 51 & 8 & 73 & 72 & 1 \\
+PMC10556716 & 107 & 95 & 12 & 115 & 110 & 5 \\
+PMC10629858 & 77 & 73 & 4 & 63 & 61 & 2 \\
+PMC3075162 & 87 & 77 & 10 & 77 & 74 & 3 \\
+PMC4778217 & 65 & 63 & 2 & 63 & 60 & 3 \\
+PMC6238558 & 70 & 66 & 4 & 71 & 64 & 7 \\
+PMC7576661 & 45 & 41 & 4 & 54 & 45 & 9 \\
+PMC9136437 & 69 & 59 & 10 & 125 & 124 & 1 \\
+PMC9355071 & 58 & 43 & 15 & 57 & 45 & 12 \\
+PMC9552858 & 101 & 63 & 38 & 81 & 66 & 15 \\
+\midrule
+Total & 738 & 631 & 107 & 779 & 721 & 58 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+
+\end{ChSixFloatBody}
+\end{table}

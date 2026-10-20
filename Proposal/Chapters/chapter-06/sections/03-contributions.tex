@@ -1,0 +1,14 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Contributions}
+Our work highlights the following contributions:
+(1) we present the first textual time series corpus for sepsis, comprising 2,139 open-access case reports identified as having Sepsis-3;
+(2) we develop an analytic pipeline to identify Sepsis-3 from clinical text and to extract time-associated clinical findings;
+(3) we contribute clinician annotations for 40 PMOA case reports, yielding $3,229$ manually annotated clinical reference events;
+(4) we develop and adapt evaluation criteria for textual time series, where matched clinical findings are not expected to be identical text strings;
+(5) we evaluate extraction performance across multiple datasets, model families, prompt variants, and time scales; and
+(6) we provide a multi-layer validation framework for the automatically generated corpus, including bootstrap uncertainty estimates, clinician--clinician agreement, hallucination auditing, self-consistency analysis, and full-corpus cross-model agreement.
+
+This work goes beyond simple event extraction by establishing textual time series as a distinct representation for clinical narratives.
+We explicitly address the misalignment between narrative structure and chronological reality---where retrospective summaries often reveal outcomes before precursors, inducing causal leakage during predictive modeling.
+By validating this representation through a framework that measures semantic content recovery, temporal ordering, time-scale-specific timestamp accuracy, factual grounding, and annotation stability, we provide a reusable retrospective resource for downstream temporal modeling tasks such as forecasting, causal reasoning, and multimodal alignment.
+

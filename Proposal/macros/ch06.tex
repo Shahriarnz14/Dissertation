@@ -1,0 +1,49 @@
+% !TeX root = ../main.tex
+% Only selected CHIL dependencies; no conference geometry or author scaffolding.
+\usepackage{ragged2e}
+\usepackage{placeins} % Explicit Chapter 6/E barriers only; no global section option.
+\definecolor{ChSixDarkPurple}{RGB}{64,0,128}
+\definecolor{ChSixDarkRed}{RGB}{139,0,0}
+\definecolor{ChSixDarkTeal}{RGB}{0,102,102}
+\newcommand{\ChSixBfTab}{\fontseries{b}\selectfont}
+\newcommand{\ChSixAnnotationTableStyle}{%
+  \scriptsize\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.12}}
+\newtheorem{ChSixRemark}{Remark}[appendix]
+\renewcommand{\theChSixRemark}{\Alph{appendix}.\arabic{ChSixRemark}}
+\newenvironment{ChSixAbstract}{\par\noindent\textbf{Abstract}\par}{\par}
+\newcommand{\ChSixParagraph}[1]{\par\medskip\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChSixAcknowledgments}[1]{\ChSixStarSection{Acknowledgments}#1}
+\makeatletter
+\newcommand{\ChSixStarSection}[1]{\par\bigskip\phantomsection\def\@currentlabelname{#1}\noindent{\large\bfseries #1}\par\nobreak}
+\newcommand{\ChSixBegin}{%
+ \tcbset{before upper=\singlespacing\raggedright,
+  ChSix/annopanel/.style={enhanced,colback=gray!4,colframe=gray!35,boxrule=0.4pt,arc=2mm,left=3mm,right=3mm,top=2mm,bottom=2mm},
+  ChSix/annobox/.style={enhanced,colback=white,colframe=gray!120,boxrule=0.4pt,arc=1.5mm,left=2mm,right=2mm,top=1.5mm,bottom=1.5mm,fonttitle=\footnotesize\bfseries}}}
+% The custom CMU float wrapper uses the native article caption formatter.
+% Scope this ragged variant to the one long caption requiring flexible wrapping.
+\newcommand{\ChSixUseRaggedCaption}{%
+ \long\def\@makecaption##1##2{%
+  \vskip\abovecaptionskip\raggedright##1: ##2\par\vskip\belowcaptionskip}}
+\newcommand{\ChSixHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\newcommand{\ChSixFloatLabel}[1]{%
+ \ifstrequal{#1}{ch06:tab:subset_pmcs}
+  {\global\let\cmu@found@label\@true\cmu@internal@label{#1}}
+  {\cmu@label{#1}}}
+% Original unreferenced precaption labels alias the real parent caption target.
+\newcommand{\ChSixUncaptionedPanelLabel}[1]{\cmu@internal@label{#1}}
+\newcommand{\ChSixTableBodyStart}{\cmu@test@custom@caption{\@false}{Chapter 6 table caption must precede its body}}
+\newenvironment{ChSixFloatBody}{%
+ \centering\let\tabular\cmu@internal@begintabular
+ \begin{adjustbox}{max totalsize={\linewidth}{.82\textheight}}
+ \begin{minipage}{\linewidth}\centering
+}{\par\end{minipage}\end{adjustbox}\par}
+% These three source annotation-gallery floats have no captions or labels.
+\newenvironment{ChSixUncaptionedFigure}{\@float{figure}[!htbp]\singlespacing}{\end@float}
+% Preserve approved algorithm counters and the previous default float style.
+\let\ChSixPreviousFloatStyle\float@style
+\floatstyle{ruled}
+\newfloat{ChSixAlgorithm}{htbp}{loachsix}[appendix]
+\let\float@style\ChSixPreviousFloatStyle
+\floatname{ChSixAlgorithm}{Algorithm}
+\renewcommand{\theChSixAlgorithm}{\Alph{appendix}.\arabic{ChSixAlgorithm}}
+\makeatother

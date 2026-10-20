@@ -1,0 +1,58 @@
+% !TeX root = ../../../main.tex
+\begin{ChSixAlgorithm}[htbp]
+\footnotesize
+\caption{Recursive Best Match}
+\label{ch06:alg:recursive_match}
+\SetAlgoLined
+\SetKwFunction{ChSixMatchEvents}{MatchEvents}
+\SetKwInOut{ChSixInput}{Input}
+\SetKwInOut{ChSixOutput}{Output}
+
+\ChSixInput{\quad Two lists: \texttt{ref} (reference events) and \texttt{pred} (predicted events)}
+\ChSixOutput{\quad List of best-matching event pairs}
+\ChSixMatchEvents{\texttt{ref}, \texttt{pred}} {
+    \; 
+
+    \Indp
+    \If{ref is empty \textbf{or} pred is empty}{
+        \Return{\textbf{[]}}
+    }
+    Initialize $\text{min\_distance} \gets \infty$\;
+    
+    Initialize $\text{best\_pair} \gets \text{None}$\;
+    
+    \ForEach{$r$ \textbf{in} ref}{
+        \ForEach{$p$ \textbf{in} pred}{
+            $d \gets \text{ComputeDistance}(r, p)$\;
+            
+            \If{$d < \text{min\_distance}$}{
+                $\text{min\_distance} \gets d$\;
+                
+                $\text{best\_pair} \gets (r, p)$\;
+            }\ElseIf{$d = \text{min\_distance}$}{
+                $\text{current\_ref\_index} \gets \text{index of } r \text{ in ref}$\;
+                
+                $\text{current\_pred\_index} \gets \text{index of } p \text{ in pred}$\;
+                
+                $\text{best\_ref\_index} \gets \text{index of best\_pair.r in ref}$\;
+                
+                $\text{best\_pred\_index} \gets \text{index of best\_pair.p in pred}$\;
+                
+                \If{$\text{current\_ref\_index} < \text{best\_ref\_index}$}{
+                    $\text{best\_pair} \gets (r, p)$\;
+                }\ElseIf{$\text{current\_ref\_index} = \text{best\_ref\_index}$ \textbf{and} $\text{current\_pred\_index} < \text{best\_pred\_index}$}{
+                    $\text{best\_pair} \gets (r, p)$\;
+                }
+            }
+        }
+    }
+    Remove $\text{best\_pair.r}$ from ref\;
+    
+    Remove $\text{best\_pair.p}$ from pred\;
+    
+    $\text{result} \gets [\text{best\_pair}] + \text{MatchEvents}
+    (\text{ref}, \text{pred})$\;
+    
+    \Return{$\text{result}$}\;
+}
+\end{ChSixAlgorithm}

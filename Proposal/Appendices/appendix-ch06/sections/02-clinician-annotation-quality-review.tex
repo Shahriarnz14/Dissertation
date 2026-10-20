@@ -1,0 +1,43 @@
+% !TeX root = ../../../main.tex
+\subsection{Clinician Annotation Quality Review}
+\label{ch06:apd:clinician_quality_review}
+
+\ChSixHeadingOnly
+\subsubsection{Review protocol}
+
+In addition to the quantitative metrics used in the main evaluation, a physician reviewed extracted timelines for the \texttt{sepsis-10} subset.
+For each case report, the clinician assigned: (i) a rank ordering (1 = best, 7 = worst) of the annotations, consisting of the manual annotation and six LLM-generated annotations, and (ii) a categorical assessment (Excellent, Good, Acceptable, or Poor) based on extraction completeness, temporal ordering accuracy, and timing plausibility.
+This review provides a qualitative assessment of annotation style and clinical usability, complementing the quantitative event-matching and temporal-alignment metrics reported in the main text.
+The reviewed annotation bundle included O1-preview as the OpenAI annotation; replacing GPT-5 which was evaluated separately in the main quantitative results in Table~\ref{ch06:tab:results}.
+
+\subsubsection{Clinician review results}
+
+Inspecting the clinical quality of the annotations, we report the mean rank, top-1 fraction, top-1-LLM fraction, and quality level in Table~\ref{ch06:tab:sep10review}.
+There is a clear performance ordering in the review, with manual annotations ranked highest, O1-preview a close second, followed by DeepSeek-R1 IQ1 and Llama 3.3.
+While the Llama 3.3 annotations were rated acceptable a high percentage of the time (90\%), the other Llama and Mixtral approaches fail to achieve Acceptable performance in excess of 50\%.
+Comparing DeepSeek-R1 IQ1 and Llama 3.3, the former has more variable clinician-rated quality (8 of 10 cases rated Acceptable or better), but maintains both higher match rate and AULTC in the main quantitative evaluation (Table~\ref{ch06:tab:results} and Figure~\ref{ch06:fig:time-disc}).
+The clinical reviewer also noted that some Llama 3.3 discrepancies for large time horizons, \emph{i.e.}, years, were large, which is corroborated by the long-horizon subpanels in Figure~\ref{ch06:fig:time-disc}.
+
+
+\input{Appendices/appendix-ch06/tables/02}
+
+
+The annotation review feedback noted a wide variety of errors; here we present several error modes identified during quality review.
+
+\ChSixParagraph{Events with duration.}
+Example: ``10-kg weight loss'' from ``he was presented to the hospital with complaints of abdominal distension, constipation, vomiting, and a 10-kg weight loss.''
+This example from case report PMC10629858 references a gradual event that has been ongoing for 2 months.
+By the annotation guideline for selecting the start time of events with duration, the time -168 (what O1-preview annotates) is correct.
+However, the event can also be considered as ``history of 10-kg weight loss'' via the ``history of'' guideline with time 0 (what L3.3 70B annotates).
+This example could be resolved by interval representations, but we see the annotation quality, particularly AULTC, degrade when requesting additional fields (Table~\ref{ch06:tab:sens} and Figure~\ref{ch06:fig:sep40ablate-time-disc}).
+
+\ChSixParagraph{Events requiring temporal reasoning or composition.}
+Example: ``passed away'' from ``he was re-admitted to the medical ICU for severe sepsis and multiorgan failure and passed away around 6 months after his initial diagnosis with NHL, despite maintaining a remission status.''
+This requires a two-step inference: (1) timing of NHL diagnosis, and (2) adding ``around 6 months'' to that time.
+While this is a simple example, more complicated chains of relative timing were noted, sometimes involving other events whose timings are themselves uncertain.
+As black-box methods, there is no explicit probabilistic specification for these chains, and empirically we see variable responses.
+For this case, the manual annotation is 4383 hours (about 6 months), O1-preview gives 4368 hours (about 6 months), DeepSeek-R1 gives 4032 hours (about 6 months), and Llama 3.3 70B gives 1440 hours (about 2 months); compared to other events the temporal ordering is correct, but the relative timing is off by months.
+
+
+
+

@@ -45,13 +45,14 @@ The user confirmed the Chapter 2, 5 and 7 source selections after reviewing Phas
 | 3 | `main.tex` | Explicit user confirmation and migration approval, October 20, 2026; follow all 15 active `Sections/` inputs, including all six supplementary modules. |
 | 4 | `main.tex` | Explicit user confirmation and complete SurvHTE/Appendix C migration approval, October 20, 2026; active `\iclrfinalcopy`, mathematical macros, local artwork and complete inline supplement. |
 | 5 | `Scientific_data/main_pmoa_tts_V4.tex` | Explicit user selection, described as `V4.tex`; this is the actual existing V4 filename. |
+| 6 | `main.tex` | Explicit Phase F approval, October 20, 2026; selected CHIL reconstruction manuscript, all four active inputs and entire inline appendix. Keep separate from Chapter 7. |
 | 7 | `CameraReady/LaTeX/main_with_appendix.tex` | Explicit user selection of the camera-ready root. |
 
 Follow each selected root's actual active `\input`, `\include`, bibliography, artwork, and supplementary dependencies. Do not mix content from other manuscript versions. In particular, Chapter 5 currently includes `Scientific_data/supplementary_v4plus.tex`, and Chapter 7 includes `CameraReady/LaTeX/appendix.tex` through its original `AAAI_2026/` path prefix. Preserve these dependency choices when adapting paths. Deep audits and scientific-content migration remain subject to each chapter's approval gate.
 
 Phase B was authorized in the same user instruction. Chapter 2 migration is **not** authorized until the completed skeleton is reviewed and explicitly approved.
 
-Current approval checkpoint (October 20, 2026): Chapters 2 and 3 and Appendices A and B are independently reviewed and approved. Chapter 4 and its complete supplement as Appendix C are authorized for migration and validation. Preserve approved scientific content, Chapter 2 heatmap sizing and all existing editor/build configuration. Chapter 5 requires separate explicit approval. Earlier phase-gate descriptions are historical requirements, superseded only by explicit approvals.
+Current approval checkpoint (October 20, 2026): Chapters 2-5 and Appendices A-D are independently reviewed and approved. Phase F authorizes Chapter 6 and its complete CHIL appendix as Appendix E; that migration is now compiled and validated, awaiting user review (see `Proposal/metadata/validation-ch06.md`). Preserve all approved scientific content, figure sizing, formatting and editor/build configuration. Chapter 7 requires separate explicit approval. Earlier phase-gate descriptions are historical requirements, superseded only by explicit approvals.
 
 Source cross-check links (not substitutes for local sources):
 - Ch 2: https://arxiv.org/abs/2312.05933

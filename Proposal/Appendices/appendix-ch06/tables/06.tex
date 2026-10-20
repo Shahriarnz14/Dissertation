@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Proportion of reports where Llama 3.3 over- or under-identified clinical events compared to manual annotations. i2m4 shows a strong bias toward under-identification, whereas \texttt{sepsis-10} has a more balanced distribution.}\ChSixFloatLabel{ch06:tab:event_identification_bias}
+\ChSixTableBodyStart
+\begin{ChSixFloatBody}
+
+\setlength{\tabcolsep}{4pt}
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Dataset} & \makecell{\textbf{\% Reports} \\ \textbf{Over-Identified}} & \makecell{\textbf{\% Reports} \\ \textbf{Under-Identified}} \\ \hline
+\textbf{i2m4}    & 15\%                                & 85\%                                 \\ \hline
+\textbf{\texttt{sepsis-10}} & 50\%                              & 50\%                                 \\ \hline
+\end{tabular}
+
+
+
+\end{ChSixFloatBody}
+\end{table}

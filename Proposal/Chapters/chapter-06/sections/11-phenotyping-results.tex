@@ -1,0 +1,8 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Phenotyping Results}
+For phenotyping the i2m4 dataset for sepsis, we found two case reports of patients with sepsis.
+The QwQ-32B-Preview response had perfect accuracy (100\%), whereas the Llama-3.1-8B-Instruct accuracy was 13/20 (65\%).
+For the \texttt{sepsis-100} dataset, where QwQ-32B-Preview outputs were used as the preferred computational labels, the relatively faster models GPT-4o and Llama-3.1-8B-Instruct agreed 84\% and 83\% of the time, respectively (Figure~\ref{ch06:fig:flow}, bottom right).
+Although QwQ-32B-Preview sometimes produced verbose rationales that referenced SOFA-style reasoning, the operational phenotyping decision was mapped to the requested binary output using the rule-based parsing and clinician-audit process described in Section~\ref{ch06:section:datasets}.
+We therefore interpret these phenotyping labels as cohort-selection outputs for constructing a retrospective research corpus, rather than as a primary clinical phenotyping benchmark.
+

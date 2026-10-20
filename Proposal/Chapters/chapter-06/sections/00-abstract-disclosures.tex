@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\begin{ChSixAbstract}
+Clinical case reports and discharge summaries may be the most complete and accurate summarization of patient encounters, yet they are finalized, \emph{i.e.}, timestamped after the encounter.
+Complementary structured data streams become available sooner but suffer from incompleteness.
+To train models and algorithms on more complete and temporally fine-grained data, we construct a pipeline to phenotype, extract, and annotate time-localized findings within case reports using large language models.
+We apply our pipeline to generate an open-access textual time series corpus for Sepsis-3 comprising 2,139 case reports from the PubMed-Open Access (PMOA) Subset.
+To validate our system, we apply it to PMOA and timeline annotations from i2b2/MIMIC-IV and compare the results to physician-expert annotations.
+We show high recovery rates of clinical findings (event match rates: GPT-5--0.93, Llama 3.3 70B Instruct--0.76) and strong temporal ordering (concordance: GPT-5--0.965, Llama 3.3 70B Instruct--0.908). 
+Our work characterizes the ability of LLMs to time-localize clinical findings in text, illustrating the limitations of LLM use for temporal reconstruction and providing several potential avenues of improvement via multimodal integration.
+\end{ChSixAbstract}
+
+
+\ChSixParagraph{Data and Code Availability}
+This paper uses the i2b2 \citep{sun2013evaluating}, MIMIC-IV \citep{ch06:johnson2023mimic}, and PubMed Open Access (PMOA) datasets \citep{pmc2024open}, as well as the timeline annotations from \cite{ch06:frattallone2024using}.
+Code and annotations are available at: \url{https://github.com/Shahriarnz14/T2S2}.
+
+\ChSixParagraph{Institutional Review Board (IRB)}
+This research has been designated by our IRB as Not Human Subjects Research.
+
