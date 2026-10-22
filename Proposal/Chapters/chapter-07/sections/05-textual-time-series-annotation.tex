@@ -1,0 +1,14 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Textual Time Series Annotation}
+\label{ch07:sec:tts-annotation}
+
+Following \citet{ch07:noroozizadeh2025reconstructing}, a textual time series case report corpus of Sepsis-3 patients was constructed from the PMOA sepsis reports. A textual time series refers to a sequence of clinical findings, each paired with a timestamp (either absolute or relative to the case presentation time), corresponding to an individual patient. Here, a clinical finding is defined as a free-text expression describing an entity that pertains to or may impact a person's health.
+
+A textual time series differs from conventional approaches to clinical concept annotation (e.g., \cite{sun2013evaluating,ch07:uzuner20112010}) in its extension of the text span to better capture the specificity and contextual meaning of each clinical finding. In our work, the interpretation of a clinical finding differs from the i2b2 concept guidelines in the following respects: (1) Clinical findings are not restricted to single prepositional phrases following a markable entity. For instance, instead of splitting “pain in chest that radiates substernally” into less informative parts, we retain the full phrase as a single, complete finding to preserve its meaning and context. (2) To improve clarity, compound phrases are broken into individual findings. For example, “metastases in the liver and pancreas” becomes “metastasis in the liver” and “metastasis in the pancreas.”
+
+We used \texttt{DeepSeek-R1-UD-IQ1} and \texttt{Llama-3.3-70B-Instruct} models to generate clinical textual time series from the 2319 sepsis case reports. We refer to this as \textbf{T}extual \textbf{T}ime-\textbf{S}eries for \textbf{S}epsis (\textit{T2S2}).
+Details on the quality evaluation of LLM-extracted temporal annotations and the prompts used for extraction are provided in Appendix~\ref{ch07:apd:tts_validity} and~\ref{ch07:TTS_prompt}, respectively.
+Our dataset was split into training (n = 1,795; 80\% train, 20\% validation), testing \textit{T2S2}-test (n = 244), and two external validation sets: \textit{sepsis-10} (n = 10) and \textit{sepsis-100} (n = 90).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

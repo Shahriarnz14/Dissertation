@@ -1,0 +1,25 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Effect of Randomly Masking History (\texttt{Llama-3.3-70B} annotations) on F1 and Concordance. \textbf{Abbreviations}: F1(1d)-10/100: F1 (1 day) for \textit{sepsis-10} and \textit{sepsis-100} respectively. c10/100: c-index for \textit{sepsis-10} and \textit{sepsis-100} respectively.}\ChSevenFloatLabel{ch07:tab:masking_effects_llama}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+    \centering
+    \resizebox{0.75\linewidth}{!}{
+    \begin{tabular}{lcccccc}
+        \toprule
+        \textbf{Timestep drop rate} & F1(1d) & c-index & F1(1d)-10 & c10 & F1(1d)-100 & c100 \\
+        \hline
+        0\%  & 0.645 & 0.632 & 0.431 & 0.595 & 0.626 & 0.612 \\
+        15\% & 0.628 & 0.635 & 0.422 & 0.592 & 0.624 & 0.610 \\
+        30\% & 0.634 & 0.634 & 0.423 & 0.586 & 0.621 & 0.598 \\
+        60\% & 0.604 & 0.634 & 0.391 & 0.577 & 0.605 & 0.613 \\
+        90\% & 0.531 & 0.622 & 0.328 & 0.546 & 0.534 & 0.607 \\
+        \bottomrule
+    \end{tabular}
+    }
+    
+    
+
+\end{ChSevenFloatBody}
+\end{table}

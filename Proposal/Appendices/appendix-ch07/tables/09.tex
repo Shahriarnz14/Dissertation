@@ -1,0 +1,24 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Post-cutoff evaluation on 115 case reports (forecasting F1 at 0h/24h/168h).}\ChSevenFloatLabel{ch07:tab:postcutoff_f1}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+\centering
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{lccc}
+\hline
+\textbf{Model} & \textbf{0h} & \textbf{24h} & \textbf{168h} \\
+\hline
+BERT     & 0.63 & 0.62 & 0.51 \\
+RoBERTa  & 0.54 & 0.61 & 0.65 \\
+DeBERTa  & 0.58 & 0.56 & 0.53 \\
+\hline
+\end{tabular}
+
+
+
+\end{ChSevenFloatBody}
+\end{table}

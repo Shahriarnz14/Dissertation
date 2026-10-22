@@ -1,0 +1,33 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Comparison of event match rate (Event), median concordance (c), median absolute error (MAE), and area under the log-time curve (AULTC) across \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} for \textit{sepsis-10}, and \textit{sepsis-100} datasets.}\ChSevenFloatLabel{ch07:tab:sepsis_onecol}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+\centering
+% \scriptsize
+\begin{adjustbox}{max width=\columnwidth}
+\setlength{\tabcolsep}{4.5pt} % tighten to fit one column
+\renewcommand{\arraystretch}{1.1}
+
+\begin{tabular}{lccc}
+\hline
+\multicolumn{4}{c}{\textbf{\textit{sepsis-10}}} \\
+\hline
+\textbf{Model} & \textbf{Event Match Rate} & \textbf{Concordance} & \textbf{AULTC} \\
+\texttt{DeepSeek-R1}      & 0.79 & 0.876 & 0.772 \\
+\texttt{Llama-3.3-70B}    & 0.75 & 0.932 & 0.759 \\
+\hline
+\multicolumn{4}{c}{\textbf{\textit{sepsis-100}}} \\
+\hline
+\textbf{Model} & \textbf{Event Match Rate} & \textbf{Concordance} & \textbf{AULTC} \\
+\texttt{DeepSeek-R1}      & 0.91 & 0.875 & 0.801 \\
+\texttt{Llama-3.3-70B}    & 0.78 & 0.894 & 0.791 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+
+
+
+\end{ChSevenFloatBody}
+\end{table}

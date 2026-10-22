@@ -1,0 +1,9 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Dataset Extraction}
+We used the PubMed Open Access (PMOA) Subset (as of April 25, 2024) for our analysis. Following prior work \cite{wang2025large}, we extracted the body of each case by selecting the text between the \texttt{==== Body} and \texttt{==== Ref} delimiters in the PMOA corpus. To maintain relevance, we included only documents with case-insensitive matches to \texttt{(case report|case presenta)} and \texttt{year-? ?old}, an approach shown to be more specific than relying on PubMed metadata 
+
+
+Additional filtering was applied to identify potential sepsis-related case reports using the regular expressions \texttt{sepsi|\allowbreak septic} and \texttt{critical|intensive} care. We then used LLM-based queries to extract key attributes, including sepsis diagnosis, patient count, age, and gender. For this step, both \texttt{GPT-4o} and \texttt{Llama-3.1-8B-Instruct} were employed. Reports describing more than one case were excluded. A case report was retained if either model classified it as involving a Sepsis-3 diagnosis.
+
+This multi-step process yielded a total of 2319 Sepsis-3 case reports. From this set, we randomly selected two subsets for evaluation: a group of 10 reports (\textit{sepsis-10}), which underwent expert clinical annotation to serve as a gold standard, and a larger group of 100 reports (\textit{sepsis-100}) as a bronze standard for broader testing based on an alternative annotator (\texttt{O1-preview}; Figure \ref{ch07:fig:flowchart}). %We split this data into training (n = ), validation (256), and test (244) sets.
+

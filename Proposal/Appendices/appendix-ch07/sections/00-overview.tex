@@ -1,0 +1,113 @@
+% !TeX root = ../../../main.tex
+
+%\section{Supplementary Material}
+% %File: formatting-instructions-latex-2026.tex
+% %release 2026.0
+% \documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+% \usepackage{aaai2026}  % DO NOT CHANGE THIS
+% \usepackage{times}  % DO NOT CHANGE THIS
+% \usepackage{helvet}  % DO NOT CHANGE THIS
+% \usepackage{courier}  % DO NOT CHANGE THIS
+% \usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+% \usepackage{graphicx} % DO NOT CHANGE THIS
+% \urlstyle{rm} % DO NOT CHANGE THIS
+% \def\UrlFont{\rm}  % DO NOT CHANGE THIS
+% \usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+% \usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+% \frenchspacing  % DO NOT CHANGE THIS
+% \setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+% \setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+% %
+% % These are recommended to typeset algorithms but not required. See the subsubsection on algorithms. Remove them if you don't have algorithms in your paper.
+
+% \usepackage{algorithm}
+% %\usepackage{algorithmic}
+% \usepackage{dsfont}
+% \usepackage{algpseudocode}
+% \usepackage{booktabs}
+% \usepackage{multicol}
+% \usepackage{multirow}
+% \usepackage{enumitem}
+% \usepackage{xcolor}
+% \usepackage{array}
+% \usepackage{makecell}
+% \usepackage[most]{tcolorbox}
+% \usepackage{url}
+% \usepackage{adjustbox} % add this in your preamble
+% \usepackage{amsmath,amssymb}
+% \usepackage{amsfonts}
+% %
+% % These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
+% \usepackage{newfloat}
+% \usepackage{listings}
+% \DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
+% \lstset{%
+% 	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
+% 	numbers=left,numberstyle=\footnotesize,xleftmargin=2em,% show line numbers, remove this entire line if you don't want the numbers.
+% 	aboveskip=0pt,belowskip=0pt,%
+% 	showstringspaces=false,tabsize=2,breaklines=true}
+% \floatstyle{ruled}
+% \newfloat{listing}{tb}{lst}{}
+% \floatname{listing}{Listing}
+% %
+% % Keep the \pdfinfo as shown here. There's no need
+% % for you to add the /Title and /Author tags.
+% \pdfinfo{
+% /TemplateVersion (2026.1)
+% }
+
+% %
+% % These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
+% \usepackage{newfloat}
+% \usepackage{listings}
+% \DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
+% \lstset{%
+% 	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
+% 	numbers=left,numberstyle=\footnotesize,xleftmargin=2em,% show line numbers, remove this entire line if you don't want the numbers.
+% 	aboveskip=0pt,belowskip=0pt,%
+% 	showstringspaces=false,tabsize=2,breaklines=true}
+% \floatstyle{ruled}
+% \newfloat{listing}{tb}{lst}{}
+% \floatname{listing}{Listing}
+% %
+% % Keep the \pdfinfo as shown here. There's no need
+% % for you to add the /Title and /Author tags.
+% % \pdfinfo{
+% % /TemplateVersion (2026.1)
+% % }
+
+% \setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% \begin{document}
+
+% \appendix
+
+
+
+
+
+% \onecolumn
+\ChSevenStarSection{Supplementary Material}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This supplementary material provides detailed information organized as follows:
+\begin{itemize}
+    \item \textbf{Appendix~\ref{ch07:apd:tts_validity}}: Validity of LLM-extracted temporal annotations (adopted from our prior work (adopted from our prior work \cite{wang2025large}).
+    \item \textbf{Appendix~\ref{ch07:TTS_prompt}}: LLM prompt template for extracting clinical time series from case reports.
+    \item \textbf{Appendix~\ref{ch07:apd:prompts}}: Prompting strategies for zero-shot and few-shot forecasting.
+    \item \textbf{Appendix~\ref{ch07:apd:encoder-forecasting}}: Technical details of encoder-based forecasting methods, including MLP-head and masking approaches.
+    \item \textbf{Appendix~\ref{ch07:apd:encoder-survival}}: Survival modeling framework using language model embeddings and the hyperparameters used.
+    \item \textbf{Appendix~\ref{ch07:apd:full_tables}}: Complete forecasting performance tables for all models on DeepSeek-R1 and Llama-3.3-70B annotations.
+    \item \textbf{Appendix~\ref{ch07:apd:full_survival}}: Complete survival analysis performance table for all datasets.
+    \item \textbf{Appendix~\ref{ch07:apd:sensitivity_analyses}}: Sensitivity analysis of the forecasting performance when using time-ordered versus text-ordered training.
+    \item \textbf{Appendix~\ref{ch07:apd:masking_l33_dsr1}}: Sensitivity analysis of masking history on Llama-3.3-70B and DeepSeek-R1 annotations.
+    \item \textbf{Appendix~\ref{ch07:apd:additional_insights}}: Additional insights into forecasting results.
+    \item \textbf{Appendix~\ref{ch07:apd:open_source}}: Analysis of open-source models to address data leakage concerns.
+    \item \textbf{Appendix~\ref{ch07:apd:beyond_pmoa}}: Generalizability beyond PubMed case reports: comparison with other clinical sources.
+    \item \textbf{Appendix~\ref{ch07:apd:broader_impact}}: Broader societal impact and ethical considerations.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix A: T2S2 extraction pipeline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

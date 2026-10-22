@@ -1,0 +1,72 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Forecasting performance (event occurrence: F1 and correct event ordering: concordance-index) of the ensuing $k=8$ events.  Models \emph{italicized} represent the open-source and medically fine-tuned models. All models are trained/fine-tuned on time-ordered annotations from \texttt{DeepSeek-R1}. \textbf{Bold} indicates best in that particular category amongst all models.}\ChSevenFloatLabel{ch07:tab:DS_forecasting}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+\footnotesize
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textit{T2S2} (\texttt{DeepSeek-R1})} & \multicolumn{2}{c}{\textit{sepsis-10}} & \multicolumn{2}{c}{\textit{sepsis-100}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+& F1(1h) & F1(1d) & F1(1w) & c-index & F1(1d) & c-index & F1(1d) & c-index \\
+\midrule
+\textbf{LLM-MLP head} &&&&&&&&\\
+DS-L3.3 70B & \textbf{0.075} & 0.482 & \textbf{0.796} & \textbf{0.632} & \textbf{0.397} & \textbf{0.578} & \textbf{0.613} & 0.595 \\
+L3.3 70B & 0.000 & 0.295 & 0.764 & 0.631 & 0.312 & 0.569 & 0.404 & 0.597 \\
+DS-L3.1 8B & 0.000 & \textbf{0.492} & 0.650 & 0.630 & 0.381 & 0.566 & 0.601 & 0.600 \\
+L3.1 8B & 0.000 & 0.355 & 0.650 & 0.630 & 0.114 & 0.575 & 0.442 & \textbf{0.604} \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textit{OLMO 32B Instruct} & \textcolor{black}{0.000} & \textcolor{black}{0.411} & \textcolor{black}{0.688} & \textcolor{black}{0.621} & \textcolor{black}{0.273} & \textcolor{black}{0.561} & \textcolor{black}{0.432} & \textcolor{black}{0.593} \\
+\textit{RedPajama-INCITE 7B Instruct} & \textcolor{black}{0.000} & \textcolor{black}{0.352} & \textcolor{black}{0.651} & \textcolor{black}{0.618} & \textcolor{black}{0.282} & \textcolor{black}{0.572} & \textcolor{black}{0.471} & \textcolor{black}{0.594} \\
+\textit{MediPhi-PubMed} & \textcolor{black}{0.000} & \textcolor{black}{0.268} & \textcolor{black}{0.751} & \textcolor{black}{0.626} & \textcolor{black}{0.169} & \textcolor{black}{0.561} & \textcolor{black}{0.210} & \textcolor{black}{0.597} \\
+\textbf{Prompting} &&&&&&&&\\
+L3.3 70B 0-shot & 0.085 & 0.368 & 0.560 & -- & 0.236 & -- & 0.452 & -- \\
+L3.3 70B 0-shot ordinal & 0.082 & 0.352 & 0.646 & -- & 0.289 & -- & \textbf{0.483} & -- \\
+L3.3 70B few-shot & \textbf{0.095} & \textbf{0.380} & 0.652 & -- & \textbf{0.360} & -- & 0.452 & -- \\
+L3.3 70B few-shot ordinal & 0.063 & 0.356 & 0.682 & -- & 0.313 & -- & 0.480 & -- \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textit{OLMO 32B 0-shot} & \textcolor{black}{0.018} & \textcolor{black}{0.333} & \textcolor{black}{0.652} & \textcolor{black}{--} & \textcolor{black}{0.322} & \textcolor{black}{--} & \textcolor{black}{0.430} & \textcolor{black}{--} \\
+\textit{OLMO 32B 0-shot ordinal} & \textcolor{black}{0.006} & \textcolor{black}{0.323} & \textcolor{black}{\textbf{0.685}} & \textcolor{black}{--} & \textcolor{black}{0.325} & \textcolor{black}{--} & \textcolor{black}{0.443} & \textit{--} \\
+\textit{OLMO 32B few-shot} & \textcolor{black}{0.014} & \textcolor{black}{0.316} & \textcolor{black}{0.630} & \textcolor{black}{--} & \textcolor{black}{0.219} & \textcolor{black}{--} & \textcolor{black}{0.423} & \textcolor{black}{--} \\
+\textit{OLMO 32B few-shot ordinal} & \textcolor{black}{0.013} & \textcolor{black}{0.315} & \textcolor{black}{0.651} & \textcolor{black}{--} & \textcolor{black}{0.247} & \textcolor{black}{--} & \textcolor{black}{0.422} & \textcolor{black}{--} \\
+
+\midrule
+\textbf{Encoder-MLP head} &&&&&&&&\\
+BERT & 0.264 & 0.550 & 0.871 & 0.501 & \textbf{0.441} & 0.498 & 0.614 & 0.501 \\
+RoBERTa & 0.250 & 0.562 & 0.866 & 0.500 & 0.405 & 0.500 & 0.614 & 0.500 \\
+DeBERTa-small & 0.262 & 0.570 & 0.871 & 0.601 & 0.382 & 0.498 & 0.617 & 0.556 \\
+ModernBERT-base & 0.306 & \textbf{0.576} & 0.877 & 0.646 & 0.428 & 0.562 & 0.607 & 0.558 \\
+ModernBERT-large & 0.277 & 0.568 & 0.874 & 0.598 & 0.391 & 0.539 & 0.602 & 0.553 \\
+\textit{Bioclinical ModernBERT-base} & \textcolor{black}{0.264} & \textcolor{black}{0.559} & \textcolor{black}{\textbf{0.879}} & \textcolor{black}{\textbf{0.677}} & \textcolor{black}{0.395} & \textcolor{black}{\textbf{0.598}} & \textcolor{black}{\textbf{0.635}} & \textcolor{black}{\textbf{0.610}} \\
+\textit{Bioclinical ModernBERT-large} & \textcolor{black}{\textbf{0.313}} & \textcolor{black}{0.562} & \textcolor{black}{0.868} & \textcolor{black}{0.671} & \textcolor{black}{0.399} & \textcolor{black}{0.491} & \textcolor{black}{0.618} & \textcolor{black}{0.607} \\
+\midrule
+\textbf{Encoder-masking-fine-tuned} &&&&&&&&\\
+BERT & 0.166 & 0.432 & 0.690 & 0.648 & 0.323 & 0.554 & 0.482 & 0.600 \\
+RoBERTa & 0.169 & 0.416 & 0.688 & 0.646 & 0.313 & 0.539 & 0.457 & 0.609 \\
+DeBERTa-small & 0.175 & 0.435 & 0.695 & 0.671 & 0.325 & 0.579 & 0.492 & 0.617 \\
+ModernBERT-base & \textbf{0.186} & 0.449 & \textbf{0.697} & 0.672 & 0.325 & 0.576 & \textbf{0.503} & 0.613 \\
+ModernBERT-large & 0.177 & \textbf{0.460} & 0.683 & 0.663 & \textbf{0.342} & 0.615 & 0.496 & 0.632 \\
+\textit{Bioclinical ModernBERT-base} & \textcolor{black}{0.166} & \textcolor{black}{0.450} & \textcolor{black}{0.692} & \textcolor{black}{\textbf{0.676}} & \textcolor{black}{0.336} & \textcolor{black}{0.604} & \textcolor{black}{0.499} & \textcolor{black}{\textbf{0.655}} \\
+\textit{Bioclinical ModernBERT-large} & \textcolor{black}{0.165} & \textcolor{black}{0.422} & \textcolor{black}{0.696} & \textcolor{black}{0.652} & \textcolor{black}{0.325} & \textcolor{black}{\textbf{0.626}} & \textcolor{black}{0.425} & \textcolor{black}{0.603} \\
+\midrule
+\textbf{Encoder-masking-zeroshot} &&&&&&&&\\
+BERT & 0.000 & 0.000 & 0.000 & 0.495 & 0.000 & 0.513 & 0.000 & 0.494 \\
+RoBERTa & 0.049 & 0.207 & 0.375 & 0.500 & 0.137 & 0.500 & 0.318 & 0.500 \\
+DeBERTa-small & 0.170 & 0.460 & 0.323 & 0.497 & 0.268 & \textbf{0.512} & 0.376 & \textbf{0.509} \\
+ModernBERT-base & 0.169 & \textbf{0.468} & \textbf{0.804} & 0.496 & 0.358 & 0.501 & \textbf{0.511} & 0.499 \\
+ModernBERT-large & 0.133 & 0.349 & 0.534 & 0.494 & 0.271 & 0.509 & 0.277 & 0.502 \\
+\textit{Bioclinical ModernBERT-base} & \textcolor{black}{\textbf{0.246}} & \textcolor{black}{0.458} & \textcolor{black}{0.614} & \textcolor{black}{\textbf{0.498}} & \textcolor{black}{0.301} & \textcolor{black}{0.509} & \textcolor{black}{0.457} & \textcolor{black}{0.498} \\
+\textit{Bioclinical ModernBERT-large} & \textcolor{black}{0.244} & \textcolor{black}{0.446} & \textcolor{black}{0.596} & \textcolor{black}{0.479} & \textcolor{black}{\textbf{0.364}} & \textcolor{black}{0.502} & \textcolor{black}{0.416} & \textcolor{black}{0.497} \\
+\bottomrule
+\end{tabular}
+}
+
+
+
+\end{ChSevenFloatBody}
+\end{table}

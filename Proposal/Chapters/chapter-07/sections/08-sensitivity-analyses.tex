@@ -1,0 +1,20 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Sensitivity Analyses}
+% \vspace{-.25em}
+We conduct sensitivity analyses to examine how the temporal structure and completeness of input sequences affect forecasting performance. These analyses probe the robustness of models to changes in event ordering and to varying levels of missing historical information.
+
+\ChSevenParagraph{Time-ordering Strategies.} We evaluate two strategies for ordering clinical events within textual time series inputs. In the \emph{text-ordered} setting, events are presented in the order they appear in the original case report narratives, preserving the narrative structure produced during extraction. In the \emph{time-ordered} setting, events are sorted chronologically by their documented occurrence time, enforcing strict temporal alignment. This comparison isolates the effect of narrative sequencing versus explicit temporal ordering on model performance. For text-ordered inputs, to prevent causal leakage, events occurring after the forecast cutoff time $t$ are masked for encoder-based models and omitted for decoder models.
+
+\ChSevenParagraph{Timestep Dropout.} To assess robustness to incomplete patient histories, we introduce a \emph{timestep dropout rate} (TDR), defined as the proportion of input timesteps randomly removed prior to inference. This procedure simulates varying degrees of missing clinical documentation that may arise in deployment settings. We vary TDR from 0\% (full history) to 90\% (severely truncated history) in increments, masking events independently and uniformly at random. This setup enables controlled evaluation of model performance under partial information, probing the extent to which predictive accuracy and event ordering depend on the completeness of historical context.
+
+
+\input{Chapters/chapter-07/tables/01}
+
+
+
+% Together, these analyses characterize model robustness to disruptions in temporal coherence and input completeness -- two key challenges in real-world deployment scenarios.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Results %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \input{AAAI_2026/Tables/clean_forecasting_DS}

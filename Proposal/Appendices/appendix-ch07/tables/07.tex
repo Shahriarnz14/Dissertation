@@ -1,0 +1,26 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Effect of Randomly Masking History (\texttt{DeepSeek-R1} annotations) on F1 and Concordance. \textbf{Abbreviations}: F1(1d)-10/100: F1 (1 day) for \textit{sepsis-10} and \textit{sepsis-100} respectively. c10/100: c-index for \textit{sepsis-10} and \textit{sepsis-100} respectively.}\ChSevenFloatLabel{ch07:tab:masking_effects_DS}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+    \centering
+    % \resizebox{\linewidth}{!}{
+    \begin{tabular}{lcccccc}
+        \toprule
+        \textbf{Timestep drop rate} & F1(1d) & c-index & F1(1d)-10 & c10 & F1(1d)-100 & c100 \\
+        \hline
+        0\%  & 0.576 & 0.672 & 0.428 & 0.576 & 0.607 & 0.613 \\
+        15\% & 0.572 & 0.667 & 0.415 & 0.564 & 0.604 & 0.616 \\
+        30\% & 0.548 & 0.672 & 0.357 & 0.542 & 0.591 & 0.619 \\
+        60\% & 0.542 & 0.678 & 0.310 & 0.578 & 0.588 & 0.616 \\
+        90\% & 0.423 & 0.661 & 0.200 & 0.561 & 0.510 & 0.614 \\
+        \bottomrule
+    \end{tabular}
+    % }
+    
+    
+    % \vspace{-1.5em}
+
+\end{ChSevenFloatBody}
+\end{table}

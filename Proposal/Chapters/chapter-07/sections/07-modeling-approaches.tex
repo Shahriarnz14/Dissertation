@@ -1,0 +1,34 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Modeling Approaches}
+% \vspace{-.25em}
+To evaluate performance on the event forecasting and survival prediction tasks, we implement five modeling paradigms: (i) decoder-only large language models (LLMs) with fine-tuned heads, (ii) prompted LLMs without gradient updates (zero- or few-shot), (iii) encoder-only models with task-specific fine-tuned heads, (iv) encoder-masking models with fine-tuning, and (v) encoder-masking models in zero-shot settings. In Appendix~\ref{ch07:apd:encoder-forecasting} and~\ref{ch07:apd:encoder-survival}, we provide technical details of encoder-based forecasting methods and the survival modeling framework respectively.
+
+\ChSevenParagraph{(i) Fine-tuned LLMs.}  
+We apply instruction-tuned decoder-only models from the \textit{Llama} and \textit{DeepSeek} families: \textit{Llama-3.3-70B-Instruct}, \textit{Llama-3.1-8B-Instruct}, and their distilled variants \citep{grattafiori2024llama,liu2024deepseek}. We also include open-source models with documented training corpora (\textit{OLMO-32B-Instruct} \citep{olmo20242}, \textit{RedPajama-INCITE-7B-Instruct} \citep{weber2024redpajama}) to address potential data leakage concerns---notably, RedPajama explicitly excludes PubMed from its training data. Additionally, we evaluate a medically fine-tuned decoder model (\textit{MediPhi-PubMed} \citep{corbeil2025modular}) to assess domain-specific benefits.
+
+Each model is paired with a lightweight multilayer perceptron (MLP) head trained for classification or ranking, depending on the task. 
+The input consists of a text-formatted prefix of events (e.g., a clinical timeline up to time $t$), optionally accompanied by an instruction template. 
+The output layer produces task-specific predictions: binary labels for event occurrence or a permutation over $k$ events for ordering. 
+Training is conducted using cross-entropy loss for classification and pairwise ranking loss for ordering.
+
+\ChSevenParagraph{(ii) Prompted LLMs.}  
+In the zero- or few-shot setting, we use the same LLM architectures as above, but without any fine-tuning. 
+Instead, we supply structured prompts at inference time to guide the model toward task-specific outputs. 
+Each prompt includes: 
+(1) a system instruction establishing the model’s role (e.g., "You are an expert physician."), 
+(2) a user instruction describing the prediction task, and 
+(3) one or more input-output examples in a few-shot format.
+Prompt designs are customized for each task and are detailed in Appendix~\ref{ch07:apd:prompts}. Model outputs are parsed to extract binary labels or ordered lists, and errors in generation or ambiguity are excluded from evaluation.
+
+\ChSevenParagraph{(iii) Fine-tuned Encoder-Only Models.}  
+We also evaluate a range of encoder-based models trained end-to-end on each task. 
+Architectures include general-purpose models (\textit{BERT-base-uncased} \citep{devlin2019bert}, \textit{RoBERTa-base} \citep{liu2019roberta}, \textit{DeBERTa-v3-small} \citep{he2021debertav3}, \textit{ModernBERT-base/large} \citep{warner2024smarter}) and biomedically-pretrained variants (\textit{BioClinical-ModernBERT-base/large} \citep{sounack2025bioclinical}).
+For each model, we append a task-specific MLP head for event occurrence or ordering prediction. 
+The model input is the same flattened prefix of the event sequence used in other settings, tokenized and formatted according to the respective architecture. 
+These models are trained using standard supervised learning objectives and evaluated on the same metrics as other methods: F1 score for event occurrence, and pairwise concordance for temporal ordering. 
+For survival analysis, the final hidden states are passed into a time-to-event prediction head and evaluated using the time-dependent concordance index \citep{ch07:antolini2005time}.
+
+\ChSevenParagraph{(iv, v) Encoder-Masking Models.}
+We adapt masked language modeling (MLM) for our temporal reasoning tasks. For event occurrence, models predict masked tokens (``\texttt{yes}''/``\texttt{no}'') in prompts such as ``Will [event] happen within 24 hours? \texttt{[MASK]}''. For temporal ordering, models predict ``\texttt{before}''/``\texttt{after}'' tokens in prompts comparing event pairs. We evaluate both fine-tuned variants (trained on task-specific objectives) and zero-shot variants (using pretrained MLM capabilities without additional training). This approach leverages the bidirectional context of encoder models while maintaining interpretable predictions through constrained vocabulary.
+
+% \vspace{-.5em}

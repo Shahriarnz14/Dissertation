@@ -1,0 +1,68 @@
+% !TeX root = ../../../main.tex
+\subsection{Validity of Temporal Annotations}
+\label{ch07:apd:tts_validity}
+
+%\subsection{Evaluation Metrics}
+
+We used \texttt{DeepSeek-R1-UD-IQ1} and \texttt{Llama-3.3-70B-Instruct} models to generate clinical textual time series from
+the 2319 sepsis case reports. We refer to this as Textual
+Time Series for Sepsis (\textit{T2S2}). We assessed the quality of \textit{T2S2} using three key metrics: event match rate, temporal concordance (c-index), and log-time discrepancy on two external validation sets: \textit{sepsis-10} (n = 10) and \textit{sepsis-100} (n = 90).(adopted from our prior work \cite{wang2025large}).
+
+\ChSevenStarSubsection{Text Event Match}
+%\textbf{Text Event Match.} 
+To align predicted clinical findings with reference annotations, we use a recursive best-match procedure adapted from \citep{wang2025large}. At each step, we select the reference-prediction pair with the minimal string-based distance; ties are broken by text order (\emph{i.e.}, the order of events in the annotation files). Matched items are removed and the process recurses on the remainder, preventing many-to-one mappings. We evaluated Levenshtein distance, cosine similarity of \textit{BERT} (\textit{bert-base-uncased}) embeddings, and sentence-embedding cosine similarity from \textit{PubMedBERT} (\textit{S-PubMedBert-MS-MARCO}). Prior validation showed \textit{PubMedBERT-based} cosine similarity with a threshold of 0.1 performed best, and we used this metric for evaluation. Pseudocode is provided in Algorithm \ref{ch07:alg:recursive_match}.
+
+%\input{Scientific_data/Supplementary/recursive_best_match_algo}
+
+\ChSevenStarSubsection{Temporal Ordering}
+%\textbf{Temporal Ordering.} 
+% (Optional) Requires \usepackage{dsfont} for \mathds{1}
+Temporal ordering accuracy was quantified with the concordance index (c-index), the probability that a randomly chosen pair of events is correctly ordered. For reference times $\{t^r_i\}$ and predicted times $\{t^p_i\}$,
+\[
+\text{c-index}=\frac{1}{N}\sum_{i<j}\mathds{1}\{(t^r_i-t^r_j)(t^p_i-t^p_j)>0\},
+\]
+where $N$ is the number of comparable pairs (event indices $i,j$ with $t^r_i\neq t^r_j$ and $t^p_i\neq t^p_j$), and $\mathds{1}\{\cdot\}$ is the indicator function. Higher values indicate better agreement with the reference timeline.
+ 
+
+
+
+\input{Appendices/appendix-ch07/algorithms/01}
+
+%\vspace{-5pt}
+
+
+\ChSevenStarSubsection{Time Discrepancy Analysis}
+%\textbf{Time Discrepancy Analysis.} 
+ Temporal prediction accuracy was assessed via discrepancies between predicted and reference timestamps. We computed the log-time discrepancy as $\log(1+\Delta t)$, where $\Delta t$ is the absolute time difference (in hours), and summarized errors with the Area Under the Log-Time Cumulative Distribution Function (AULTC), which reflects how rapidly the error CDF rises—larger AULTC indicates better temporal alignment. 
+
+% One-column AAAI-friendly table (stacked datasets)
+
+\input{Appendices/appendix-ch07/tables/01}
+
+
+
+Formally, we compute the AULTC as the area under $F(x)$ from $x = 0$ to $x = \log(1 + S_{\text{max}})$, normalized by $\log(1 + S_{\text{max}})$:
+
+\begin{equation*}
+\ChSevenUnusedEquationLabel{ch07:eq:aultc}
+\begin{aligned}
+\text{AULTC}
+&= \frac{1}{\log(1+S_{\max})}
+   \sum_{i=1}^{k}\big(x_{(i)}-x_{(i-1)}\big)\frac{i}{k} \\
+&\quad + \frac{\log(1+S_{\max})-x_{(k)}}{\log(1+S_{\max})},
+\end{aligned}
+\end{equation*}
+
+where $x_{(0)} = 0$. With this definition, AULTC = 1 indicates that discrepancies are zero (perfect recovery), resulting in maximum area $\log(1 + S_{\text{max}})$, and AULTC = 0 indicates that all discrepancies exceed $S_{\text{max}}$, yielding zero area. We also stratified results by reference time intervals (hour, day, week, year) to examine accuracy as a function of time from case presentation.
+
+\ChSevenStarSubsection{Annotation Quality Results}
+On the \textit{sepsis-10} subset, \texttt{DeepSeek-R1} achieved an event match rate of 0.79, c-index of 0.876, and AULTC of 0.772, while \texttt{Llama-3.3-70B} obtained 0.75, 0.932, and 0.759, respectively. Thus, \texttt{Llama} provided stronger pairwise ordering (higher c-index) but with fewer matched events and a slightly weaker log-time error profile (lower AULTC) than \texttt{DeepSeek}. On \textit{sepsis-100}, \texttt{DeepSeek-R1} reached 0.91 (event match rate), 0.875 (c-index), and 0.801 (AULTC), whereas \texttt{Llama-3.3-70B} reached 0.78, 0.894, and 0.791. Here, \texttt{DeepSeek} matched substantially more events and achieved better AULTC, while \texttt{Llama} again showed a small c-index advantage. Overall, \texttt{DeepSeek} tends to optimize event identification and log-time alignment, whereas \texttt{Llama} slightly favors pairwise temporal ordering. 
+
+Overall, these metrics together indicate strong alignment of the generated textual time series with expert annotations, sufficient to support forecasting benchmarks. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix B: LLM prompt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

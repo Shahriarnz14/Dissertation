@@ -1,0 +1,46 @@
+% !TeX root = ../../../main.tex
+\subsection{Survival Modeling with Language Model Embeddings}
+\label{ch07:apd:encoder-survival}
+
+
+\input{Appendices/appendix-ch07/tables/02}
+
+
+To evaluate the prognostic value of textual information encoded in large language models (LLMs), we adopt a two-stage framework: (1) extraction of fixed-dimensional sequence embeddings from various pre-trained LLMs, and (2) downstream survival modeling using these embeddings as covariates.
+
+In the first stage, we process each textual time series (which is converted to a textual context of \emph{"(time) clinical event [SEP] ... [SEP] (time) clinical event [SEP]"}) using a suite of LLMs to obtain dense vector representations that summarize the content of the input sequence. 
+For models belonging to the encoder family, including \textit{bert-base-uncased}, \textit{roberta-base}, \textit{deberta-v3-small}, \textit{ModernBERT-base}, and \textit{ModernBERT-large}, we extract the final hidden state corresponding to the \textit{[CLS]} token, which is conventionally used to represent the entire sequence in classification tasks. 
+This token-specific embedding serves as a compact, sequence-level representation.
+
+For decoder-based models that do not utilize a dedicated \texttt{[CLS]} token, including \textit{DeepSeek-R1-Distill-Llama-70B}, \textit{Llama-3.3-70B-Instruct}, \textit{DeepSeek-R1-Distill-Llama-8B}, and \textit{Llama-3.1-8B-Instruct}, we compute the mean-pooled embedding over the last hidden states of all non-padding tokens. 
+This pooling strategy yields a fixed-length vector that captures the overall semantic content of the input while mitigating the impact of padding artifacts.
+
+In the second stage, these embedding vectors are used as input covariates to three survival models, each designed to capture time-to-event dynamics in different ways:
+
+\begin{itemize}
+    \item \textbf{Random Survival Forest (RSF):} 
+    A nonparametric ensemble method based on decision trees, capable of handling complex interactions and high-dimensional inputs. 
+    The model is tuned over the number of trees (\texttt{n\_estimators}), the minimum number of samples required to split an internal node (\texttt{min\_samples\_split}), and the minimum number of samples at a leaf node (\texttt{min\_samples\_leaf}); see Table~\ref{ch07:tab:hyperparams} for search ranges.
+
+    \item \textbf{DeepSurv:} 
+    A neural-network generalization of the Cox proportional hazards model. 
+    The architecture comprises fully connected layers with varying widths (\texttt{num\_nodes}) and dropout rates; see Table~\ref{ch07:tab:hyperparams} for search ranges. The number of training epochs is fixed.
+
+    \item \textbf{DeepHit:} 
+    A multi-task neural network that jointly models the discrete hazard and survival functions. 
+    As with DeepSurv, we perform a grid search over hidden layer sizes and dropout rates while keeping the number of epochs fixed; see Table~\ref{ch07:tab:hyperparams}.
+\end{itemize}
+
+Hyperparameter tuning for each survival model is performed using a validation split from the training set. 
+For each combination of language model and survival model, we conduct grid search over the respective hyperparameter space, selecting the configuration that maximizes the time-dependent concordance index \citep{ch07:antolini2005time} on the validation set. 
+Final evaluation is conducted on held-out test sets (\textit{T2S2\_test}, \textit{sepsis-10}, \textit{sepsis-100}), and results are aggregated across survival metrics to assess model performance.
+
+This framework allows for a systematic evaluation of how different pre-trained LLMs, and their associated embedding strategies, contribute to downstream survival prediction tasks.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix F: Forecasting tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\FloatBarrier
+
+% \section{Forecasting performance on \textit{DeepSeek-R1} and \textit{Llama-3.3-70B} textual time series annotations}
+% \label{apd:full_tables}
+

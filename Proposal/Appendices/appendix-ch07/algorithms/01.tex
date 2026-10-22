@@ -1,0 +1,36 @@
+% !TeX root = ../../../main.tex
+\begin{ChSevenAlgorithm}[tbp]
+\caption{Recursive Best Match}
+\label{ch07:alg:recursive_match}
+\begin{algorithmic}[1]
+\ChSevenAlgRequire Two lists: \texttt{ref} (reference events) and \texttt{pred} (predicted events)
+\ChSevenAlgEnsure List of best-matching event pairs
+\ChSevenAlgFunction{MatchEvents}{\texttt{ref}, \texttt{pred}}
+    \ChSevenAlgIf{\texttt{ref} is empty \textbf{or} \texttt{pred} is empty}
+        \ChSevenAlgState \ChSevenAlgReturn $[]$
+    \ChSevenAlgEndIf
+    \ChSevenAlgState $\text{min\_distance} \gets \infty$
+    \ChSevenAlgState $\text{best\_pair} \gets \text{None}$
+    \ChSevenAlgForAll{$r \in \texttt{ref}$}
+        \ChSevenAlgForAll{$p \in \texttt{pred}$}
+            \ChSevenAlgState $d \gets \text{ComputeDistance}(r, p)$
+            \ChSevenAlgIf{$d < \text{min\_distance}$}
+                \ChSevenAlgState $\text{min\_distance} \gets d$
+                \ChSevenAlgState $\text{best\_pair} \gets (r, p)$
+            \ChSevenAlgElsIf{$d = \text{min\_distance}$}
+                \ChSevenAlgState Get indices of $r$, $p$, and current $\text{best\_pair}$
+                \ChSevenAlgIf{index of $r <$ best $r$ index}
+                    \ChSevenAlgState $\text{best\_pair} \gets (r, p)$
+                \ChSevenAlgElsIf{index of $r = $ best $r$ index \textbf{and} index of $p <$ best $p$ index}
+                    \ChSevenAlgState $\text{best\_pair} \gets (r, p)$
+                \ChSevenAlgEndIf
+            \ChSevenAlgEndIf
+        \ChSevenAlgEndFor
+    \ChSevenAlgEndFor
+    \ChSevenAlgState Remove $\text{best\_pair.r}$ from \texttt{ref}
+    \ChSevenAlgState Remove $\text{best\_pair.p}$ from \texttt{pred}
+    \ChSevenAlgState $\text{result} \gets [\text{best\_pair}] + \text{MatchEvents}(\texttt{ref}, \texttt{pred})$
+    \ChSevenAlgState \ChSevenAlgReturn $\text{result}$
+\ChSevenAlgEndFunction
+\end{algorithmic}
+\end{ChSevenAlgorithm}

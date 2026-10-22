@@ -1,0 +1,39 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{
+Time-dependent concordance index for survival analysis on the \texttt{DeepSeek-R1} \textit{T2S2} annotations evaluated at 0h, 24h, and 168h. Extended \textit{sepsis-10} and \textit{sepsis-100} results are provided in Appendix~\ref{ch07:apd:full_survival}.
+% Survival analyses evaluated using time-dependent concordance index for each model across \texttt{DeepSeek-R1} test set annotations (\textit{T2S2}) at three observation time thresholds (0h, 24h, 168h). The full results for sepsis-10 and sepsis-100 is available in Appendix~\ref{ch07:apd:full_survival}.
+}\ChSevenFloatLabel{ch07:tab:concordance_t2s2_only}
+\ChSevenTableBodyStart
+\begin{ChSevenFloatBody}
+
+\centering
+%\scriptsize
+{
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & 0h & 24h & 168h \\
+\midrule
+bert-base-uncased       & 0.60 & 0.61 & 0.53 \\
+roberta-base            & 0.55 & 0.60 & 0.60 \\
+deberta-v3-small        & 0.56 & 0.57 & 0.57 \\
+ModernBERT-base         & 0.52 & 0.58 & 0.58 \\
+ModernBERT-large        & 0.53 & 0.59 & 0.58 \\
+\textcolor{black}{Bioclinical ModernBERT-base} & 0.57 & 0.53 & 0.53 \\
+\textcolor{black}{Bioclinical ModernBERT-large} & 0.54 & 0.55 & 0.54 \\
+DeepSeek-R1-Llama-70B   & \textbf{0.64} & \textbf{0.63} & 0.59 \\
+Llama-3.3-70B-Instruct  & 0.62 & \textbf{0.63} & 0.58 \\
+DeepSeek-R1-Llama-8B    & 0.60 & 0.58 & 0.58 \\
+Llama-3.1-8B-Instruct   & 0.62 & 0.61 & \textbf{0.61} \\
+\textcolor{black}{OLMO 32B Instruct} & 0.60 & 0.62 & 0.59 \\
+\textcolor{black}{RedPajama-INCITE 7B Instruct} & 0.56 & 0.60 & \textbf{0.61} \\
+\textcolor{black}{MediPhi-PubMed} & 0.54 & 0.62 & 0.55 \\
+\bottomrule
+\end{tabular}
+}
+
+
+% \vspace{-1.5em}
+
+\end{ChSevenFloatBody}
+\end{table}

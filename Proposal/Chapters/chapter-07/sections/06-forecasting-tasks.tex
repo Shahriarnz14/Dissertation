@@ -1,0 +1,27 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Forecasting Tasks}
+Using the timelines extracted from the annotations, we defined two primary forecasting tasks and a survival analysis task as follows:
+
+\ChSevenParagraph{Event Occurrence Prediction.} 
+Given a prefix of the clinical timeline (all events up to a certain time $t$), the model is tasked with predicting whether each of the immediate next $k$ events occurs within a specified time horizon. 
+This setup is repeated across multiple time cut-offs to simulate an “online” forecasting scenario, where the model must output a binary label for each of the next $k$ events:
+does this event occur within $h$ hours after $t$? 
+Time horizons used include 1 hour, 24 hours (1 day), and 168 hours (1 week). 
+The task is framed as a series of binary classification problems, with one binary decision per event. 
+Evaluation is based on precision, recall, and F1 score, averaged across event positions for each time horizon.
+
+\ChSevenParagraph{Temporal Ordering Prediction.} 
+This task assesses the model's ability to reconstruct the correct sequence of future events. 
+At each time cut-off $t$, we extract the next $k$ events from the timeline and remove their timestamps. 
+The model must output a permutation of these events that matches their true chronological order.
+This is framed as a ranking task, evaluated by computing the pairwise concordance between the predicted and true orderings (e.g., proportion of correctly ordered pairs). 
+This tests whether the model can infer temporal progression from unordered event content alone.
+
+\ChSevenParagraph{Survival Analysis for Mortality Time.}  
+We include a classical survival analysis task to model time until death. 
+Many case reports specify whether the patient died and, if so, when (e.g., "the patient died on hospital day 10"), which enables us to define a time-to-event outcome. 
+For this task, we evaluate models at predefined cut-off times--- specifically at 0 hours (admission), 24 hours (1 day), and 168 hours (1 week)--- and use the extracted event history up to each cut-off as input. 
+A survival model is trained to predict the probability of survival over time beyond each cut-off. 
+We evaluate using the time-dependent concordance to measure alignment of the predicted survival times with actual outcomes.
+
+% \vspace{-.5em}

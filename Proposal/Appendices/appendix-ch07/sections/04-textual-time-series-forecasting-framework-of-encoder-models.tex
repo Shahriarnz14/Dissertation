@@ -1,0 +1,120 @@
+% !TeX root = ../../../main.tex
+\subsection{Textual Time Series Forecasting Framework of Encoder Models}
+\label{ch07:apd:encoder-forecasting}
+
+We develop a general framework for predictive modeling over textual time series of the encoder-only models, designed to accommodate the irregular, event-based structure common to clinical case reports. 
+As highlighted Section~\ref{ch07:sec:tts-annotation}, each data instance consists of a sequence of clinical events, where each event is a free-text string describing a clinical finding, intervention, or diagnosis, paired with a timestamp in hours relative to the time of admission. 
+The format resembles a two-column table, where the first column contains textual clinical events and the second column contains integer-valued timestamps.
+
+\ChSevenParagraph{Input Preprocessing and Timeseries Construction.}
+From each case report, we construct multiple training examples for sequence forecasting. 
+For a fixed forecast horizon parameter $K$, we generate overlapping windows of historical events and forecast targets. 
+Specifically, for each case report with $L$ rows, we construct a sequence of up to $L-K$ forecasting examples. 
+Each example is structured as follows:
+
+\begin{itemize}
+    \item A \textbf{history segment} $\mathcal{H}_t = \{(e_i, t_i)\}_{i=1}^{n}$, consisting of clinical events $e_i$ occurring at timestamps $t_i \leq t$.
+    \item A \textbf{forecast target} $\mathcal{F}_t = \{(f_j, \tau_j)\}_{j=1}^{K}$, consisting of the next $K$ events after $t$.
+\end{itemize}
+
+To preserve the temporal coherence of events, we treat all events with the same timestamp as an atomic unit. 
+That is, if multiple events share the same timestamp, they are included together in the history or forecast block, and the next forecasting window is only advanced after the full timestamp block has been consumed.
+
+\ChSevenParagraph{Model Input Representation.}
+Each training example is serialized into a transformer-compatible input by linearizing the historical events and forecast events. 
+Importantly, we preserve both temporal and textual content by encoding each event in the form ``\texttt{t:e}'' where \texttt{t} is the timestamp and \texttt{e} is the event string.
+The input to the language model takes the form:
+
+\begin{equation}
+\texttt{[CLS]} \; t_1\texttt{:}e_1 \; \texttt{[SEP]} \; t_2\texttt{:}e_2 \; \texttt{[SEP]} \; \dots \; \texttt{[SEP]} \; t_n\texttt{:}e_n
+\end{equation}
+
+This is followed by additional target-specific components, as described below.
+
+\ChSevenParagraph{Language Models.}
+To test the generality of our framework, we experiment with a variety of pre-trained encoder-only language models, including:
+\begin{itemize}\raggedright
+    \item \textit{bert-base-uncased} (BERT; Devlin et al., 2018)
+    \item \textit{roberta-base} (Liu et al., 2019)
+    \item \textit{microsoft/deberta-v3-small} (He et al., 2021)
+    \item \textit{answerdotai/ModernBERT-base}, \textit{answerdotai/ModernBERT-large}
+    \item \textit{thomas-sounack/BioClinical-ModernBERT-base}, \textit{thomas-sounack/BioClinical-ModernBERT-large} 
+\end{itemize}
+Each model is used with its corresponding tokenizer. 
+For models with SentencePiece tokenization (e.g., \textit{DeBERTa}), we use the appropriate fast tokenizer such as \textit{DebertaV2Tokenizer} to ensure compatibility. 
+All inputs are truncated from the left (i.e., keeping the most recent tokens) if they exceed the model's context window (typically 512 tokens).
+
+\ChSevenParagraph{Prediction Tasks.}
+We define two primary prediction tasks over $\mathcal{F}_t$, each formulated as a binary classification problem.
+
+\ChSevenParagraph{1. Event Ordering (Concordance) Task.}
+The goal in this task is to predict the correct temporal ordering between future events. 
+For each example, we generate all \emph{comparable pairs} of events in $\mathcal{F}_t$, defined as pairs $(f_i, f_j)$ where $\tau_i \neq \tau_j$. 
+For each pair, we form a binary classification example as follows:
+
+\begin{itemize}
+    \item \textbf{Input:} The serialized history segment followed by:
+    \begin{equation}
+        \texttt{[SEP]} \; \tau_i\texttt{:}f_i \; \texttt{[SEP]} \; \tau_j\texttt{:}f_j \; \texttt{[SEP]}
+    \end{equation}
+    \item \textbf{Label:} $y = 1$ if $\tau_i < \tau_j$, else $y = 0$
+\end{itemize}
+
+The model output is taken from the \texttt{[CLS]} token, passed through a linear classification head, and softmaxed to produce a binary probability. 
+We optimize cross-entropy loss across all pairwise comparisons. 
+At evaluation time, we report the concordance index (c-index), which measures the proportion of correctly predicted pairs among all comparable pairs.
+
+\ChSevenParagraph{2. Time-Window Classification Task.}
+This task evaluates whether each forecast event occurs within a fixed prediction window $H$ hours of the last historical event. 
+For each $f_j \in \mathcal{F}_t$, we generate an input:
+
+\begin{itemize}
+    \item \textbf{Input:} The serialized history segment followed by:
+    \begin{equation}
+        \texttt{[SEP]} \; \tau_j\texttt{:}f_j \; \texttt{[SEP]}
+    \end{equation}
+    \item \textbf{Label:} $y = 1$ if $\tau_j - t_n \leq H$, where $t_n$ is the timestamp of the last historical event.
+\end{itemize}
+
+This is again treated as a binary classification task over the \texttt{[CLS]} embedding, using a linear layer and softmax. 
+We report macro-averaged F1 scores over all prediction examples.
+
+\ChSevenParagraph{Masked Language Modeling Approaches.}
+In addition to the MLP-head approach described above, we implement masked language modeling (MLM) variants that leverage the pretrained masked token prediction capabilities of encoder models. These approaches reformulate our forecasting tasks as cloze-style problems:
+
+\ChSevenParagraph{1. Masked Event Occurrence Prediction.}
+For the time-window classification task, we construct prompts that include a \texttt{[MASK]} token whose prediction indicates whether an event occurs within the specified horizon:
+
+\begin{itemize}
+    \item \textbf{Input:} History formatted as: \texttt{[CLS]} $h_1$ \texttt{[SEP]} $h_2$ \texttt{[SEP]} ... \texttt{[SEP]} Will "$e_j$" happen within $H$ hours? \texttt{[MASK]} \texttt{[SEP]}
+    \item \textbf{Target:} The model predicts either "\texttt{yes}" or "\texttt{no}" at the \texttt{[MASK]} position
+\end{itemize}
+
+We constrain the output vocabulary to only these two tokens and compute cross-entropy loss over their logits. For fine-tuned variants, we train the entire model to optimize this masked prediction task. For zero-shot variants, we directly use the pretrained model's predictions without additional training.
+
+\ChSevenParagraph{2. Masked Temporal Ordering.}
+For the concordance task, we predict relational tokens that indicate temporal ordering:
+
+\begin{itemize}
+    \item \textbf{Input:} History followed by: \texttt{[SEP]} $e_1$ \texttt{[MASK]} $e_2$ \texttt{[SEP]}
+    \item \textbf{Target:} The model predicts "\texttt{before}" if $e_1$ occurs before $e_2$, else "\texttt{after}"
+\end{itemize}
+
+Again, we restrict predictions to these two tokens. This formulation allows the model to leverage its pretrained understanding of temporal relationships encoded during MLM pretraining. 
+
+Note that in our dataset, we randomize the relative ordering of $e_1$ and $e_2$ each time to avoid introducing positional biases that could lead the model to rely on superficial cues rather than genuine temporal reasoning.
+
+\ChSevenParagraph{Implementation Details.}
+For both tasks, we extract the logits at the \texttt{[MASK]} position and apply a linear projection to the target vocabulary size (2 tokens). The key advantage of this approach is that it can leverage pretrained masked language modeling capabilities, potentially requiring less task-specific training. We evaluate both fine-tuned versions (which update all model parameters) and zero-shot versions (which use frozen pretrained weights).
+
+\ChSevenParagraph{Training and Evaluation.}
+Each task is trained separately using AdamW with linear learning rate decay and early stopping based on validation loss. 
+We save the model checkpoint with the best validation performance. 
+During inference, we reload this checkpoint and evaluate on a held-out test set (which is obtained from textual time series of unseen case reports).
+
+For both tasks, we extract softmax probabilities rather than hard labels to allow for threshold calibration and ROC-based analyses. 
+All training is conducted using PyTorch and HuggingFace Transformers.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix E: Survival Modeling with Language Model Embeddings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\FloatBarrier

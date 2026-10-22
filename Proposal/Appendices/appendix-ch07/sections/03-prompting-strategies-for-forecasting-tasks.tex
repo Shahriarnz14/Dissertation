@@ -1,0 +1,107 @@
+% !TeX root = ../../../main.tex
+\subsection{Prompting Strategies for Forecasting Tasks}\label{ch07:apd:prompts}
+
+\ChSevenHeadingOnly
+\subsubsection{Zero-Shot}
+
+\begin{tcolorbox}[breakable,colback=gray!5, colframe=gray!100, title=Prompt, boxrule=2pt]
+
+{You are an expert physician.}
+
+{Reply to the prompt with structured predictions in a k-item, bar-separated row.
+
+For example, if there are k=3 events (A, B, C) and only B occurs in the time window, then:}
+{0 $\mid$ 1 $\mid$  0
+would be the correct response. \\ 
+
+Reply with the answer only. Do NOT provide any other text. Do NOT explain.}
+
+\end{tcolorbox}
+
+\subsubsection{Zero-Shot (with degree of confidence)}
+
+\begin{tcolorbox}[breakable,colback=gray!5, colframe=gray!100, title=Prompt, boxrule=2pt]
+{You are an expert physician.}
+
+{Reply to the prompt with structured predictions in a k-item, bar-separated row.
+Assess whether the event happens in the time window using a scale from 1 to 5, where 5 means it definitely happened and 1 means it did not happen.
+
+For example, if there are k=3 events (A, B, C) and only B occurs in the time window, then:
+$1 | 5 | 1$
+would be the correct response. \\
+
+Reply with the answer only. Do NOT provide any other text. Do NOT explain.}
+\end{tcolorbox}
+
+\subsubsection{Few-Shot}
+\begin{tcolorbox}[breakable,colback=gray!5, colframe=gray!100, title=Prompt, boxrule=2pt]
+
+{You are an expert physician.}
+
+{Reply to the prompt with predictions in a k-item, bar-separated row to answer if the k events happen within a given forecast time window. \\
+
+Example 1. If there are k=3 events (A, B, C) and only B occurs in the requested time window, then:
+0 $\mid$ 1 $\mid$ 0
+would be the correct response.}\\
+
+{Example 2. Suppose the time series is:}
+
+\noindent \texttt{\textcolor{teal}
+{admitted | 0 \\
+history of diabetes | 0 \\
+elevated troponin | 5 \\
+--- \textbf{PREDICTION WINDOW} --- \\
+cardiac catheterization | 6 \\
+admission to icu | 24 \\ 
+transfer to floor | 72\\ 
+discharge | 144\\ 
+office visit | 1440}
+}
+
+{Then, if the prediction is at 5 hours, the time preceding ``--- PREDICTION WINDOW ---'', the events admitted, history of diabetes, and elevated troponin have occurred.  Supposing k=4 and a forecast window of 24 hours, then the task it to determine which of cardiac catheterization, admission to icu, transfer to floor, and discharge happen. So the correct response for the example is:
+1 $\mid$ 1 $\mid$ 0 $\mid$ 0
+because cardiac catherization (6) and admission to icu (24) happen before 5 + 24 = 29.}\\
+
+{Reply with the answer only. Do NOT provide any other text. Do NOT explain.}
+
+\end{tcolorbox}
+
+\subsubsection{Few-Shot Ordinal}
+
+\begin{tcolorbox}[breakable,colback=gray!5, colframe=gray!100, title=Prompt, boxrule=2pt]
+
+{You are an expert physician.}
+
+{Reply to the prompt with predictions in a k-item, bar-separated row to answer if the k events happen within a given forecast time window, using a scale from 1 to 5, where 5 means it definitely happened and 1 means it did not happen.}\\
+
+{Example 1. If there are k=3 events (A, B, C) and only B occurs in the time window, then:
+1 $\mid$ 5 $\mid$ 1
+would be the correct response.}\\
+
+{Example 2. Suppose the time series is:}\\
+\noindent \texttt{\textcolor{teal}{
+admitted | 0\\
+history of diabetes | 0\\
+elevated troponin | 5\\
+--- \textbf{PREDICTION WINDOW} ---\\
+cardiac catheterization | 6\\
+admission to icu | 24\\
+transfer to floor | 72\\
+discharge | 144\\
+office visit | 1440}}
+
+{Then, if the prediction is at 5 hours, the time preceding ``--- PREDICTION WINDOW ---'', the events admitted, history of diabetes, and elevated troponin have occurred.  Supposing k=4 and a forecast window of 24 hours, then the task it to determine which of cardiac catheterization, admission to icu, transfer to floor and discharge happen. So the an excellent response for the example is:
+5 $\mid$ 4 $\mid$ 1 $\mid$ 1
+because cardiac catherization (6) and admission to icu (24) happen before 5 + 24 = 29.}\\
+
+{Reply with the answer only. Do NOT provide any other text. Do NOT explain.}
+
+\end{tcolorbox}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix D: Textual Time Series Forecasting Framework of Encoder Models
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\FloatBarrier

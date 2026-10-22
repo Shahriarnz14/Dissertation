@@ -1,0 +1,58 @@
+% !TeX root = ../../../main.tex
+\subsection{Sensitivity Analysis of Time-Ordered versus Text-Ordered Training}\label{ch07:apd:sensitivity_analyses}
+
+
+% \section{Sensitivity analysis}
+% \vspace{-0.2em}
+% \paragraph{Time-Ordered versus Text-Ordered Training.}
+
+{\raggedright
+Table \ref{ch07:tab:dsr1q_l33_comparison} shows time-ordering generally improves concordance, particularly for \texttt{DeepSeek-R1} annotations, while F1 scores show mixed results. Text-ordering sometimes yields better external dataset performance with \texttt{Llama-3.3-70B}, suggesting that preserving the narrative sequence can support accurate classification even when it does not follow temporal order.  These results highlight a trade-off between temporal alignment and narrative coherence for different tasks.
+
+
+\par}
+\input{Appendices/appendix-ch07/tables/06}
+
+
+
+%\input{MLHC_2025/tab_textord_vs_timeord}
+
+% Text-ordered train vs time-ordered train (Note: evaluation always on timeord)
+
+% Best model (from Table 1 and Table 2): 
+%     - ModernBERT base MLP head (for F1)
+%     - ModernBRERT base masking fine-tuned (for concordance)
+    
+% ### Text-ordered train (DSR1Q annotations | L33 annotations)
+% T2S2 test: F1 (1hr) = 0.290 | 0.311
+% T2S2 test: F1 (1day) = 0.569 | 0.648
+% T2S2 test: F1 (7days) = 0.876 | 0.898
+% sepsis10: F1 (1day) = 0.361 | 0.423
+% sepsis100: F1 (1day) = 0.615 | 0.662
+
+% (DSR1Q annotations | L33 annotations)
+% T2S2 test : c-index = 0.659 | 0.586
+% sepsis10 : c-index = 0.598 | 0.526
+% sepsis100 : c-index = 0.609 | 0.541
+
+% ### Time-ordered train (DSR1Q annotations | L33 annotations) - values from Table 1 and Table 2 in overleaf
+% T2S2 test: F1 (1hr) = 0.306 | 0.257
+% T2S2 test: F1 (1day) =  0.576 | 0.645
+% T2S2 test: F1 (7days) = 0.877 | 0.903
+% sepsis10: F1 (1day) = 0.428 | 0.382
+% sepsis100: F1 (1day) = 0.607 | 0.616
+
+% (DSR1Q annotations | L33 annotations)
+% T2S2 test : c-index = 0.672 | 0.632
+% sepsis10 : c-index = 0.576 | 0.595
+% sepsis100 : c-index = 0.613 | 0.612
+
+% Key takeaways:
+%     - Time-ordered training generally improves concordance. 
+%     - F1 scores are not much affected due to time-ordered 
+%       training. Sometimes, text-ordered has better F1. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\FloatBarrier

@@ -1,0 +1,23 @@
+% !TeX root = ../../../main.tex
+\subsection{Additional Insights into Forecasting Results}
+\label{ch07:apd:additional_insights}
+
+In this section, we provide some additional insights into the forecasting results. Specifically, we summarize two observations that clarify model behavior and apparent anomalies in the results.
+
+\subsubsection{Why decoders fare better on survival but not short-horizon forecasting}
+ Our findings align with adjacent literature on representation usage over different time horizons. \emph{Encoder} models, typically pooled via a \texttt{[CLS]} token, excel on short-horizon tasks because bidirectional attention aggregates local context effectively \citep{devlin2019bert,bai2018empirical}. In contrast, \emph{decoder} models trained autoregressively pass information forward through final token states, which is advantageous for long-range aggregation required by survival outcomes \citep{dai2019style,zhou2021informer}. In our setting, forecasting aligns with near-term prediction, whereas survival analysis emphasizes longer-range temporal dependencies; this mismatch naturally yields the observed performance split. While not a one-to-one architectural proof, the pattern is consistent with prior evidence on horizon-specific strengths \citep{wang2025large}.
+
+\subsubsection{Interpreting very low $F_{1}$ scores and external validation drops}
+ \textbf{Why some $F_{1}$ scores are near zero.} The very low F1 scores observed for certain models are not random failures but arise from two interacting factors. First, F1 is highly sensitive to threshold choice when the positive class is rare; small shifts in threshold calibration can yield 0.000 even when the model produces meaningful probabilities. Second, **architectural limitations** amplify this effect: **autoregressive decoders** tend to reproduce narrative rather than temporal order, and **instruction-tuned models** often default to generic or high-probability completions rather than selecting the correct event token—a behavior documented in prior analyses of instruction-following LLMs (\cite{liu2024lost,wei2021finetuned}).
+
+These failures do not undermine model comparisons; rather, they highlight systematic architectural differences. **Encoder-based models**, trained with a **bidirectional masking objective** (\cite{devlin2019bert}), are better aligned with time-structured prediction tasks, as their contextual representation naturally integrates information from both past and future tokens. In contrast, **autoregressive decoders**, optimized for left-to-right generation (\cite{brown2020language}), are disadvantaged for temporal reasoning without explicit sequence restructuring or supervision. The contrast underscores that forecasting from clinical narratives is fundamentally different from standard text generation.
+ 
+ \textbf{Why external validation is lower.} Performance drops on external subsets (e.g., \textit{sepsis-10} vs.\ \textit{sepsis-100}) reflect shifts in writing style and case mix, not random overfitting. Crucially, the \emph{relative ranking} of models remains stable across datasets, so comparative conclusions hold even when absolute scores vary.
+
+% \subsection{Practical implications}
+%  (i) Treat thresholding as part of the model: calibrate on a validation set (e.g., maximize $F_{1}$ or expected utility) and report threshold sensitivity. (ii) For decoders, impose explicit temporal supervision (sequence restructuring, time-aware heads) to mitigate left-to-right biases. (iii) Maintain cross-dataset evaluation to verify that relative rankings persist under domain/style shifts.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%Appendix I: 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
