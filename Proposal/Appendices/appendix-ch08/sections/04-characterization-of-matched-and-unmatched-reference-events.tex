@@ -1,0 +1,17 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Characterization of matched and unmatched reference events}\label{ch08:supp:matched-unmatched}
+
+\noindent
+\textbf{Methods.} We analyzed all 8,066 manually annotated reference events in the DeepSeek V3.2 multimodal match file. A reference event was classified as matched when a predicted counterpart was present and the semantic error rate was at most 0.1; events with a missing counterpart or error rate greater than 0.1 were classified as unmatched. Description length was counted using alphanumeric tokens. Temporal position was summarized among events with an available reference time: within 24 hours denotes an absolute time no greater than 24 hours from the case reference, and at least 7 days after denotes a reference time of at least +168 hours. An event was considered numerical when its reference-event text contained at least one digit. We also reviewed matched and unmatched event descriptions qualitatively. Temporal metrics were not calculated for unmatched events because they have no aligned predicted timestamp.
+
+
+\noindent
+\textbf{Results.} Of the 8,066 reference events, 3,931 were matched and 4,135 were unmatched. Among unmatched events, 3,319 had no assigned predicted counterpart and 816 had a candidate counterpart with semantic error greater than 0.1. Both subsets had a median description length of three tokens. Matched events covered diverse clinical categories rather than only admission, discharge, or procedure anchors. Unmatched events were more often located at least seven days after the case reference time and more often contained a numerical value. Qualitative review identified recurring unmatched laboratory and imaging details, medication doses and discharge prescriptions, pertinent negatives, follow-up and functional or social details, and context-dependent fragments that were difficult to recover as standalone events.
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/02}
+
+\par\medskip
+

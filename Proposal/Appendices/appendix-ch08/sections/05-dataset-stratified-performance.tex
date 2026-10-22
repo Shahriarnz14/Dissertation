@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Dataset-stratified performance}\label{ch08:supp:dataset-stratified}
+\noindent
+\textbf{Methods.} We repeated the primary evaluation separately for the 15 i2b2-derived cases and 25 MIMIC-IV cases using event-matching threshold 0.1. Event match rate, concordance, and AULTC were recomputed within each source and reported separately for unimodal and multimodal reconstruction. Source-specific 95\% confidence intervals were obtained by resampling cases with replacement within each source using the same 200-resample case-level bootstrap procedure as the marginal confidence intervals in the main analysis. These tables provide descriptive source-specific estimates; they are not paired tests of the multimodal-minus-unimodal difference.
+
+\noindent
+\textbf{Results.} Multimodal calibration changed event match rate little within either source. Performance was generally higher on the i2b2-derived subset: five of six models had higher event match rates and all six had higher AULTC than on MIMIC-IV. Temporal shifts were heterogeneous. On i2b2, multimodal calibration produced mostly small AULTC gains and modest concordance changes. On MIMIC-IV, multimodal temporal point estimates were generally unchanged or lower in the supplied source-stratified outputs, with the largest decreases for DeepSeek V3.2 and Qwen3.5-397B-A17B. The broad overlap of the marginal intervals warrants cautious interpretation.
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/03}
+\par\medskip
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/04}
+\par\medskip
+

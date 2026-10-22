@@ -1,0 +1,19 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Paired matched-mention sensitivity analysis}\label{ch08:supp:matched-mention}
+\noindent
+\textbf{Methods.} This secondary analysis paired the same manually annotated reference mention across unimodal and multimodal reconstruction. Event recovery was evaluated over all 8,066 reference mentions with exact two-sided McNemar tests. For temporal accuracy, we retained only reference events matched under both conditions, compared paired absolute timestamp errors with two-sided Wilcoxon signed-rank tests, and recomputed AULTC on the same shared matched subset. Wilcoxon calculations used tie correction and dropped zero differences. No multiplicity adjustment was applied. Because mentions are clustered within 40 discharge summaries and event-rich cases contribute more observations, the reported p values are nominal and may be anti-conservative. These analyses are exploratory and secondary to the paired case-level bootstrap in \hyperref[ch08:tab:supp-paired-bootstrap]{Supplementary Table~\ref*{ch08:tab:supp-paired-bootstrap}}.
+
+\noindent
+\textbf{Results.} Event-recovery differences were small: DeepSeek R1 and DeepSeek V3.2 were unchanged, GPT-OSS-120B changed negligibly, GLM5 and Qwen3.5-397B-A17B increased slightly, and KimiK2-Instruct decreased slightly. On the shared matched subset, AULTC point estimates favored multimodal calibration for DeepSeek V3.2, GPT-OSS-120B, GLM5, and Qwen3.5-397B-A17B; DeepSeek R1 changed negligibly and KimiK2-Instruct decreased. The nominal mention-level p values should not be interpreted as confirmatory evidence because they do not model within-case dependence.
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/06}
+\par\medskip
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/07}
+\par\medskip
+

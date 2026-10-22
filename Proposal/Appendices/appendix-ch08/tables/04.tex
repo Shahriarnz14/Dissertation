@@ -1,0 +1,32 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Performance on the MIMIC-IV subset (n = 25) at event-matching threshold 0.1 for unimodal and multimodal timeline reconstruction.}\ChEightFloatLabel{ch08:tab:supp-mimiciv}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+
+\centering
+\scriptsize
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Event match rate}} & \multicolumn{2}{c}{\textbf{Concordance}} & \multicolumn{2}{c}{\textbf{AULTC}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+\textbf{Model} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Unimodal} & \textbf{Multimodal} \\
+\midrule
+DeepSeek R1 & 0.36 [0.28, 0.45] & 0.36 [0.28, 0.45] & 0.70 [0.68, 0.80] & 0.70 [0.66, 0.80] & \textbf{0.79 [0.75, 0.82]} & \textbf{0.78 [0.75, 0.82]} \\
+KimiK2-Instruct & 0.22 [0.19, 0.26] & 0.21 [0.19, 0.25] & 0.71 [0.59, 0.82] & 0.67 [0.56, 0.82] & 0.64 [0.56, 0.71] & 0.63 [0.56, 0.70] \\
+GPT-OSS-120B & 0.27 [0.24, 0.34] & 0.27 [0.23, 0.34] & 0.70 [0.64, 0.75] & 0.70 [0.65, 0.77] & 0.76 [0.72, 0.80] & 0.74 [0.69, 0.79] \\
+DeepSeek V3.2 & \textbf{0.46 [0.38, 0.55]} & \textbf{0.46 [0.38, 0.55]} & 0.77 [0.70, 0.83] & 0.71 [0.62, 0.77] & 0.76 [0.71, 0.81] & 0.67 [0.58, 0.76] \\
+GLM5 & 0.34 [0.26, 0.41] & 0.33 [0.26, 0.40] & \textbf{0.82 [0.77, 0.85]} & \textbf{0.80 [0.73, 0.83]} & 0.77 [0.71, 0.83] & 0.76 [0.71, 0.82] \\
+Qwen3.5-397B-A17B & 0.35 [0.24, 0.48] & 0.32 [0.22, 0.45] & 0.81 [0.78, 0.83] & 0.78 [0.67, 0.81] & 0.75 [0.72, 0.77] & 0.70 [0.65, 0.75] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Values are point estimates with source-specific case-level bootstrap 95\% confidence intervals in brackets. Bold indicates the largest unrounded point estimate within each metric-modality column. All displayed values are rounded to two decimals.
+\end{minipage}
+
+\end{ChEightFloatBody}
+\end{table}

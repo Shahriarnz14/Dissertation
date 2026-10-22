@@ -1,0 +1,15 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Sensitivity analysis by model-generated temporal certainty}\label{ch08:supp:temporal-certainty}
+\noindent
+\textbf{Methods.} We performed a post hoc DeepSeek V3.2 analysis using the event-level is\_certain flag derived from the model-generated confidence scores returned with relative-time estimates in the temporal-relation and event-attachment stages. We set is\_certain = 1 for confidence scores from 6 through 9 and is\_certain = 0 otherwise. Within each predicted-event stratum, we calculated the proportion of predicted events that matched a reference event and calculated AULTC over the matched events in that stratum. The matched proportion therefore has a different denominator from the reference-event match rate in the main manuscript. We did not report stratum-specific concordance because filtering to separate certainty strata produces different event-pair populations and does not support a direct comparison.
+
+\noindent
+\textbf{Results.} The within-stratum matched proportion was 0.67 for model-labeled uncertain events and 0.64 for model-labeled certain events. Among matched events, AULTC was 0.76 for the uncertain stratum and 0.84 for the certain stratum. Thus, the certainty flag was associated with better absolute timestamp accuracy conditional on successful matching, but not with a higher probability of matching. The flag is an uncalibrated operational signal and should not be treated as a complete measure of temporal uncertainty.
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/05}
+
+\par\medskip
+

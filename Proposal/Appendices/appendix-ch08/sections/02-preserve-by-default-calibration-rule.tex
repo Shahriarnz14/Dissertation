@@ -1,0 +1,13 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Preserve-by-default calibration rule}\label{ch08:supp:calibration-rule}
+\noindent The same retrieval and calibration logic is used for anchor calibration and final full-timeline refinement. For each narrative-derived event, the calibration model receives the event, its initial text-derived time, the source narrative, and the top-k retrieved structured rows. Each row is provided as name $\mid$ value $\mid$ time $\mid$ similarity. Calibration proceeds as follows:
+\begin{enumerate}
+    \item Exclude retrieved rows that are not clinically relevant to the event.
+    \item If no clinically relevant row remains, retain the initial text-derived time.
+    \item If a relevant merged row contains multiple timestamps, use the narrative context to select the most plausible occurrence.
+    \item If relevant rows conflict, select the most clinically relevant and confident candidate.
+    \item Update the event time only when the selected evidence justifies a change; otherwise, preserve the initial time.
+\end{enumerate}
+Cosine similarity determines which rows are retrieved and their order, but it is not an automatic update criterion. The procedure returns one final timestamp per event and does not force every narrative event to align to a structured row.
+

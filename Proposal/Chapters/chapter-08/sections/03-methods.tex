@@ -1,0 +1,106 @@
+% !TeX root = ../../../main.tex
+\subsection{Methods}
+\label{ch08:sec:methods}
+\ChEightHeadingOnly
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+\subsubsection{Clinical timeline task and dataset}
+\label{ch08:sec:data}
+
+
+Given a clinical narrative $T$ and associated structured EHR rows $R$, the goal is to reconstruct a textual time series $\hat{S}=\{(e_i,\hat{t}_i)\}_{i=1}^{N}$, where each $e_i$ is a standalone clinical event and each $\hat{t}_i \in \mathbb{R}$ is its predicted timestamp in hours relative to a case-specific reference time. When hospital admission is explicitly described, we use admission as $t=0$; otherwise, we use the earliest documented clinical encounter or presentation in the narrative. Events before the reference time receive negative timestamps, and events after it receive positive timestamps.
+
+A clinical event is any patient-specific health-related mention that is semantically interpretable on its own and temporally locatable, including symptoms and signs, diagnoses, tests, procedures, treatments, medication administrations, major clinical states, outcomes, pertinent negatives, and termination or discontinuation events. Our event representation follows prior textual time-series work \cite{ch08:wang2025large,noroozizadeh2026reconstructing,ch08:noroozizadeh2025pmoa,ch08:kumar2026temporally}, but differs from short-span, concept-centric schemes such as i2b2 \cite{ch08:uzuner20112010,sun2013evaluating}. We represent events as standalone clinical findings: spans may include context needed for clinical specificity, conjunctive mentions are split when doing so improves clarity, and modifiers such as negation, uncertainty, severity, laterality, and intent are preserved when they affect event interpretation or temporal placement.
+
+Our evaluation uses \textbf{40 discharge summaries} with manual gold-standard timelines and aligned structured EHR rows: \textbf{15 i2b2-derived discharge summaries} and \textbf{25 MIMIC-IV discharge summaries}. All cases have structured EHR rows aligned to the same hospital encounter. MIMIC-style critical-care records are well suited for this setting because they pair narrative clinical documentation with timestamped structured data, including laboratory values, medication administrations, vital signs, procedures, diagnoses, and administrative events \cite{ch08:johnson2016mimic,ch08:johnson2023mimic}. For each case, the narrative note provides the source text for event reconstruction, while the structured record provides external temporal evidence. We convert structured-row timestamps to hours relative to the same case-specific reference time used for the narrative timeline. Each structured row $r_m \in R$ is represented as $r_m=(\nu_m,x_m,s_m)$, where $\nu_m$ is the row name or clinical feature, $x_m$ is the observed value when available, and $s_m$ is the timestamp in hours relative to the reference time.
+
+\ChEightRebuttal{The 15 i2b2-derived cases were randomly sampled from eligible cases; the 25 MIMIC-IV cases were sampled at the patient level, using the first discharge summary for five randomly sampled patients and one randomly selected summary for 20 others, without enrichment for diagnosis, temporal richness, or encounter complexity. Three medical experts annotated disjoint subsets; every case was annotated once from the note and aligned structured record, so no adjudication or inter-annotator agreement was available (\hyperref[ch08:supp:eval-cohort]{Supplementary Material \S\ref*{ch08:supp:eval-cohort}}).}
+
+We treat structured rows as temporal evidence rather than gold-standard timeline events. Structured EHR tables contain dense repeated measurements, medication records, and machine-generated entries, many of which are not standalone narrative events. Conversely, clinically meaningful narrative events, such as symptoms, functional status, patient-reported histories, and clinical reasoning, may not have direct structured counterparts. Our method therefore uses structured rows to calibrate text-derived event times when clinically relevant, rather than forcing all structured rows into the reconstructed timeline.
+
+% Each discharge summary is evaluated against a manual gold-standard timeline consisting of clinical events paired with timestamps in hours relative to the case-specific reference time. These annotations provide the reference event content and timing used to assess event recovery, temporal ordering, and absolute timestamp accuracy.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Scaffolded retrieval-augmented multimodal timeline reconstruction}
+\label{ch08:sec:pipeline}
+
+
+Our workflow is designed around three principles. First, it anchors before expanding: the model identifies temporally informative anchor events before reconstructing the full event set. Second, it retrieves candidate structured evidence rather than forcing every narrative event to align to a structured row. Third, \ChEightRebuttal{it uses preserve-by-default calibration}: event times are updated only when retrieved structured evidence is clinically relevant and temporally plausible. The workflow proceeds in seven clinically interpretable steps (Figure \ref{ch08:fig:pipeline}).\footnote{Step-specific prompts and the full reproducibility pipeline are available in our GitHub repository:\\\url{https://github.com/SayantanKumar/multimodal_textual_tabular_alignment}}
+
+\begin{enumerate}
+    \item \textbf{Step 1: Extract anchor events.} The model first identifies temporally informative anchor events, also referred to as central events, that define the encounter backbone or serve as temporal referents for other events. Examples include admission, symptom onset, treatment initiation, clinical deterioration, procedures, transfers, and discharge. 
+
+    \item \textbf{Step 2: Estimate timing among anchors.} The model estimates pairwise time differences (in hours) between selected anchor events.
+
+    \item \textbf{Step 3: Build an initial anchor timeline.} The pairwise relations between anchor events are resolved into a provisional timeline backbone in hours relative to the case reference time. When estimates conflict, the model uses higher-confidence relations and the source narrative to construct the initial scaffold.
+
+    \item \textbf{Step 4: Calibrate anchors using structured evidence.} For each anchor event, retrieved structured EHR rows are provided to the calibration model together with the narrative and provisional scaffold. The model updates an anchor time only when the structured row clinically supports the change; otherwise, the text-derived estimate is retained.
+
+    \item \textbf{Step 5: Extract non-anchor supporting events relative to anchors.} After anchor calibration, the model extracts remaining non-anchor events and attaches each event to a referent anchor with a relative time offset and confidence score. These events include symptoms, exam findings, pertinent negatives, severity descriptors, functional status, medication details, and contextual clinical information.
+    
+    \item \textbf{Step 6: Assemble the full timeline.} The calibrated anchor times and relative supporting-event offsets are combined into an initial complete timeline, converting all events into absolute times in hours relative to the case reference time.
+    
+    \item \textbf{Step 7: Refine the complete timeline using structured evidence.} Structured rows are retrieved again for all reconstructed events, not only anchors. The model performs a final conservative calibration pass, updating timestamps when retrieved rows provide clinically consistent temporal evidence and preserving text-derived times otherwise. The output is a temporally grounded textual time series containing clinically meaningful narrative events with calibrated timestamps when structured evidence is relevant.
+\end{enumerate}
+
+
+\ChEightParagraph{Retrieval and calibration module.}
+The same retrieval module is used in Step 4 and Step 7. Structured rows are represented by concatenating the row event name and value; timestamps are excluded from the embedding text and passed separately to the calibration model. Rows with the same event name and value are merged, with timestamps represented in hours relative to the case reference time. We embed event strings and structured-row representations using MedTE (\texttt{mohammadkhodadad/MedTE-cl15-step-8000}), mean-pool and L2-normalize the embeddings, and rank rows by cosine similarity. For each event, we retrieve the top $k=5$ structured rows with no fixed similarity threshold. The calibration model receives each row as \texttt{name | value | time | similarity}. \ChEightRebuttal{Calibration follows a preserve-by-default rule: cosine similarity ranks candidates, irrelevant rows are disregarded, the initial time is retained when no relevant evidence justifies a change, and narrative context resolves repeated timestamps or conflicting rows. The complete decision rule appears in \hyperref[ch08:supp:calibration-rule]{Supplementary Material \S\ref*{ch08:supp:calibration-rule}}.}
+We also evaluated $k=3$, $k=5$, and $k=10$, finding negligible performance differences but increased runtime for larger $k$.
+
+This design treats retrieval as evidence selection rather than forced temporal alignment. Methods such as dynamic time warping assume that two sequences share an approximately comparable event universe and can be aligned through a monotone path. Clinical narratives and structured EHR rows often violate this assumption: many narrative events have no structured counterpart, while structured tables contain dense repeated measurements, medication records, and charted observations that are not standalone narrative events. Our workflow therefore allows structured evidence to calibrate event times when appropriate without requiring every narrative event to have a tabular match.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Experimental setup}
+\label{ch08:sec:experimental_setup}
+
+
+\textbf{Baselines and ablations.} We compare the default scaffolded multimodal workflow against text-only, single-step, stage-specific, and forced-alignment baselines. \textbf{Text-only reconstruction} uses the same scaffolded workflow but removes both structured-EHR calibration steps, testing whether retrieved structured evidence improves temporal localization beyond narrative-only reconstruction. \textbf{Single-step multimodal reconstruction} directly generates a complete timeline from the narrative and retrieved structured rows without constructing an anchor-event scaffold, testing whether the staged anchor/non-anchor decomposition is useful beyond simply adding retrieved evidence to the prompt. To isolate where structured evidence contributes, we compare two stage-specific ablations: \textbf{anchor-only calibration}, which calibrates the anchor scaffold but omits final full-timeline calibration, and \textbf{final-only calibration}, which reconstructs the full timeline from text before applying structured-EHR calibration. The default workflow applies both anchor-stage and final-stage calibration. Finally, \textbf{dynamic time warping (DTW)} serves as a forced temporal-alignment baseline that attempts to align text-derived events with structured rows through sequence alignment rather than retrieval-based evidence selection followed by clinical calibration.
+
+
+\noindent\textbf{Evaluation metrics.} We evaluate predicted timelines along two complementary dimensions: \emph{event recovery} and \emph{temporal localization}, adapted from prior textual time-series work \cite{ch08:wang2025large,noroozizadeh2026reconstructing}. Because predicted and reference timelines may differ in length and event wording, we first align predicted events to manually annotated reference events using a recursive best-match procedure. This produces a one-to-one alignment between predicted and reference events while accommodating unequal timeline lengths. \textbf{Event match rate} is the proportion of reference clinical events successfully aligned to a predicted event. Temporal metrics are computed on the matched subset. \textbf{Temporal concordance} (c-index) measures whether the predicted timeline preserves the relative ordering of events in the manual reference. \textbf{Area Under the Log-Time Cumulative Distribution Function (AULTC)} summarizes absolute timestamp discrepancy on a log-transformed time scale, with higher values indicating smaller timestamp errors across clinically meaningful ranges. Because concordance and AULTC are computed only over matched events, they should be interpreted jointly with event match rate. 
+We estimate uncertainty using case-level bootstrap confidence intervals. Each bootstrap sample resamples discharge summaries with replacement and recomputes event matching and timeline metrics, preserving within-case dependence among events. We report 95\% confidence intervals for the reconstruction metrics using 200 bootstrap resamples.
+\ChEightRebuttal{For direct multimodal--unimodal comparisons, we additionally used 10,000 paired case-level resamples and report
+confidence intervals for the mean within-case differences in \hyperref[ch08:supp:paired-bootstrap]{Supplementary Material \S\ref*{ch08:supp:paired-bootstrap}}, \hyperref[ch08:tab:supp-paired-bootstrap]{Table~\ref*{ch08:tab:supp-paired-bootstrap}}.} 
+\ChEightRebuttal{All implementation and reproducibility details are presented in \hyperref[ch08:supp:implementation]{Supplementary Material \S\ref*{ch08:supp:implementation}}.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 
+% \noindent\textbf{Implementation and reproducibility.} All evaluated models are open-weight models run locally through \texttt{llama.cpp}; no proprietary APIs are used. The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B. The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline. On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware. Models were run on NVIDIA A100 GPUs, with GPU count varying by model size. 
+% \ChEightRebuttal{The stages differ in complexity: constrained extraction and assembly may
+% be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost–quality tradeoff remains to be evaluated.}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \input{tables/main_table}
+
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[width=0.485\textwidth]{plots/aultc_vs_emr_n40_v2.pdf}
+%     \hfill
+%     \includegraphics[width=0.485\textwidth]{plots/cidx_vs_emr_n40_v2.pdf}
+
+%     \vspace{-4pt}
+%     \begin{minipage}[t]{0.485\textwidth}
+%         \centering
+%         %\footnotesize \textbf{A.} 
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.485\textwidth}
+%         \centering
+%         %\footnotesize \textbf{B.} Concordance
+%     \end{minipage}
+
+%     \vspace{-5mm}
+%     \caption{Temporal performance versus event match rate across event-matching thresholds for unimodal and multimodal variants of each model on the 40-summary evaluation set. (\textbf{Left}) AULTC versus event match rate. (\textbf{Right}) Temporal concordance versus event match rate.}
+%     \label{fig:threshold_sweeps_main}
+%     \vspace{-7.5mm}
+% \end{figure}
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

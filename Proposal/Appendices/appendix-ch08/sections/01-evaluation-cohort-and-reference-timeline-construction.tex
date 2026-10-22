@@ -1,0 +1,8 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Evaluation cohort and reference timeline construction}\label{ch08:supp:eval-cohort}
+\noindent
+The evaluation set contains 15 i2b2-derived discharge summaries and 25 MIMIC-IV discharge summaries. The i2b2-derived summaries were randomly sampled from eligible cases. The MIMIC-IV summaries were selected in two patient-level batches: for five randomly sampled patients, the first discharge summary was used; for 20 additional randomly sampled patients, one discharge summary was randomly selected. Each MIMIC-IV case therefore represents a distinct patient. Sampling was not conditioned on diagnosis, temporal richness, encounter complexity, or model performance. Eligibility required a discharge summary and structured EHR rows aligned to the same hospitalization; no additional clinical enrichment criteria were applied.
+
+Three clinically trained annotators created the reference timelines across the 40 cases. Each case was assigned to one annotator, who reviewed the discharge summary and structured EHR record aligned to the same hospitalization, identified standalone clinical events using the event definition in the main manuscript, and assigned each event a time in hours relative to admission or the case-specific reference time. Event identity and timestamp were annotated jointly. Each case was annotated once; therefore, there was no overlapping independent annotation set, formal adjudication, or inter-annotator agreement calculation.
+

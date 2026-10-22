@@ -1,0 +1,16 @@
+% !TeX root = ../main.tex
+% Exact selected PSB false-color scientific branch; no venue layout overrides.
+\newcommand{\ChEightBegin}{\tcbset{before upper=\singlespacing\raggedright}}
+\newcommand{\ChEightRebuttal}[1]{#1}
+\newenvironment{ChEightAbstract}{\par\noindent\textbf{Abstract}\par}{\par}
+\newcommand{\ChEightKeywords}[1]{\par\noindent\textbf{Keywords:} #1\par}
+\newcommand{\ChEightParagraph}[1]{\par\medskip\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChEightAuthorBlock}[2]{\par{\small #1\par #2\par}}
+\newcommand{\ChEightContributionNote}[1]{\par{\small #1\par}}
+\makeatletter
+\newcommand{\ChEightStarSection}[1]{\par\bigskip\phantomsection\def\@currentlabelname{#1}\noindent{\large\bfseries #1}\par\nobreak}
+\newcommand{\ChEightHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\newcommand{\ChEightFloatLabel}[1]{\ifboolexpr{ test {\ifstrequal{#1}{ch08:tab:supp-mcnemar}} or test {\ifstrequal{#1}{ch08:tab:supp-wilcoxon}} }{\global\let\cmu@found@label\@true\cmu@internal@label{#1}}{\cmu@label{#1}}}
+\newcommand{\ChEightTableBodyStart}{\cmu@test@custom@caption{\@false}{Chapter 8 table caption must precede body}}
+\newenvironment{ChEightFloatBody}{\centering\let\tabular\cmu@internal@begintabular\expandafter\let\csname tabular*\endcsname\cmu@internal@begintabularstar\begin{adjustbox}{max totalsize={\linewidth}{.82\textheight}}\begin{minipage}{\linewidth}\centering}{\par\end{minipage}\end{adjustbox}\par}
+\makeatother

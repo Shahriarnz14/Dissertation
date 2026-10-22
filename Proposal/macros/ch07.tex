@@ -1,0 +1,28 @@
+% !TeX root = ../main.tex
+% Selected camera-ready semantics; no AAAI document/font/layout overrides.
+\newcommand{\ChSevenBegin}{\renewcommand{\ttdefault}{pcr}\tcbset{before upper=\singlespacing\raggedright}}
+\newenvironment{ChSevenAbstract}{\par\noindent\textbf{Abstract}\par}{\par}
+\newcommand{\ChSevenParagraph}[1]{\par\medskip\noindent\textbf{#1}\par\nobreak}
+\newcounter{ChSevenContribFootnote}
+\makeatletter
+\newcommand{\ChSevenEqualContrib}{\ifnum\value{ChSevenContribFootnote}=0\footnote{\hypertarget{ch07:equal-contribution-note}{}These authors contributed equally.}\setcounter{ChSevenContribFootnote}{\value{footnote}}\else\hyperlink{ch07:equal-contribution-note}{\textsuperscript{\theChSevenContribFootnote}}\fi}
+\makeatother
+\newcommand{\ChSevenAuthorBlock}[2]{\par{\small #1\par #2\par}}
+\makeatletter
+\newcommand{\ChSevenStarSection}[1]{\par\bigskip\phantomsection\def\@currentlabelname{#1}\noindent{\large\bfseries #1}\par\nobreak}
+\newcommand{\ChSevenStarSubsection}[1]{\par\medskip\phantomsection\def\@currentlabelname{#1}\noindent\textbf{#1}\par\nobreak}
+\newcommand{\ChSevenHeadingOnly}{\addtocounter{cmusectionline}{1}}
+\newcommand{\ChSevenFloatLabel}[1]{\ifboolexpr{ test {\ifstrequal{#1}{ch07:tab:sepsis_onecol}} or test {\ifstrequal{#1}{ch07:tab:postcutoff_f1}} }{\global\let\cmu@found@label\@true\cmu@internal@label{#1}}{\cmu@label{#1}}}
+\newcommand{\ChSevenUnusedEquationLabel}[1]{\cmu@internal@label{#1}}
+\newcommand{\ChSevenTableBodyStart}{\cmu@test@custom@caption{\@false}{Chapter 7 table caption must precede its body}}
+\newenvironment{ChSevenFloatBody}{\centering\let\tabular\cmu@internal@begintabular\begin{adjustbox}{max totalsize={\linewidth}{.82\textheight}}\begin{minipage}{\linewidth}\centering}{\par\end{minipage}\end{adjustbox}\par}
+\let\ChSevenPreviousFloatStyle\float@style
+\floatstyle{ruled}
+\newfloat{ChSevenAlgorithm}{htbp}{loachseven}[appendix]
+\let\float@style\ChSevenPreviousFloatStyle
+\floatname{ChSevenAlgorithm}{Algorithm}
+\renewcommand{\theChSevenAlgorithm}{\Alph{appendix}.\arabic{ChSevenAlgorithm}}
+% Reuse original algpseudocode implementation already isolated by Chapter 5.
+\@for\ChSevenName:=Require,Ensure,Function,EndFunction,If,ElsIf,EndIf,ForAll,EndFor,State,Return\do{%
+ \expandafter\let\csname ChSevenAlg\ChSevenName\expandafter\endcsname\csname ChFiveAlg\ChSevenName\endcsname}
+\makeatother

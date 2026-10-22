@@ -1,0 +1,28 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Paired matched-mention event-recovery sensitivity analysis at event-matching threshold 0.1. Values use the same pooled reference mentions under both conditions, with Delta = multimodal minus unimodal.}\ChEightFloatLabel{ch08:tab:supp-mcnemar}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+\small
+
+\centering
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Unimodal} & \textbf{Multimodal} & \textbf{Delta} & \textbf{Nominal McNemar p} \\
+\midrule
+DeepSeek R1 & 0.39 & 0.39 & 0.00 & 1.000 \\
+KimiK2-Instruct & 0.26 & 0.25 & -0.01 & $<0.001$ \\
+GPT-OSS-120B & 0.32 & 0.32 & 0.00 & 0.558 \\
+DeepSeek V3.2 & 0.49 & 0.49 & 0.00 & 1.000 \\
+GLM5 & 0.33 & 0.33 & 0.00 & $<0.001$ \\
+Qwen3.5-397B-A17B & 0.38 & 0.40 & 0.02 & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\par
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Exact two-sided McNemar tests compare paired match status over all 8,066 reference mentions. Values are rounded to two decimals, so a displayed Delta of 0.00 may reflect a small nonzero unrounded difference. The nominal p values do not account for clustering of mentions within discharge summaries and are reported only as an exploratory sensitivity analysis.
+\end{minipage}
+
+\end{ChEightFloatBody}
+\end{table}

@@ -1,0 +1,30 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Paired temporal-accuracy sensitivity analysis on reference events matched under both unimodal and multimodal reconstruction. Delta AULTC = multimodal minus unimodal.}\ChEightFloatLabel{ch08:tab:supp-wilcoxon}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+\small
+
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Shared matches, n} & \textbf{AULTC (UM)} & \textbf{AULTC (MM)} & \textbf{Delta AULTC} & \textbf{Nominal Wilcoxon p} \\
+\midrule
+DeepSeek R1 & 3,134 & 0.80 & 0.79 & 0.00 & 0.364 \\
+KimiK2-Instruct & 1,999 & 0.68 & 0.68 & -0.01 & $<0.001$ \\
+GPT-OSS-120B & 2,532 & 0.76 & 0.77 & 0.01 & $<0.001$ \\
+DeepSeek V3.2 & 3,930 & 0.71 & 0.77 & 0.06 & $<0.001$ \\
+GLM5 & 2,650 & 0.78 & 0.78 & 0.00 & 0.003 \\
+Qwen3.5-397B-A17B & 3,025 & 0.74 & 0.77 & 0.03 & $<0.001$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par
+\begin{minipage}{\textwidth}
+\footnotesize\textit{Note:} Nominal p values are from paired two-sided Wilcoxon signed-rank tests of absolute timestamp error among events matched in both conditions; AULTC is reported on the same shared subset. The tests do not account for clustering within discharge summaries and may be anti-conservative. UM = unimodal; MM = multimodal.
+\end{minipage}
+
+\end{ChEightFloatBody}
+\end{table}

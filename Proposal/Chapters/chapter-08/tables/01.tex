@@ -1,0 +1,80 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{Performance on 40 discharge summaries at event-matching threshold $0.1$ for unimodal and multimodal timeline reconstruction. Values are point estimates with bootstrap 95\% confidence intervals in brackets. \textbf{Bold} indicates the best point estimate within each metric--modality column.}\ChEightFloatLabel{ch08:tab:main_results_threshold_01}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccc}
+\hline
+\multirow{2}{*}{\textbf{Model}} 
+& \multicolumn{2}{c}{\textbf{Event match rate}} 
+& \multicolumn{2}{c}{\textbf{Concordance}} 
+& \multicolumn{2}{c}{\textbf{AULTC}} \\
+\cline{2-7}
+& \textbf{Unimodal} & \textbf{Multimodal} 
+& \textbf{Unimodal} & \textbf{Multimodal} 
+& \textbf{Unimodal} & \textbf{Multimodal} \\
+\hline
+DeepSeek R1
+& 0.39 [0.32, 0.47]
+& 0.39 [0.32, 0.47]
+& 0.75 [0.69, 0.79]
+& 0.75 [0.70, 0.80]
+& \textbf{0.80 [0.76, 0.82]} 
+& \textbf{0.79 [0.77, 0.82]}\\
+
+KimiK2-Instruct
+& 0.26 [0.21, 0.29]
+& 0.25 [0.22, 0.30]
+& 0.73 [0.69, 0.76]
+& 0.74 [0.68, 0.81]
+& 0.68 [0.61, 0.73]
+& 0.68 [0.62, 0.73] \\
+
+GPT-OSS-120B
+& 0.32 [0.27, 0.37]
+& 0.32 [0.28, 0.37]
+& 0.74 [0.70, 0.77]
+& 0.75 [0.71, 0.80]
+& 0.76 [0.72, 0.80] 
+& 0.77 [0.74, 0.81]\\
+
+DeepSeek V3.2
+& \textbf{0.49 [0.43, 0.56]}
+& \textbf{0.49 [0.43, 0.56]}
+& 0.74 [0.70, 0.80]
+& 0.77 [0.73, 0.81]
+& 0.71 [0.64, 0.78] 
+& 0.77 [0.73, 0.81]\\
+
+GLM5
+& 0.33 [0.27, 0.39]
+& 0.33 [0.27, 0.40]
+& \textbf{0.80 [0.78, 0.83]}
+& \textbf{0.82 [0.75, 0.84]}
+& 0.78 [0.73, 0.82] 
+& 0.78 [0.73, 0.82]\\
+
+Qwen3.5-397B-A17B
+& 0.38 [0.28, 0.47]
+& 0.40 [0.29, 0.51]
+& 0.78 [0.72, 0.81]
+& 0.79 [0.78, 0.82]
+& 0.74 [0.68, 0.77] 
+& 0.77 [0.74, 0.78]\\
+
+\hline
+\end{tabular}
+\end{adjustbox}
+
+
+}
+
+
+\end{ChEightFloatBody}
+\end{table}

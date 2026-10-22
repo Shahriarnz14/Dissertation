@@ -1,0 +1,14 @@
+% !TeX root = ../../../main.tex
+\FloatBarrier
+\subsection{Paired case-level bootstrap analysis}\label{ch08:supp:paired-bootstrap}
+
+\noindent\textbf{Methods.} We compared multimodal and unimodal reconstruction using a paired case-level bootstrap with 10,000 resamples. In each replicate, the same 40 discharge-summary case IDs were sampled with replacement for both conditions. Event matching and all three evaluation metrics were recomputed within the sampled cases at threshold 0.1. For each metric, we recorded Delta = multimodal - unimodal and calculated the percentile 95\% confidence interval from the 10,000 paired differences. Resampling whole cases preserves dependence among events from the same discharge summary.
+
+\noindent
+\textbf{Results.} The paired differences were generally small and model-dependent. No concordance confidence interval excluded zero. Event match rate decreased slightly for KimiK2-Instruct and increased slightly for Qwen3.5-397B-A17B; the unrounded intervals for these two changes excluded zero, although the displayed bounds round to 0.00. For AULTC, only DeepSeek V3.2 had a confidence interval entirely above zero. Qwen3.5-397B-A17B had a positive AULTC point estimate, but its interval included zero.
+
+\par\medskip
+\noindent
+\input{Appendices/appendix-ch08/tables/01}
+\par\medskip
+

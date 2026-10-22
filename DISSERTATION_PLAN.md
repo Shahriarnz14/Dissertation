@@ -35,7 +35,7 @@ The following chapter titles are working headings; their use does not authorize 
 | 9 | III | Verification and Decision-Making from Textual Sepsis Trajectories | Placeholder for RL/sepsis verification proposal |
 | 10 | — | Discussion and Conclusion | Placeholder; no source manuscript |
 
-### User-confirmed authoritative manuscript roots
+### Authoritative manuscript roots and selection authority
 
 The user confirmed the Chapter 2, 5 and 7 source selections after reviewing Phase A on October 19, 2026, and explicitly confirmed Chapters 3 and 4 on October 20, 2026. These decisions persist across sessions and supersede the corresponding preflight ambiguities.
 
@@ -46,13 +46,14 @@ The user confirmed the Chapter 2, 5 and 7 source selections after reviewing Phas
 | 4 | `main.tex` | Explicit user confirmation and complete SurvHTE/Appendix C migration approval, October 20, 2026; active `\iclrfinalcopy`, mathematical macros, local artwork and complete inline supplement. |
 | 5 | `Scientific_data/main_pmoa_tts_V4.tex` | Explicit user selection, described as `V4.tex`; this is the actual existing V4 filename. |
 | 6 | `main.tex` | Explicit Phase F approval, October 20, 2026; selected CHIL reconstruction manuscript, all four active inputs and entire inline appendix. Keep separate from Chapter 7. |
-| 7 | `CameraReady/LaTeX/main_with_appendix.tex` | Explicit user selection of the camera-ready root. |
+| 7 | `CameraReady/LaTeX/main_with_appendix.tex` | Explicit Phase 0 selection reaffirmed in Phase G; all seven active input/include edges and complete thirteen-parent camera-ready supplement. |
+| 8 | `psb_camera_ready.tex` | Identified under explicit Phase H authorization: only complete local root, matching requested title, accepted PSB 2027 declaration and revised paired-bootstrap claims; includes complete `supplementary_material_psb.tex`. No competing main manuscript locally. |
 
 Follow each selected root's actual active `\input`, `\include`, bibliography, artwork, and supplementary dependencies. Do not mix content from other manuscript versions. In particular, Chapter 5 currently includes `Scientific_data/supplementary_v4plus.tex`, and Chapter 7 includes `CameraReady/LaTeX/appendix.tex` through its original `AAAI_2026/` path prefix. Preserve these dependency choices when adapting paths. Deep audits and scientific-content migration remain subject to each chapter's approval gate.
 
 Phase B was authorized in the same user instruction. Chapter 2 migration is **not** authorized until the completed skeleton is reviewed and explicitly approved.
 
-Current approval checkpoint (October 20, 2026): Chapters 2-5 and Appendices A-D are independently reviewed and approved. Phase F authorizes Chapter 6 and its complete CHIL appendix as Appendix E; that migration is now compiled and validated, awaiting user review (see `Proposal/metadata/validation-ch06.md`). Preserve all approved scientific content, figure sizing, formatting and editor/build configuration. Chapter 7 requires separate explicit approval. Earlier phase-gate descriptions are historical requirements, superseded only by explicit approvals.
+Current approval checkpoint (October 20, 2026): Chapters 2-7 and Appendices A-F are independently audited and approved. Phase H authorizes Chapter 8 and its entire active supplement as Appendix G, the final existing research-paper migration. The identified authoritative local root is `psb_camera_ready.tex`, with its exact active dependencies and false-color rebuttal branch. Preserve approved science, artwork, sizing, formatting, citations and editor/build configuration. Chapter 8/G is compiled and validated for independent user review (October 21, 2026; `Proposal/metadata/validation-ch08.md`). Stop here; do not begin Chapters 1, 9, 10 or the overarching abstract. Earlier phase-gate descriptions are historical requirements, superseded only by explicit approvals.
 
 Source cross-check links (not substitutes for local sources):
 - Ch 2: https://arxiv.org/abs/2312.05933

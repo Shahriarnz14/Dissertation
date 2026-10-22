@@ -1,0 +1,41 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{
+DeepSeek V3.2 sensitivity analysis stratified by the model-generated is\_certain flag.
+}\ChEightFloatLabel{ch08:tab:supp-certainty}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+\small
+
+
+\centering
+\begin{minipage}{0.99\linewidth}
+\centering
+
+\begin{tabular}{@{}p{0.42\linewidth}
+                >{\centering\arraybackslash}p{0.36\linewidth}
+                >{\centering\arraybackslash}p{0.14\linewidth}@{}}
+\toprule
+\textbf{is\_certain stratum} &
+\textbf{Within-stratum matched proportion} &
+\textbf{AULTC} \\
+\midrule
+0 (model-labeled uncertain) & 0.67 & 0.76 \\
+1 (model-labeled certain)   & 0.64 & 0.84 \\
+\bottomrule
+\end{tabular}
+
+\par
+
+\footnotesize
+\raggedright
+\textit{Note:} is\_certain = 1 denotes model-assigned confidence scores from 6 through 9;
+is\_certain = 0 denotes all other scores. AULTC is calculated over matched events within
+each stratum. Concordance is omitted because the filtered strata yield different
+event-pair populations.
+
+\end{minipage}
+
+\end{ChEightFloatBody}
+\end{table}

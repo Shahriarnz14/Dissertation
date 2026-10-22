@@ -1,0 +1,63 @@
+% !TeX root = ../../../main.tex
+\begin{table}[htbp]
+\caption{
+Descriptive comparison of matched and unmatched reference events for DeepSeek V3.2
+at event-matching threshold 0.1.
+}\ChEightFloatLabel{ch08:tab:supp-matched-unmatched}
+\ChEightTableBodyStart
+\begin{ChEightFloatBody}
+
+\small
+
+
+
+\centering
+\begin{minipage}{0.99\linewidth}
+\centering
+
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}p{0.62\linewidth}
+                >{\centering\arraybackslash}p{0.17\linewidth}
+                >{\centering\arraybackslash}p{0.17\linewidth}@{}}
+\toprule
+\textbf{Characteristic} &
+\textbf{Matched} &
+\textbf{Unmatched} \\
+\midrule
+Reference events, $n$ &
+3,931 &
+4,135 \\
+
+Description length, median [IQR] tokens &
+3 [2, 5] &
+3 [2, 6] \\
+
+Within 24 h of the case reference time &
+52.4\% &
+46.5\% \\
+
+At least 7 d after the case reference time &
+19.7\% &
+28.6\% \\
+
+Contains a numerical value &
+18.0\% &
+36.8\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+
+\par
+
+\footnotesize
+\raggedright
+\textit{Note:} Among unmatched events, 3,319 (80.3\%) had no assigned predicted
+counterpart and 816 (19.7\%) had a candidate counterpart with semantic error greater
+than 0.1. Temporal-position percentages are calculated among events with an available
+reference timestamp. This is a descriptive coverage analysis; timestamp error,
+concordance, and AULTC are undefined for unmatched events.
+
+\end{minipage}
+
+\end{ChEightFloatBody}
+\end{table}
