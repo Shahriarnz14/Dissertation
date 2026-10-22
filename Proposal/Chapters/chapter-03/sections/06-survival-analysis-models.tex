@@ -1,10 +1,8 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Survival Analysis Models}
 \label{ch03:sec:methods_survival}
-% \vspace{-0.25em}
 To estimate the adverse event time, we consider four survival analysis models that vary in their underlying assumptions and modeling flexibility. 
 These models include both traditional statistical approaches and more recently developed deep learning methods and can be plugged into meta-learning causal inference approaches:
-% Below, we describe the four survival models used in our experiments:
 \begin{enumerate}\setlength{\itemsep}{0pt}
     \item \textbf{Cox Proportional Hazards (CoxPH)} \citep{cox1972regression} – A semiparametric model that assumes a log-linear relationship between covariates and the hazard function, with a time-invariant hazard ratio:
     \(
@@ -39,4 +37,3 @@ Our experiments later also uses a Causal Survival Forest (CSF) \citep{cui2023est
 However, since a CSF is inherently a causal model that estimates treatment effects, it is not meant for being plugged into a meta-learning causal inference framework.
 We defer discussing it to the next section, where we describe the causal inference setup we consider. 
 
-% \vspace{-1em}

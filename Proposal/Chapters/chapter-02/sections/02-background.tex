@@ -11,7 +11,6 @@ For any positive integer $k$, we regularly use the notation $[k]\triangleq \{1,2
 \label{ch02:sec:problem-setup}
 
 
-% \vspace{.2em}
 \noindent
 \textbf{Training data.}
 We assume that the training data consist of $N$ patients with different time series.
@@ -22,7 +21,6 @@ This notation allows for features to be static, i.e., a feature could stay const
 
 We further assume that every time step of a time series belongs to one of $C$ different classes, i.e., the set of classes is $[C]$.
 In the dynamic outcome case, where the classification label varies over time, we assume that we know the classification label $y_i^{(\ell)}\in[C]$ for every patient
-%data point
 $i\in[N]$ for every time step $\ell\in[L_i]$.
 For the static outcome case, we only know the classification label at the final time step per time series: we know $y_i^{(L_i)}\in[C]$ for all $i\in[N]$, and at earlier time steps $\ell < L_i$, we set $y_i^{(\ell)}=``?"$, which could be thought of as an additional ``unknown'' class.
 

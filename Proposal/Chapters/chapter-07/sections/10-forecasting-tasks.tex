@@ -1,14 +1,11 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Forecasting Tasks}
-% \vspace{-0.2em}
 \ChSevenParagraph{Event forecast within next 24 hours: F1 performance.}
 
 Our results show that encoder-based models outperform decoder-based LLMs in event forecasting across both \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} annotations (Table~\ref{ch07:tab:forecasting_clean_combined}).
 Forecasting performance across all models is shown in Tables \ref{ch07:tab:DS_forecasting} and \ref{ch07:tab:L33_forecasting} (Appendix~\ref{ch07:apd:full_tables}).
 Encoder models, especially those with a fine-tuned MLP head, achieve substantially higher F1 scores than decoder LLMs, reinforcing the effectiveness of encoder-based representations for forecasting.
 
-%\input{AAAI_2026/Tables/clean_forecasting_DS}
-% \input{AAAI_2026/Tables/clean_forecasting_L33}
 Among decoders, we observe varied performance patterns. \textit{RedPajama-INCITE-7B-Instruct}, whose training excludes PubMed, achieves 0.352 F1 at 24h---better than some decoder models like \textit{MediPhi-PubMed} (0.268) and within the typical decoder performance range, though below top performers like \textit{DeepSeek-Llama-3.3-70B} (0.482). \textit{OLMO-32B-Instruct} performs competitively (0.411), suggesting that open models without biomedical pretraining can still achieve strong temporal forecasting results.
 
 Among encoder models, both general-purpose and biomedically-pretrained variants show strong performance.
@@ -25,7 +22,6 @@ Performance trends remain consistent across forecasting windows.
 F1 scores improve as the window increases, with 1-hour predictions being most challenging and 168-hour predictions yielding highest scores.
 Models perform worse on external validation sets than internal \textit{T2S2} test sets, though \textit{BioClinical-ModernBERT} models show the smallest performance degradation, maintaining their advantage in cross-dataset generalization.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ChSevenParagraph{Temporal ordering of forecasted events: concordance.}
 
 Encoder models consistently outperform decoders in correctly ranking the order of upcoming events, as measured by concordance (c-index; Table \ref{ch07:tab:forecasting_clean_combined}; complete results in Tables~\ref{ch07:tab:DS_forecasting} and~\ref{ch07:tab:L33_forecasting} for \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} annotations, respectively, with full details in Appendix~\ref{ch07:apd:full_tables}. Decoder models with potential biomedical exposure achieve modest concordance (0.618-0.632), while \textit{RedPajama-INCITE-7B-Instruct} without PubMed data in its training corpus performs similarly, suggesting domain-specific knowledge is less critical here than for event prediction. The comparable performance of \textit{RedPajama-INCITE-7B-Instruct} to other general models (with access to PubMed in their pretraining) also provides evidence that the \textit{T2S2} prediction task is distinct from raw PubMed text and assuages causal leakage concerns.
@@ -35,7 +31,6 @@ Biomedical pretraining in encoders demonstrates clear advantages, with \textit{B
 MLP-head training yields superior F1 scores, while fine-tuned masking excels in concordance. \textit{BioClinical-ModernBERT-base} also generalizes well to external datasets (c-index \textgreater0.60), suggesting that biomedical pretraining provides stability in temporal reasoning under dataset shifts.\par}
 
 {\raggedright
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ChSevenParagraph{Survival analysis: model performance across timepoints and cohorts.}
 Tables~\ref{ch07:tab:concordance_t2s2_only} and~\ref{ch07:tab:concordance_wide} (Appendix~\ref{ch07:apd:full_survival}) show time-dependent concordance results where 
 instruction-tuned decoder models clearly outperform encoder-based models.
@@ -49,49 +44,8 @@ Models evaluated on the \textit{T2S2} cohort, often peak at earlier windows (0h 
 Meanwhile, the \textit{sepsis-10} cohort experiences clear ceiling effects, with many models achieving perfect concordance (1.00).
 These results suggest that, unlike the forecasting tasks, survival prediction in our dataset benefits more from the capabilities inherent in large decoder models than from domain-specific pretrained encoders.
 
-% Predictive performance does not universally improve with more observation time. \textit{T2S2} cohort models often peak at earlier windows, while \textit{sepsis-10} experiences ceiling effects. Instruction-tuned decoders excel overall, yet biomedical encoders remain competitive, particularly at admission (0h). Survival prediction thus benefits from both larger decoder models and domain-specific pretraining, each excelling in different temporal contexts.
 
-% \begin{table*}[!tbp]
-% % \footnotesize
-% \caption{Survival analyses evaluated using time-dependent concordance index for each model across \textit{DeepSeek-R1} test set annotations (\textit{T2S2}, \textit{Sepsis-10}, \textit{Sepsis-100}), evaluated at three observation time thresholds (0h, 24h, and 168h).
-% \vspace{-0.75em}
-% }
-% \label{tab:concordance_wide}
-% \centering
-% % \resizebox{\linewidth}{!}
-% \scriptsize
-% {
-% \begin{tabular}{lccccccccc}
-% \toprule
-% \textbf{Model} 
-% & \multicolumn{3}{c}{T2S2} 
-% & \multicolumn{3}{c}{sepsis-10} 
-% & \multicolumn{3}{c}{sepsis-100} \\
-% \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
 
-% Time Threshold & 0h & 24h & 168h 
-% & 0h & 24h & 168h 
-% & 0h & 24h & 168h \\
-% \midrule
-% bert-base-uncased       & 0.60 & 0.61 & 0.53 & 1.00 & 1.00 & 1.00 & 0.58 & 0.62 & 0.58 \\
-% roberta-base            & 0.55 & 0.60 & 0.60 & 0.75 & 1.00 & 1.00 & 0.55 & 0.58 & 0.57 \\
-% deberta-v3-small        & 0.56 & 0.57 & 0.57 & 0.75 & 0.00 & 0.75 & 0.52 & 0.49 & 0.51 \\
-% ModernBERT-base         & 0.52 & 0.58 & 0.58 & 1.00 & 1.00 & 1.00 & 0.54 & 0.51 & 0.51 \\
-% ModernBERT-large        & 0.53 & 0.59 & 0.58 & 0.50 & 1.00 & 1.00 & 0.59 & 0.55 & 0.49 \\
-% \textcolor{black}{Bioclinical ModernBERT-base} & 0.57& 0.53& 0.53& 1.00& 0.75& 0.75& 0.63& 0.59& 0.56\\
-% \textcolor{black}{Bioclinical ModernBERT-large} & 0.54& 0.55 & 0.54 & 0.75 & 0.75 & 0.75& 0.61 & 0.57 & 0.49\\
-% DeepSeek-R1-Llama-70B   & \textbf{0.64} & \textbf{0.63} & 0.59 & 0.50 & 1.00 & 1.00 & 0.61 & 0.53 & 0.55 \\
-% Llama-3.3-70B-Instruct  & 0.62 & \textbf{0.63} & 0.58 & 0.50 & 1.00 & 0.75 & 0.64 & 0.57 & 0.53 \\
-% DeepSeek-R1-Llama-8B    & 0.60 & 0.58 & 0.58 & 1.00 & 1.00 & 1.00 & 0.53 & \textbf{0.66} & {0.65} \\
-% Llama-3.1-8B-Instruct   & 0.62 & 0.61 & \textbf{0.61} & 1.00 & 1.00 & 1.00 & 0.60 & 0.59 & 0.61 \\
-% \textcolor{black}{OLMO 32B Instruct} & 0.60& 0.62 & 0.59 & 0.75 & 0.75 & 0.75&\textbf{ 0.66} & 0.58 & 0.56\\
-% \textcolor{black}{RedPajama-INCITE 7B Instruct} & 0.56&  0.60 & \textbf{0.61} & 0.50 & 1.00 & 1.00& 0.61 & 0.53 & \textbf{0.76}\\
-% \textcolor{black}{MediPhi-PubMed} & 0.54 & 0.62 & 0.55 & 1.00 & 1.00 & 1.00& 0.62 & 0.58 & 0.61\\
-% \bottomrule
-% \end{tabular}
-% }
-% \vspace{-1.5em}
-% \end{table*}
 
 
 
@@ -99,43 +53,9 @@ These results suggest that, unlike the forecasting tasks, survival prediction in
 
 
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % \vspace{-0.5em}
-% \subsection{Sensitivity analysis}
-% % \vspace{-0.2em}
-% \paragraph{Time-Ordered versus Text-Ordered Training.}
-
-% Table \ref{tab:dsr1q_l33_comparison} shows time-ordering generally improves concordance, particularly for \textit{DeepSeek-R1} annotations, while F1 scores show mixed results. Text-ordering sometimes yields better external dataset performance with \textit{Llama-3.3-70B}, suggesting that preserving the narrative sequence can support accurate classification even when it does not follow temporal order.  These results highlight a trade-off between temporal alignment and narrative coherence for different tasks.
-
-% \input{AAAI_2026/Tables/tab_textord_vs_timeord}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \paragraph{Impact of timestep dropout on F1 and concordance.}
-% Tables~\ref{tab:masking_effects_DS} and~\ref{tab:masking_effects_llama} (Appendix~\ref{apd:masking_l33}) report the effect of timestep dropout on classification and ranking performance. F1 scores decrease monotonically with increasing TDR, with relatively mild degradation up to 30–60\% dropout and sharper declines thereafter. For example, in the \textit{DeepSeek-R1} annotations, T2S2/sepsis-10/sepsis-100 drop from 0.576/0.428/0.607 at TDR = 0\% to 0.423/0.200/0.510 at TDR = 90\%, with sepsis-10 showing the largest relative decline. In contrast, concordance (c-index) remains stable across dropout levels (0.661–0.678), indicating that ranking-based evaluations are less sensitive to history truncation. These trends are consistent for \textit{Llama-3.3} annotations (Appendix~\ref{apd:masking_l33}), suggesting that ranking objectives capture temporal relationships that are more robust to missing historical information than binary classification accuracy of predicting whether an event happens within a time window.
-
-% \begin{table}[t]
-%     \centering
-%     \resizebox{\linewidth}{!}{
-%     \begin{tabular}{lcccccc}
-%         \toprule
-%         \textbf{Timestep drop rate} & F1(1d) & c-index & F1(1d)-10 & c10 & F1(1d)-100 & c100 \\
-%         \hline
-%         0\%  & 0.576 & 0.672 & 0.428 & 0.576 & 0.607 & 0.613 \\
-%         15\% & 0.572 & 0.667 & 0.415 & 0.564 & 0.604 & 0.616 \\
-%         30\% & 0.548 & 0.672 & 0.357 & 0.542 & 0.591 & 0.619 \\
-%         60\% & 0.542 & 0.678 & 0.310 & 0.578 & 0.588 & 0.616 \\
-%         90\% & 0.423 & 0.661 & 0.200 & 0.561 & 0.510 & 0.614 \\
-%         \bottomrule
-%     \end{tabular}
-%     }
-%     \caption{Effect of Randomly Masking History (\textit{DeepSeek-R1} annotations) on F1 and Concordance.
-%     % \vspace{-0.75em}
-%     }
-%     \label{tab:masking_effects_DS}
-%     % \vspace{-1.5em}
-% \end{table}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%% Discussion and Conclusion%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+

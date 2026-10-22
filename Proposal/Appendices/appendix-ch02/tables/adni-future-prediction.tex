@@ -1,15 +1,14 @@
 % !TeX root = ../../../main.tex
 \begin{table}[ht!]
-% \vspace{-6ex}
 \caption{Future Prediction on ADNI data test set accuracy (mean $\pm$ std.~dev.~across 10 experiments).}
 \centering
 \setlength\tabcolsep{8pt}
 \scriptsize
 \begin{tabular}{ccccc} 
 \toprule
-		\multirow{2}{*}[-2pt]{Model}                                       & \multicolumn{2}{c}{6 months in the future}                          & \multicolumn{2}{c}{1 year in the future}                                                   \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} %\hline %{3-7}
+		\multirow{2}{*}[-2pt]{Model}                                       & \multicolumn{2}{c}{6 months in the future}                          & \multicolumn{2}{c}{1 year in the future}                                                   \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} %
                                                                & AUROC                    & AUPRC                   & AUROC                   & AUPRC \\ 
-                       \midrule  % \hline
+                       \midrule  %
                         Logistic Regression                    & 0.825$\pm$0.007          & 0.659$\pm$0.008         & 0.767$\pm$0.006          & 0.620$\pm$0.012 \\
 					  LSTM                                   & \text{0.880$\pm$0.003}   & 0.789$\pm$0.005         & 0.856$\pm$0.004          & 0.736$\pm$0.008 \\
                         RETAIN                                 & \text{0.882$\pm$0.010}   & 0.793$\pm$0.016         & \text{0.867$\pm$0.013}   & 0.740$\pm$0.017 \\

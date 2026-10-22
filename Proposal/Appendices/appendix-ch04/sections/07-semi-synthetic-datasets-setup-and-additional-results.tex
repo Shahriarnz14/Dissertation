@@ -43,7 +43,6 @@ where $\sigma(\cdot)$ is the sigmoid function, $\{ \beta_A, \alpha_A, \lambda_A,
 We extract 36 covariates spanning laboratory test abnormalities (e.g., creatinine, glucose, hemoglobin), demographic features (e.g., age, sex, race, marital status), and admission descriptors (e.g., admission type, recurrent admissions, night admission).
 Table~\ref{ch04:tab:mimic-covariates} summarizes covariate statistics; Table~\ref{ch04:tab:mimic-demographics} reports demographic and categorical distributions; and Figure~\ref{ch04:fig:mimic_corr} shows correlations among covariates.
 
-% The second family of datasets is derived from MIMIC-IV ICU records~\citep{johnson2023mimic}. We extract 36 covariates that span laboratory test abnormalities (e.g., creatinine, glucose, hemoglobin), demographic features (e.g., age, sex, race, marital status), and admission descriptors (e.g., admission type, recurrent admissions, night admission). Treatments ($W$) are simulated as Bernoulli($0.5$), and event times are generated following the formulation of \citet{meir2025heterogeneous}, where baseline hazards depend on subsets of laboratory and demographic covariates. Five variants are created by altering the censoring distribution, resulting in censoring rates ranging from 53\% to 88\%. This design mimics the range of censoring observed in longitudinal EHR studies, from moderate censoring to highly censored survival outcomes.
 
 
 \input{Appendices/appendix-ch04/tables/mimic-covariate-summary}
@@ -99,7 +98,6 @@ C \sim \mathrm{Poisson}(\lambda_c),
 where $\lambda_c \in \{21, 23, 24.7, 26.5, 29\}$ controls censoring severity for MIMIC-$i$--$v$, yielding censoring rates from approximately 53\% to 88\%.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \paragraph{Confounded assignment, varying functional form (MIMIC-$vi$--$ix$)}
 \label{ch04:app:mimic-vi-ix}
@@ -111,7 +109,6 @@ The four variants correspond to the following combinations:
     \item MIMIC-$viii$: Propensity score=\texttt{non-linear}, event/censoring time=\texttt{linear};
     \item MIMIC-$ix$: Propensity score=\texttt{non-linear}, event/censoring time=\texttt{non-linear}.
 \end{itemize}
-% Throughout, we clip probabilities and Poisson means to maintain overlap and positivity.
 
 \ChFourParagraph{Covariate-dependent treatment assignment (propensity score).}
 We consider two propensity-score families:
@@ -261,7 +258,6 @@ Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75} summariz
 \input{Appendices/appendix-ch04/tables/survival-third-quartile-cate}
 
 
-% Across horizons, performance differences are typically more pronounced at earlier horizons (25th percentile) and become more compressed at later horizons, while the overall ordering remains broadly stable.
 
 \ChFourParagraph{Horizon effects.}
 Across MIMIC variants, performance gaps are generally more pronounced at earlier horizons (25th percentile) and become more compressed at later horizons (75th percentile).
@@ -284,97 +280,10 @@ Table~\ref{ch04:tab:rmst-sensitivity-results} compares CATE RMSE under both hori
 
 
 
-% \begin{table}[!ht]
-%     \centering \small
-%     \caption{CATE RMSE (mean $\pm$ std over 10 repeats) on MIMIC semi-synthetic datasets, comparing RMST estimands at different horizons $h = T_{\max}$ (maximum observed time) and $h = T_{\text{med}}$ (median event time).}
-%     \label{tab:rmst-sensitivity-results}
 
-%     \setlength{\tabcolsep}{3pt}
-%     \renewcommand{\arraystretch}{0.92}
 
-%     \begin{adjustbox}{angle=90,max height=0.95\textheight,center}
-%     \begin{minipage}{\textheight}
-%         \begin{subtable}{\linewidth}
-%         \centering
-%         \begin{tabular}{l cc cc cc cc cc}
-%         \toprule
-%         & \multicolumn{2}{c}{MIMIC-$i$} 
-%         & \multicolumn{2}{c}{MIMIC-$ii$}
-%         & \multicolumn{2}{c}{MIMIC-$iii$}
-%         & \multicolumn{2}{c}{MIMIC-$iv$} 
-%         & \multicolumn{2}{c}{MIMIC-$v$} \\ 
-%         \cmidrule(lr){2-3}
-%         \cmidrule(lr){4-5}
-%         \cmidrule(lr){6-7}
-%         \cmidrule(lr){8-9}
-%         \cmidrule(lr){10-11}
-%         \textbf{Method Family} 
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$ \\ \midrule
-%         \multicolumn{9}{l}{\textit{Outcome Imputation Methods}} \\
-%         T-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & 7.912 ± 0.046 & 4.363 ± 0.040 & 7.915 ± 0.043 & 4.361 ± 0.039 & 7.912 ± 0.043 & 4.361 ± 0.039 & 7.908 ± 0.043 & 4.360 ± 0.039 \\ 
-%         S-Learner & 7.977 ± 0.044 & 4.387 ± 0.040 & 7.968 ± 0.047 & 4.390 ± 0.042 & 7.956 ± 0.050 & 4.387 ± 0.039 & 7.959 ± 0.046 & 4.387 ± 0.039 & 7.958 ± 0.048 & 4.387 ± 0.039 \\ 
-%         X-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & 7.912 ± 0.046 & 4.363 ± 0.040 & 7.915 ± 0.043 & 4.361 ± 0.039 & 7.912 ± 0.043 & 4.361 ± 0.039 & 7.908 ± 0.043 & 4.360 ± 0.039 \\ 
-%         DR-Learner & 7.964 ± 0.046 & 4.367 ± 0.038 & 7.912 ± 0.047 & 4.363 ± 0.040 & 7.911 ± 0.043 & 4.361 ± 0.039 & 7.911 ± 0.043 & 4.361 ± 0.039 & 7.909 ± 0.043 & 4.360 ± 0.039 \\ 
-%         Double-ML & 7.954 ± 0.047 & 4.365 ± 0.040 & 7.936 ± 0.045 & 4.357 ± 0.041 & 7.919 ± 0.044 & 4.355 ± 0.040 & 7.917 ± 0.046 & 4.356 ± 0.040 & 7.891 ± 0.050 & 4.354 ± 0.040 \\ 
-%         Causal Forest & 7.967 ± 0.045 & 4.371 ± 0.039 & 7.949 ± 0.044 & 4.365 ± 0.041 & 7.934 ± 0.043 & 4.365 ± 0.039 & 7.931 ± 0.047 & 4.364 ± 0.040 & 7.909 ± 0.044 & 4.363 ± 0.037 \\ 
-%         \addlinespace
-%         \multicolumn{9}{l}{\textit{Direct-Survival CATE Methods}} \\
-%         Causal Survival Forests & 7.963 ± 0.057 & 4.376 ± 0.035 & 7.942 ± 0.039 & 4.363 ± 0.038 & 7.929 ± 0.037 & 4.364 ± 0.037 & 7.911 ± 0.051 & 4.357 ± 0.036 & 7.893 ± 0.042 & 4.357 ± 0.035 \\ 
-%         SurvITE & 7.931 ± 0.050 & 4.381 ± 0.035 & 7.908 ± 0.065 & 4.377 ± 0.038 & 7.906 ± 0.071 & 4.375 ± 0.040 & 7.907 ± 0.058 & 4.374 ± 0.038 & 7.906 ± 0.066 & 4.376 ± 0.037 \\ 
-%         \addlinespace
-%         \multicolumn{9}{l}{\textit{Survival Meta-Learners}} \\ 
-%         T-Learner-Survival & 8.007 ± 0.075 & 4.391 ± 0.040 & 7.980 ± 0.233 & 4.477 ± 0.340 & 7.911 ± 0.054 & 4.364 ± 0.034 & 7.902 ± 0.042 & 4.361 ± 0.038 & 7.902 ± 0.046 & 4.360 ± 0.036 \\ 
-%         S-Learner-Survival & 7.921 ± 0.044 & 4.362 ± 0.039 & 7.912 ± 0.052 & 4.363 ± 0.036 & 7.900 ± 0.045 & 4.361 ± 0.038 & 7.901 ± 0.046 & 4.361 ± 0.037 & 7.897 ± 0.042 & 4.358 ± 0.038 \\ 
-%         Matching Survival & 7.949 ± 0.043 & 4.603 ± 0.140 & 7.935 ± 0.053 & 4.600 ± 0.070 & 7.920 ± 0.047 & 4.652 ± 0.065 & 7.921 ± 0.046 & 4.714 ± 0.086 & 7.912 ± 0.042 & 4.735 ± 0.058 \\ 
-%         \bottomrule
-%     \end{tabular}
-%     \end{subtable}
 
-%     \vspace{0.9em}
 
-%     \begin{subtable}{\linewidth}
-%     \centering
-%     \begin{tabular}{l cc cc cc cc}
-%         \toprule
-%         & \multicolumn{2}{c}{MIMIC-$vi$} 
-%         & \multicolumn{2}{c}{MIMIC-$vii$}
-%         & \multicolumn{2}{c}{MIMIC-$viii$}
-%         & \multicolumn{2}{c}{MIMIC-$ix$} \\
-%         \cmidrule(lr){2-3}
-%         \cmidrule(lr){4-5}
-%         \cmidrule(lr){6-7}
-%         \cmidrule(lr){8-9}
-%         \textbf{Method Family} 
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$
-%         & $h=T_{\max}$ & $h=T_{\text{med}}$ \\ \midrule
-%         \multicolumn{7}{l}{\textit{Outcome Imputation Methods}} \\
-%         T-Learner & 7.184 ± 0.052 & 3.865 ± 0.036 & 7.374 ± 0.067 & 3.772 ± 0.027 & 7.220 ± 0.046 & 3.866 ± 0.031 & 7.354 ± 0.048 & 3.769 ± 0.032 \\ 
-%         S-Learner & 7.176 ± 0.048 & 3.873 ± 0.037 & 7.308 ± 0.068 & 3.770 ± 0.026 & 7.197 ± 0.049 & 3.854 ± 0.032 & 7.275 ± 0.061 & 3.747 ± 0.034 \\ 
-%         X-Learner & 7.182 ± 0.053 & 3.865 ± 0.036 & 7.318 ± 0.069 & 3.772 ± 0.027 & 7.203 ± 0.045 & 3.866 ± 0.031 & 7.273 ± 0.044 & 3.769 ± 0.032 \\ 
-%         DR-Learner & 7.145 ± 0.054 & 3.854 ± 0.035 & 7.295 ± 0.061 & 3.751 ± 0.026 & 7.167 ± 0.046 & 3.846 ± 0.032 & 7.263 ± 0.045 & 3.737 ± 0.034 \\ 
-%         Double-ML & 7.127 ± 0.051 & 3.855 ± 0.038 & 7.259 ± 0.072 & 3.743 ± 0.028 & 7.147 ± 0.049 & 3.849 ± 0.035 & 7.226 ± 0.056 & 3.732 ± 0.033 \\ 
-%         Causal Forest & 7.142 ± 0.052 & 3.860 ± 0.035 & 7.288 ± 0.068 & 3.753 ± 0.026 & 7.162 ± 0.047 & 3.852 ± 0.033 & 7.247 ± 0.043 & 3.739 ± 0.029 \\ 
-%         \addlinespace
-%         \multicolumn{7}{l}{\textit{Direct-Survival CATE Methods}} \\
-%         Causal Survival Forests & 7.123 ± 0.048 & 3.850 ± 0.032 & 7.281 ± 0.064 & 3.740 ± 0.025 & 7.149 ± 0.045 & 3.839 ± 0.031 & 7.227 ± 0.054 & 3.725 ± 0.032 \\ 
-%         SurvITE & 7.169 ± 0.042 & 3.878 ± 0.034 & 7.286 ± 0.059 & 3.766 ± 0.025 & 7.184 ± 0.043 & 3.859 ± 0.029 & 7.265 ± 0.055 & 3.755 ± 0.031 \\ 
-%         \addlinespace
-%         \multicolumn{7}{l}{\textit{Survival Meta-Learners}} \\
-%         T-Learner-Survival & 7.168 ± 0.055 & 3.860 ± 0.039 & 7.332 ± 0.071 & 3.761 ± 0.031 & 7.188 ± 0.040 & 3.861 ± 0.025 & 7.358 ± 0.047 & 3.762 ± 0.026 \\ 
-%         S-Learner-Survival & 7.138 ± 0.048 & 3.856 ± 0.031 & 7.285 ± 0.064 & 3.751 ± 0.024 & 7.163 ± 0.041 & 3.845 ± 0.030 & 7.239 ± 0.055 & 3.735 ± 0.031 \\ 
-%         Matching Survival & 7.163 ± 0.050 & 4.238 ± 0.038 & 7.340 ± 0.062 & 4.233 ± 0.039 & 7.199 ± 0.043 & 4.255 ± 0.028 & 7.297 ± 0.050 & 4.283 ± 0.063 \\ 
-%         \bottomrule
-%     \end{tabular}
-%     \end{subtable}
-%     \end{minipage}
-%     \end{adjustbox}
-% \end{table}
 
 
 
@@ -417,78 +326,29 @@ Taken together, the semi-synthetic results suggest the following heuristics. (i)
 
 
 
-% 
-% \subsection{Detailed Analysis of Semi-Synthetic Results}
-% \label{ch04:app:semi-synthetic-detailed} \vspace{-0.8em} 
 
 % \textcolor{red}{TODO: update numbers with new results.}
 % This section provides additional analysis of semi-synthetic results in Section~\ref{ch04:sec:semi-syn-data-experiment} and Table~\ref{ch04:tab:semi-syn-cate-rmse}, examining performance patterns, stability characteristics, and practical implications for method selection.
 
-% \textbf{Method-Specific Performance Analysis.} The ACTG dataset reveals clear performance hierarchies. Double-ML achieves the lowest RMSE (10.651 $\pm$ 0.239), representing a 3.9\% improvement over the next-best method, X-Learner (11.072 $\pm$ 0.196). This advantage aligns with our synthetic findings where sophisticated causal machinery excels in moderate-dimensional settings. However, SurvITE and survival meta-learners struggle on ACTG, with SurvITE (12.714 $\pm$ 0.559) and Matching Survival (12.523 $\pm$ 0.289) showing the worst performance.
-
-% The pattern reverses on MIMIC data, especially under high-censoring. S-Learner-Survival achieves the best or the second best performance on four of five MIMIC variants: MIMIC-$i$ (7.921 $\pm$ 0.044), MIMIC-$iii$ (7.900 $\pm$ 0.045), MIMIC-$iv$ (7.901 $\pm$ 0.046), and MIMIC-$v$ (7.897 $\pm$ 0.042). This consistency demonstrates robustness across varying censoring intensities in high-dimensional settings.
-
-% \textbf{Censoring Gradient Analysis.} The MIMIC censoring rate range (53\% - 88\%) enables analysis of degradation patterns. S-Learner-Survival maintains consistent performance across this range, with RMSE ranging from 7.897 to 7.921---less than 0.3\% variation despite 35 percentage points of censoring difference. In contrast, T-Learner-Survival shows clear instability, particularly at MIMIC-$ii$ (82\% censoring), where standard deviation jumps to $\pm$0.233, indicating unreliable estimates.
-
-% Double-ML exhibits an interesting non-monotonic pattern: performing well at extreme censoring (MIMIC-$i$: 7.954 $\pm$ 0.047) and low censoring (MIMIC-$v$: 7.891 $\pm$ 0.050) but showing degradation at intermediate levels. This suggests that Double-ML's robustness may depend on specific censoring-covariate interactions rather than censoring rate alone.
-
-% \textbf{Variance and Stability Patterns.} Standard deviations reveal important stability trade-offs. On ACTG, imputation methods show relatively low variance (0.175-0.239 range) while survival methods exhibit higher variability (0.160-0.289). This pattern suggests that survival-specific methods may be more sensitive to the particular covariate-outcome relationships present in clinical trial data.
-
-% However, this relationship inverts on MIMIC data. Survival meta-learners achieve consistently low variance (0.042-0.075 range), while imputation methods show slightly higher variability (0.043-0.050 range). The exception is T-Learner-Survival's instability at high censoring, which appears dataset-specific rather than method-inherent.
-
-% \textbf{Performance Convergence in High-Dimensional Settings.} The MIMIC results demonstrate performance convergence absent in synthetic experiments. Across all MIMIC variants, the RMSE range spans only 7.891 to 8.007---approximately 1.4\% variation. This convergence contrasts sharply with ACTG's 15\% performance spread (10.651 to 12.523), suggesting that high-dimensional, realistic covariate structures may level the playing field between method families.
-
-% This convergence has practical implications: in EHR-like settings with many correlated covariates, method selection may prioritize stability and interpretability over raw performance, since performance differences become negligible.
-
-% \textbf{Cross-Dataset Generalization Challenges.} No single method achieves consistent top-tier performance across both datasets. Double-ML excels on ACTG but performs moderately on MIMIC. S-Learner-Survival dominates MIMIC but struggles on ACTG. This inconsistency highlights a critical limitation of synthetic-only evaluation: performance rankings established on one data structure may not transfer to others, even when both represent realistic medical scenarios.
-
-% \textbf{Practical Method Selection Guidelines.} Based on these findings, a suggested actionable recommendation can be formed as follows: (1) For clinical trial-like data with moderate dimensionality and balanced censoring, prioritize Double-ML or X-Learner. (2) For EHR-like data with high dimensionality and variable censoring, S-Learner-Survival provides the best combination of performance and stability. (3) Avoid T-Learner-Survival in high-censoring scenarios due to variance instability. (4) When performance differences are small ($<$2\%), prioritize methods with lower computational cost and better interpretability.
-
-% These semi-synthetic results demonstrate that while our synthetic benchmark captures important performance trends, real-world method selection requires considering dataset-specific characteristics that pure synthetic evaluation cannot fully capture.
 
 
 
 
 
-% \begin{table}[!ht]
-%     \centering
-%     \caption{\rebuttal{CATE RMSE on semi-synthetic datasets across 10 experimental repeats, using \textbf{RMST with respect to max event time} of each dataset as the estimand}}
-%     \begin{tabular}{lcccc}
-%     \toprule
-%         Method Family & MIMIC-$vi$ & MIMIC-$vii$ & MIMIC-$viii$ & MIMIC-$ix$ \\ 
-%     \midrule
-%         Causal Survival Forests & 7.123 $\pm$ 0.048 & 7.281 $\pm$ 0.064 & 7.149 $\pm$ 0.045 & 7.227 $\pm$ 0.054 \\ 
-%         SurvITE & 7.243 $\pm$ 0.154 & 7.378 $\pm$ 0.112 & 7.268 $\pm$ 0.117 & 7.347 $\pm$ 0.078 \\ 
-%         T-Learner-Survival & 7.465 $\pm$ 0.364 & 7.487 $\pm$ 0.179 & 7.266 $\pm$ 0.053 & 7.465 $\pm$ 0.254 \\ 
-%         S-Learner-Survival & 7.183 $\pm$ 0.051 & 7.345 $\pm$ 0.066 & 7.198 $\pm$ 0.042 & 7.283 $\pm$ 0.049 \\ 
-%         Matching Survival & 7.219 $\pm$ 0.060 & 7.393 $\pm$ 0.074 & 7.240 $\pm$ 0.043 & 7.357 $\pm$ 0.046 \\ 
-%     \bottomrule
-%     \end{tabular}
-% \end{table}
-
-% \begin{table}[!ht]
-%     \centering
-%     \caption{\rebuttal{CATE RMSE on semi-synthetic datasets across 10 experimental repeats, using \textbf{RMST with respect to median event time} of each dataset as the estimand}}
-%     \begin{tabular}{lcccc}
-%     \toprule
-%         Method Family & MIMIC-$vi$ & MIMIC-$vii$ & MIMIC-$viii$ & MIMIC-$ix$ \\ 
-%     \midrule
-%         Causal Survival Forests & 3.850 $\pm$ 0.032 & 3.740 $\pm$ 0.025 & 3.839 $\pm$ 0.031 & 3.725 $\pm$ 0.032 \\ 
-%         SurvITE & 3.908 $\pm$ 0.067 & 3.869 $\pm$ 0.177 & 3.886 $\pm$ 0.057 & 3.813 $\pm$ 0.055 \\ 
-%         T-Learner-Survival & 4.314 $\pm$ 0.563 & 3.967 $\pm$ 0.241 & 3.904 $\pm$ 0.081 & 4.093 $\pm$ 0.379 \\ 
-%         S-Learner-Survival & 3.866 $\pm$ 0.036 & 3.760 $\pm$ 0.024 & 3.852 $\pm$ 0.030 & 3.742 $\pm$ 0.032 \\ 
-%         Matching Survival & ~ & ~ & ~ & ~ \\ 
-%     \bottomrule
-%     \end{tabular}
-% \end{table}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
 
 
 

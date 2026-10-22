@@ -44,12 +44,8 @@ Preliminary results from over 125K PMOA case reports across various diagnostic c
 Finally, despite mitigation steps (timestamp extraction, temporal masking, external test sets), pretrained language models may still have been exposed to PMOA content.
 Although they were not trained on our derived \emph{(event, time)} sequences or temporally reordered data, the original narratives could appear in pretraining.
 Our pipeline applies temporal reordering and masking of future events beyond the prediction cutoff, enforcing a causal structure absent from the originals and yielding a distinct setup that requires reasoning over partial, temporally grounded inputs. 
-% To assess any pretraining exposure, we include \textit{RedPajama-INCITE-7B-Instruct}, an open-source model with a documented PubMed-free corpus; its performance (0.352 F1 at 24h; concordance 0.618), comparable to decoders potentially exposed to PubMed, supports that the T2S2 task is sufficiently distinct from raw PMOA text and mitigates causal leakage concerns.
 While we included \textit{RedPajama-INCITE-7B-Instruct}, an open-source model with a documented PubMed-free corpus for pretraining, and saw its performance (0.352 F1 at 24h; concordance 0.618) was comparable to decoders potentially exposed to PubMed, other strategies supporting the argument that the \textit{T2S2} task is sufficiently distinct from raw PMOA text and mitigates causal leakage concerns could be examined.
 See Appendix~\ref{ch07:apd:open_source} for a detailed discussion of how open-source models mitigate potential data leakage, as well as additional forecasting results on 115 case reports published after the pretraining cutoffs of encoder-based models (post-2020).
 
-%Finally, our analysis is limited by the modest size of the high-cost manual annotations collected as a gold standard to calibrate and validate our LLM extraction pipeline. Expanding gold-standard validation across diverse diagnoses could assess the generalizability of our approach and aid in evaluating model robustness, and is a direction for future work.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

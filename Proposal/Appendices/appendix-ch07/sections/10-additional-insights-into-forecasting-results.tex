@@ -20,10 +20,5 @@ The contrast underscores that forecasting from clinical narratives is fundamenta
  
  \textbf{Why external validation is lower.} Performance drops on external subsets (e.g., \textit{sepsis-10} vs.\ \textit{sepsis-100}) reflect shifts in writing style and case mix, not random overfitting. Crucially, the \emph{relative ranking} of models remains stable across datasets, so comparative conclusions hold even when absolute scores vary.
 
-% \subsection{Practical implications}
-%  (i) Treat thresholding as part of the model: calibrate on a validation set (e.g., maximize $F_{1}$ or expected utility) and report threshold sensitivity. (ii) For decoders, impose explicit temporal supervision (sequence restructuring, time-aware heads) to mitigate left-to-right biases. (iii) Maintain cross-dataset evaluation to verify that relative rankings persist under domain/style shifts.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%Appendix I: 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

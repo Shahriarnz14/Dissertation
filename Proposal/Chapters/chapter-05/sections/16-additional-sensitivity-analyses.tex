@@ -11,10 +11,7 @@ Varying the cosine distance threshold from \ChFiveRebuttal{0.01 to 0.50 (in incr
 A threshold of 0.10 was chosen based on manual review of \texttt{Llama 3.3 70B Instruct} and \texttt{O1} outputs.
 The resulting trade-offs are summarized in Figure~\ref{ch05:fig:threshold_tradeoff_greedy}.
 
-% For both the recursive matching heuristic and LAPJV matching, we examine the trade-off between event match rate and temporal accuracy by sweeping the distance threshold from 0.01 to 0.50 in increments of 0.01. 
-% Figures~\ref{ch05:fig:threshold_tradeoff_greedy} and~\ref{ch05:fig:threshold_tradeoff_LAPJV} plots temporal concordance and AULTC as a function of event match rate for the recursive and LAPJV strategy respectively, with the operating point at threshold 0.1 highlighted.
 
-% As expected, stricter thresholds for recursive matching produce fewer but cleaner matches, while more permissive thresholds increase coverage at the expense of noisier ordering and timing. Varying the cosine distance threshold from 0.01 to 0.25, we observed corresponding shifts in match rate, concordance, and AULTC. A threshold of 0.1 was chosen based on manual review of \texttt{Llama 3.3 70B Instruct} and \texttt{O1} outputs. The resulting trade-offs are summarized in Figure~\ref{ch05:fig:threshold_tradeoff_greedy}.
 
 Similarly, LAPJV preserves high event match rates at low thresholds across models and exhibits a smooth trade-off between coverage and temporal accuracy (Supplementary Material, Section \ref{ch05:apd:lapjv-matching} Figure~\ref{ch05:fig:threshold_tradeoff_LAPJV}).
 The resulting operating points are highly comparable to those obtained using the recursive matching heuristic.
@@ -39,32 +36,7 @@ These results highlight that prompt design plays an important role in guiding LL
 
 
 
-% \begin{figure}
-%     \centering
-%     % % \begin{minipage}{0.45\textwidth}
-%     %     % \centering
-%     %     \includegraphics[width=\linewidth]{Plots_tables/event_match_vs_metrics_updated.pdf}
-%     %     % \caption{}
-%     % % \end{minipage}
-%     % % \hfill
-%     \begin{subfigure}[t]{\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{Plots_tables/event_match_vs_metrics_updated.pdf}
-%         \caption{Concordance and AULTC by event match rate (\textbf{recursive matching heuristic}).}
-%         \label{fig:threshold_tradeoff_greedy}
-%     \end{subfigure}
 
-%     \begin{subfigure}[t]{\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{Plots_tables/event_match_vs_metrics_lapjv.pdf}
-%         \caption{Concordance and AULTC by event match rate (\textbf{LAPJV matching).}}
-%         \label{fig:threshold_tradeoff_LAPJV}
-%     \end{subfigure}
-%     \caption{Concordance and AULTC by event match rate for recursive matching heuristic (\textbf{a}) and LAPJV matching (\textbf{b}). Solid circle ($\bullet$) represents threshold of 0.1, with ticks (|) indicating 0.01 increments of the threshold in [0.01, 0.50].
-%     }
-%     \label{fig:threshold_temporal_LAPJV}
-%     \vspace{-5mm}
-% \end{figure}
 
 \paragraph{Inter-LLM comparison of temporal annotations}
 Finally, we qualitatively compared temporal annotations produced by several LLMs on a representative case report to illustrate characteristic differences in event extraction and timestamping (Supplementary Material, Section~\ref{ch05:apd:inter-llm-comparison}, Figure~\ref{ch05:fig:tts_evaluation}).
@@ -73,7 +45,6 @@ event granularity, paraphrasing, and long-range temporal normalization.
 These differences complement the aggregate quantitative results and highlight the impact of model behavior on the structure of extracted timelines.
 Common model-specific error patterns, such as granularity variation, duplicate events, and differences in temporal normalization, are summarized in the Supplementary Material, Section~\ref{ch05:apd:inter-llm-comparison}, Table~\ref{ch05:tab:error_taxonomy}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Validation of Structured Fields}
 \label{ch05:sec:structured-field-validation}
 
@@ -85,5 +56,4 @@ We manually validated the structured fields on 88 confirmed case reports of \tex
 Demographic errors were concentrated in missing or malformed values; diagnosis errors primarily reflected family history, excluded differentials, or hypothetical complications assigned to the patient. UMLS errors most often involved an inappropriate semantic type or an overly generic concept.
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

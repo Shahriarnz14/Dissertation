@@ -5,17 +5,7 @@ The resulting T2S2 corpus contains 2,139 open-access PMOA case reports represent
 Evaluation on the clinician-annotated \texttt{sepsis-40} subset shows strong performance, with GPT-5 achieving the strongest overall results and DeepSeek-R1 and Llama 3.3 providing competitive open-model baselines with different tradeoffs across event recovery, temporal ordering, and absolute timestamp accuracy. 
 Additional analyses, including document-level bootstrapping, clinician--clinician agreement, sepsis onset inference, hallucination auditing, self-consistency evaluation, and cross-model agreement on \texttt{sepsis-100} and the full corpus, further contextualize the reliability and limitations of the extracted trajectories.
 These results support T2S2 as a retrospective research corpus for downstream tasks such as risk forecasting, causal reasoning, and disease trajectory characterization, while making clear that it is not intended as a deployment-ready clinical extraction system.
-% We developed an analytical pipeline for processing free-text biomedical corpora to construct Sepsis-3 textual time series using large language models, and demonstrated strong performance characteristics, including high match rates and concordance, as well as minimal temporal discrepancies.
-% We plan to release the full cohort annotations upon acceptance, providing a novel Sepsis-3 cohort with rich textual information, annotated with timestamps, which may be useful for downstream tasks such as risk forecasting, causal reasoning, and disease trajectory characterization. 
-% In PMOA samples \texttt{sepsis-40} and \texttt{sepsis-100}, performance levels were strong with respect to clinician annotations (\texttt{sepsis-40}) and inter-LLM agreement (\texttt{sepsis-100}).
 
-% There are several limitations to our work. 
-% First, our product, the textual time series corpus for sepsis, is a clinical research informatics cohort, and possesses its characteristic limitations.  
-% It should not be considered a representative sample, since case report corpora possess biases, including but not limited to publication biases, rare finding over-representation, and revisionism. 
-% Second, while we analyzed multiple data sources, we are limited by the number of clinician annotations that are challenging and expensive to obtain. 
-% % Our hope is that a revision of strong first-pass LLM annotations will be more straightforward and a human-in-the-loop process will result in improved clinical time series datasets. 
-% Third, the substantial use of LLMs in the analytic pipeline can make error analysis more difficult, as their errors can be subtle and inaccurate.  
-% Furthermore, our error analysis (Appendix~\ref{apd:error-analysis}) attributes the systematic under-identification of events in i2m4 (Figure~\ref{fig:manual_vs_l33_event_count}) to the prevalence of semi-structured elements, such as tables and unexpanded abbreviations, within the discharge summaries. This indicates that while foundation models excel with standard narrative prose, extracting events from the dense, non-standard syntax often found in other clinical notes requires tailored prompting strategies.
 
 There are several limitations to our work.
 First, T2S2 is a clinical research informatics corpus constructed from published case reports and should not be considered a representative sample of all patients with sepsis.
@@ -63,7 +53,5 @@ For instance, causal modeling requires strict time-ordering, whereas forecasting
 Furthermore, while our current formulation targets true physiological occurrence, an alternative paradigm could focus on the timing of clinical recognition.
 Capturing these perceived occurrences could illuminate decision-making dynamics and facilitate research in dynamic resource allocation. 
 Ultimately, integrating these narrative-derived timelines with structured physiological data offers a promising avenue to build more comprehensive, multimodal representations of patient trajectories.
-% Ultimately, integrating these narrative-derived timelines with structured physiological data offers a promising avenue to reconcile true disease onset with clinical perception, advancing early sepsis detection.
 
-% Subsequent iterations of this extraction pipeline can be optimized for specific downstream objectives, which impose distinct constraints on the generated time series. For example, time-ordering is a necessary condition for causality, whereas the precise absolute timestamp may be of high importance in forecasting and alignment. Finally, while our current formulation seeks to align clinical findings with their true physiological occurrence, an alternative modeling paradigm could focus on the timing of clinical recognition and documentation. Capturing these perceived occurrences could illuminate decision-making dynamics, facilitating research in multi-agent systems and dynamic resource allocation. Integrating these narrative-derived timelines with structured physiological data offers a promising avenue for reconciling true disease onset with clinical perception, ultimately advancing the early detection and management of sepsis trajectories.
 

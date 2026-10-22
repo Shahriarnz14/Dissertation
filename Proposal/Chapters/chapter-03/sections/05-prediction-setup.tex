@@ -1,8 +1,7 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Prediction Setup}
 \label{ch03:sec:methods_prediction}
-% \vspace{-0.25em}
-We formulate a time-to-event prediction task using longitudinal patient data at snapshot times \(\tau \in \{3,6,9,12\}\) months, following a standard setup (see, e.g., Section 6.2 of \citet{chen2024introduction}). %, following the standard approach of \citet{fitzmaurice2009longitudinal}.
+We formulate a time-to-event prediction task using longitudinal patient data at snapshot times \(\tau \in \{3,6,9,12\}\) months, following a standard setup (see, e.g., Section 6.2 of \citet{chen2024introduction}). %
 For each snapshot \(\tau\), patient information up to that time is used to predict the occurrence of an adverse event after time $\tau$ (we measure the adverse event time starting from time $\tau$). 
 
 \ChThreeParagraph{Cohort selection at each time snapshot.}  
@@ -34,4 +33,3 @@ where \(T\) is the ground-truth adverse event time, and
 \(\widetilde{T}\) represents the time to the event from \(\tau\).  
 Thus, the prediction target is \(\widetilde{T}\), focusing solely on estimating the time to the adverse event.
 
-% \vspace{-1em}

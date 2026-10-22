@@ -12,7 +12,6 @@ We divide these baselines into 3 subgroups of: (a) Purely-supervised, (b) Predic
     \item \textbf{Purely-Supervised Baselines}
     
 \end{itemize}
-% \vspace{.2em}
 \noindent
 \textbf{Logistic regression.}
 For this simple baseline, our training data has each timestep as an individual datapoint with the true label of each timestep being the final timestep outcome of its corresponding sequence. 
@@ -46,7 +45,6 @@ We train a BERT-based \citep{devlin2018bert} model from scratch to encode the ti
     \item \textbf{Predictive-Clustering Baselines}
     
 \end{itemize}
-% \vspace{.2em}
 \noindent
 \textbf{Actor-Critic Temporal Predictive Clustering (AC-TPC).}
 \citet{lee2020temporal} proposed an actor-critic approach from reinforcement learning for temporal predictive clustering (AC-TPC) where each cluster consists of patients with similar future outcomes of interest.
@@ -65,7 +63,6 @@ The centroid of the cluster assigned to the latent embedding is stored in the em
     \item \textbf{Self-Supervised Learning and Contrastive Learning Baselines}
     
 \end{itemize}
-% \vspace{.2em}
 \noindent
 \textbf{Sequential Multi-Dimensional Self-Supervised Learning (SMD-SSL).}
 \citet{raghu2023sequential} developed Sequential Multi-Dimensional Self-Supervised Learning (SMD-SSL) to effectively process complex clinical time series data, particularly in settings with abundant multimodal data like intensive care units. This method addresses the shortcomings of traditional self-supervised learning approaches that are limited to unimodal data. SMD-SSL is capable of handling both structured data, such as lab values and vital signs, and high-dimensional physiological signals like electrocardiograms. It employs a dual SSL loss optimization strategy, applying one loss at the level of individual high-dimensional data points and another at the overall sequence level, enabling a more nuanced understanding of the multimodal clinical data. Crucially, SMD-SSL is designed to be compatible with different loss functions, allowing the use of either contrastive methods, as exemplified by SimCLR \citep{chen2020simple}, or non-contrastive approaches like VICReg \citep{bardes2021vicreg}. In our experiments, we implement SMD-SSL using both the contrastive loss from SimCLR and the non-contrastive loss from VICReg. Following the self-supervised learning phase with each of these loss functions, we attach a prediction head to the model for our prediction tasks. We present two variations of the model in our experiments: a fine-tuned version, where the loss is back-propagated through both the prediction head and the main SMD-SSL encoder, and a frozen version, in which we keep the main SMD-SSL encoder weights constant and optimize only the prediction head.
@@ -87,8 +84,6 @@ We train our model on the patients in the training set, optimize the hyperparame
 We train each method on the training set, tune hyperparameters based on the validation set, and report evaluation metrics on the test set.
 Furthermore, we choose 10 different random seeds to randomize the parameter initialization of all the models evaluated as well as randomizing the train/validation/test sets for each experimental repeat.
 
-% \subsubsection{Evaluation Metrics}
-% \label{sec:performance_metrics}
 
 \noindent
 \textbf{Evaluation metrics.}
@@ -109,7 +104,6 @@ Lastly, SI is a completely unsupervised metric ranging from -1 to 1 which provid
 
 \noindent
 \textbf{Training hyperparameters.}
-% \label{sec:TrainingDetails}
 Table~\ref{ch02:tab:trainingHyperParams} summarizes the hyperparameters used in all our experimentations presented in this paper.
 {
 % Please add the following required packages to your document preamble:
@@ -139,7 +133,6 @@ Given the clashing of the two starting time steps, there are a total of 10 true 
 \label{ch02:sec:real-data-info}
 
 \textbf{Medical Information Mart for Intensive Care (MIMIC).}
-% \label{sec:data_mimic}
 We consider the trajectory of septic patients using data from the Medical Information Mart
 for Intensive Care (MIMIC-III) dataset (v1.4) \citep{johnson2018mimic}.
 We follow the same procedure as done by \citet{komorowski2018artificial} to identify 18,354 septic patients among which there is an observed mortality rate just above 20\% (determined by death within 48h of the final observation $y_i^{(L_i)}=1$ or death within 90 days of the final observation $y_i^{(L_i)}=2$ versus discharge $y_i^{(L_i)}=0$).
@@ -158,7 +151,6 @@ Figure~\ref{ch02:fig:mimic-setup} shows the setup for our MIMIC-Sepsis experimen
 
 \noindent
 \textbf{Alzheimer's Disease Neuroimaging Initiative (ADNI).}
-% \label{sec:data_adni}
 We also test our method on the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset \citep{petersen2010alzheimer}. 
 This dataset consists of a total of 11,651 hospital visits from 1,346 patients which tracks the progression of Alzheimer's disease via follow-up observations at 6 months interval. 
 Each patient has 21 variables out of which 5 are static and 16 are time-varying. 
@@ -173,7 +165,6 @@ Figure~\ref{ch02:fig:adni-setup} shows the overview for our ADNI experiment that
 
 \noindent
 \textbf{Imputation.}
-% \label{sec:imputation}
 For both real datasets of this paper, we take the following approach to impute the missing features in our experiments. 
 (1) For each patient, if at any time step feature has been recorded in a previous time step, we use the last recorded value to replace the missing feature.
 (2) If at no previous time step a feature is recorded, we calculate the population median of the feature among all patients and impute the missing feature with this value.

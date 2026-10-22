@@ -18,7 +18,6 @@ Explicitly stated pertinent negatives and termination events (such as “no shor
 Demographic attributes that appear in the narrative, such as age and sex are also extracted as clinical events with reference time (t=0) as the timestamp.
 We exclude purely contextual text that does not describe the index patient, such as general background statements or literature discussion.
 
-% To preserve clinical nuance, we retain minimally edited, context-rich text spans rather than restricting events to short phrases. In contrast to span-based temporal annotation methods (e.g., \cite{sun2013evaluating,uzuner20112010}) and i2b2-style guidelines that often limit events to short prepositional phrases, our approach allows events to include sufficient surrounding context to accurately convey meaning (for example, retaining “pain in chest that radiates substernally” as a single event). Conjunctive mentions are separated into individual events when doing so improves clarity, and semantic modifiers that alter meaning—such as negation, uncertainty, or intent (e.g., “planned”)—are preserved in the event string so that intended actions are not conflated with actions that occurred. 
 
 \ChFiveRebuttal{
 PMOA-TTS uses source-faithful, span-based events in the tradition of i2b2 clinical concept annotation, while allowing enough surrounding context for an event to remain clinically interpretable, in contrast to span-based temporal annotation methods (e.g., \cite{sun2013evaluating,uzuner20112010}) and i2b2-style guidelines that often limit events to short prepositional phrases. This is necessary because the timelines include symptoms, findings, procedures, treatments, outcomes, pertinent negatives, uncertainty, and intent in addition to diagnoses. For example, retaining ``pain in chest that radiates substernally'' preserves information that would be lost if the event were reduced to a generic chest-pain code; similarly, retaining ``planned'' distinguishes an intended procedure from one that occurred.
@@ -57,5 +56,4 @@ For temporal expressions that described intervals, the start time of the interva
 All timestamps were expressed in hours relative to the reference time (t=0).
 
 These manually produced timelines serve as the reference standard for evaluating LLM-generated annotations in subsequent sections.
-% \ChFiveRebuttal{To contextualize agreement with the single-expert reference set, we also analyzed a separate 140-case report subset of PMOA-TTS involving patients who took GLP-1 RA(Glucagon-like Peptide Receptor Agonists) medications. Two clinically-trained annotators independently constructed event-time timelines for this subset using the same annotation framework.}
 

@@ -3,13 +3,8 @@
 
 
 
-% Table~\ref{ch07:tab:masking_effects_llama} examines the impact of randomly masking portions of the input history on model performance when using \textit{Llama-3.3-70B}-generated annotations. 
-% We evaluate performance across three datasets (T2S2-L33, Sepsis-10, and \textit{sepsis-100}) using F1 scores for prediction of next \(k\) events happening within the next day and concordance index (c-index) for correctly ordering the next \(k\) events. 
-% As the proportion of masked history increases, we observe a general decline in F1 performance, particularly at higher masking rates (e.g., 90\%), suggesting that access to historical context is important for accurate forecasting. 
-% Interestingly, the concordance index remains relatively stable, indicating the model's robustness in ranking the next \(k\) events with partial input histories.
 
 
-% \paragraph{Impact of timestep dropout on F1 and concordance.}
 Tables~\ref{ch07:tab:masking_effects_DS} and~\ref{ch07:tab:masking_effects_llama} report the effect of timestep dropout on classification and ranking performance. 
 We evaluate performance across three datasets (\textit{T2S2}-\texttt{L3.3}, \textit{sepsis-10}, and \textit{sepsis-100}) using F1 scores for prediction of next \(k\) events happening within the next day and concordance index (c-index) for correctly ordering the next \(k\) events. 
 As the proportion of masked history increases, we observe a general decline in F1 performance, particularly at higher masking rates (e.g., 90\%), suggesting that access to historical context is important for accurate forecasting. 
@@ -28,8 +23,5 @@ These trends are consistent for \texttt{Llama-3.3} annotations (Table~\ref{ch07:
 \input{Appendices/appendix-ch07/tables/llama-history-masking}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%Appendix H:  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \FloatBarrier
 

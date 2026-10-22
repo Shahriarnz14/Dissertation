@@ -9,8 +9,6 @@ Our analyses aim to address four questions:
 \textbf{(Q2)} How do violations of causal assumptions (ignorability, positivity, ignorable censoring) affect performance?  
 \textbf{(Q3)} How does the censoring rate influence estimation quality?  
 \textbf{(Q4)} How do component choices (imputation algorithms and base learners) affect final CATE accuracy?
-% \textbf{(Q4)} For outcome imputation methods, how important is the imputation algorithm?  
-% \textbf{(Q5)} How do choices of imputation method and base learner shape final CATE estimates? 
 
 
 \input{Chapters/chapter-04/figures/estimator-borda-rankings}
@@ -38,7 +36,6 @@ While the focus of this benchmark is on CATE estimation, these serve as a comple
 Additionally, in Appendix~\ref{ch04:app:auxiliary-eval-results}, we report a series of auxiliary evaluations of key components, including imputation error (Appendix~\ref{ch04:subapp:impute-eval}) for imputation-based methods and regression model accuracy (Appendix~\ref{ch04:subapp:base-reg-eval}) or survival model performance (Appendix~\ref{ch04:subapp:base-surv-eval}) for meta-learners.
 These results establish how component-level performance relates to downstream CATE estimation.
 
-% We compute method rankings using the Borda count method, where methods are ranked by their CATE RMSE performance in each experimental setting (lower RMSE means better rank), and the resulting ranks are averaged across all settings. Figure~\ref{ch04:fig:average_rank_all} shows rankings from two different perspectives: specific method configurations (top) and method families (bottom). Detailed rankings within each survival scenario (Figure~\ref{ch04:fig:average_rank_per_scenario}) and causal configuration (Figure~\ref{ch04:fig:average_rank_per_experiments}) are provided in Appendix~\ref{ch04:app:more-avg-rank}, revealing how different approaches perform under specific modeling assumptions and violations. CATE RMSE results for Scenario \texttt{C} are presented in Figure~\ref{ch04:fig:cate_mse_scenario_C_main}, with results for other scenarios and ATE bias analyses in Appendix~\ref{ch04:app:more-cate-mse-plots} and \ref{ch04:app:more-ate-plots}.
 
 
 \setlength{\tabcolsep}{2pt}
@@ -52,32 +49,23 @@ For example, in low-censoring randomized settings, outcome imputation methods su
 As censoring intensifies or when assumptions are violated, survival meta-learners and Causal Survival Forests gain a clear advantage.
 Within method families, the choice of imputation algorithm or survival base model critically determines outcomes. 
 Appendix~\ref{ch04:app:additional_synthetic_exps} further supports this pattern quantitatively through Top-$k$ frequency summaries of CATE RMSE and ATE Bias (Tables~\ref{ch04:tab:overall-winrate}-~\ref{ch04:tab:winrate-obs-configs}), highlighting methods that consistently rank at the top rather than merely performing well on average.
-% Aggregate win-rate analyses further reinforce this observed pattern, demonstrating that survival-aware method families consistently dominate the top performance (Appendix~\ref{ch04:app:additional_synthetic_exps}). 
 We summarize detailed findings below.
-% \ChFourRebuttal{Appendix~\ref{ch04:app:additional_synthetic_exps} complements these averages with Top-$k$ frequency summaries across both CATE RMSE and ATE Bias (Tables~\ref{ch04:tab:overall-winrate} ), helping distinguish methods that rank well on average from those that do so consistently.}
 
 \textbf{Overall performance (Q1).}  Figure~\ref{ch04:fig:average_rank_all} (top) presents Borda count rankings of the top-10 performing methods out of the \ChFourRebuttal{53} total configurations evaluated (full ranking in Appendix~\ref{ch04:app:full-rankings}). 
-% This analysis reveals a clear advantage for survival meta-learners using DeepSurv as their base model, with Matching-Survival (DeepSurv) ranking first (average rank of 6.70 out of 52) and S-Learner-Survival (DeepSurv) ranking second (6.85). Double-ML with Margin imputation follows closely (7.47), indicating its effectiveness when paired with the right imputation method. 
 The highest-performing estimators are survival meta-learners built on DeepSurv, with S-Learner-Survival (average rank 5.17 across \ChFourRebuttal{53} methods) and Matching-Survival (5.42) leading, followed by Double-ML with Margin imputation (6.65). 
 Among outcome imputation approaches, Margin appears most frequently among the top performers, though Pseudo-obs and IPCW-T are also represented. 
-% Similarly, while Lasso appears more frequently as the base regression model in top-ranked methods (particularly in X-Learner configurations), Random Forest also shows strong performance in certain combinations.
-% It is worth nothing that on average across all 40 datasets, more sophisticated outcome imputation approaches, specifically X-Learner and Double-ML, appear multiple times in the top 10, while their simpler counterparts (S-Learner and T-Learner with imputation) are absent from the top ranks. This suggests that more complex meta-learning structures provide substantial benefits when handling censored data through imputation. 
-% Causal Survival Forests ranks sixth (12.88), offering competitive performance without requiring method-specific tuning of base models or imputation approaches. All top 10 methods represent strong performers across our comprehensive benchmark, with each demonstrating strengths in different settings as revealed by our more detailed analyses.
 
 At the method family level (Figure~\ref{ch04:fig:cate_mse_scenario_C_main} for Scenario \texttt{C} and Figure~\ref{ch04:fig:average_rank_all} (bottom) across all causal configurations and survival scenarios), we see how each approach performs when optimally configured.
 At this level, S-Learner-Survival (average rank \ChFourRebuttal{3.30 across 11 method families}) and Matching-Survival (3.48) maintain their advantage, followed by Double-ML (3.98) and Causal Survival Forests (5.10).
-% Complementary win-rate analysis also highlights that Matching-Survival and S-Learner-Survival achieve the most consistent Top-5 placements across all causal and survival conditions (Appendix~\ref{ch04:app:full-rankings}).
-%Causal Survival Forests (4.83) ranks fifth, ahead of both Causal Forest (6.40) and T-Learner-Survival (6.47). We can see that standard S-Learner with imputation ranks last (8.07), which highlights that simpler meta-learners paired with an imputation method struggle to compete with more sophisticated approaches in the survival setting.
 
 
 \textbf{Violations of causal assumptions (Q2).}
 Performance shifts substantially depending on assumption violations (Figure~\ref{ch04:fig:average_rank_per_experiments}).
 In randomized balanced trials (\texttt{RCT-50}), outcome imputation methods dominate, with Double-ML (3.60) and Causal Forest (5.60) showing performance comparable to high-ranking survival meta-learners.
 However, under imbalanced treatment (\texttt{RCT-5}), Double-ML remains strong (1.80), while T-Learner-Survival---which relies on fitting base models on treated units---drops to last place (9.00), alongside SurvITE, due to sparsity of treated samples.
-% As we introduce various assumption violations, survival meta-learners increasingly dominate, particularly in scenarios with multiple simultaneous violations like unmeasured confounding with informative censoring (Figure~\ref{ch04:fig:average_rank_per_experiments}(g)), where S-Learner-Survival (2.40) and Causal Survival Forests (3.00) substantially outperform all outcome imputation methods.
 
 Under ignorability violation (\texttt{OBS-UConf}, Figure~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf}), Double-ML and X-Learner are the main competitive imputation methods, whereas survival meta-learners retain relatively stable performance. 
-\textcolor{black}{Examining ATE bias (Figures~\ref{ch04:fig:ate_bias_grid_scenario_A}d-\ref{ch04:fig:ate_bias_grid_scenario_E}d), we see that across all scenarios, survival meta-learners and Causal Survival Forests methods maintain relatively consistent bias levels despite ignorability violations, whereas meta-learners exhibit a slightly increased bias at times.} %This suggest that inherently survival methods may better accommodate unmeasured confounding, possibly because their direct modeling of the survival process captures important structural relationships that help mitigate bias from unobserved factors.
+\textcolor{black}{Examining ATE bias (Figures~\ref{ch04:fig:ate_bias_grid_scenario_A}d-\ref{ch04:fig:ate_bias_grid_scenario_E}d), we see that across all scenarios, survival meta-learners and Causal Survival Forests methods maintain relatively consistent bias levels despite ignorability violations, whereas meta-learners exhibit a slightly increased bias at times.} %
 \ChFourRebuttal{This stability is also reflected in aggregated win-rate summaries for \texttt{OBS-UConf}, where survival-aware families most consistently appear among the Top-$k$ for both CATE RMSE and ATE Bias (Appendix~\ref{ch04:app:more-avg-rank}, Table~\ref{ch04:tab:winrate-obs-configs}).}
 
 Under positivity violation (\texttt{OBS-NoPos}, Figure \ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos}), we see the more sophisticated outcome imputation approaches like Double-ML and X-Learner maintain strong performance and outperform survival meta-learners.
@@ -100,8 +88,6 @@ We observe apparent divergence of the estimated ATE from the true ATE in Scenari
 }
 
 
-% A series of auxiliary evaluation on the imputation and base learner:
-% We assess imputation accuracy Appendix~\ref{ch04:subapp:impute-eval}, where Table~\ref{tab:impute-eval} reports the MAE for three candidate methods across different datasets. survival accuracy and base regression accuracy. These will help us under the perforamnce of them on final CATE estimations.
 
 
 \textbf{Component effects on CATE estimation (Q4).} 

@@ -36,35 +36,8 @@ These are summarized in Table~\ref{ch04:tab:hyperparam-csf}.
 
 
 For SurvITE, we implemented a PyTorch version based on the original architecture and repository.
-The main configuration is summarized in Table~\ref{ch04:tab:hyperparam-survite}. % Unless otherwise noted, we use the same settings for all datasets. For datasets with \texttt{mimic\_syn} we increase the hidden layer widths to $64$ units to accommodate the higher-dimensional feature space.
+The main configuration is summarized in Table~\ref{ch04:tab:hyperparam-survite}. %
 
-% \begin{table}[htbp]
-% \centering
-% \footnotesize
-% \setlength{\tabcolsep}{4pt}
-% \caption{\rebuttal{Hyperparameters for SurvITE \textcolor{red}{Polish the text in this table; update hyperparameters}}}
-% \label{tab:hyperparam-survite}
-% \begin{tabular}{l l}
-% \toprule
-% \textbf{Parameter} & \textbf{Value} \\ \midrule
-% Latent representation dimension $z\_\text{dim}$ & Same as Head hidden dimensions (see below) \\
-% Shared hidden layer width $h\_\text{dim1}$ & Same as Head hidden dimensions (see below) \\
-% Head hidden layer width $h\_\text{dim2}$ & $\{8,16,32,64\}$ for synthetic, ACTG semi-synthetic, and ACTG datasets,  or $\{16,32,64,128\}$ for MIMIC semi-synthetic and twin datasets\\
-% Number of shared layers $\text{num\_layers1}$ & 2 \\
-% Number of head layers $\text{num\_layers2}$ & 2 \\
-% Activation function & ReLU \\
-% Dropout rate & 0.3 \\
-% IPM type & Wasserstein \\
-% IPM regularization weight $\beta$ & $10^{-3}$ \\
-% Smoothing parameter $\gamma$ & 0 \\
-% Learning rate & $10^{-3}$ \\
-% Batch size & 256 \\
-% Maximum epochs & 5000 \\
-% Early stopping patience & 10 (checked every 100 epochs) \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-% }
 
 
 \input{Appendices/appendix-ch04/tables/survite-hyperparameters}
@@ -101,7 +74,4 @@ All experiments were conducted on a machine equipped with an AMD Ryzen 9 5900X C
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -1,6 +1,5 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Modeling Approaches}
-% \vspace{-.25em}
 To evaluate performance on the event forecasting and survival prediction tasks, we implement five modeling paradigms: (i) decoder-only large language models (LLMs) with fine-tuned heads, (ii) prompted LLMs without gradient updates (zero- or few-shot), (iii) encoder-only models with task-specific fine-tuned heads, (iv) encoder-masking models with fine-tuning, and (v) encoder-masking models in zero-shot settings.
 In Appendix~\ref{ch07:apd:encoder-forecasting} and~\ref{ch07:apd:encoder-survival}, we provide technical details of encoder-based forecasting methods and the survival modeling framework respectively.
 
@@ -39,4 +38,3 @@ For temporal ordering, models predict ``\texttt{before}''/``\texttt{after}'' tok
 We evaluate both fine-tuned variants (trained on task-specific objectives) and zero-shot variants (using pretrained MLM capabilities without additional training).
 This approach leverages the bidirectional context of encoder models while maintaining interpretable predictions through constrained vocabulary.
 
-% \vspace{-.5em}

@@ -2,7 +2,7 @@
 \subsection{Experiments}
 
 We benchmark \ChTwoSmallCaps{Temporal-SCL} on tabular time series data:
-a synthetic dataset with known ground truth embedding space structure (Section~\ref{ch02:sec:ToyExperiment}), and two standard real clinical datasets with unknown embedding space structure (Section~\ref{ch02:sec:ClinicalExperiments}). %No data augmentation is used. 
+a synthetic dataset with known ground truth embedding space structure (Section~\ref{ch02:sec:ToyExperiment}), and two standard real clinical datasets with unknown embedding space structure (Section~\ref{ch02:sec:ClinicalExperiments}). %
 We also examine how \ChTwoSmallCaps{Temporal-SCL} works without pre-training and, separately, without nearest neighbor pairing.
 
 As baselines, we use (a) purely supervised methods: logistic regression, an LSTM~\citep{hochreiter1997long}, \mbox{RETAIN} \citep{choi2016retain}, Dipole \citep{ma2017dipole}, a BERT-based transformer \citep{devlin2018bert}; (b) temporal predictive clustering methods: AC-TPC \citep{lee2020temporal} and T-Phenotype \citep{qin2023t}; and (c) Self-Supervised Learning and Contrastive Learning based model: SMD-SSL \citep{raghu2023sequential} with SimCLR loss \citep{chen2020simple} and VICReg loss \citep{bardes2021vicreg}, and \mbox{\ChTwoSmallCaps{Simple-SCL}} (treating snapshots as separate data points and without nearest neighbor pairing).
@@ -23,7 +23,6 @@ Details of our training including network types and hyperparameter grids, and an
  
 \label{ch02:sec:ToyExperiment}
 
-% \vspace{.2em}
 \noindent
 \textbf{Data.}
 We generate a 2D dataset where every patient time series has exactly 3 time steps.
@@ -50,7 +49,7 @@ This experiment is used to evaluate the model's ability to be used for different
 The cluster prediction accuracy is reported alongside other results in Table~\ref{ch02:tab:toyDataset_ratios}.
 
 The main finding from our synthetic data experiment is that while most methods yield similar, optimal prediction scores, only the full version of \ChTwoSmallCaps{Temporal-SCL} consistently recovers all 10 clusters.
-This is evident in the high silhouette index (0.98) our full model achieves, closely matching the ground truth SI of 0.982. %$\pm$ 0.000.
+This is evident in the high silhouette index (0.98) our full model achieves, closely matching the ground truth SI of 0.982. %
 This claim is further supported by visual examination of Fig.~\ref{ch02:fig:toyDataset} (also see the last column of Table~\ref{ch02:tab:toyDataset_ratios} and appendix Fig.~\ref{ch02:fig:toyDataset_result_complete}).
 No other method evaluated consistently recovers all 10 ground truth clusters.
 Notably, removing nearest neighbor pairing from \ChTwoSmallCaps{Temporal-SCL} leads to a 0\% recovery rate of ground truth clusters. 
@@ -68,10 +67,9 @@ This result highlights our model's ability to accurately identify cluster origin
 
 
 
-% \vspace{.2em}
 \noindent
 \textbf{Data.}
-We use two standard datasets: % (Please see Appendix~\ref{sec:dataset-info} for more details on each dataset):
+We use two standard datasets: %
 \begin{itemize}
 \item[$\bullet$]
 \textbf{MIMIC }(static outcome case)\textbf{.}
@@ -89,7 +87,6 @@ We further predict cognitive impairment status 6 months and 1 year in advance in
 \end{itemize}
 More details on the datasets and how we preprocess them (including imputation) are in Appendix~\ref{ch02:sec:real-data-info}.
 
-% \vspace{.2em}
 \noindent
 \textbf{Experimental results.} Accuracy scores for methods evaluated are in Table \ref{ch02:tab:results}. In both MIMIC and ADNI datasets, \ChTwoSmallCaps{Temporal-SCL} (the full model without ablation) yields strong results, outperforming all baseline approaches. Omitting pre-training from \ChTwoSmallCaps{Temporal-SCL} substantially decreases accuracy. Meanwhile, excluding nearest neighbor pairing shows accuracy closer to the full model in MIMIC but significantly lower in ADNI. We suspect that all models typically work better in ADNI vs MIMIC due to the ADNI dataset having less missing data and less feature noise (e.g., ADNI has memory assessments as features whereas MIMIC has lab exams, which tend to be noisier). 
 
@@ -109,7 +106,6 @@ For example, in Fig.~\ref{ch02:fig:heatmapMIMIC}, clusters with mortality risks 
 Similarly, the clusters with mortality risks of $0.492$ and $0.523$ also have different patient characteristics.
 
 
-% \vspace{-.5em}
 
 \noindent
 \textbf{Ablation studies.}

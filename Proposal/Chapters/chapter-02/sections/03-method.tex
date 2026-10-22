@@ -13,7 +13,6 @@ We propose a method for visualizing embedding vectors in Section~\ref{ch02:sec:v
 
  
 
-% \vspace{.2em}
 \noindent
 \textbf{Encoder network $f$.}
 We aim to learn an embedding representation of every time step of each time series. 
@@ -33,7 +32,6 @@ To ensure the embedding space's predictive power of the outcome, we train predic
 To encourage two adjacent time steps in the same time series $\mathbf{x}_i^{(\ell)}$ and $\mathbf{x}_i^{(\ell+1)}$ to map to embedding vectors $\mathbf{z}_i^{(\ell)}$ and $\mathbf{z}_i^{(\ell+1)}$ that are closeby, we learn a temporal network $h$ that predicts how embedding vectors change over time (Fig.~\ref{ch02:fig:temporal-smoothing}). 
 For the \mbox{$i$-th} training time series, we define the duration $\delta_i^{(\ell)}\triangleq t_i^{(\ell+1)} - t_i^{(\ell)}$ for $\ell\in[L_i-1]$.
 Then $h$ takes as input the sequence $(\mathbf{z}_i^{(1)},\delta_i^{(1)}),\dots,(\mathbf{z}_i^{(\ell)},\delta_i^{(\ell)})$ and outputs a prediction for $\mathbf{z}_i^{(\ell+1)}$.
-%
 We ask that $\mathbf{z}_i^{(\ell+1)}$ and $h\big((\mathbf{z}_i^{(1)},\delta_i^{(1)}),\dots,(\mathbf{z}_i^{(\ell)},\delta_i^{(\ell)})\big)$ be close (using squared Euclidean distance loss).
 Thus, $h$ aims to make the next time step's embedding vector predictable based on all previous time steps and could be thought of as a regularization term. 
 A similar temporal regularization strategy was used by~\citet{lee2019dynamic}.
@@ -47,7 +45,6 @@ A similar temporal regularization strategy was used by~\citet{lee2019dynamic}.
 \input{Chapters/chapter-02/figures/temporal-scl-overview}
 
 
-% \vspace{.2em}
 \noindent
 \textbf{Training.}
 We train \ChTwoSmallCaps{Temporal-SCL} in three phases:
@@ -71,7 +68,6 @@ For ease of exposition, we explain the first two phases in Sections~\ref{ch02:se
 
 \noindent
 \textbf{Prediction.}
-% As mentioned in Section~\ref{sec:problem-setup},
 At test time, we are given a feature vector $\mathbf{x}_*\in\mathbb{R}^{D}$ for a single time step.
 To make a prediction for~$\mathbf{x}_*$, we first compute the embedding vector of $\mathbf{x}_*$ given by $\mathbf{z}_* \triangleq  f(\mathbf{x}_*)$.
 Then the predicted class probabilities are precisely given by $g(\mathbf{z}_*)$.
@@ -96,14 +92,12 @@ Thus, we take the ``training data'' of our encoder network to be all the snapsho
 \noindent
 \textbf{Nearest neighbor pairing for identifying similar snapshots.}
 \label{ch02:sec:nearest-neighbor-refinement}
-%  
 Whereas \ChTwoSmallCaps{Simple-SCL} (that did not have time steps) considered two points to be similar if they share the same classification outcome, we now instead consider two \emph{snapshots} to be similar if they share the same classification outcome \emph{and} their raw feature vectors are ``close to each other''.
 We use random sampling to find pairs of similar snapshots:
 \begin{enumerate}
 \small
 \item Initialize the set of snapshot pairs to be empty: $\mathcal{E} \leftarrow \emptyset$.
 \item For each class $c\in[C]$:
-% \small
 \begin{enumerate}
 \item 
 Let the set $\mathcal{A}_c$ consist of all snapshots with label $c$.
@@ -120,12 +114,10 @@ Denote the snapshot found as~$(\mathbf{x}_{i'}^{(\ell')}, y_{i'}^{(\ell')})$.
 To sample a minibatch of $B$ data points for minibatch gradient descent, where we assume that $B$ is even, we randomly choose $B/2$ pairs from the set $\mathcal{E}$; denote the set of these $B/2$ pairs as $\mathcal{E}_{\text{batch}}$.
 Note that the $B/2$ pairs in $\mathcal{E}_{\text{batch}}$ correspond to a total of $B$ different snapshots; denote the set of these $B$ snapshots as $\mathcal{V}_{\text{batch}}$.
 Then the loss we use for minibatch gradient descent during pre-training is
-% \begin{align}
-% \begin{split}
 \begin{align*}
     &L_{\text{SCL-snapshots}} \triangleq \\
-    &- \!\!\!\!\!\!\!\!%\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
-    \sum_{\substack{((\mathbf{x}_i^{(\ell)}, y_i^{(\ell)}), \\ ~\!(\mathbf{x}_{i'}^{(\ell')}, y_{i'}^{(\ell')})) \\ ~\!\in~\!  \mathcal{E}_{\text{batch}}}} \!\!\!\!\!\!%\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+    &- \!\!\!\!\!\!\!\!%
+    \sum_{\substack{((\mathbf{x}_i^{(\ell)}, y_i^{(\ell)}), \\ ~\!(\mathbf{x}_{i'}^{(\ell')}, y_{i'}^{(\ell')})) \\ ~\!\in~\!  \mathcal{E}_{\text{batch}}}} \!\!\!\!\!\!%
     \log\Bigg[
 \frac{\exp(\langle f(\mathbf{x}_i^{(\ell)}), f(\mathbf{x}_{i'}^{(\ell')}) \rangle / \tau)}{\sum\limits_{\substack{(\mathbf{x}_{i''}^{(\ell'')}, y_{i''}^{(\ell'')}) ~\!\in~\!  \mathcal{V}_{\text{batch}} \\ \text{~s.t.~}(i'',\ell'')\ne(i,\ell)}} \!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\exp(\langle f(\mathbf{x}_i^{(\ell)}), f(\mathbf{x}_{i''}^{(\ell'')}) \rangle / \tau)}\Bigg]
 \end{align*}
@@ -135,7 +127,6 @@ For simplicity, our experiments later use Euclidean distance to find nearest nei
 \input{Chapters/chapter-02/figures/mimic-cluster-heatmap}
 
 
-% \vspace{.2em}
 \noindent
 \textbf{Ablation.}
 Later on in our experiments, we conduct ablation experiments where we do not use nearest neighbor pairing.
@@ -177,7 +168,6 @@ We ask that $\mathbf{z}_i^{(\ell+1)}$ and $h\big(\{(\mathbf{z}_i^{(t)},\delta_i^
 \!-\! \mathbf{z}_i^{(\ell+1)} \big\|^2 }{L_i-1}.
 \end{align*}
 
-% \vspace{-.25em}
 
 \subsubsection{Visualizing Embedding Vectors}
 \label{ch02:sec:visualizing}

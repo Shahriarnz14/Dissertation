@@ -22,15 +22,11 @@ This process involved the following steps:
     \item \textbf{Concept Normalization}: After mapping to CUIs, we:
     \begin{itemize}
         \item Retrieved the canonical names from UMLS Metathesaurus.
-        % \item Applied semantic type filtering to ensure mapped concepts were of types relevant to diagnoses (e.g., "Disease or Syndrome", "Pathologic Function", "Mental or Behavioral Dysfunction")
-        % \item Grouped synonym concepts where appropriate to reduce redundancy
     \end{itemize}
 \end{enumerate}
 
-% \input{Scientific_data/Supplementary/US_disease_prevalence}
 
 This mapping process allowed us to standardize the diverse expressions of diagnoses extracted by LLMs into a consistent terminology system, enabling more reliable frequency analysis and co-occurrence patterns. 
-% \textcolor{red}{Jeremy: Quantify the mapping success rate. Any effects of confidence score or justification for threshold? @Shariar}
 Across the full PMOA-TTS corpus, LLM-extracted diagnoses yielded
 $N_{\text{raw}} = 63{,}715$ unique free-text diagnosis strings.
 Of these, $N_{\text{mapped}} = 41{,}216$ ($64.7\%$) were successfully mapped to at least one

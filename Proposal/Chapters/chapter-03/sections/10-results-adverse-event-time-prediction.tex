@@ -1,7 +1,6 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Results: Adverse Event Time Prediction}
 \label{ch03:sec:04_results_survival}
-% \vspace{-0.25em}
 
 We begin by looking at the prediction performance of the survival models from Section~\ref{ch03:sec:methods_survival}.
 Tables~\ref{ch03:tab:survival_3_6} and~\ref{ch03:tab:survival_9_12} report the time-dependent Concordance Index (\(C^{td}\)), Integrated Brier Score (IBS), and time-dependent Area Under the Curve (\(\text{AUC}^{td}\)) for each survival model--Cox proportional hazards (CoxPH), Random Survival Forest (RSF), DeepSurv, and DeepHit--across the four snapshot horizons. 
@@ -16,4 +15,3 @@ The superior performance of RSF suggests its strength in capturing nonlinear rel
 In contrast, CoxPH is interpretable but limited by its linearity and proportional hazards assumptions, reducing its flexibility in capturing complex dependencies.
 DeepSurv and DeepHit exhibit larger variability performance metrics, possibly due to hyperparameter sensitivity.
 
-% \vspace{-1em}

@@ -1,7 +1,6 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Causal Inference Setup}
 \label{ch03:sec:methods_causal}
-% \vspace{-0.25em}
 For our observational study, we adopt a causal inference framework to quantify the association between medication non-adherence and adverse event time.
 Under the potential outcomes framework, these estimates approximate causal effects if unmeasured confounding is limited and positivity holds.
 To help satisfy some of these assumptions, we apply preprocessing techniques such as trimming, detailed in Appendix~\ref{ch03:apd:preprocessing}.
@@ -42,7 +41,6 @@ with
 
 \ChThreeParagraph{Causal estimators.}  
 We extend meta-learning approaches (T-learner and S-learner from \citet{kunzel2019metalearners}) and matching methods to survival analysis, with algorithms provided in Appendix~\ref{ch03:apd:causal-meta-learner-algorithms}, introducing novel extensions for estimating treatment effects under censoring:
-% Additionally, we employ causal survival forests as a nonparametric baseline.
 \begin{itemize}\setlength{\itemsep}{0pt}
     \item \textbf{T-Learner:}
     Fit separate survival models for the treated (\(a=1\)) and control (\(a=0\)) groups. 
@@ -93,7 +91,6 @@ The estimated counterfactual RMET is
     See Appendix~\ref{ch03:apd:matching_derivation} for a more detailed derivation.
     
     \item \textbf{Causal Survival Forest (CSF)} \citep{cui2023estimating}\textbf{:} A nonparametric method that estimates heterogeneous treatment effects in censored survival data:
-    % CSF partitions the feature space into homogeneous subgroups and estimates ITEs within each partition:
     \[
     \widehat{\theta}_{\text{CSF}}(\mathbf{Z}_{i\tau}) = \widehat{\mu}_1 (\mathbf{Z}_{i\tau}) - \widehat{\mu}_0 (\mathbf{Z}_{i\tau}),
     \]
@@ -104,4 +101,3 @@ The estimated counterfactual RMET is
     (Appendix~\ref{ch03:apd:csf_ate_derivation} provides a more detailed derivation of CSF).
 \end{itemize}
 
-% \vspace{-1em}

@@ -3,12 +3,9 @@
 
 
 Time is central to clinical reasoning in critical care.
-% ICU p
 Patients often follow rapidly evolving trajectories, requiring symptoms, physiologic measurements, treatments, and outcomes to be interpreted relative to admission, deterioration, intervention, and recovery. 
-% Sepsis exemplifies this challenge. 
 Sepsis trajectories exemplify this challenge.
 Although Sepsis-3 remains important for trial eligibility and computational phenotyping \cite{kyriazopoulou2021procalcitonin,ch08:seymour2019derivation}, 
-% sepsis is better understood as a heterogeneous clinical trajectory than as a single, uniform state. 
 sepsis is better understood as a set of heterogeneous clinical trajectories with a shared dysregulatory response rather than as a single, uniform course. 
 Similar temporal challenges extend across critical illness: risk forecasts depend on when evidence becomes available; treatment-response analyses require distinguishing pre- and post-intervention measurements; and retrospective cohort definitions may change when the timing of symptom onset, diagnostic testing, or treatment initiation is misaligned.
 This increasing focus on temporal structure is evident in early-warning systems \cite{henry2022factors}, studies showing that predictive utility varies with timing \cite{kamran2024evaluation}, and research on the temporal characteristics of sepsis subtypes and progression \cite{ch08:noroozizadeh2023temporal}.
@@ -35,21 +32,13 @@ This decomposition reflects a clinically natural distinction between events that
 Using this framework, we assess whether and where multimodal alignment improves on text-only timeline reconstruction.
 Specifically, we examine the effects of introducing structured evidence at different stages of the reconstruction workflow, determine whether improvements are concentrated in temporal metrics rather than event recovery, and analyze which prognostically relevant information appears in text but is missing or delayed in tabular data.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{Chapters/chapter-08/figures/stroke-alert-grounding-example}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{Chapters/chapter-08/figures/scaffolded-reconstruction-workflow}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \vspace{-5pt}
 \textbf{Contributions.} In summary, the paper makes the following contributions. \textbf{(i) Temporal grounding formulation:} We formulate clinical timeline reconstruction as retrieval-augmented temporal grounding of narrative-derived patient trajectories using structured EHR evidence. \textbf{(ii) Multimodal scaffolded reconstruction workflow:} We introduce a workflow that uses anchor events as a temporal backbone and retrieved structured rows as partial evidence for timestamp calibration. \textbf{ (iii) Multimodal timeline evaluation:} We evaluate multimodal calibration on 40 discharge summaries with aligned structured EHR rows and manual gold-standard timelines, testing whether structured evidence improves temporal localization more than event recovery. \textbf{(iv) Information missing from tabular data:} We provide an empirical analysis of clinically relevant events that are absent, delayed, or semantically compressed in structured tabular data, motivating why unstructured text is necessary for constructing clinically meaningful patient trajectories.
-% \textcolor{blue}{Shahriar - if you can manage space, feel free to add uncertainty analyses and update relevant sections}
-%\textcolor{blue}{\textbf{(v) When multimodal alignment helps most:} We characterize performance across event types and timestamp-certainty settings, showing that structured data is especially useful as a temporal calibrator when event timing cannot be directly inferred from text.}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

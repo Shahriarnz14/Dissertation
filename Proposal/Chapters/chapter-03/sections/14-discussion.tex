@@ -1,16 +1,11 @@
 % !TeX root = ../../../main.tex
 \subsection{Discussion}
 \label{ch03:sec:discussion}
-% \vspace{-0.5em}
-% \paragraph{Overall Findings.}
 Our analyses reveal a robust association between medication non-adherence and the earliest occurrence of any of the three adverse events (mortality, involuntary hospitalization, jail booking) in the short- to medium-term (predicting time until the earliest adverse event starting from 3, 6, or 9 months after the first prescription fill recorded).
 Our findings demonstrate that, at each time snapshot, medication non-adherence is associated with earlier adverse event time among patients who have not yet experienced any adverse outcome.
 Moreover, at these earlier time frames (3, 6, and 9 months), this effect is particularly pronounced, with non-adherence advancing the onset of adverse outcomes by approximately 3 months on average across our models.
 Over the first year, these earlier onsets culminate in an estimated 9\% increase in composite adverse events, underscoring the practical significance of adherence in mitigating severe outcomes.
 
-% \vspace{.1em}
-% \noindent
-% \textbf{Methodological insights: multiple survival models.}~
 
 \ChThreeParagraph{Methodological insights: multiple survival models.}
 A central methodological insight from this work is the importance of evaluating multiple survival models in our framework, both for prediction and subsequently in treatment effect estimation.
@@ -21,9 +16,6 @@ Indeed, our findings show that if a chosen survival model fails to capture the u
 Moreover, consistency of ATE estimates across different snapshot times serves as an additional check on a model’s robustness.
 In our study, methods with stronger predictive performance (e.g. Random Survival Forest, and Causal Survival Forest) yielded more stable ATE estimates, highlighting a broader analytical insight: reliable causal inferences with right-censored data hinge on trustworthy survival predictions, rendering performance evaluation at multiple time points a critical step in model validation.
 
-% \vspace{.1em}
-% \noindent
-% \textbf{``Unbundling'' the composite outcome.}~
 
 \ChThreeParagraph{``Unbundling'' the composite outcome.}
 In this study, we treat mortality, involuntary hospitalization, and jail booking as a single composite outcome to leverage well-established causal survival analysis methodologies.
@@ -32,9 +24,6 @@ While competing risks models are widely used in the multiple event type setting,
 Also, jail booking and involuntary hospitalization could each happen multiple times for an individual, whereas death of course prevents any future adverse event from happening.
 Properly modeling how these three adverse events interact in the presence of censoring would necessitate developing an entirely new analytical framework, as current methods in causal survival analysis do not readily support multiple events like the ones we have (without just bundling them into a larger composite adverse event as we have done).
 
-% \vspace{-.5em}
-% \noindent
-% \textbf{Policy implications and medication type.}~
 
 \ChThreeParagraph{Policy implications and medication type.}
 While our subgroup analyses in Section~\ref{ch03:sec:04_results_ite_analysis} and Appendix~\ref{ch03:apd:ite_medication} revealed consistently negative ATE estimates across multiple medication types, we found minimal evidence of meaningful effect heterogeneity in adherence-related outcomes among the top four antipsychotics.
@@ -54,10 +43,6 @@ Examples of such initiatives include structured adherence counseling programs an
 These strategically targeted programs can leverage routinely collected administrative and pharmacy data to identify and proactively engage high-risk individuals, such as reaching out to them to check in on their well-being or possibly more directly incentivizing adherence by providing some sort of financial incentive such as a discount or rebate on specific medications.
 These targeted problems could significantly mitigate adverse outcomes at the population level and improve overall healthcare quality and efficiency.
 
-% \vspace{.1em}
-% \noindent
-% \textbf{Actionable interventions informed by adherence quantification.}~
-% 
 \ChThreeParagraph{Actionable interventions informed by adherence quantification.}
 Our findings underscore the need for proactive, targeted interventions to enhance adherence.
 Effective strategies could include personalized outreach programs, such as scheduled follow-up calls, digital medication reminders, or telehealth sessions designed around patient preferences and needs.
@@ -66,9 +51,6 @@ Additionally, policy adjustments aimed at streamlining prescription renewals cou
 Previous studies have consistently demonstrated that structured adherence interventions significantly lower hospitalization rates and associated healthcare costs \citep{velligan2009expert, kane2016comprehensive}.
 Thus, the quantified impact of adherence presented here can directly guide clinicians and policymakers in designing and implementing interventions optimized for maximal clinical benefit and resource efficiency.
 
-% \vspace{.1em}
-% \noindent
-% \textbf{Future research directions.}~
 
 \ChThreeParagraph{Other future research directions.}
 Although our observational design cannot definitively establish causality, the consistently negative ATE estimates indicate a strong link between non-adherence and earlier adverse events.
@@ -83,5 +65,4 @@ Although our study is based on data from a single county, the methodological fra
 Future studies could replicate this analysis using data from multiple regions or healthcare systems to assess the consistency of the observed associations across diverse settings.
 Additionally, incorporating data from different demographic groups or healthcare infrastructures could provide insights into how contextual factors influence the relationship between medication non-adherence and adverse outcomes.
 
-% \vspace{-1.5em}
 

@@ -9,47 +9,7 @@
 
 
 
-% \begin{table}[!ht]
-%     \footnotesize
-%     \centering
-%     \caption{Case report identification performance per diagnosis}
-%     \label{tab:diagnosis_results}
-%     \begin{tabular}{l l c c c c c}
-%         \hline
-%         Subset & Diagnosis & Sensitivity & Specificity & Accuracy & Precision & F1 Score \\
-%         \hline
-%         PubMed MetaData  & Atrial Fibrillation & 0.94 & 0.00 & 0.80 & 0.84 & 0.89 \\
-%         LLM-Pipeline     & Atrial Fibrillation & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
-%         \hline
-%         PubMed MetaData  & COVID-19           & 0.89 & 0.00 & 0.85 & 0.94 & 0.92 \\
-%         LLM-Pipeline     & COVID-19           & 0.89 & 1.00 & 0.90 & 1.00 & 0.94 \\
-%         \hline
-%         PubMed MetaData  & Diabetes           & 1.00 & 0.00 & 0.85 & 0.85 & 0.92 \\
-%         LLM-Pipeline     & Diabetes           & 0.94 & 1.00 & 0.95 & 1.00 & 0.97 \\
-%         \hline
-%         PubMed MetaData  & Hypertension       & 1.00 & 0.00 & 1.00 & 1.00 & 1.00 \\
-%         LLM-Pipeline     & Hypertension       & 0.95 & 0.00 & 0.95 & 1.00 & 0.97 \\
-%         \hline
-%         PubMed MetaData  & Sepsis             & 0.95 & 0.00 & 0.90 & 0.95 & 0.95 \\
-%         LLM-Pipeline     & Sepsis             & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
-%         \hline
-%     \end{tabular}
-% \end{table}
 
-% \begin{table}[!ht]
-%     \footnotesize
-%     \centering
-%     \caption{Aggregated case report identification performance across all diagnoses}
-%     \label{tab:aggregated_results}
-%     \begin{tabular}{l c c c c c}
-%         \hline
-%         Subset & Sensitivity & Specificity & Accuracy & Precision & F1 Score \\
-%         \hline
-%         PubMed MetaData  & \textbf{0.96} & 0.00 & 0.88 & 0.92 & 0.94 \\
-%         LLM-Pipeline     & \textbf{0.96} & \textbf{1.00} & \textbf{0.96} & \textbf{1.00} & \textbf{0.98} \\
-%         \hline
-%     \end{tabular}
-% \end{table}
 
 Table~\ref{ch05:tab:case_report_identification} reports the performance of the LLM-based pipeline and a PubMed metadata filter for identifying single-patient case reports on the manually reviewed 100-document case-identification evaluation set, evaluated across five diagnostic categories using clinician-assigned labels as reference.
 In this evaluation set, the LLM-based pipeline achieved precision of 1.00 across all diagnostic categories and in aggregate, meaning that every document flagged as a single-patient case report by the pipeline was confirmed as such in this sample.

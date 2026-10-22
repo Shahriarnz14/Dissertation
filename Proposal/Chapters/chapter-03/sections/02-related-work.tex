@@ -1,7 +1,6 @@
 % !TeX root = ../../../main.tex
 \subsection{Related Work}
 \label{ch03:sec:related_works}
-% \vspace{-0.25em}
 Survival analysis in healthcare has been widely studied, spanning classical statistical methods and modern machine learning.
 The Cox Proportional Hazards (CoxPH) model \citep{cox1972regression} remains popular for its interpretability but assumes a log-linear relationship with proportional hazards.
 To capture complex patterns, nonparametric tree-based methods like random survival forests (RSFs) \citep{ishwaran2008random} and causal survival forests (CSFs) \citep{cui2023estimating} account for nonlinearities and interactions without explicit model assumptions.
@@ -32,4 +31,3 @@ Unlike prior studies that focus on an outcome defined by a single event or that 
 We adapt standard meta-learners to estimate restricted mean adverse event time differences, demonstrating how widely used causal methods can be applied in survival contexts.
 While our observational design does not permit definitive causal conclusions, the consistent sign of our Average Treatment Effect (ATE) estimates across multiple approaches suggests that adherence may delay adverse outcomes, highlighting its clinical benefits, informing policy-driven studies, and motivating further refinements in causal survival analysis.
 
-% \vspace{-1em}

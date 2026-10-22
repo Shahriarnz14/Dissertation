@@ -3,14 +3,6 @@
 \label{ch06:sec:additional_validation_methods}
 We perform six additional validation analyses: (1) we quantify uncertainty on \texttt{sepsis-40} using document-level bootstrap resampling; (2) we measure inter-annotator agreement (IAA) on five additional case reports independently annotated by two clinicians; (3) using \texttt{sepsis-10}, we evaluate inference of sepsis onset timestamps from narratives (the onset inference prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}); (4) using \texttt{sepsis-10}, we audit extracted events for hallucination by checking whether model-generated findings are grounded in the source report; (5) using the same \texttt{sepsis-10} reports, we evaluate multi-pass self-consistency by re-annotating reports under multiple random seeds; and (6) we estimate full-corpus cross-model agreement between DeepSeek-R1 and Llama-3.3-70B-Instruct across all 2,139 reports.
 Detailed methods for the hallucination audit, self-consistency, and full-corpus agreement are provided in Appendix~\ref{ch06:apd:validation_details}.
-% We perform six additional validation analyses.
-% First, we quantify uncertainty on \texttt{sepsis-40} using document-level bootstrap resampling.
-% Second, we measure inter-annotator agreement (IAA) on five additional case reports independently annotated by two clinicians.
-% Third, using \texttt{sepsis-10}, we evaluate inference of sepsis onset timestamps from narratives (the onset inference prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}).
-% Fourth, using \texttt{sepsis-10}, we audit extracted events for hallucination by checking whether model-generated findings are grounded in the source report.
-% Fifth, using the same \texttt{sepsis-10} reports, we evaluate multi-pass self-consistency by re-annotating reports under multiple random seeds.
-% Sixth, we estimate full-corpus cross-model agreement between DeepSeek-R1 and Llama-3.3-70B-Instruct across all 2,139 reports.
-% Detailed methods for the hallucination audit, self-consistency, and full-corpus agreement are provided in Appendix~\ref{ch06:apd:validation_details}.
 
 \paragraph{Uncertainty quantification via document-level bootstrap (\texttt{sepsis-40})}
 \label{ch06:sec:bootstrap_methods}

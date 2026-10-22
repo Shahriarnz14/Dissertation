@@ -2,55 +2,16 @@
 \subsection{Log-Time Cumulative Distribution Function}
 \label{ch06:apd:ltcdf}
 
-% Given we have $k$ event matches combined across case reports, we want to compute a measure of the discrepancy between the predicted times
-% $t^p_i$ and the manual reference times $t^r_i$ for $i = {1,\dots,k}$ that captures the quality of time recovery across time scales.
 
-% \subsection{Log-time CDF}
 Recall the log-time cumulative distribution function is given as follows:
-% % \subsection*{1. Truncated Discrepancies}
-% For each matched event $i$, compute the discrepancy $s_i = |t^p_i - t^r_i|$. then truncate at the maximum cutoff $S_{\text{max}}$ (\emph{e.g.}, 1 year = 8760 hours):
-% \[
-%    s'_i = \min(s_i, S_{\text{max}})
-% \]
-% % \subsection*{2. Log-Transformed Discrepancies}
-% Apply the log transformation:
-% \[
-%     x_i = \log(1 + s'_i)
-% \] % so that $s_i=0 \implies x_i=0$.
-% % \subsection*{3. Sorted Log-Transformed Discrepancies}
-% Sort $x_i$ in ascending order:
-% \[
-%    x_{(1)} \leq x_{(2)} \leq \cdots \leq x_{(k)}
-% \]
 
-% % \subsection*{4. Log-Time Cumulative Distribution Function (CDF)}
-% The CDF $F(x)$ is defined as the fraction of log-transformed discrepancies less than or equal to $x$:
 \[
    F(x) = \frac{1}{k} \sum_{i=1}^k \mathbf{1}_{\{x_{(i)} \leq x\}}
 \]
 where $\mathbf{1}$ is the indicator function.
 
-% This results in a step function where:
-% \begin{itemize}
-%    \item For $x < x_{(1)}$, $F(x) = 0$.
-%    \item For $x_{(i)} \leq x < x_{(i+1)}$, $F(x) = \frac{i}{k}$.
-%    \item For $x \geq x_{(k)}$, $F(x) = 1$.
-% \end{itemize}
 
-% \section*{Properties of the Log-Time Cumulative Distribution}
-% \begin{itemize}
-%    \item \textbf{Domain}: $x \in [0, \log(1 + S_{\text{max}})]$.
-%    \item \textbf{Non-Decreasing}: $F(x)$ increases monotonically with $x$.
-%    \item \textbf{Right-Continuous}: Jumps occur at each $x_{(i)}$, with $F(x)$ constant between jumps.
-   % \item \textbf{Boundary Values}: 
-   % \begin{itemize}
-% Then, we get the following boundary values:
-% $F(0) \geq 0$ (depending on the smallest discrepancy) and $F(\log(1 + S_{\text{max}})) = 1$.
-%    % \end{itemize}
-% % \end{itemize}
 
-% % \section*{Area Under the Log-Time Curve (AULTC)}
-% With the the CDF defined, 
 We compute the AULTC as the area under $F(x)$ from $x = 0$ to $x = \log(1 + S_{\text{max}})$, normalized by $\log(1 + S_{\text{max}})$:
 \begin{align*}
 \text{AULTC} &= \frac{1}{\log(1 + S_{\text{max}})} \Bigg[ \sum_{i=1}^k (x_{(i)} - x_{(i-1)}) \frac{i}{k} + (\log(1 + S_{\text{max}}) - x_{(k)}) \times 1 \Bigg]
@@ -63,7 +24,6 @@ The code for the AULTC calculation is given in the function \texttt{ecdf\textund
 \begin{ChSixRemark}
 The time unit and cutoff $S_\text{max}$ affect the AULTC calculation, so they must be specified when reporting the AULTC.
 \end{ChSixRemark}
-% We note that both the choice of time units and cutoff $S_\text{max}$ affect the AULTC calculation.
 Unless otherwise stated, we set $S_{\max}=8760$ hours, corresponding to one year.
 This upper limit was chosen because it captures clinically meaningful discrepancies from hours to months while preventing very long-horizon case-history events from dominating the metric.
 
@@ -120,63 +80,13 @@ L(\lambda t^{p1} + (1-\lambda) t^{p2}) > \lambda L(t^{p1}) + (1-\lambda) L(t^{p2
 \]
 This proves that the average log-time discrepancy is non-convex.
 This remark illustrates the loss form, in case it is considered for optimization/model training rather than for assessment purposes.
-% \subsection{Approximation for a shift in units (and lower bound)}
 
-% In this subsection, we provide an approximate proportionate relationship between the \textbf{Area Under the Log-Time Curve (AULTC)} when converting between different units, we introduce the following variables. 
 
-% Let $U$ and $V$ be two units of time with a conversion factor $c$, such that:
-% \[
-% 1 \text{ unit of } U = c \text{ units of } V
-% \]
-% (Example: $U = \text{hours}, V = \text{seconds}, c = 3600$).
 
-% Let $S_{\text{max}}^{U}$ be the maximum discrepancy cutoff in units $U$.  Correspondingly, the maximum cutoff in units $V$ is:
-% \[
-% S_{\text{max}}^{V} = c \times S_{\text{max}}^{U}
-% \]
 
-% \subsubsection{Proportionate Relationship}
-% The AULTC in units $V$ ($\text{AULTC}^{V}$) is approximately proportional to the AULTC in units $U$ ($\text{AULTC}^{U}$) via the ratio of their normalization factors:
-% \[
-% \text{AULTC}^{V} \approx \left( \frac{\log(S_{\text{max}}^{U})}{\log(c) + \log(S_{\text{max}}^{U})} \right) \times \text{AULTC}^{U}
-% \]
 
-% \subsubsection{Derivation}
-% For this derivation, we assume that approximation $\log(1 + S_{\text{max}}^{U}) \approx \log(S_{\text{max}}^{U})$ holds.
-% For units $U$, we have the approximation of the normalizing factor $\gamma_U$:
-% \[
-% \gamma_U = \log(1 + S_{\text{max}}^{U}) \approx \log(S_{\text{max}}^{U})
-% \]
-% $(\text{for large } S_{\text{max}}^{U})$. For units $V$: 
-% \[
-% \gamma_V = \log(1 + c S_{\text{max}}^{U}) \approx \log(c) + \log(S_{\text{max}}^{U})
-% \]
-% $\text{for large } c S_{\text{max}}^{U}$.
-% Then, the ratio of the normalization factors is:
-% \[
-% \frac{\log(S_{\text{max}}^{U})}{\log(c) + \log(S_{\text{max}}^{U})}
-% \]
-% This ratio scales the AULTC when switching units.
 
-% With these approximations, the proportionate relationship is:
-% \[
-% \text{AULTC}^{V} \approx \left( \frac{\log(S_{\text{max}}^{U})}{\log(c) + \log(S_{\text{max}}^{U})} \right) \times \text{AULTC}^{U},
-% \]
-% which allows conversion of AULTC between any units $U$ and $V$ with a conversion factor $c$, provided $S_{\text{max}}^{U}$ is sufficiently large.
 
-% \subsubsection{Example}
 
-% Here is an example proportionality of the AULTC when converting from units of hours to units of seconds when the $S_\text{max}$ is 1 year.
 
-% For $ S_{\text{max}}^{\text{hr}} = 8760 $ hours (1 year):
-% \begin{align*}
-% &\log(8760) \approx 9.07, \\
-% &\log(3600 \times 8760) = \log(31,536,000) \approx 17.27, \\
-% &\text{Ratio:}
-%    \frac{9.07}{17.27} \approx 0.525
-% \end{align*}
-% Thus:
-% \[
-% \text{AULTC}^{\text{sec}} \approx 0.525 \times \text{AULTC}^{\text{hr}}
-% \]
 

@@ -4,8 +4,6 @@
 \ChEightHeadingOnly
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
 \subsubsection{Clinical timeline task and dataset}
 \label{ch08:sec:data}
 
@@ -32,9 +30,7 @@ Structured EHR tables contain dense repeated measurements, medication records, a
 Conversely, clinically meaningful narrative events, such as symptoms, functional status, patient-reported histories, and clinical reasoning, may not have direct structured counterparts.
 Our method therefore uses structured rows to calibrate text-derived event times when clinically relevant, rather than forcing all structured rows into the reconstructed timeline.
 
-% Each discharge summary is evaluated against a manual gold-standard timeline consisting of clinical events paired with timestamps in hours relative to the case-specific reference time. These annotations provide the reference event content and timing used to assess event recovery, temporal ordering, and absolute timestamp accuracy.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsubsection{Scaffolded retrieval-augmented multimodal timeline reconstruction}
@@ -83,7 +79,6 @@ Methods such as dynamic time warping assume that two sequences share an approxim
 Clinical narratives and structured EHR rows often violate this assumption: many narrative events have no structured counterpart, while structured tables contain dense repeated measurements, medication records, and charted observations that are not standalone narrative events.
 Our workflow therefore allows structured evidence to calibrate event times when appropriate without requiring every narrative event to have a tabular match.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Experimental setup}
 \label{ch08:sec:experimental_setup}
@@ -100,38 +95,10 @@ We report 95\% confidence intervals for the reconstruction metrics using 200 boo
 confidence intervals for the mean within-case differences in \hyperref[ch08:supp:paired-bootstrap]{Supplementary Material \S\ref*{ch08:supp:paired-bootstrap}}, \hyperref[ch08:tab:supp-paired-bootstrap]{Table~\ref*{ch08:tab:supp-paired-bootstrap}}.} 
 \ChEightRebuttal{All implementation and reproducibility details are presented in \hyperref[ch08:supp:implementation]{Supplementary Material \S\ref*{ch08:supp:implementation}}.}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 
-% \noindent\textbf{Implementation and reproducibility.} All evaluated models are open-weight models run locally through \texttt{llama.cpp}; no proprietary APIs are used. The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B. The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline. On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware. Models were run on NVIDIA A100 GPUs, with GPU count varying by model size. 
-% \ChEightRebuttal{The stages differ in complexity: constrained extraction and assembly may
-% be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost–quality tradeoff remains to be evaluated.}
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \input{tables/main_table}
 
-% \begin{figure}[t]
-%     \centering
-%     \includegraphics[width=0.485\textwidth]{plots/aultc_vs_emr_n40_v2.pdf}
-%     \hfill
-%     \includegraphics[width=0.485\textwidth]{plots/cidx_vs_emr_n40_v2.pdf}
 
-%     \vspace{-4pt}
-%     \begin{minipage}[t]{0.485\textwidth}
-%         \centering
-%         %\footnotesize \textbf{A.} 
-%     \end{minipage}
-%     \hfill
-%     \begin{minipage}[t]{0.485\textwidth}
-%         \centering
-%         %\footnotesize \textbf{B.} Concordance
-%     \end{minipage}
 
-%     \vspace{-5mm}
-%     \caption{Temporal performance versus event match rate across event-matching thresholds for unimodal and multimodal variants of each model on the 40-summary evaluation set. (\textbf{Left}) AULTC versus event match rate. (\textbf{Right}) Temporal concordance versus event match rate.}
-%     \label{fig:threshold_sweeps_main}
-%     \vspace{-7.5mm}
-% \end{figure}
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

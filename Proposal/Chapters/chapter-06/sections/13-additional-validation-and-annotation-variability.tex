@@ -31,11 +31,6 @@ Clinician--clinician agreement is imperfect even on the same case reports (Table
 Against this reference, the strongest LLM annotators achieve model--clinician agreement that is comparable to clinician--clinician agreement across the same metrics (Table~\ref{ch06:tab:iaa_models}), supporting that the leading performance levels in Table~\ref{ch06:tab:results} are meaningful relative to human variability rather than artifacts of the evaluation protocol.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \paragraph{Sepsis onset timestamp inference from narratives}
-% To broaden T2S2 applicability to onset-anchored analyses, we evaluated an onset inference module that estimates sepsis onset timestamps directly from narrative text. From the 10 case report subset of \texttt{sepsis-40}, on the clinician-annotated subset where onset could be assessed, SOFA-based onset matched clinician onset exactly in 6 of 9 valid cases (excluding one neonatal outlier for which neonatal SOFA would be more appropriate). The median absolute error was 0 hours (mean $\approx$3.4 hours), with a single moderate deviation (24 hours). In contrast, qSOFA-based onset tended to lag substantially (mean absolute error $\approx$355 hours including the outlier and $\approx$126 hours excluding it), consistent with retrospective reporting of qSOFA-related cues in case narratives rather than true physiologic delay, whereas SOFA-based onset closely aligned with clinician-annotated sepsis onset.
 
 \paragraph{Sepsis onset timestamp inference from narratives}
 \label{ch06:sec:onset_results}
@@ -45,28 +40,7 @@ On \texttt{sepsis-10}, SOFA-based onset matched clinician onset exactly in 6 of 
 The median absolute error was 0 hours (mean $\approx 3.4$ hours), with a single moderate deviation of 24 hours.
 In contrast, qSOFA-based onset tended to lag substantially (mean absolute error $\approx 355$ hours including the outlier and $\approx 126$ hours excluding it), consistent with retrospective reporting of qSOFA-related cues in case narratives rather than true physiologic delay, whereas SOFA-based onset closely aligned with clinician-annotated sepsis onset.
 
-% \begin{table*}[!ht]
-% \caption{\texttt{sepsis-10} annotation quality review
-% % mean rank and fraction of cases that are top-1, top LLM (Top-1-LLM), excellent, good or better ($\geq$ Good), and acceptable or better ($\geq$ Acceptable).
-% }
-% \label{tab:sep10review}
-% \small
-% \centering
-% \begin{tabular}{lcccccc}
 
-% \toprule
-% \textbf{Annotator} & Mean Rank & Top-1 & Top-1-LLM & Excellent & $\geq$ Good & $\geq$ Acceptable \\
-% \midrule
-% Manual & 1.2 & 0.9 & -- & 1 & 1 & 1 \\
-% O1-preview & 1.5 & 0.6 & 0.9 & 0.9 & 1 & 1 \\
-% DeepSeek R1 IQ1 & 3.5 & 0.1 & 0.2 & 0.4 & 0.5 & 0.8 \\
-% L3.3 70B   & 3.8 & 0 & 0 & 0 & 0.2 & 0.9 \\
-% L3.1 70B   & 4.8 & 0 & 0 & 0 & 0.2 & 0.5 \\
-% Mixtral 8x7B  & 5.4 & 0 & 0 & 0 & 0.1 & 0.2\\
-% L3.1 8B    & 6.5 & 0 & 0 & 0 & 0 & 0 \\
-% \bottomrule
-% \end{tabular}
-% \end{table*}
 
 
 
@@ -78,7 +52,6 @@ We further evaluated factual grounding, generation stability, and full-corpus co
 In the \texttt{sepsis-10} hallucination audit, 1,517 total extracted events from combined DeepSeek-R1 and Llama-3.3-70B-Instruct were reviewed through automated lexical grounding followed by manual adjudication of unresolved cases; no unsupported hallucinated events were identified (Table~\ref{ch06:tab:hallucination_audit} in Appendix~\ref{ch06:apd:hallucination_audit_results}).
 On the same \texttt{sepsis-10} reports, multi-pass self-consistency across five random seeds showed stable extraction behavior across DeepSeek-R1, Llama 3.3, O1-preview, and GPT-5 (Table~\ref{ch06:tab:self_consistency} in Appendix~\ref{ch06:apd:self_consistency_results}).
 Across the full 2,139-report corpus, Llama-3.3-70B-Instruct achieved strong agreement with DeepSeek-R1, with match rate 0.79, concordance 0.87, and AULTC 0.83 (Table~\ref{ch06:tab:full_corpus_agreement} in Appendix~\ref{ch06:apd:full_corpus_agreement_results}).
-% Finally, on the \texttt{sepsis-10} onset subset, SOFA-based onset matched clinician onset exactly in 6 of 9 valid cases, with median absolute error 0 hours, whereas qSOFA-based onset tended to lag behind clinician-assessed onset.
 
 
 

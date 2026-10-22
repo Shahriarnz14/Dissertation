@@ -32,36 +32,19 @@ This setup mirrors real-world contexts such as clinical trials with dropout patt
 We evaluated representative estimators from all three method families. 
 Figure~\ref{ch04:fig:uconf-ic-results} reports CATE RMSE and ATE bias (mean $\pm$ standard error) across 10 random splits. 
 
-% \begin{figure}[ht]
-%     \centering
-%     \captionsetup[subfigure]{labelformat=empty}
 
-%     \makebox[\textwidth][c]{
-%     \begin{subfigure}[t]{0.6\textwidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{fig/unobIC_scenario_C_e_X_U_info_censor_unobserved_cate_rmse.pdf} \vspace{-0.6cm}
-%        \caption{RCT:\blackcross, Ignorability:\blackcross, Positivity:\graycheck, Ignorable Censoring:\blackcross}
-%     \end{subfigure}
-%     }
-%     \vspace{-0.1cm}
-%     \caption{CATE RMSE under informative censoring induced by unobserved confounding.}
-%     \label{fig:uconf-ic-results}
-% \end{figure}
 
 
 \input{Appendices/appendix-ch04/figures/informative-censoring-errors}
 
 
 The results indicate that Causal Survival Forests and survival meta-learners with matching tend to perform best under this setting, consistent with findings from the main synthetic datasets. 
-% Performance differences across methods are modest, but the ranking of families is stable, underscoring robustness to how informative censoring is introduced. 
 
 \ChFourParagraph{Extensibility to other settings.}
 Here we illustrate one case: \texttt{OBS-UConf} combined with Scenario~\texttt{C}.  
 However, the same mechanism can be straightforwardly extended to other causal configurations (e.g., randomized trials with imbalance) and survival scenarios (e.g., AFT or Cox models).  
-We leave systematic exploration of these additional combinations for future work, but their ease of inclusion highlights the flexibility of \textsc{SurvHTE-Bench} to accommodate alternative censoring mechanisms.% without disrupting its structured $8 \times 5$ design.
+We leave systematic exploration of these additional combinations for future work, but their ease of inclusion highlights the flexibility of \textsc{SurvHTE-Bench} to accommodate alternative censoring mechanisms.%
 
 
 
-% \section{The Use of Large Language Models (LLMs)} \label{app:llm-usage}
-% Large Language Models (LLMs) were used as general-purpose assistive tools. Specifically, they supported parts of the writing process (editing, formatting, and polishing text) without contributing to the core methodology, scientific rigor, or originality of the research. In addition, LLMs were used to assist with improving visualization code for figures, documenting the code, and minor refactoring. No part of the conceptualization, design, or execution of the research relied on LLMs.
 

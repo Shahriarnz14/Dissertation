@@ -6,7 +6,7 @@ The Third International Consensus Definitions for Sepsis (Sepsis-3) are the benc
 In the critical care literature, sepsis is seen as a heterogeneous disease, a pathway arrived upon from a multitude of infectious origins, anatomical sites, and comorbid profiles.  
 There is increasing recognition of the importance of time in understanding sepsis and sepsis progression, as seen in early-warning systems \citep{henry2022factors}, variation in prediction utility \citep{kamran2024evaluation}, and endotype characterization \citep{ch06:noroozizadeh2023temporal}.
 
-Meanwhile, structured data streams, which are the data resources these tools use, are often incomplete records with insufficient information to render or confirm a diagnosis of sepsis \citep{moldwin2021empirical}. %,seinen2024structured}.  
+Meanwhile, structured data streams, which are the data resources these tools use, are often incomplete records with insufficient information to render or confirm a diagnosis of sepsis \citep{moldwin2021empirical}. %
 A more complete alternative is the discharge summary, or more generally, the case report, in which a clinician documents the clinical findings pertinent to the case and care management.
 The impracticality of using the case report is that it is only written in full after the encounter is over, \emph{i.e.}, with a less granular timestamp than the events contained within. 
 In principle, having a more complete, fine-grained temporal record could enable better temporal analyses of patients with sepsis, leading to better understanding and treatment improvements.
@@ -15,7 +15,6 @@ At present, the (semi-)public critical care repositories at the research frontie
 While several concerted efforts have focused on extracting temporal information, they have largely focused on temporal relations between clinical concepts \citep{sun2013evaluating} rather than on event timing.  
 Those that have focused on timing \citep{leeuwenberg2020towards,ch06:frattallone2024using} used excerpted summaries and relatively small sample sizes. 
 
-% To train sepsis models with fine temporal granularity from free-text, we introduce a novel Sepsis-3 textual time series corpus from the PubMed Open Access (PMOA) Subset. We evaluate LLMs' ability to extract and timestamp clinical findings, contrasting performance with manual annotations and existing methods \citep{frattallone2024using}. Our assessments across model scales provide evidence for the textual time series corpus for sepsis (T2S2) quality.
 
 In order to train sepsis models that can incorporate information referenced in free text with finer temporal granularity, we seek to generate larger samples of textual time series.
 To do so, we introduce a novel Sepsis-3 textual time series corpus from the PubMed Open Access (PMOA) Subset.
