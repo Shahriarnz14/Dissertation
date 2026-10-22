@@ -3,11 +3,14 @@
 \label{ch04:sec:semi-syn-data-experiment}
 
 
-To bridge the gap between controlled synthetic experiments and real-world complexity, we evaluate methods on semi-synthetic datasets that pair real covariate distributions with simulated treatments and outcomes. This approach addresses a critical limitation of purely synthetic data---the potential lack of representativeness in covariate structures---while maintaining ground-truth CATEs for rigorous evaluation. These datasets preserve real-world covariate correlations, mixed data types, and high dimensionality while enabling controlled evaluation against known treatment effects.
+To bridge the gap between controlled synthetic experiments and real-world complexity, we evaluate methods on semi-synthetic datasets that pair real covariate distributions with simulated treatments and outcomes.
+This approach addresses a critical limitation of purely synthetic data---the potential lack of representativeness in covariate structures---while maintaining ground-truth CATEs for rigorous evaluation.
+These datasets preserve real-world covariate correlations, mixed data types, and high dimensionality while enabling controlled evaluation against known treatment effects.
 
 \textbf{Dataset construction.} We construct 10 semi-synthetic datasets using covariates from two sources (Table~\ref{ch04:tab:semi-syn-dataset-summary} summarizes all datasets).
 \begin{itemize}
-    \item \textbf{ACTG semi-synthetic}: Based on 23 covariates from the ACTG HIV clinical trial~\citep{hammer1996atrial}, with treatment and event times simulated following~\citet{chapfuwa2021enabling}. This dataset exhibits moderate censoring (51\%) with realistic treatment imbalance.
+    \item \textbf{ACTG semi-synthetic}: Based on 23 covariates from the ACTG HIV clinical trial~\citep{hammer1996atrial}, with treatment and event times simulated following~\citet{chapfuwa2021enabling}.
+This dataset exhibits moderate censoring (51\%) with realistic treatment imbalance.
     % \item \textbf{MIMIC semi-synthetic}: Derived from 36 covariates in the MIMIC-IV ICU database~\citep{johnson2023mimic}, with treatment and outcomes generated following~\citet{meir2025heterogeneous}. \textcolor{red}{modify so that says 5 use this, 4 from others.} We create five variants with censoring rates from 53\% to 88\%, simulating the range from moderate to extreme censoring common in longitudinal EHR studies. \ChFourRebuttal{We also include four additional variants (MIMIC-$vi$-$ix$) that use the same covariates but introduce covariate-dependent treatment assignment and non-linear event-time and censoring mechanisms; these variants maintain similar treatment prevalence (51-54\%) as the first five with balanced censoring (53\%). Full generative details for both of these constructions are provided in Appendix~\ref{app:mimic-i-v} and Appendix~\ref{app:mimic-vi-ix} respectively.}
     \item \textbf{MIMIC semi-synthetic}: Derived from 36 covariates in the MIMIC-IV ICU database~\citep{johnson2023mimic}. 
     \ChFourRebuttal{We construct nine MIMIC-based semi-synthetic variants organized into two complementary subsets: 
@@ -22,7 +25,7 @@ To bridge the gap between controlled synthetic experiments and real-world comple
 Table~\ref{ch04:tab:semi-syn-cate-rmse} presents CATE RMSE results across semi-synthetic datasets, showing how realistic covariate structure modulates the core performance patterns observed in synthetic experiments. % \ChFourRebuttal{The results for the remaining semi-synthetic datasets, MIMIC-$vi$--$ix$, can be found in Appendix~\ref{app:mimic-vi-ix-results}.}
 
 
-\input{Chapters/chapter-04/tables/03}
+\input{Chapters/chapter-04/tables/semi-synthetic-cate-rmse}
 
 
 \textbf{Validation and extension of synthetic findings.} The semi-synthetic results broadly corroborate the synthetic benchmark: In ACTG,  Double-ML achieves the lowest RMSE (10.65), consistent with the advantage of flexible, doubly robust approaches in moderate-dimensional settings with controlled confounding. Across MIMIC-$i$--$v$, methods remain competitive within a narrow band, with survival-oriented approaches (SurvITE and survival meta-learners) frequently among the top performers.

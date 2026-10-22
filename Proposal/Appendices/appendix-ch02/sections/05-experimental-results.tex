@@ -5,17 +5,20 @@
 \subsubsection{Synthetic Data Results}
 \label{ch02:sec:ToyExperiment_Results}
 
-In Figure~\ref{ch02:fig:toyDataset_result_complete}, we visualize the embedding space of all the models tested. For all the baselines tested, we show the 3D embedding space. For the \ChTwoSmallCaps{Temporal-SCL} model and its ablations where the embedding is constrained to lie on the hypersphere, we also plot the underlying unit hypersphere shell as well as the embeddings.
+In Figure~\ref{ch02:fig:toyDataset_result_complete}, we visualize the embedding space of all the models tested.
+For all the baselines tested, we show the 3D embedding space.
+For the \ChTwoSmallCaps{Temporal-SCL} model and its ablations where the embedding is constrained to lie on the hypersphere, we also plot the underlying unit hypersphere shell as well as the embeddings.
 
 
-\input{Appendices/appendix-ch02/figures/03}
+\input{Appendices/appendix-ch02/figures/synthetic-baseline-embeddings}
 
 
 As it can be seen here, our proposed model is the only model that can fully recover the structure and the 10 clusters of time steps from the input raw feature space shown in Figure~\ref{ch02:fig:toyDataset_Raw}.
 
 \subsubsection{Visualizing Embedding Clusters for MIMIC}
 \label{ch02:sec:heatmap_mimic}
-We show the full heatmap of Figure~\ref{ch02:fig:heatmapMIMIC} for how the features vary across clusters in the test set of our MIMIC dataset in Figure~\ref{ch02:fig:heatmapMIMIC_full}. This heatmap is generated from the test patient embeddings of the complete \ChTwoSmallCaps{Temporal-SCL} model.
+We show the full heatmap of Figure~\ref{ch02:fig:heatmapMIMIC} for how the features vary across clusters in the test set of our MIMIC dataset in Figure~\ref{ch02:fig:heatmapMIMIC_full}.
+This heatmap is generated from the test patient embeddings of the complete \ChTwoSmallCaps{Temporal-SCL} model.
 The heatmap uses the first version of our model out of the 10 experimental repeats.
 
 
@@ -25,14 +28,18 @@ The heatmap uses the first version of our model out of the 10 experimental repea
 
 To interpret each cluster for ADNI, we plot the heatmap how features (rows) vary across clusters for the test patients of ADNI in Figure \ref{ch02:fig:heatmapADNI}.
 Columns are ordered (left to right) in dementia rate. 
-Here we can also see that abnormal feature values that are correlated with higher risk of dementia such as irregular dementia rating scores are present in clusters containing higher proportion of AD. The heatmap uses the first version of our model out of the 10 experimental repeats.
+Here we can also see that abnormal feature values that are correlated with higher risk of dementia such as irregular dementia rating scores are present in clusters containing higher proportion of AD.
+The heatmap uses the first version of our model out of the 10 experimental repeats.
 
 
 
 
 \subsubsection{Visualizing Embedding Clusters for MIMIC from Raw Features}
 \label{ch02:sec:heatmap_mimic_raw}
-We also tried our clustering-based heatmap visualization for clusters from raw feature vectors instead of \ChTwoSmallCaps{Temporal-SCL}’s embedding vectors. Using raw features results in less useful heatmaps. For example, in MIMIC as shown in Figure~\ref{ch02:fig:RawHeatmapADNI}, using raw feature vectors and 20 clusters, the resulting heatmap has high concentration in one cluster (93\% of data are in a single cluster) and the mortality rates across clusters are nearly all below 35\% (so the clusters found do not distinguish between patients with intermediate mortality probabilities, e.g., between 50\% to 100\%). Neither of these issues arise when we cluster on our model’s embedding vectors as shown in Figure~\ref{ch02:fig:heatmapMIMIC_full}.
+We also tried our clustering-based heatmap visualization for clusters from raw feature vectors instead of \ChTwoSmallCaps{Temporal-SCL}’s embedding vectors.
+Using raw features results in less useful heatmaps.
+For example, in MIMIC as shown in Figure~\ref{ch02:fig:RawHeatmapADNI}, using raw feature vectors and 20 clusters, the resulting heatmap has high concentration in one cluster (93\% of data are in a single cluster) and the mortality rates across clusters are nearly all below 35\% (so the clusters found do not distinguish between patients with intermediate mortality probabilities, e.g., between 50\% to 100\%).
+Neither of these issues arise when we cluster on our model’s embedding vectors as shown in Figure~\ref{ch02:fig:heatmapMIMIC_full}.
 
 
 
@@ -54,33 +61,44 @@ Including or withholding each of these modules results in the following ablated 
 We observe that together, all three modules play a key role in performance for both our synthetic and real-world clinical datasets experiments. 
 
 
-\input{Appendices/appendix-ch02/tables/02}
+\input{Appendices/appendix-ch02/tables/supervision-ablation}
 
 
 \textbf{Synthetic dataset.} 
-In Table~\ref{ch02:tab:toyDataset_ratios}, examining the ablated models reveals the distinct contributions of each module in our synthetic experiments. Specifically, the observed decrease in Silhouette Index (SI) when NN pairing is absent underscores its pivotal role in maintaining feature similarity, which is instrumental in ground truth recovery. Conversely, the model lacking pre-training suggests that while pre-training facilitates initial model configuration, the presence of NN pairing and the temporal network can partly mitigate its absence.
+In Table~\ref{ch02:tab:toyDataset_ratios}, examining the ablated models reveals the distinct contributions of each module in our synthetic experiments.
+Specifically, the observed decrease in Silhouette Index (SI) when NN pairing is absent underscores its pivotal role in maintaining feature similarity, which is instrumental in ground truth recovery.
+Conversely, the model lacking pre-training suggests that while pre-training facilitates initial model configuration, the presence of NN pairing and the temporal network can partly mitigate its absence.
 
 These results highlight the NN pairing module's significance in organizing the embedding space, a notion further evidenced by the relatively higher SI in the NN Pairing Only ablation (3) compared to other single-module ablations.
 
-The temporal network's role, while not markedly influencing performance metrics in isolation, proves vital for the temporal structure within the embedding space. This is contrasted with the \ChTwoSmallCaps{Simple-SCL} model, where the simultaneous absence of NN pairing and the temporal network leads to the lowest performance metrics, emphasizing the necessity of their collective functionality.
+The temporal network's role, while not markedly influencing performance metrics in isolation, proves vital for the temporal structure within the embedding space.
+This is contrasted with the \ChTwoSmallCaps{Simple-SCL} model, where the simultaneous absence of NN pairing and the temporal network leads to the lowest performance metrics, emphasizing the necessity of their collective functionality.
 
 The full \ChTwoSmallCaps{Temporal-SCL} configuration exhibits superior SI and Cluster Prediction Accuracy, demonstrating the synergistic effect of the three modules in both the recovery of input structure and the enhancement of downstream task prediction.
 
-In Figure~\ref{ch02:fig:toyDataset_result_complete}, we include ablations of the most simple model (1) and ablations of single module omitted (6), (7), alongside the fully-equipped model (8). The learned embedding space from these models illustrates high prediction accuracy, as evidenced by a hyperplane nearly perfectly segregating the red data points from the blue data points. However, the figure also showcases the collective capacity of the modules to recover the known ground-truth embedding vectors. Notably, only the complete model represented in Figure~\ref{ch02:fig:synth-tscl} achieves an accurate reconstruction of the embedding structure, evidenced by distinct, correctly ordered clusters for each timestep.
+In Figure~\ref{ch02:fig:toyDataset_result_complete}, we include ablations of the most simple model (1) and ablations of single module omitted (6), (7), alongside the fully-equipped model (8).
+The learned embedding space from these models illustrates high prediction accuracy, as evidenced by a hyperplane nearly perfectly segregating the red data points from the blue data points.
+However, the figure also showcases the collective capacity of the modules to recover the known ground-truth embedding vectors.
+Notably, only the complete model represented in Figure~\ref{ch02:fig:synth-tscl} achieves an accurate reconstruction of the embedding structure, evidenced by distinct, correctly ordered clusters for each timestep.
 
 
 \noindent
 \textbf{Clinical datasets.} We present an ablation study of our model to see how each modification contributes to the performance.
 Our full model includes pre-training with \ChTwoSmallCaps{Simple-SCL}, enhancing the Temporal Network $h$, and using ``labels$+$feature-similarity'' for finding the nearest neighbor pairs. 
 We train the extra 7 additional ablated models in this section on both our MIMIC and ADNI datasets.
-Note that to discover discrete latent states that could be of interest, we cluster on the learned hyperspherical embeddings (the $\mathbf{z}_i^{(\ell)}$ variables)  using a complete linkage Agglomerative Hierarchical Clustering \citep{murtagh2012algorithms}. We describe our clustering approach in Appendix~\ref{ch02:sec:cluster}. The unsupervised metrics presented here are evaluated for the same number of clusters in each ablation.
+Note that to discover discrete latent states that could be of interest, we cluster on the learned hyperspherical embeddings (the $\mathbf{z}_i^{(\ell)}$ variables)  using a complete linkage Agglomerative Hierarchical Clustering \citep{murtagh2012algorithms}.
+We describe our clustering approach in Appendix~\ref{ch02:sec:cluster}.
+The unsupervised metrics presented here are evaluated for the same number of clusters in each ablation.
 
 
-\input{Appendices/appendix-ch02/tables/03}
+\input{Appendices/appendix-ch02/tables/adni-future-prediction}
 
 
 Firstly, our empirical findings show that for the models without pre-training and without the temporal network $h$ (\ChTwoSmallCaps{Simple-SCL}), we see a clear performance drop for all supervised and unsupervised metrics which highlights the importance of inclusion of these modules in our model training.
-We also calculated the Silhouette Index (SI) of the ablated models in the last column of Table~\ref{ch02:tab:ablation_results}. As it can be seen from the ablation results, with respect to the supervised prediction performance (AUROC, AUPRC), the two models with and without NN pairing ((5), (8)) perform similarly. However, the main gain of using “labels+feature similarity” comes in the unsupervised prediction performance (Purity, NMI, ARI, SI). This is especially apparent in the Silhouette Index score (a measure of how similar an object is to its own cluster compared to other clusters) where we see the greatest boost in performance when using “labels+feature similarity” (full model (8)) instead of “labels only” (ablated model (5)) where it shows how our model moves away from just stratifying risk (which is what the supervised metrics are measuring) to additionally being capable of identifying homogeneous disease phenotypes.
+We also calculated the Silhouette Index (SI) of the ablated models in the last column of Table~\ref{ch02:tab:ablation_results}.
+As it can be seen from the ablation results, with respect to the supervised prediction performance (AUROC, AUPRC), the two models with and without NN pairing ((5), (8)) perform similarly.
+However, the main gain of using “labels+feature similarity” comes in the unsupervised prediction performance (Purity, NMI, ARI, SI).
+This is especially apparent in the Silhouette Index score (a measure of how similar an object is to its own cluster compared to other clusters) where we see the greatest boost in performance when using “labels+feature similarity” (full model (8)) instead of “labels only” (ablated model (5)) where it shows how our model moves away from just stratifying risk (which is what the supervised metrics are measuring) to additionally being capable of identifying homogeneous disease phenotypes.
 These experiments together, underscore the significance of having the different building blocks of our model for achieving the highest performance gain in our experiments.
 
 Additionally, the ablation results shown in the bottom portion of Table~\ref{ch02:tab:results} reveal that the highest performance gain with respect to the supervised prediction performance (AUROC, AUPRC) is achieved by the full \ChTwoSmallCaps{Temporal-SCL}.
@@ -95,14 +113,14 @@ The results are presented in Table~\ref{ch02:tab:results_future_adni} below.
 We can see that for this prediction task again our model outperforms other baselines.
 
 
-\input{Appendices/appendix-ch02/figures/04}
+\input{Appendices/appendix-ch02/figures/mimic-embedding-heatmap}
 
 
 
-\input{Appendices/appendix-ch02/figures/05}
+\input{Appendices/appendix-ch02/figures/adni-embedding-heatmap}
 
 
 
-\input{Appendices/appendix-ch02/figures/06}
+\input{Appendices/appendix-ch02/figures/mimic-raw-feature-heatmap}
 
 

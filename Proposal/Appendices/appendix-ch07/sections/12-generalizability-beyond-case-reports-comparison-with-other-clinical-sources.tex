@@ -4,10 +4,17 @@
 
 \ChSevenHeadingOnly
 \subsubsection{Scope and Rationale for using Case Reports}
-We acknowledge that published case reports differ from routine clinical documentation: they emphasize atypical presentations and are written for publication rather than point-of-care use, so they cannot substitute for validation on EHR notes. Our choice is methodological and pragmatic. Case reports are (i) publicly available, (ii) rich in temporally explicit clinical reasoning, and (iii) sufficiently structured to support extraction of textual time series. This makes them a practical, reproducible testbed for assessing whether forecasting models operate on temporally structured narratives without IRB barriers or restricted data access. We therefore use case reports to establish methodological feasibility and transparency, while recognizing that generalization to clinical operations must be demonstrated on EHR notes.
+We acknowledge that published case reports differ from routine clinical documentation: they emphasize atypical presentations and are written for publication rather than point-of-care use, so they cannot substitute for validation on EHR notes.
+Our choice is methodological and pragmatic.
+Case reports are (i) publicly available, (ii) rich in temporally explicit clinical reasoning, and (iii) sufficiently structured to support extraction of textual time series.
+This makes them a practical, reproducible testbed for assessing whether forecasting models operate on temporally structured narratives without IRB barriers or restricted data access.
+We therefore use case reports to establish methodological feasibility and transparency, while recognizing that generalization to clinical operations must be demonstrated on EHR notes.
 
 \subsubsection{Position Relative to Structured Clinical Scores}
-Direct comparison to structured risk scores (e.g., SOFA, SAPS) is infeasible because required variables are absent from case reports. Our contribution is complementary to prior work that integrates text with structured data \citep{kline2022multimodal,wang2025large}: we show that free-text narratives, once transformed into timelines, carry prognostic signal usable for forecasting. Whereas \citet{kline2022multimodal} demonstrated that text can \emph{augment} structured models, our experiments isolate the incremental value of text when converted into time series, independent of structured covariates. In contexts where structured variables are available, these representations can be fused with established scores to assess additive value; here we focus on the text-only signal because the necessary structured inputs are not present in case reports.
+Direct comparison to structured risk scores (e.g., SOFA, SAPS) is infeasible because required variables are absent from case reports.
+Our contribution is complementary to prior work that integrates text with structured data \citep{kline2022multimodal,wang2025large}: we show that free-text narratives, once transformed into timelines, carry prognostic signal usable for forecasting.
+Whereas \citet{kline2022multimodal} demonstrated that text can \emph{augment} structured models, our experiments isolate the incremental value of text when converted into time series, independent of structured covariates.
+In contexts where structured variables are available, these representations can be fused with established scores to assess additive value; here we focus on the text-only signal because the necessary structured inputs are not present in case reports.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%Appendix K:  

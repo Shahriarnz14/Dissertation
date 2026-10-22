@@ -2,19 +2,24 @@
 \subsection{List of CATE Estimators in \textsc{SurvHTE} Benchmark} \label{ch04:app:exp-setup}
 
 
-As mentioned in Section~\ref{ch04:sec:bench}, in our benchmark, we evaluate three families of survival CATE methods, totaling 53 variants. We list the number of variants for each type of CATE estimator in Table~\ref{ch04:tab:baseline-details}.
+As mentioned in Section~\ref{ch04:sec:bench}, in our benchmark, we evaluate three families of survival CATE methods, totaling 53 variants.
+We list the number of variants for each type of CATE estimator in Table~\ref{ch04:tab:baseline-details}.
 
-For the outcome imputation methods, we first apply one of three imputation strategies (Pseudo-observation, Margin, or IPCW-T)~\citep{qi2023an} to handle the censored data, transforming the survival problem into a standard regression task. After imputation, we use these imputed outcomes with four different meta-learner frameworks (S-, T-, X-, and DR-Learners), each implemented with three different base regression models (Lasso Regression, Random Forest, and XGBoost), resulting in $3 \times 4 \times 3 = 36$
-different variants. Additionally, we pair each imputation method with two specialized causal inference methods: Causal Forest~\citep{athey2019grf} and Double-ML~\citep{chernozhukov2018double}, which adds $3 \times 1 + 3 \times 1 = 6$ more variants, for a total of $42$ outcome imputation method variants.
+For the outcome imputation methods, we first apply one of three imputation strategies (Pseudo-observation, Margin, or IPCW-T)~\citep{qi2023an} to handle the censored data, transforming the survival problem into a standard regression task.
+After imputation, we use these imputed outcomes with four different meta-learner frameworks (S-, T-, X-, and DR-Learners), each implemented with three different base regression models (Lasso Regression, Random Forest, and XGBoost), resulting in $3 \times 4 \times 3 = 36$
+different variants.
+Additionally, we pair each imputation method with two specialized causal inference methods: Causal Forest~\citep{athey2019grf} and Double-ML~\citep{chernozhukov2018double}, which adds $3 \times 1 + 3 \times 1 = 6$ more variants, for a total of $42$ outcome imputation method variants.
 
-For direct-survival CATE models, we include the Causal Survival Forests (CSF)~\citep{ch04:cui2023estimating} and SurvITE~\citep{curth2021survite}, which are specifically designed to handle right-censored data without requiring separate imputation steps. SurvITE estimates individual treatment effects directly from right-censored survival data by learning balanced representations and optimizing a survival-specific loss.
+For direct-survival CATE models, we include the Causal Survival Forests (CSF)~\citep{ch04:cui2023estimating} and SurvITE~\citep{curth2021survite}, which are specifically designed to handle right-censored data without requiring separate imputation steps.
+SurvITE estimates individual treatment effects directly from right-censored survival data by learning balanced representations and optimizing a survival-specific loss.
 
-For survival meta-learners, we implement three types of meta-learning frameworks that have been extended to handle censored data directly: S-Learner, T-Learner, and matching-learner~\citep{noroozizadeh2025impact}. Each of these frameworks is combined with three different base survival models (Random Survival Forests~\citep{ch04:ishwaran2008random}, DeepSurv~\citep{ch04:katzman2018deepsurv}, and DeepHit~\citep{ch04:lee2018deephit}) that estimate the underlying survival functions, resulting in $3 \times 3 = 9$ survival meta-learner variants.
+For survival meta-learners, we implement three types of meta-learning frameworks that have been extended to handle censored data directly: S-Learner, T-Learner, and matching-learner~\citep{noroozizadeh2025impact}.
+Each of these frameworks is combined with three different base survival models (Random Survival Forests~\citep{ch04:ishwaran2008random}, DeepSurv~\citep{ch04:katzman2018deepsurv}, and DeepHit~\citep{ch04:lee2018deephit}) that estimate the underlying survival functions, resulting in $3 \times 3 = 9$ survival meta-learner variants.
 
 In total, our benchmark evaluates $42+2+9=53$ different method configurations across the 40 synthetic datasets and the two real-world datasets described in Section~\ref{ch04:sec:bench}.
 
 
-\input{Appendices/appendix-ch04/tables/05}
+\input{Appendices/appendix-ch04/tables/estimator-variant-inventory}
 
 
 

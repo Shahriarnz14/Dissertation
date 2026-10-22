@@ -4,26 +4,31 @@
 
 \ChSixHeadingOnly
 \paragraph{Uncertainty quantification via document-level bootstrap (\texttt{sepsis-40})}
-Because clinician-annotated evaluation sets are necessarily limited in size, we quantify uncertainty using nonparametric bootstrap resampling at the \emph{case report} level with 200 bootstrap replicates. We resample case reports with replacement and recompute each metric on each bootstrap replicate, reporting 95\% bootstrap confidence intervals for event match rate, concordance, and AULTC on \texttt{sepsis-40}. Table~\ref{ch06:tab:bootstrap_ci} summarizes these intervals. 
+Because clinician-annotated evaluation sets are necessarily limited in size, we quantify uncertainty using nonparametric bootstrap resampling at the \emph{case report} level with 200 bootstrap replicates.
+We resample case reports with replacement and recompute each metric on each bootstrap replicate, reporting 95\% bootstrap confidence intervals for event match rate, concordance, and AULTC on \texttt{sepsis-40}.
+Table~\ref{ch06:tab:bootstrap_ci} summarizes these intervals. 
 Across models, the bootstrap intervals preserve the main qualitative conclusions from Table~\ref{ch06:tab:results}: GPT-5 is the strongest model on \texttt{sepsis-40}, DeepSeek-R1 and Llama 3.3 remain the strongest open-model annotators overall, and the smaller or older models generally show lower event recovery and/or temporal accuracy.
 
 
-\input{Chapters/chapter-06/tables/04}
+\input{Chapters/chapter-06/tables/sepsis-bootstrap-intervals}
 
 
 \paragraph{Inter-annotator agreement on additional sepsis reports}
 \label{ch06:sec:iaa}
-To contextualize residual model--clinician discrepancies, we quantified agreement between two independent clinician annotators on five sampled case reports from T2S2, annotated under the same guidelines. We report (i) model--annotator alignment for two leading LLM annotators against each clinician and (ii) clinician--clinician agreement using the same metrics as the main evaluation.
+To contextualize residual model--clinician discrepancies, we quantified agreement between two independent clinician annotators on five sampled case reports from T2S2, annotated under the same guidelines.
+We report (i) model--annotator alignment for two leading LLM annotators against each clinician and (ii) clinician--clinician agreement using the same metrics as the main evaluation.
 
 
-\input{Chapters/chapter-06/tables/05}
+\input{Chapters/chapter-06/tables/inter-annotator-agreement}
 
 
 
-\input{Chapters/chapter-06/tables/06}
+\input{Chapters/chapter-06/tables/model-annotator-comparison}
 
 
-Tables~\ref{ch06:tab:iaa_manual} and~\ref{ch06:tab:iaa_models} contextualize the main results by quantifying annotator variability under the same guidelines and metrics. Clinician--clinician agreement is imperfect even on the same case reports (Table~\ref{ch06:tab:iaa_manual}), reflecting inherent ambiguity in mapping narrative descriptions to temporally localized findings and timestamps. Against this reference, the strongest LLM annotators achieve model--clinician agreement that is comparable to clinician--clinician agreement across the same metrics (Table~\ref{ch06:tab:iaa_models}), supporting that the leading performance levels in Table~\ref{ch06:tab:results} are meaningful relative to human variability rather than artifacts of the evaluation protocol.
+Tables~\ref{ch06:tab:iaa_manual} and~\ref{ch06:tab:iaa_models} contextualize the main results by quantifying annotator variability under the same guidelines and metrics.
+Clinician--clinician agreement is imperfect even on the same case reports (Table~\ref{ch06:tab:iaa_manual}), reflecting inherent ambiguity in mapping narrative descriptions to temporally localized findings and timestamps.
+Against this reference, the strongest LLM annotators achieve model--clinician agreement that is comparable to clinician--clinician agreement across the same metrics (Table~\ref{ch06:tab:iaa_models}), supporting that the leading performance levels in Table~\ref{ch06:tab:results} are meaningful relative to human variability rather than artifacts of the evaluation protocol.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

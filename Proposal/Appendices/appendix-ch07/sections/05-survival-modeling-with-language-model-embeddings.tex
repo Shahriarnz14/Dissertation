@@ -3,7 +3,7 @@
 \label{ch07:apd:encoder-survival}
 
 
-\input{Appendices/appendix-ch07/tables/02}
+\input{Appendices/appendix-ch07/tables/survival-hyperparameter-grid}
 
 
 To evaluate the prognostic value of textual information encoded in large language models (LLMs), we adopt a two-stage framework: (1) extraction of fixed-dimensional sequence embeddings from various pre-trained LLMs, and (2) downstream survival modeling using these embeddings as covariates.
@@ -24,7 +24,8 @@ In the second stage, these embedding vectors are used as input covariates to thr
 
     \item \textbf{DeepSurv:} 
     A neural-network generalization of the Cox proportional hazards model. 
-    The architecture comprises fully connected layers with varying widths (\texttt{num\_nodes}) and dropout rates; see Table~\ref{ch07:tab:hyperparams} for search ranges. The number of training epochs is fixed.
+    The architecture comprises fully connected layers with varying widths (\texttt{num\_nodes}) and dropout rates; see Table~\ref{ch07:tab:hyperparams} for search ranges.
+The number of training epochs is fixed.
 
     \item \textbf{DeepHit:} 
     A multi-task neural network that jointly models the discrete hazard and survival functions. 

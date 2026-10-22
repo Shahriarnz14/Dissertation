@@ -7,7 +7,8 @@ To investigate the discrepancies in event match rate between the i2m4 and \textt
 
 \ChSixParagraph{Overview of Clinical Event Identification.}
 For the i2m4 dataset, manual annotations by clinicians identified an average of $195\pm94$ clinical events per report across $20$ case reports, compared to $80\pm28$ clinical events per report for \texttt{sepsis-10} across $10$ case reports. 
-Llama 3.3 identified an average of $120\pm61$ clinical events for i2m4 and $78\pm24$ clinical events for \texttt{sepsis-10}. These results highlight a systematic bias of under-identification of clinical events in i2m4 compared to \texttt{sepsis-10} by Llama 3.3.
+Llama 3.3 identified an average of $120\pm61$ clinical events for i2m4 and $78\pm24$ clinical events for \texttt{sepsis-10}.
+These results highlight a systematic bias of under-identification of clinical events in i2m4 compared to \texttt{sepsis-10} by Llama 3.3.
 
 Additionally, the i2m4 dataset contains $2.3\times$ more clinical events per report on average than \texttt{sepsis-10}, as annotated by the clinician, with a much larger variance in event counts across reports (Figure~\ref{ch06:fig:manual_vs_l33_event_count}). 
 This heterogeneity reflects structural differences in the datasets: i2m4 reports often include a large number of structured entries, whereas \texttt{sepsis-10} reports are only made-up of free text. 
@@ -16,11 +17,11 @@ For \texttt{sepsis-10}, the model showed a more balanced distribution, over-iden
 These patterns suggest that the higher density and variability of clinical events in i2m4 pose a greater challenge for Llama 3.3.
 
 
-\input{Appendices/appendix-ch06/figures/09}
+\input{Appendices/appendix-ch06/figures/manual-predicted-event-counts}
 
 
 
-\input{Appendices/appendix-ch06/tables/06}
+\input{Appendices/appendix-ch06/tables/event-count-bias}
 
 
 \ChSixParagraph{Dataset Structure Differences.}
@@ -31,7 +32,7 @@ In contrast, \texttt{sepsis-10} reports are written in free text and provide ful
 The absence of abbreviations in \texttt{sepsis-10} reduces variability in event representation and ensures greater alignment between manual annotations and Llama 3.3 predictions.
 
 
-\input{Appendices/appendix-ch06/tables/07}
+\input{Appendices/appendix-ch06/tables/event-description-lengths}
 
 
 Llama 3.3-generated clinical events are of similar length across datasets, with averages of $17\pm14$ characters for i2m4 and $21\pm13$ characters for \texttt{sepsis-10}. 
@@ -56,7 +57,7 @@ The observed difference can be attributed to two main factors:
 \end{itemize}
 
 
-\input{Appendices/appendix-ch06/figures/10}
+\input{Appendices/appendix-ch06/figures/adjusted-event-match-distributions}
 
 
 These findings demonstrate that the lower event match rate for i2m4 is at least partially driven by a systematic under-identification of clinical events by Llama 3.3 in this dataset, compounded by structural differences of reports in i2m4 versus \texttt{sepsis-10}. 
@@ -65,12 +66,13 @@ These findings demonstrate that the lower event match rate for i2m4 is at least 
 Across all models, i2m4 exhibits a lower concordance index (c-index) compared to \texttt{sepsis-10}. 
 To better understand this discrepancy, we closely examine the performance of Llama 3.3, which shows similar trends in event ordering inconsistencies and a concordance-index drop from 0.93 to 0.75.
 
-In i2m4, we observe higher variance in predicted event timestamps, with some extreme deviations from clinician annotations. To quantify the impact of these outliers, we apply an outlier filtering approach based on the interquartile range ($IQR$). 
+In i2m4, we observe higher variance in predicted event timestamps, with some extreme deviations from clinician annotations.
+To quantify the impact of these outliers, we apply an outlier filtering approach based on the interquartile range ($IQR$). 
 The $IQR$ represents the middle 50\% of time differences, defined as the range between the first quartile ($Q1$, $25^{th}$ percentile) and the third quartile ($Q3$, $75^{th}$ percentile). 
 Predictions falling outside $Q1 - 1.5 \times IQR$ or $Q3 + 1.5 \times IQR$ are removed, ensuring that event ordering is evaluated on a more stable subset of predictions.
 
 
-\input{Appendices/appendix-ch06/figures/11}
+\input{Appendices/appendix-ch06/figures/temporal-outlier-filtering}
 
 
 After filtering, the average c-index for i2m4 improves from 0.75 to 0.80, suggesting that extreme time mispredictions were an important factor in lowering event ranking consistency. 
@@ -272,7 +274,7 @@ Specifically, since no events in \texttt{sepsis-10} were assigned to the ``Other
 This misalignment in categorization likely contributed to the lower agreement rate between the two annotators in the \texttt{sepsis-10} dataset.  
 
 
-\input{Appendices/appendix-ch06/tables/08}
+\input{Appendices/appendix-ch06/tables/event-category-alignment}
 
 
 To further investigate the impact of event type categorization on event match rates, we analyzed the match rate separately for each of the six predefined event categories within both datasets.  
@@ -291,7 +293,7 @@ The absence of the ``Other or Unknown'' category in \texttt{sepsis-10} could ind
 This difference in dataset characteristics could contribute to the observed variability in event match rates, as the annotation and alignment processes are inherently influenced by the dataset's structure and complexity.  
 
 
-\input{Appendices/appendix-ch06/figures/12}
+\input{Appendices/appendix-ch06/figures/event-category-match-rates}
 
 
 Overall, the analysis suggests that event match rates are relatively stable across event categories within each dataset.  

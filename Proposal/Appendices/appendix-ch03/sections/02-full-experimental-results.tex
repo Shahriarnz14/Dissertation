@@ -23,7 +23,7 @@ These trends highlight DeepHit's limitations in handling the low-dimensional and
 Given these limitations, the use of DeepHit in our causal inference meta-learner approach for predicting restricted mean time (RMET) is unreliable, as its survival estimates lack the necessary stability and accuracy.
 
 
-\input{Appendices/appendix-ch03/tables/01}
+\input{Appendices/appendix-ch03/tables/prediction-nine-twelve-months}
 
 
 Overall, the results reinforce the performance advantage of the Random Survival Forest across varying time horizons, making it the most reliable model evaluated for predicting time-to-first-event in our dataset.
@@ -35,7 +35,7 @@ Addressing this limitation is critical for advancing both predictive and causal 
 \label{ch03:apd:causal_inference}
 
 
-\input{Appendices/appendix-ch03/tables/02}
+\input{Appendices/appendix-ch03/tables/ate-nine-twelve-months}
 
 
 The Average Treatment Effect (ATE) estimates for 9 and 12 months are summarized in Table~\ref{ch03:tab:table_ate_9_12}.
@@ -67,19 +67,36 @@ While these findings provide some insights, they emphasize the need for cautious
 \subsubsection{Graphical Representation of ATE Trends Across Time Snapshots}
 \label{ch03:apd:graphical_ate}
 
-Figure~\ref{ch03:fig:graphical_ATE_trend} presents the Average Treatment Effect (ATE) estimates at different time snapshots \(\tau\) for the survival models experimented with (Cox Proportional Hazards (CoxPH), Random Survival Forest, DeepSurv, and DeepHit). Each subfigure illustrates the ATE trends over time for a specific survival model, incorporating multiple meta-learning approaches. To facilitate comparisons, the Causal Survival Forest (CSF) that is inherently a causal method is included in all plots.
+Figure~\ref{ch03:fig:graphical_ATE_trend} presents the Average Treatment Effect (ATE) estimates at different time snapshots \(\tau\) for the survival models experimented with (Cox Proportional Hazards (CoxPH), Random Survival Forest, DeepSurv, and DeepHit).
+Each subfigure illustrates the ATE trends over time for a specific survival model, incorporating multiple meta-learning approaches.
+To facilitate comparisons, the Causal Survival Forest (CSF) that is inherently a causal method is included in all plots.
 
 
-\input{Appendices/appendix-ch03/figures/01}
+\input{Appendices/appendix-ch03/figures/ate-time-snapshots}
 
 
-The graphical analysis of ATE estimates over time highlights consistent trends across different survival models and meta-learning strategies. Across CoxPH, Random Survival Forest (RSF), and DeepSurv, a clear ranking of ATE estimates emerges, with the T-learner consistently producing the most negative values, the S-learner yielding the least negative values, and the Matching-based estimator falling in between. This pattern holds across all time snapshots, suggesting that the T-learner amplifies the estimated effect of non-adherence, whereas the S-learner provides more conservative estimates. The Causal Survival Forest (CSF), included in all plots, provides relatively stable estimates that align closely with those from RSF and CoxPH.
+The graphical analysis of ATE estimates over time highlights consistent trends across different survival models and meta-learning strategies.
+Across CoxPH, Random Survival Forest (RSF), and DeepSurv, a clear ranking of ATE estimates emerges, with the T-learner consistently producing the most negative values, the S-learner yielding the least negative values, and the Matching-based estimator falling in between.
+This pattern holds across all time snapshots, suggesting that the T-learner amplifies the estimated effect of non-adherence, whereas the S-learner provides more conservative estimates.
+The Causal Survival Forest (CSF), included in all plots, provides relatively stable estimates that align closely with those from RSF and CoxPH.
 
-As time progresses, a general upward trend is observed in ATE estimates, with some models—particularly RSF and CSF—approaching zero or slightly positive values at 12 months. However, this shift should be interpreted with caution, as it is likely influenced by \textit{survivor bias}, where the population at later time points consists only of individuals who have not yet experienced an adverse event. As discussed in Section~\ref{ch03:sec:04_results_causal}, this selection dynamic skews the estimates toward a subset of individuals who may inherently be at lower risk, leading to a potential underestimation of the true treatment effect. Even when an ATE estimate appears positive, the confidence intervals often extend into the negative range, indicating that the treatment effect of non-adherence could still be detrimental. The increasing standard deviation at later snapshots further suggests greater uncertainty, reinforcing the notion that these estimates become less reliable over longer time snapshots. While we account for observable covariates and risk scores, unmeasured resilience factors or external support systems may still differentiate the remaining population, contributing to the observed shift. Additionally, residual time-varying confounding may exacerbate this effect, as evolving risk factors influencing survival may not be fully captured by standard covariate adjustments. 
+As time progresses, a general upward trend is observed in ATE estimates, with some models—particularly RSF and CSF—approaching zero or slightly positive values at 12 months.
+However, this shift should be interpreted with caution, as it is likely influenced by \textit{survivor bias}, where the population at later time points consists only of individuals who have not yet experienced an adverse event.
+As discussed in Section~\ref{ch03:sec:04_results_causal}, this selection dynamic skews the estimates toward a subset of individuals who may inherently be at lower risk, leading to a potential underestimation of the true treatment effect.
+Even when an ATE estimate appears positive, the confidence intervals often extend into the negative range, indicating that the treatment effect of non-adherence could still be detrimental.
+The increasing standard deviation at later snapshots further suggests greater uncertainty, reinforcing the notion that these estimates become less reliable over longer time snapshots.
+While we account for observable covariates and risk scores, unmeasured resilience factors or external support systems may still differentiate the remaining population, contributing to the observed shift.
+Additionally, residual time-varying confounding may exacerbate this effect, as evolving risk factors influencing survival may not be fully captured by standard covariate adjustments. 
 
-DeepHit continues to stand out as the least stable model for ATE estimation, producing extreme deviations from other methods, particularly at 6 months, where the T-learner reports an ATE of \(11.551 \pm 3.806\). As noted in Section~\ref{ch03:sec:04_results_causal}, this erratic behavior aligns with its poor predictive performance, where it consistently underperformed in concordance and calibration metrics. The instability in DeepHit’s survival predictions likely propagates into its ATE estimates, making it unreliable for causal inference in our experiments. In contrast, CoxPH and RSF provide more stable and interpretable estimates across time, reinforcing their reliability in treatment effect estimation. Lastly, CSF also gives estimates that remain within a reasonable range while avoiding the extreme fluctuations observed in DeepHit.
+DeepHit continues to stand out as the least stable model for ATE estimation, producing extreme deviations from other methods, particularly at 6 months, where the T-learner reports an ATE of \(11.551 \pm 3.806\).
+As noted in Section~\ref{ch03:sec:04_results_causal}, this erratic behavior aligns with its poor predictive performance, where it consistently underperformed in concordance and calibration metrics.
+The instability in DeepHit’s survival predictions likely propagates into its ATE estimates, making it unreliable for causal inference in our experiments.
+In contrast, CoxPH and RSF provide more stable and interpretable estimates across time, reinforcing their reliability in treatment effect estimation.
+Lastly, CSF also gives estimates that remain within a reasonable range while avoiding the extreme fluctuations observed in DeepHit.
 
-These results suggest that while ATE estimates generally indicate a detrimental effect of non-adherence at earlier time points, later snapshots introduce more uncertainty due to both selection dynamics and model instability. The consistent ordering of ATE estimates across meta-learners further underscores the systematic differences in how these approaches estimate treatment effects, with the T-learner capturing the largest negative effects, the S-learner being the most conservative, and Matching-based methods providing intermediate estimates. Given the growing standard deviations and the shifting ATE trends at later time points, care must be taken when interpreting long-term treatment effects, as unmeasured confounding and survival bias may increasingly distort the estimates.
+These results suggest that while ATE estimates generally indicate a detrimental effect of non-adherence at earlier time points, later snapshots introduce more uncertainty due to both selection dynamics and model instability.
+The consistent ordering of ATE estimates across meta-learners further underscores the systematic differences in how these approaches estimate treatment effects, with the T-learner capturing the largest negative effects, the S-learner being the most conservative, and Matching-based methods providing intermediate estimates.
+Given the growing standard deviations and the shifting ATE trends at later time points, care must be taken when interpreting long-term treatment effects, as unmeasured confounding and survival bias may increasingly distort the estimates.
 
 \subsubsection{Unadjusted Survival Curves}
 \label{ch03:apd:unadjusted_survival}
@@ -92,12 +109,12 @@ While right-censoring occurs, on average, at 62.6 months, composite adverse even
 These raw results of difference in adverse event time between the non-adherent and adherent groups set the stage for the survival modeling and causal inference analyses of our paper, which account for confounding factors and provide adjusted estimates of adherence's impact on time-to-first-event.
 
 
-\input{Appendices/appendix-ch03/tables/03}
+\input{Appendices/appendix-ch03/tables/first-event-censoring-times}
 
 
 
 
-\input{Appendices/appendix-ch03/figures/02}
+\input{Appendices/appendix-ch03/figures/kaplan-meier-adherence}
 
 
 
@@ -138,28 +155,28 @@ The trends observed in later time snapshots align with the biases discussed in A
 This further reinforces the difficulty in drawing reliable causal conclusions at these later snapshots, as the subset of patients included becomes increasingly non-representative of the original cohort.
 
 
-\input{Appendices/appendix-ch03/tables/04}
+\input{Appendices/appendix-ch03/tables/coxph-ate-ablation}
 
 
 
 
 
-\input{Appendices/appendix-ch03/tables/05}
+\input{Appendices/appendix-ch03/tables/survival-forest-ate-ablation}
 
 
 
 
-\input{Appendices/appendix-ch03/tables/06}
+\input{Appendices/appendix-ch03/tables/deepsurv-ate-ablation}
 
 
 
 
-\input{Appendices/appendix-ch03/tables/07}
+\input{Appendices/appendix-ch03/tables/deephit-ate-ablation}
 
 
 
 
-\input{Appendices/appendix-ch03/tables/08}
+\input{Appendices/appendix-ch03/tables/causal-forest-ate-ablation}
 
 
 

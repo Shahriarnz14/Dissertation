@@ -12,14 +12,19 @@ Each dimension captures a distinct property of timeline quality.
 \label{ch05:apd:event-match-rate}
 
 To assess how well predicted clinical events align with reference events, we use a recursive
-best-match strategy adapted from prior work~\cite{wang2025large} as shown in Algorithm~\ref{ch05:alg:recursive_match}. At each step, the method
+best-match strategy adapted from prior work~\cite{wang2025large} as shown in Algorithm~\ref{ch05:alg:recursive_match}.
+At each step, the method
 identifies the closest unmatched pair of predicted and reference events using a text-similarity
 metric, retains the pair if it satisfies a distance threshold, and removes both events before
 proceeding. \textbf{Algorithm \ref{ch05:alg:recursive_match}} provides pseudocode for this recursive matching procedure.
 This strategy produces a one-to-one alignment between reference and predicted events that is
 efficient and well-suited to timelines of differing lengths. 
 
-In our final evaluation, we also implement a globally optimal one-to-one matching procedure based on the Linear Assignment Problem, solved using the Jonker–Volgenant (LAPJV) algorithm \citep{jonker1987shortest}. We construct a rectangular cost matrix of pairwise cosine distances between predicted and reference events and enforce a distance threshold by assigning infeasible pairs a prohibitively large cost. LAPJV then computes a minimum-cost assignment under these constraints, yielding a globally optimal one-to-one alignment. This provides a principled benchmark against the recursive heuristic while preserving the same matching constraints. Unlike the recursive best-match heuristic, which greedily selects local minima, the LAPJV formulation optimizes the full matching jointly, ensuring global optimality under the same one-to-one and distance constraints. A detailed sensitivity analysis of LAPJV-based matching with respect to the distance threshold,
+In our final evaluation, we also implement a globally optimal one-to-one matching procedure based on the Linear Assignment Problem, solved using the Jonker–Volgenant (LAPJV) algorithm \citep{jonker1987shortest}.
+We construct a rectangular cost matrix of pairwise cosine distances between predicted and reference events and enforce a distance threshold by assigning infeasible pairs a prohibitively large cost. LAPJV then computes a minimum-cost assignment under these constraints, yielding a globally optimal one-to-one alignment.
+This provides a principled benchmark against the recursive heuristic while preserving the same matching constraints.
+Unlike the recursive best-match heuristic, which greedily selects local minima, the LAPJV formulation optimizes the full matching jointly, ensuring global optimality under the same one-to-one and distance constraints.
+A detailed sensitivity analysis of LAPJV-based matching with respect to the distance threshold,
 including trade-offs between event match recall, temporal concordance, and timestamp accuracy, is presented in Appendix~\ref{ch05:apd:lapjv-matching}. 
 
 We evaluated several similarity measures—including Levenshtein distance, BERT-based
@@ -101,14 +106,15 @@ t^{\text{pred}}_i=t^{\text{pred}}_j
 \right\}
 \right],
 \]
-where $N$ is the number of comparable pairs. Higher values indicate stronger preservation of reference ordering.
+where $N$ is the number of comparable pairs.
+Higher values indicate stronger preservation of reference ordering.
 
 \ChFiveRebuttal{
 In our analysis of 200 manually annotated benchmark, manual-reference ties accounted for 13.81\%--15.37\% of all eligible pairs, while LLM annotation ties occurred in 14.16\%--34.70\% of comparable pairs (Table \ref{ch05:tab:concordance_pairs_ties}). Counts were summed across documents, and percentages were calculated from the corresponding summed counts. Manual-reference tie rates differ across models because each model yields a different set of matched events with usable timestamps.
 }
 
 
-\input{Appendices/appendix-ch05/tables/01}
+\input{Appendices/appendix-ch05/tables/concordance-pairs-ties}
 
 
 \subsubsection{Time Discrepancy and AULTC}

@@ -2,26 +2,35 @@
 \ChFourLongSection{Additional Experimental Results for Synthetic Dataset}
 \label{ch04:app:additional_synthetic_exps}
 
-This section provides comprehensive experimental results on our synthetic datasets, expanding on the key findings presented in the main text. We begin in Appendix~\ref{ch04:app:full-rankings} with a full Borda ranking of all 53 model combinations, summarizing global performance across every causal configuration and survival scenario. In Appendix~\ref{ch04:app:average_rank_per_scenario}, we explore how performance varies across different survival scenarios--illustrating the impact of censoring patterns and time-to-event distributions on method rankings. Appendix~\ref{ch04:app:more-avg-rank} then delves into how violations of causal assumptions (treatment randomization, ignorability, positivity, and censoring mechanisms) reshape the ranking of models for effectiveness of each causal method.
+This section provides comprehensive experimental results on our synthetic datasets, expanding on the key findings presented in the main text.
+We begin in Appendix~\ref{ch04:app:full-rankings} with a full Borda ranking of all 53 model combinations, summarizing global performance across every causal configuration and survival scenario.
+In Appendix~\ref{ch04:app:average_rank_per_scenario}, we explore how performance varies across different survival scenarios--illustrating the impact of censoring patterns and time-to-event distributions on method rankings.
+Appendix~\ref{ch04:app:more-avg-rank} then delves into how violations of causal assumptions (treatment randomization, ignorability, positivity, and censoring mechanisms) reshape the ranking of models for effectiveness of each causal method.
 
-Subsequent sections (\ref{ch04:app:more-cate-mse-plots} and \ref{ch04:app:more-ate-plots}) present detailed performance metrics---CATE RMSE and ATE bias, respectively---across all 8 causal configurations and 5 survival scenarios, with box plots capturing variability over 10 experiment repetitions. We also evaluate auxiliary components in \ref{ch04:app:auxiliary-eval-results}, including imputation methods and base learners (regression, survival, and propensity models), and in Appendix~\ref{ch04:app:varying-train-size} we examine convergence behavior under varying training set sizes. Together, these detailed results support the robustness, sensitivity, and practical trade-offs of each model family in a wide spectrum of data-generating and causal settings.
+Subsequent sections (\ref{ch04:app:more-cate-mse-plots} and \ref{ch04:app:more-ate-plots}) present detailed performance metrics---CATE RMSE and ATE bias, respectively---across all 8 causal configurations and 5 survival scenarios, with box plots capturing variability over 10 experiment repetitions.
+We also evaluate auxiliary components in \ref{ch04:app:auxiliary-eval-results}, including imputation methods and base learners (regression, survival, and propensity models), and in Appendix~\ref{ch04:app:varying-train-size} we examine convergence behavior under varying training set sizes.
+Together, these detailed results support the robustness, sensitivity, and practical trade-offs of each model family in a wide spectrum of data-generating and causal settings.
 
 \ChFourRebuttal{In addition to average-rank summaries, in Appendix~\ref{ch04:app:full-rankings}--~\ref{ch04:app:more-avg-rank}, we also report a set of win-rate analyses that track how often each method family attains Top-1, Top-3, and Top-5 performance on both \textcolor{black}{CATE RMSE and ATE Bias}. Overall win-rates across all survival scenarios and causal configurations are summarized in Table~\ref{ch04:tab:overall-winrate}, while Tables~\ref{ch04:tab:scenario-winrates},~\ref{ch04:tab:winrate-rct-configs}, and~\ref{ch04:tab:winrate-obs-configs} provide scenario-specific and causal-configuration-specific win-rates. These complementary views highlight not only which methods achieve strong average performance, but also which ones most consistently appear among the top performers across varying censoring regimes, survival experimental conditions, and patterns of causal assumption violations.}
 
 \subsubsection{Full ranking of models}
 \label{ch04:app:full-rankings}
 
-To compare the overall performance of the methods across all synthetic datasets, we computed a Borda ranking based on the average rank of each method’s test set CATE RMSE (Table~\ref{ch04:tab:borda-rank-all-method}). The ranking procedure aggregates method performance across all combinations of causal configurations and survival scenarios. For each method, we first computed its RMSE on the test subset of the CATE predictions for each (causal configuration, survival scenario) pair. We then ranked all \ChFourRebuttal{53} methods (described in Appendix~\ref{ch04:app:exp-setup}) within each pair and calculated the average rank across these conditions. This average rank represents the method’s Borda score and serves as a unified summary of its performance robustness in our synthetic data experiments.
+To compare the overall performance of the methods across all synthetic datasets, we computed a Borda ranking based on the average rank of each method’s test set CATE RMSE (Table~\ref{ch04:tab:borda-rank-all-method}).
+The ranking procedure aggregates method performance across all combinations of causal configurations and survival scenarios.
+For each method, we first computed its RMSE on the test subset of the CATE predictions for each (causal configuration, survival scenario) pair.
+We then ranked all \ChFourRebuttal{53} methods (described in Appendix~\ref{ch04:app:exp-setup}) within each pair and calculated the average rank across these conditions.
+This average rank represents the method’s Borda score and serves as a unified summary of its performance robustness in our synthetic data experiments.
 
 
-\input{Appendices/appendix-ch04/tables/11}
+\input{Appendices/appendix-ch04/tables/all-method-borda-rankings}
 
 
 \ChFourRebuttal{
 In addition to the Borda rankings, we also summarize how often each method family achieves leading performance across all experimental settings by reporting the percentage of times a method appears in the \textcolor{black}{Top-1, Top-3, and Top-5 for both CATE RMSE and ATE Bias}. This provides a complementary view that focuses on frequency of strong performance rather than average rank, and helps separate methods that occasionally perform well from those that do so consistently across our full set of survival scenarios and causal configurations.}
 
 
-\input{Appendices/appendix-ch04/tables/12}
+\input{Appendices/appendix-ch04/tables/method-family-win-rates}
 
 
 
@@ -41,14 +50,23 @@ Overall, Table~\ref{ch04:tab:overall-winrate} shows that the strongest performan
 \subsubsection{Ranking of causal methods for different Survival Scenarios}
 \label{ch04:app:average_rank_per_scenario}
 
-In Figure~\ref{ch04:fig:average_rank_per_scenario}, we present the Borda ranking of all causal model families across five different survival scenarios (\texttt{A}--\texttt{E}). For each scenario, the average rank of each method is computed over 8 distinct causal configurations, allowing us to assess robustness across varying underlying data-generating processes. The horizontal layout of each plot ranks methods from best (left, top to bottom) to worst (right, bottom to top), with rank values annotated next to each method for clarity. The colors of the lines connecting the methods to the horizontal axis represent the specific family of the method (e.g., outcome imputation, direct-survival CATE, survival meta-learners). Additionally, thick black horizontal bands connect methods whose difference in ranking is not statistically significant.
+In Figure~\ref{ch04:fig:average_rank_per_scenario}, we present the Borda ranking of all causal model families across five different survival scenarios (\texttt{A}--\texttt{E}).
+For each scenario, the average rank of each method is computed over 8 distinct causal configurations, allowing us to assess robustness across varying underlying data-generating processes.
+The horizontal layout of each plot ranks methods from best (left, top to bottom) to worst (right, bottom to top), with rank values annotated next to each method for clarity.
+The colors of the lines connecting the methods to the horizontal axis represent the specific family of the method (e.g., outcome imputation, direct-survival CATE, survival meta-learners).
+Additionally, thick black horizontal bands connect methods whose difference in ranking is not statistically significant.
 
-These plots illustrate how model performance shifts as censoring rates and survival distributions vary. In Scenario \texttt{A}, which involves minimal censoring, Double-ML achieves the best overall ranking (1.5), though survival meta-learner approaches like T-Learner-Survival and S-Learner-Survival also perform highly, sharing statistical overlap with the top spot. However, as we move toward Scenarios \texttt{C}, \texttt{D}, and \texttt{E}---which are characterized by higher censoring---direct survival modeling approaches consistently rise to the top. Specifically, S-Learner-Survival, Matching-Survival, and Causal Survival Forests dominate the highest ranks across these later scenarios, although SurvITE does not show a really strong average performance even with more censoring. Conversely, the relative performance of Double-ML steadily declines, eventually dropping to the bottom half of average ranking (rank 6.9) in Scenario \texttt{E}. This pattern reinforces that survival-specific modeling is better equipped to handle the uncertainty introduced by heavy censoring, outperforming standard outcome imputation strategies in such settings.
+These plots illustrate how model performance shifts as censoring rates and survival distributions vary.
+In Scenario \texttt{A}, which involves minimal censoring, Double-ML achieves the best overall ranking (1.5), though survival meta-learner approaches like T-Learner-Survival and S-Learner-Survival also perform highly, sharing statistical overlap with the top spot.
+However, as we move toward Scenarios \texttt{C}, \texttt{D}, and \texttt{E}---which are characterized by higher censoring---direct survival modeling approaches consistently rise to the top.
+Specifically, S-Learner-Survival, Matching-Survival, and Causal Survival Forests dominate the highest ranks across these later scenarios, although SurvITE does not show a really strong average performance even with more censoring.
+Conversely, the relative performance of Double-ML steadily declines, eventually dropping to the bottom half of average ranking (rank 6.9) in Scenario \texttt{E}.
+This pattern reinforces that survival-specific modeling is better equipped to handle the uncertainty introduced by heavy censoring, outperforming standard outcome imputation strategies in such settings.
 
 % These plots illustrate how model performance shifts as censoring rates and survival distributions vary. In Scenario \texttt{A}, which involves minimal censoring, outcome regression-based methods such as Double-ML and X-Learner dominate the rankings. However, as we move toward Scenarios D and E--both characterized by higher censoring--direct survival modeling approaches such as S-Learner-Survival, Matching-Survival, and Causal Survival Forests consistently rise to the top. This pattern suggests that survival-specific modeling is better suited to handle the uncertainty introduced by heavy censoring, outperforming outcome imputation strategies in such settings.
 
 
-\input{Appendices/appendix-ch04/figures/02}
+\input{Appendices/appendix-ch04/figures/survival-scenario-rankings}
 
 
 
@@ -63,7 +81,7 @@ These plots illustrate how model performance shifts as censoring rates and survi
 \ChFourRebuttal{As censoring increases, survival-specific modeling becomes increasingly important and accounts for a larger fraction of the best-performing sets. In Scenario~\texttt{C} (Poisson, medium censoring), Causal Survival Forests clearly leads on both metrics (62.5\% Top-1 CATE RMSE; 37.5\% Top-1 ATE Bias; 100\% Top-5 ATE Bias), while Matching-Survival and S-Learner-Survival frequently appear among the best methods (e.g., Matching-Survival is 25.0\% Top-1 CATE RMSE and 100\% Top-5 CATE RMSE; both Matching-Survival and S-Learner-Survival reach 75.0\% Top-3 CATE RMSE). Under high censoring, the dominance shifts even more strongly toward survival-aware families, but with different emphases across scenarios. In Scenario~\texttt{D} (AFT, high censoring), S-Learner-Survival is the primary winner on CATE RMSE (50.0\% Top-1 and 100\% Top-3/Top-5), while Matching-Survival achieves perfect Top-3/Top-5 coverage (100\% in both cases). For ATE Bias, the top positions are shared across multiple survival-aware families (Causal Survival Forests, T-Learner-Survival, and S-Learner-Survival each at 25.0\% Top-1). In Scenario~\texttt{E} (Poisson, high censoring), the strongest ATE Bias performance is achieved by T-Learner-Survival (50.0\% Top-1 and 87.5\% Top-5), with Matching-Survival and SurvITE following, whereas CATE RMSE Top-1 is more distributed (Matching-Survival: 37.5\% Top-1; several other methods across both outcome-imputation and direct-survival CATE methods at 12.5\%). Overall, across all scenarios, classical outcome-imputation methods are rarely dominant or ranked Top-1 under moderate or high censoring, reinforcing the benefit of explicitly modeling time-to-event structure when the censoring rate is high.}
 
 
-\input{Appendices/appendix-ch04/tables/13}
+\input{Appendices/appendix-ch04/tables/survival-scenario-win-rates}
 
 
 
@@ -78,15 +96,21 @@ These plots illustrate how model performance shifts as censoring rates and survi
 \label{ch04:app:more-avg-rank}
 
 % In Figure~\ref{ch04:fig:average_rank_per_experiments}, we present the Borda ranking of causal model families across eight distinct causal configurations, each representing different combinations of assumptions related to treatment assignment (RCT vs. observational), ignorability, positivity, and censoring mechanisms. Within each configuration, the average rank of each method is computed over all survival scenarios, allowing us to isolate how assumption violations affect model performance independently of survival data characteristics.
-In Figure~\ref{ch04:fig:average_rank_per_experiments}, we present the Borda ranking of causal model families across eight distinct causal configurations, each representing different combinations of assumptions related to treatment assignment (RCT vs. observational), ignorability, positivity, and censoring mechanisms. Within each configuration, the average rank of each method is computed over all survival scenarios, allowing us to isolate how assumption violations affect model performance independently of survival data characteristics. The colors of the lines connecting the methods to the horizontal axis represent the specific family of the method (e.g., outcome imputation based, direct-survival CATE, survival meta-learners).
+In Figure~\ref{ch04:fig:average_rank_per_experiments}, we present the Borda ranking of causal model families across eight distinct causal configurations, each representing different combinations of assumptions related to treatment assignment (RCT vs. observational), ignorability, positivity, and censoring mechanisms. Within each configuration, the average rank of each method is computed over all survival scenarios, allowing us to isolate how assumption violations affect model performance independently of survival data characteristics.
+The colors of the lines connecting the methods to the horizontal axis represent the specific family of the method (e.g., outcome imputation based, direct-survival CATE, survival meta-learners).
 
 % Notably, outcome imputation approaches such as X-Learner and Double-ML perform best in randomized settings with unbalanced treatment (e.g., RCT-5\%, panel b), but their performance deteriorates as we move to settings with unmeasured confounding, or more visibly with informative-censoring. In contrast, survival-specific methods such as S-Learner-Survival, Matching-Survival, and Causal Survival Forests consistently rise in the rankings under these challenging conditions--particularly when multiple violations occur simultaneously (e.g., panel g and h). This trend suggests that survival meta-learners and direct modeling of the survival process offer increased robustness to violations of standard causal assumptions, especially in the presence of unmeasured confounding and informative censoring. 
 % Another finding here is that Causal Survival Forests maintains strong performance across many configurations, consistently ranking in the top half--particularly in settings involving unmeasured confounding or informative censoring. However, when the positivity assumption is violated (e.g., Figure~\ref{ch04:fig:average_rank_per_experiments}e and h), its performance declines, suggesting limitations in modeling highly sparse regions of the covariate space with deterministic treatment assignment.
-Notably, outcome imputation approaches perform best in randomized settings with unbalanced treatment (e.g., RCT-5\%, Figure~\ref{ch04:fig:borda_ranking_causal_config_RCT_05}), where Double-ML achieves the top rank of 1.80. However, their performance deteriorates as we move to settings with unmeasured confounding (Figure~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf}), or more visibly with informative censoring (Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos_InfC}), where Double-ML drops to the bottom of the top half and X-Learner falls entirely into the lower-performing half of the rankings. In contrast, survival-specific methods of survival meta-learners such as S-Learner-Survival, Matching-Survival, and Causal Survival Forests (belonging to the direct-survival CATE family) consistently rise in the rankings under these conditions, particularly when multiple violations occur simultaneously (e.g., Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos_InfC}), where S-Learner-Survival and Matching-Survival take the top two spots. This trend suggests that survival meta-learners and Causal Survival Forests, which directly model the survival process, offer increased robustness to violations of standard causal assumptions, especially in the presence of unmeasured confounding and informative censoring.
-Another finding is that Causal Survival Forests maintains strong performance across many configurations, consistently ranking in the top half---particularly in settings involving informative censoring (e.g., Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC}). However, when the positivity assumption is violated while censoring remains ignorable (Figure~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos}), its performance declines substantially, dropping to a rank of 6.60 in the bottom half of the ranking. This suggests limitations in modeling highly sparse regions of the covariate space with deterministic treatment assignment under certain censoring conditions.
+Notably, outcome imputation approaches perform best in randomized settings with unbalanced treatment (e.g., RCT-5\%, Figure~\ref{ch04:fig:borda_ranking_causal_config_RCT_05}), where Double-ML achieves the top rank of 1.80.
+However, their performance deteriorates as we move to settings with unmeasured confounding (Figure~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf}), or more visibly with informative censoring (Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos_InfC}), where Double-ML drops to the bottom of the top half and X-Learner falls entirely into the lower-performing half of the rankings.
+In contrast, survival-specific methods of survival meta-learners such as S-Learner-Survival, Matching-Survival, and Causal Survival Forests (belonging to the direct-survival CATE family) consistently rise in the rankings under these conditions, particularly when multiple violations occur simultaneously (e.g., Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos_InfC}), where S-Learner-Survival and Matching-Survival take the top two spots.
+This trend suggests that survival meta-learners and Causal Survival Forests, which directly model the survival process, offer increased robustness to violations of standard causal assumptions, especially in the presence of unmeasured confounding and informative censoring.
+Another finding is that Causal Survival Forests maintains strong performance across many configurations, consistently ranking in the top half---particularly in settings involving informative censoring (e.g., Figures~\ref{ch04:fig:borda_ranking_causal_config_OBS_InfC},~\ref{ch04:fig:borda_ranking_causal_config_OBS_UConf_InfC}).
+However, when the positivity assumption is violated while censoring remains ignorable (Figure~\ref{ch04:fig:borda_ranking_causal_config_OBS_NoPos}), its performance declines substantially, dropping to a rank of 6.60 in the bottom half of the ranking.
+This suggests limitations in modeling highly sparse regions of the covariate space with deterministic treatment assignment under certain censoring conditions.
 
 
-\input{Appendices/appendix-ch04/figures/03}
+\input{Appendices/appendix-ch04/figures/causal-configuration-rankings}
 
 
 
@@ -100,7 +124,7 @@ Another finding is that Causal Survival Forests maintains strong performance acr
 % RCT CONFIGURATIONS (GROUP 1)
 % ============================
 
-\input{Appendices/appendix-ch04/tables/14}
+\input{Appendices/appendix-ch04/tables/randomized-configuration-win-rates}
 
 
 % \ChFourRebuttal{The observational configurations highlight how violations of standard causal assumptions shift the balance further toward survival-focused methods. In \texttt{OBS-CPS} (no unmeasured confounding, no positivity or informative censoring), Double-ML and SurvITE are strong for CATE RMSE, but Causal Survival Forests and the survival meta-learners (especially S-Learner-Survival and Matching-Survival) capture most of the Top-1 and Top-3 spots for ATE Bias. Once unmeasured confounding is introduced (\texttt{OBS-UConf}), Causal Survival Forests, SurvITE, and the survival meta-learners dominate both metrics: Causal Survival Forests and Double-ML still perform well on CATE RMSE, but ATE Bias win-rates are almost entirely driven by Causal Survival Forests, SurvITE, S-Learner-Survival, and Matching-Survival. When positivity is violated (\texttt{OBS-NoPos}), Double-ML and SurvITE retain high CATE RMSE win-rates, whereas Causal Survival Forests and SurvITE achieve strong ATE Bias performance, and survival meta-learners again appear often in the Top-3 and Top-5.}
@@ -114,7 +138,7 @@ Another finding is that Causal Survival Forests maintains strong performance acr
 % OBSERVATIONAL CONFIGS (GROUP 2)
 % ================================
 
-\input{Appendices/appendix-ch04/tables/15}
+\input{Appendices/appendix-ch04/tables/observational-configuration-win-rates}
 
 
 
@@ -125,20 +149,24 @@ Another finding is that Causal Survival Forests maintains strong performance acr
 
 \subsubsection{Figure results - CATE RMSE} \label{ch04:app:more-cate-mse-plots}
 
-This section presents the complete CATE RMSE results for each family of causal inference methods across various survival analysis scenarios. For each scenario, we display performance under 8 distinct causal configurations, each varying in terms of treatment assignment (RCT vs. observational), ignorability, positivity, and censoring assumptions. These results highlight the robustness and sensitivity of different methods under varying degrees of assumption violations.
+This section presents the complete CATE RMSE results for each family of causal inference methods across various survival analysis scenarios.
+For each scenario, we display performance under 8 distinct causal configurations, each varying in terms of treatment assignment (RCT vs. observational), ignorability, positivity, and censoring assumptions.
+These results highlight the robustness and sensitivity of different methods under varying degrees of assumption violations.
 
-For each survival scenario and causal configuration, we selected the best hyperparameter setting and base model configuration for each causal method family based on validation set performance. The RMSE values shown in the figures reflect the performance of these selected models on the test set. The box plots are from the 10 independent experimental repeats to account for random seed variability.
+For each survival scenario and causal configuration, we selected the best hyperparameter setting and base model configuration for each causal method family based on validation set performance.
+The RMSE values shown in the figures reflect the performance of these selected models on the test set.
+The box plots are from the 10 independent experimental repeats to account for random seed variability.
 
 
 
 % Secnario A
 
-\input{Appendices/appendix-ch04/figures/04}
+\input{Appendices/appendix-ch04/figures/scenario-a-cate-rmse}
 
 
 % Secnario B
 
-\input{Appendices/appendix-ch04/figures/05}
+\input{Appendices/appendix-ch04/figures/scenario-b-cate-rmse}
 
 
 
@@ -146,7 +174,7 @@ For each survival scenario and causal configuration, we selected the best hyperp
 
 % Secnario C
 
-\input{Appendices/appendix-ch04/figures/06}
+\input{Appendices/appendix-ch04/figures/scenario-c-cate-rmse}
 
 
 
@@ -155,14 +183,14 @@ For each survival scenario and causal configuration, we selected the best hyperp
 
 % Scenario D
 
-\input{Appendices/appendix-ch04/figures/07}
+\input{Appendices/appendix-ch04/figures/scenario-d-cate-rmse}
 
 
 % 
 
 % Secnario E
 
-\input{Appendices/appendix-ch04/figures/08}
+\input{Appendices/appendix-ch04/figures/scenario-e-cate-rmse}
 
 
 
@@ -175,15 +203,20 @@ For each survival scenario and causal configuration, we selected the best hyperp
 
 \subsubsection{Figure results - ATE bias} \label{ch04:app:more-ate-plots}
 
-This section presents the ATE bias results for each family of causal inference methods across various survival scenarios. As with the CATE RMSE results in Appendix~\ref{ch04:app:more-cate-mse-plots}, we display performance under 8 distinct causal configurations per scenario, each varying in treatment assignment (RCT vs. observational), ignorability, positivity, and censoring assumptions.
+This section presents the ATE bias results for each family of causal inference methods across various survival scenarios.
+As with the CATE RMSE results in Appendix~\ref{ch04:app:more-cate-mse-plots}, we display performance under 8 distinct causal configurations per scenario, each varying in treatment assignment (RCT vs. observational), ignorability, positivity, and censoring assumptions.
 
-For each survival scenario and causal configuration, the model shown corresponds to the best hyperparameter setting and base model configuration selected based on CATE RMSE performance on the validation set --- ATE bias was not used for model selection for consistent results with other sections. The reported ATE bias values are computed on the test set and defined as the difference between the \emph{predicted ATE} from the test population and the \emph{true ATE} in the full population.
+For each survival scenario and causal configuration, the model shown corresponds to the best hyperparameter setting and base model configuration selected based on CATE RMSE performance on the validation set --- ATE bias was not used for model selection for consistent results with other sections.
+The reported ATE bias values are computed on the test set and defined as the difference between the \emph{predicted ATE} from the test population and the \emph{true ATE} in the full population.
 
-Each box plot represents results from 10 independent experimental repeats to account for random seed variability. For meta-learners and double machine learning models, which by design can provide 95\% confidence intervals for ATE estimates, we also include these intervals in the plots---adjusted accordingly to center around the ATE bias. These confidence intervals are obtained via 100 bootstrap samples and are notably wider than the variability observed across the 10 experimental repeats. The zero bias line is shown as a dashed reference line.
+Each box plot represents results from 10 independent experimental repeats to account for random seed variability.
+For meta-learners and double machine learning models, which by design can provide 95\% confidence intervals for ATE estimates, we also include these intervals in the plots---adjusted accordingly to center around the ATE bias.
+These confidence intervals are obtained via 100 bootstrap samples and are notably wider than the variability observed across the 10 experimental repeats.
+The zero bias line is shown as a dashed reference line.
 
 % Secnario A
 
-\input{Appendices/appendix-ch04/figures/09}
+\input{Appendices/appendix-ch04/figures/scenario-a-ate-bias}
 
 % 
 
@@ -191,14 +224,14 @@ Each box plot represents results from 10 independent experimental repeats to acc
 
 % Secnario B
 
-\input{Appendices/appendix-ch04/figures/10}
+\input{Appendices/appendix-ch04/figures/scenario-b-ate-bias}
 
 
 % 
 
 % Secnario C
 
-\input{Appendices/appendix-ch04/figures/11}
+\input{Appendices/appendix-ch04/figures/scenario-c-ate-bias}
 
 
 % 
@@ -207,7 +240,7 @@ Each box plot represents results from 10 independent experimental repeats to acc
 
 % Scenario D
 
-\input{Appendices/appendix-ch04/figures/12}
+\input{Appendices/appendix-ch04/figures/scenario-d-ate-bias}
 
 
 
@@ -215,7 +248,7 @@ Each box plot represents results from 10 independent experimental repeats to acc
 
 % Secnario E
 
-\input{Appendices/appendix-ch04/figures/13}
+\input{Appendices/appendix-ch04/figures/scenario-e-ate-bias}
 
 
 
@@ -228,58 +261,65 @@ In this section, we report the performance of auxiliary imputation and base regr
 
 \paragraph{Imputation evaluation}\label{ch04:subapp:impute-eval}
 
-Table~\ref{ch04:tab:impute-eval} reports the MAE of the three imputation methods (Pseudo-obs, Margin, IPCW-T) across eight causal configurations and five censoring scenarios on the test sets. Recall that Scenarios \texttt{A} and \texttt{B} have low censoring ($<$30\%), Scenario \texttt{C} medium (30--70\%), and Scenarios \texttt{D} and \texttt{E} high ($>$70\%), except it is switched in \texttt{-InfC} causal configurations, as mentioned in Appendix~\ref{ch04:app:synthetic-dataset}. We can tell that the imputation method Pseudo-obs is only competitive under minimal censoring and suffers from high variability. Margin imputation provides the best balance of accuracy and robustness, especially as censoring intensifies. IPCW-T imputation improves over Pseudo-obs in most cases, but generally underperforms relative to Margin in medium‐ and high‐censor contexts.
+Table~\ref{ch04:tab:impute-eval} reports the MAE of the three imputation methods (Pseudo-obs, Margin, IPCW-T) across eight causal configurations and five censoring scenarios on the test sets.
+Recall that Scenarios \texttt{A} and \texttt{B} have low censoring ($<$30\%), Scenario \texttt{C} medium (30--70\%), and Scenarios \texttt{D} and \texttt{E} high ($>$70\%), except it is switched in \texttt{-InfC} causal configurations, as mentioned in Appendix~\ref{ch04:app:synthetic-dataset}.
+We can tell that the imputation method Pseudo-obs is only competitive under minimal censoring and suffers from high variability.
+Margin imputation provides the best balance of accuracy and robustness, especially as censoring intensifies.
+IPCW-T imputation improves over Pseudo-obs in most cases, but generally underperforms relative to Margin in medium‐ and high‐censor contexts.
 
 
-\input{Appendices/appendix-ch04/tables/16}
+\input{Appendices/appendix-ch04/tables/imputation-method-mae}
 
 
 
 \paragraph{Base regression learner evaluation} \label{ch04:subapp:base-reg-eval}
-See Table~\ref{ch04:tab:base-s-learner}, \ref{ch04:tab:base-t-learner}, \ref{ch04:tab:base-x-learner}, \ref{ch04:tab:base-dr-learner} for MAE of prediction by the base regression learners for S-, T-, X-, DR-Learners. The MAE is calculated by comparing a base learner's predicted event times and imputed event times by the imputation method (the latter is used as the ``ground truth'' for the base regression learners). Since there are three imputation methods used, we first take the average of MAE across three different imputation methods within each random split, then report the mean and standard deviation of the average MAE across 10 experimental repeats with different random splits. 
+See Table~\ref{ch04:tab:base-s-learner}, \ref{ch04:tab:base-t-learner}, \ref{ch04:tab:base-x-learner}, \ref{ch04:tab:base-dr-learner} for MAE of prediction by the base regression learners for S-, T-, X-, DR-Learners.
+The MAE is calculated by comparing a base learner's predicted event times and imputed event times by the imputation method (the latter is used as the ``ground truth'' for the base regression learners).
+Since there are three imputation methods used, we first take the average of MAE across three different imputation methods within each random split, then report the mean and standard deviation of the average MAE across 10 experimental repeats with different random splits. 
 
 See Table~\ref{ch04:tab:base-dr-learner-propensity} for the AUC on the evaluation of the predicted propensity score of DR-Learners.
 
 
-\input{Appendices/appendix-ch04/tables/17}
+\input{Appendices/appendix-ch04/tables/s-learner-mae}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/18}
+\input{Appendices/appendix-ch04/tables/t-learner-mae}
 
 
 
-\input{Appendices/appendix-ch04/tables/19}
+\input{Appendices/appendix-ch04/tables/x-learner-mae}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/20}
+\input{Appendices/appendix-ch04/tables/dr-learner-mae}
 
 
 
-\input{Appendices/appendix-ch04/tables/21}
+\input{Appendices/appendix-ch04/tables/propensity-score-auc}
 
 
 
 
 \paragraph{Base survival learner evaluation} \label{ch04:subapp:base-surv-eval}
-See Table~\ref{ch04:tab:base-surv-s-learner-ctd}, \ref{ch04:tab:base-surv-t-learner-ctd}, \ref{ch04:tab:base-surv-match-learner-ctd} for time-dependent concordance index on different base survival learners by the base survival learners for S-, T-, matching-learners. We report the mean and standard deviation across 10 experimental repeats with different random splits.
+See Table~\ref{ch04:tab:base-surv-s-learner-ctd}, \ref{ch04:tab:base-surv-t-learner-ctd}, \ref{ch04:tab:base-surv-match-learner-ctd} for time-dependent concordance index on different base survival learners by the base survival learners for S-, T-, matching-learners.
+We report the mean and standard deviation across 10 experimental repeats with different random splits.
 
 
 
-\input{Appendices/appendix-ch04/tables/22}
-
-
-
-
-\input{Appendices/appendix-ch04/tables/23}
+\input{Appendices/appendix-ch04/tables/s-learner-concordance}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/24}
+\input{Appendices/appendix-ch04/tables/t-learner-concordance}
+
+
+
+
+\input{Appendices/appendix-ch04/tables/matching-learner-concordance}
 
 
 
@@ -290,11 +330,16 @@ Figure~\ref{ch04:fig:convergence_results} presents the convergence behavior of d
 % Each subplot corresponds to a different combination of assumptions on treatment assignment (RCT or observational), ignorability, positivity, and censoring mechanisms. 
 The x-axis shows increasing training set sizes (ranging from 50 to 10,000), while the y-axis plots the root mean squared error (RMSE) of the estimated CATE on the test set. (Note that, all models are selected based on performance on the validation set).
 
-Across all configurations, we observe general convergence trends where CATE RMSE decreases as training size increases. Among the survival methods, the T-Learner-Survival consistently converges the slowest, especially under small training sizes. This may be due to the model requiring sufficient uncensored samples per treatment arm to function effectively. Double-ML also tends to require more data to stabilize, particularly in the presence of low treatment rate or lack of positivity. The Causal Survival Forests shows slower convergence under settings with non-ignorable censoring or positivity violations, reflecting its convergence sensitivity to these assumptions despite its nonparametric structure.
-Overall, while standard meta-learners and tree-based methods show relatively stable convergence behavior, survival-specific adaptations appear more data-hungry and assumption-sensitive for convergence. These trends highlight the importance of choosing appropriately robust methods with respect to the dataset size in practice, especially in real-world settings where assumptions like positivity or ignorability may be compromised.
+Across all configurations, we observe general convergence trends where CATE RMSE decreases as training size increases.
+Among the survival methods, the T-Learner-Survival consistently converges the slowest, especially under small training sizes.
+This may be due to the model requiring sufficient uncensored samples per treatment arm to function effectively.
+Double-ML also tends to require more data to stabilize, particularly in the presence of low treatment rate or lack of positivity.
+The Causal Survival Forests shows slower convergence under settings with non-ignorable censoring or positivity violations, reflecting its convergence sensitivity to these assumptions despite its nonparametric structure.
+Overall, while standard meta-learners and tree-based methods show relatively stable convergence behavior, survival-specific adaptations appear more data-hungry and assumption-sensitive for convergence.
+These trends highlight the importance of choosing appropriately robust methods with respect to the dataset size in practice, especially in real-world settings where assumptions like positivity or ignorability may be compromised.
 
 
-\input{Appendices/appendix-ch04/figures/14}
+\input{Appendices/appendix-ch04/figures/training-size-convergence}
 
 
 

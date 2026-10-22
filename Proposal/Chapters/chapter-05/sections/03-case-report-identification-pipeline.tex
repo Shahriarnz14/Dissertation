@@ -21,7 +21,9 @@ The pipeline selected 124{,}699 source articles as single-patient case reports. 
 }
 This two-stage process results in a final dataset of \ChFiveRebuttal{124{,}349} single-patient case reports (Figure~\ref{ch05:fig:flowchart}).
 
-We compared our LLM-based case report identification method with PubMed's metadata-based labeling using a carefully designed benchmark. We created a dataset of 100 reports across five diagnoses—Diabetes, Sepsis, Hypertension, COVID-19, and Atrial Fibrillation—with 10 reports per diagnosis from each method. A clinician manually reviewed and labeled each report to verify whether it described exactly one case.
+We compared our LLM-based case report identification method with PubMed's metadata-based labeling using a carefully designed benchmark.
+We created a dataset of 100 reports across five diagnoses—Diabetes, Sepsis, Hypertension, COVID-19, and Atrial Fibrillation—with 10 reports per diagnosis from each method.
+A clinician manually reviewed and labeled each report to verify whether it described exactly one case.
 \ChFiveRebuttal{
 Because this evaluation set was constructed from documents surfaced by at least one of the two identification approaches, recall is computed with respect to manually confirmed single-patient case reports within this evaluation set and should not be interpreted as corpus-level sensitivity over all PMOA documents.
 }

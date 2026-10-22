@@ -11,11 +11,19 @@ Encoder models, especially those with a fine-tuned MLP head, achieve substantial
 % \input{AAAI_2026/Tables/clean_forecasting_L33}
 Among decoders, we observe varied performance patterns. \textit{RedPajama-INCITE-7B-Instruct}, whose training excludes PubMed, achieves 0.352 F1 at 24h---better than some decoder models like \textit{MediPhi-PubMed} (0.268) and within the typical decoder performance range, though below top performers like \textit{DeepSeek-Llama-3.3-70B} (0.482). \textit{OLMO-32B-Instruct} performs competitively (0.411), suggesting that open models without biomedical pretraining can still achieve strong temporal forecasting results.
 
-Among encoder models, both general-purpose and biomedically-pretrained variants show strong performance. While \textit{ModernBERT-base} achieves slightly higher F1 scores on internal test sets (0.576 vs 0.559), \textit{BioClinical-ModernBERT-base} demonstrates superior concordance (0.677 vs 0.646 for \textit{DeepSeek-R1}) and notably better generalization to external datasets, with F1 scores of 0.635 and 0.662 on \textit{sepsis-100} compared to 0.607 and 0.626 for the general-purpose variant. This suggests that while both \textit{ModernBERT} architectures are effective, biomedical pretraining particularly enhances temporal reasoning and cross-dataset generalization.
+Among encoder models, both general-purpose and biomedically-pretrained variants show strong performance.
+While \textit{ModernBERT-base} achieves slightly higher F1 scores on internal test sets (0.576 vs 0.559), \textit{BioClinical-ModernBERT-base} demonstrates superior concordance (0.677 vs 0.646 for \textit{DeepSeek-R1}) and notably better generalization to external datasets, with F1 scores of 0.635 and 0.662 on \textit{sepsis-100} compared to 0.607 and 0.626 for the general-purpose variant.
+This suggests that while both \textit{ModernBERT} architectures are effective, biomedical pretraining particularly enhances temporal reasoning and cross-dataset generalization.
 
-Different training strategies yield distinct performance patterns. The MLP head fine-tuning approach consistently outperforms both fine-tuned masking and zero-shot masking models, particularly in long-horizon forecasting. While \textit{ModernBERT-base} achieves strong F1 scores, \textit{BioClinical-ModernBERT-base} demonstrates the best overall performance when considering both accuracy and generalization. Zero-shot masking models, particularly standard \textit{BERT} and \textit{RoBERTa}, fail to make meaningful predictions at the 1-hour mark. However, \textit{ModernBERT} variants exhibit relatively better zero-shot performance, with \textit{BioClinical-ModernBERT-base} achieving notably higher scores in zero-shot settings (0.246 F1 at 1h), indicating that biomedical pretraining improves out-of-the-box temporal reasoning.
+Different training strategies yield distinct performance patterns.
+The MLP head fine-tuning approach consistently outperforms both fine-tuned masking and zero-shot masking models, particularly in long-horizon forecasting.
+While \textit{ModernBERT-base} achieves strong F1 scores, \textit{BioClinical-ModernBERT-base} demonstrates the best overall performance when considering both accuracy and generalization.
+Zero-shot masking models, particularly standard \textit{BERT} and \textit{RoBERTa}, fail to make meaningful predictions at the 1-hour mark.
+However, \textit{ModernBERT} variants exhibit relatively better zero-shot performance, with \textit{BioClinical-ModernBERT-base} achieving notably higher scores in zero-shot settings (0.246 F1 at 1h), indicating that biomedical pretraining improves out-of-the-box temporal reasoning.
 
-Performance trends remain consistent across forecasting windows. F1 scores improve as the window increases, with 1-hour predictions being most challenging and 168-hour predictions yielding highest scores. Models perform worse on external validation sets than internal \textit{T2S2} test sets, though \textit{BioClinical-ModernBERT} models show the smallest performance degradation, maintaining their advantage in cross-dataset generalization.
+Performance trends remain consistent across forecasting windows.
+F1 scores improve as the window increases, with 1-hour predictions being most challenging and 168-hour predictions yielding highest scores.
+Models perform worse on external validation sets than internal \textit{T2S2} test sets, though \textit{BioClinical-ModernBERT} models show the smallest performance degradation, maintaining their advantage in cross-dataset generalization.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ChSevenParagraph{Temporal ordering of forecasted events: concordance.}
@@ -23,15 +31,23 @@ Performance trends remain consistent across forecasting windows. F1 scores impro
 Encoder models consistently outperform decoders in correctly ranking the order of upcoming events, as measured by concordance (c-index; Table \ref{ch07:tab:forecasting_clean_combined}; complete results in Tables~\ref{ch07:tab:DS_forecasting} and~\ref{ch07:tab:L33_forecasting} for \texttt{DeepSeek-R1} and \texttt{Llama-3.3-70B} annotations, respectively, with full details in Appendix~\ref{ch07:apd:full_tables}. Decoder models with potential biomedical exposure achieve modest concordance (0.618-0.632), while \textit{RedPajama-INCITE-7B-Instruct} without PubMed data in its training corpus performs similarly, suggesting domain-specific knowledge is less critical here than for event prediction. The comparable performance of \textit{RedPajama-INCITE-7B-Instruct} to other general models (with access to PubMed in their pretraining) also provides evidence that the \textit{T2S2} prediction task is distinct from raw PubMed text and assuages causal leakage concerns.
 
 {\raggedright
-Biomedical pretraining in encoders demonstrates clear advantages, with \textit{BioClinical-ModernBERT-base} achieving the highest concordance (0.677 with an MLP head, 0.676 with fine-tuned masking) and strong performance across datasets. MLP-head training yields superior F1 scores, while fine-tuned masking excels in concordance. \textit{BioClinical-ModernBERT-base} also generalizes well to external datasets (c-index \textgreater0.60), suggesting that biomedical pretraining provides stability in temporal reasoning under dataset shifts.\par}
+Biomedical pretraining in encoders demonstrates clear advantages, with \textit{BioClinical-ModernBERT-base} achieving the highest concordance (0.677 with an MLP head, 0.676 with fine-tuned masking) and strong performance across datasets.
+MLP-head training yields superior F1 scores, while fine-tuned masking excels in concordance. \textit{BioClinical-ModernBERT-base} also generalizes well to external datasets (c-index \textgreater0.60), suggesting that biomedical pretraining provides stability in temporal reasoning under dataset shifts.\par}
 
 {\raggedright
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ChSevenParagraph{Survival analysis: model performance across timepoints and cohorts.}
 Tables~\ref{ch07:tab:concordance_t2s2_only} and~\ref{ch07:tab:concordance_wide} (Appendix~\ref{ch07:apd:full_survival}) show time-dependent concordance results where 
-instruction-tuned decoder models clearly outperform encoder-based models. This pattern contrasts with the forecasting tasks (Table~\ref{ch07:tab:forecasting_clean_combined}), where encoders excelled. Across both the \textit{T2S2} and \textit{sepsis-100} cohorts, decoder models consistently achieve the strongest results. Notably, \textit{RedPajama-INCITE-7B-Instruct} attains the highest concordance overall (0.76 at 168h, \textit{sepsis-100}) despite lacking any biomedical text in pretraining, while larger models such as \textit{DeepSeek-R1-Llama-70B} and \textit{OLMO-32B-Instruct} also perform robustly. Encoder models---including biomedically fine-tuned variants like \textit{BioClinical-ModernBERT-base}, which is competitive on \textit{sepsis-100} but not on \textit{T2S2}---are generally surpassed by decoder models.\par}
+instruction-tuned decoder models clearly outperform encoder-based models.
+This pattern contrasts with the forecasting tasks (Table~\ref{ch07:tab:forecasting_clean_combined}), where encoders excelled.
+Across both the \textit{T2S2} and \textit{sepsis-100} cohorts, decoder models consistently achieve the strongest results.
+Notably, \textit{RedPajama-INCITE-7B-Instruct} attains the highest concordance overall (0.76 at 168h, \textit{sepsis-100}) despite lacking any biomedical text in pretraining, while larger models such as \textit{DeepSeek-R1-Llama-70B} and \textit{OLMO-32B-Instruct} also perform robustly.
+Encoder models---including biomedically fine-tuned variants like \textit{BioClinical-ModernBERT-base}, which is competitive on \textit{sepsis-100} but not on \textit{T2S2}---are generally surpassed by decoder models.\par}
 
-Predictive performance does not universally improve with more observation time. Models evaluated on the \textit{T2S2} cohort, often peak at earlier windows (0h or 24h) rather than at 168h. Meanwhile, the \textit{sepsis-10} cohort experiences clear ceiling effects, with many models achieving perfect concordance (1.00). These results suggest that, unlike the forecasting tasks, survival prediction in our dataset benefits more from the capabilities inherent in large decoder models than from domain-specific pretrained encoders.
+Predictive performance does not universally improve with more observation time.
+Models evaluated on the \textit{T2S2} cohort, often peak at earlier windows (0h or 24h) rather than at 168h.
+Meanwhile, the \textit{sepsis-10} cohort experiences clear ceiling effects, with many models achieving perfect concordance (1.00).
+These results suggest that, unlike the forecasting tasks, survival prediction in our dataset benefits more from the capabilities inherent in large decoder models than from domain-specific pretrained encoders.
 
 % Predictive performance does not universally improve with more observation time. \textit{T2S2} cohort models often peak at earlier windows, while \textit{sepsis-10} experiences ceiling effects. Instruction-tuned decoders excel overall, yet biomedical encoders remain competitive, particularly at admission (0h). Survival prediction thus benefits from both larger decoder models and domain-specific pretraining, each excelling in different temporal contexts.
 
@@ -79,7 +95,7 @@ Predictive performance does not universally improve with more observation time. 
 
 
 
-\input{Chapters/chapter-07/tables/02}
+\input{Chapters/chapter-07/tables/survival-concordance-performance}
 
 
 

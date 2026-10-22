@@ -7,21 +7,27 @@
 \subsubsection{\ChEightRebuttal{Structured EHR evidence calibrates event timing while preserving event recovery}}
 \label{ch08:sec:main_results}
 
-Table~\ref{ch08:tab:main_results_threshold_01} summarizes timeline reconstruction performance for text-only reconstruction and multimodal reconstruction with retrieved structured EHR evidence. Across models, multimodal calibration has little effect on event match rate, indicating that structured rows do not primarily expand the set of events recovered from narrative text. Instead, structured evidence primarily affects temporal localization, with effects that vary by model and metric. These results support the role of structured rows as temporal evidence for text-derived events, rather than as a substitute event source.
+Table~\ref{ch08:tab:main_results_threshold_01} summarizes timeline reconstruction performance for text-only reconstruction and multimodal reconstruction with retrieved structured EHR evidence.
+Across models, multimodal calibration has little effect on event match rate, indicating that structured rows do not primarily expand the set of events recovered from narrative text.
+Instead, structured evidence primarily affects temporal localization, with effects that vary by model and metric.
+These results support the role of structured rows as temporal evidence for text-derived events, rather than as a substitute event source.
 
 \ChEightRebuttal{
 Mean paired case-level temporal differences generally favored multimodal calibration: 4 of 6 models showed higher concordance and 3 of 6 showed higher AULTC, while no model showed lower performance on either temporal metric. However, uncertainty was substantial: no paired confidence interval for the multimodal--unimodal concordance difference excluded zero, and only DeepSeek V3.2 showed an AULTC interval entirely above zero ((\hyperref[ch08:supp:paired-bootstrap]{Supplementary Material \S\ref*{ch08:supp:paired-bootstrap}}, \hyperref[ch08:tab:supp-paired-bootstrap]{Table~\ref*{ch08:tab:supp-paired-bootstrap}})). Performance was generally higher on the i2b2-derived subset, but modality effects were source-dependent ((\hyperref[ch08:supp:dataset-stratified]{Supplementary Material \S\ref*{ch08:supp:dataset-stratified}}, Tables~\hyperref[ch08:tab:supp-i2b2]{\ref*{ch08:tab:supp-i2b2}}--\hyperref[ch08:tab:supp-mimiciv]{\ref*{ch08:tab:supp-mimiciv}})).}
 
-Because event match rate depends on the semantic matching threshold used to align predicted and reference events, we also vary the event-matching threshold and examine the relationship between event recovery and temporal quality. Figure~\ref{ch08:fig:threshold_sweeps_main} shows AULTC and concordance as functions of event match rate across thresholds. Across operating points, multimodal reconstruction generally occupies a similar event-recovery range as text-only reconstruction while changing temporal performance, especially AULTC, for several models. This supports the same broad conclusion as Table~\ref{ch08:tab:main_results_threshold_01}: retrieved structured rows primarily affect temporal calibration rather than event discovery.
+Because event match rate depends on the semantic matching threshold used to align predicted and reference events, we also vary the event-matching threshold and examine the relationship between event recovery and temporal quality.
+Figure~\ref{ch08:fig:threshold_sweeps_main} shows AULTC and concordance as functions of event match rate across thresholds.
+Across operating points, multimodal reconstruction generally occupies a similar event-recovery range as text-only reconstruction while changing temporal performance, especially AULTC, for several models.
+This supports the same broad conclusion as Table~\ref{ch08:tab:main_results_threshold_01}: retrieved structured rows primarily affect temporal calibration rather than event discovery.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{Chapters/chapter-08/tables/01}
+\input{Chapters/chapter-08/tables/unimodal-multimodal-performance}
 
 
 
-\input{Chapters/chapter-08/figures/03}
+\input{Chapters/chapter-08/figures/temporal-performance-thresholds}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -29,17 +35,22 @@ Because event match rate depends on the semantic matching threshold used to alig
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \noindent\textbf{Scaffold ablations.}
-Table~\ref{ch08:tab:ablation_and_DTW}A evaluates whether the staged scaffolded workflow is necessary, or whether similar performance can be obtained by generating a complete timeline in one step with retrieved structured rows.  The single-step formulation performs worse than the full scaffolded variant, suggesting that clinical timeline reconstruction benefits from first identifying temporally informative anchor events before reconstructing the full event set. The stage at which structured evidence is introduced also matters. Final-stage calibration yields the highest event match rate, but the strongest temporal metrics are obtained when structured evidence is used both to calibrate the anchor scaffold and to refine the final assembled timeline. This supports the design choice of using structured rows first to stabilize the temporal backbone of the encounter and then to recalibrate the expanded trajectory.
+Table~\ref{ch08:tab:ablation_and_DTW}A evaluates whether the staged scaffolded workflow is necessary, or whether similar performance can be obtained by generating a complete timeline in one step with retrieved structured rows.
+The single-step formulation performs worse than the full scaffolded variant, suggesting that clinical timeline reconstruction benefits from first identifying temporally informative anchor events before reconstructing the full event set.
+The stage at which structured evidence is introduced also matters.
+Final-stage calibration yields the highest event match rate, but the strongest temporal metrics are obtained when structured evidence is used both to calibrate the anchor scaffold and to refine the final assembled timeline.
+This supports the design choice of using structured rows first to stabilize the temporal backbone of the encounter and then to recalibrate the expanded trajectory.
 
 
-\input{Chapters/chapter-08/tables/02}
+\input{Chapters/chapter-08/tables/scaffold-calibration-ablations}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 \noindent\textbf{Explicit temporal alignment.}
 % We also compare retrieval-based calibration with dynamic time warping (DTW), an explicit temporal-alignment baseline that aligns text-derived events with structured rows as sequences (Table~\ref{ch08:tab:ablation_and_DTW}B). DTW provides modest improvements across most models and metrics, although the differences are small relative to the variability reflected by the bootstrap confidence intervals in the main results. This suggests that explicit alignment can exploit some shared temporal structure, but does not substantially outperform retrieval-based calibration. This is consistent with the task structure: narrative and structured EHR data do not share a one-to-one event universe. Many narrative events lack structured counterparts, while tables contain dense repeated measurements that are not standalone narrative events. Retrieval therefore remains a natural calibration mechanism, selectively incorporating clinically relevant evidence without requiring full sequence-level correspondence.
-We also compare retrieval-based calibration with dynamic time warping (DTW), an explicit temporal-alignment baseline that aligns text-derived events with structured rows as sequences (Table~\ref{ch08:tab:ablation_and_DTW}B). The two approaches achieve broadly comparable accuracy: DTW is slightly higher for some model--metric pairs, while retrieval-based calibration is slightly higher for others, and the differences are small relative to the variability reflected by the bootstrap confidence intervals in Table~\ref{ch08:tab:main_results_threshold_01}.  \ChEightRebuttal{Retrieval and DTW therefore show comparable aggregate accuracy rather than quantitative superiority. Their principal distinction is structural: retrieval presents event-specific candidates and can retain a text-derived estimate when no adequate counterpart exists, whereas DTW imposes monotone sequence alignment across modalities with incomplete and asymmetric event coverage.}
+We also compare retrieval-based calibration with dynamic time warping (DTW), an explicit temporal-alignment baseline that aligns text-derived events with structured rows as sequences (Table~\ref{ch08:tab:ablation_and_DTW}B).
+The two approaches achieve broadly comparable accuracy: DTW is slightly higher for some model--metric pairs, while retrieval-based calibration is slightly higher for others, and the differences are small relative to the variability reflected by the bootstrap confidence intervals in Table~\ref{ch08:tab:main_results_threshold_01}.  \ChEightRebuttal{Retrieval and DTW therefore show comparable aggregate accuracy rather than quantitative superiority. Their principal distinction is structural: retrieval presents event-specific candidates and can retain a text-derived estimate when no adequate counterpart exists, whereas DTW imposes monotone sequence alignment across modalities with incomplete and asymmetric event coverage.}
 
 % This suggests that explicit alignment can exploit some shared temporal structure, but does not provide a consistent advantage over retrieval-based calibration.
 
@@ -50,13 +61,18 @@ We also compare retrieval-based calibration with dynamic time warping (DTW), an 
 \label{ch08:sec:gap_results}
 
 
-The main reconstruction results show that structured rows can improve event timing when used as calibration evidence. We next ask why structured records cannot simply replace narrative text and then
+The main reconstruction results show that structured rows can improve event timing when used as calibration evidence.
+We next ask why structured records cannot simply replace narrative text and then
 \ChEightRebuttal{characterize which narrative-derived events are poorly represented in structured EHR data; because this text-to-structure analysis does not assess structured-only events, it supports complementarity rather than completeness of either modality. We compare text-derived timelines against tabular records from the same encounters. }
 % To characterize which clinically relevant information is poorly represented in structured EHR data, we compare text-derived timelines against tabular records from the same encounters. 
-The analysis uses the best-performing LLM-generated event timelines as the textual view, MIMIC structured data as the tabular view, and admission or the case reference time as the shared temporal anchor. For each text-derived event, we retrieve a candidate tabular counterpart using embedding-based similarity matching and evaluate it along two dimensions: semantic adequacy and temporal alignment. Semantic adequacy is assessed using retrieval-augmented scoring on a 0--1 scale, while temporal alignment is measured as the absolute difference in hours between the text-derived timestamp and the matched tabular timestamp. Based on these criteria, each event is classified as \textbf{well captured}, \textbf{complete absence}, \textbf{temporal mismatch}, \textbf{semantic distance}, or \textbf{detail gap}. Table~\ref{ch08:tab:gap_analysis} summarizes the distribution of these categories.
+The analysis uses the best-performing LLM-generated event timelines as the textual view, MIMIC structured data as the tabular view, and admission or the case reference time as the shared temporal anchor.
+For each text-derived event, we retrieve a candidate tabular counterpart using embedding-based similarity matching and evaluate it along two dimensions: semantic adequacy and temporal alignment.
+Semantic adequacy is assessed using retrieval-augmented scoring on a 0--1 scale, while temporal alignment is measured as the absolute difference in hours between the text-derived timestamp and the matched tabular timestamp.
+Based on these criteria, each event is classified as \textbf{well captured}, \textbf{complete absence}, \textbf{temporal mismatch}, \textbf{semantic distance}, or \textbf{detail gap}.
+Table~\ref{ch08:tab:gap_analysis} summarizes the distribution of these categories.
 
 
-\input{Chapters/chapter-08/tables/03}
+\input{Chapters/chapter-08/tables/structured-data-gap}
 
 
 
@@ -125,7 +141,11 @@ The analysis uses the best-performing LLM-generated event timelines as the textu
 
 % Across 8,439 text-derived events, only 33.5\% are well captured by structured data, while 35.1\% have no structured counterpart at all. When a structured counterpart exists, its timestamp is often useful: the median temporal discrepancy is 4.3 hours, with 58.4\% of matched events within 6 hours, 69.5\% within 12 hours, and 79.3\% within 24 hours. The missing events are not merely low-value narrative detail; they include symptoms, functional status, temporal qualifiers, patient-reported information, severity descriptions, and clinical context. These findings explain why structured rows are useful for temporal calibration but incomplete as representations of patient trajectories.
 
-Across 8,439 text-derived events, only 33.5\% are well captured by structured data, while 35.1\% have no structured counterpart at all. When a structured counterpart exists, its timestamp is often useful: the median temporal discrepancy is 4.3 hours, with 58.4\% of matched events within 6 hours, 69.5\% within 12 hours, and 79.3\% within 24 hours. The missing events are not merely low-value narrative detail; they include symptoms, functional status, temporal qualifiers, patient-reported information, severity descriptions, and clinical context. Representative complete-absence examples include \textbf{symptom descriptions} such as ``substernal chest pain for 1 day'' and ``developed chest pain''; \textbf{denial statements} such as ``no seizure-like activity'' and ``no deformity''; \textbf{temporal patterns} such as ``pain resolved'' and ``improving clots on LE''; \textbf{severity descriptors} such as ``EF 55\%'' and ``non-small cell lung cancer stage IIIA''; and \textbf{causal or procedural context} such as ``intubated for several days after second surgery'' and ``repair of leak from pouch.'' These findings explain why structured rows are useful for temporal calibration but incomplete as representations of patient trajectories.
+Across 8,439 text-derived events, only 33.5\% are well captured by structured data, while 35.1\% have no structured counterpart at all.
+When a structured counterpart exists, its timestamp is often useful: the median temporal discrepancy is 4.3 hours, with 58.4\% of matched events within 6 hours, 69.5\% within 12 hours, and 79.3\% within 24 hours.
+The missing events are not merely low-value narrative detail; they include symptoms, functional status, temporal qualifiers, patient-reported information, severity descriptions, and clinical context.
+Representative complete-absence examples include \textbf{symptom descriptions} such as ``substernal chest pain for 1 day'' and ``developed chest pain''; \textbf{denial statements} such as ``no seizure-like activity'' and ``no deformity''; \textbf{temporal patterns} such as ``pain resolved'' and ``improving clots on LE''; \textbf{severity descriptors} such as ``EF 55\%'' and ``non-small cell lung cancer stage IIIA''; and \textbf{causal or procedural context} such as ``intubated for several days after second surgery'' and ``repair of leak from pouch.''
+These findings explain why structured rows are useful for temporal calibration but incomplete as representations of patient trajectories.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -133,7 +153,10 @@ Across 8,439 text-derived events, only 33.5\% are well captured by structured da
 \label{ch08:sec:vignette_results}
 
 
-Figure~\ref{ch08:fig:motivation_multimodal_alignment} illustrates the qualitative behavior of the pipeline using a synthetic stroke-alert case. The narrative supplies clinically decisive phenotype details, including lobar hemorrhage location, hematoma volume, aphasia, plegia, command following, absence of intraventricular hemorrhage or hydrocephalus, and repeat-CT stability. The structured rows provide sparse but precise temporal anchors, including admission time and IV andexanet alfa administration. The text-only scaffold recovers the reversal event but places it shortly after the initial CT at approximately \(+1.5\)h; retrieval-augmented calibration links the event to the medication-administration row and shifts reversal to \(+6.5\)h relative to admission.
+Figure~\ref{ch08:fig:motivation_multimodal_alignment} illustrates the qualitative behavior of the pipeline using a synthetic stroke-alert case.
+The narrative supplies clinically decisive phenotype details, including lobar hemorrhage location, hematoma volume, aphasia, plegia, command following, absence of intraventricular hemorrhage or hydrocephalus, and repeat-CT stability.
+The structured rows provide sparse but precise temporal anchors, including admission time and IV andexanet alfa administration.
+The text-only scaffold recovers the reversal event but places it shortly after the initial CT at approximately \(+1.5\)h; retrieval-augmented calibration links the event to the medication-administration row and shifts reversal to \(+6.5\)h relative to admission.
 
 \begin{tcolorbox}[
     breakable,

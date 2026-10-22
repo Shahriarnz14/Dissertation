@@ -1,12 +1,17 @@
 % !TeX root = ../../../main.tex
 \subsection{Introduction}
 
-Modeling disease progression patterns of patients is crucial for developing treatment strategies. Understanding and learning these patterns from longitudinal tabular data, commonly found in healthcare, can be challenging. These time series often vary in length, exhibit irregular sampling, and have many missing entries.
-To this end, various methods have emerged in recent years to model such tabular time series data. These methods can broadly be categorized into those that focus only on predicting patient outcomes (e.g., \citet{choi2016retain, ma2017dipole, devlin2018bert, mollura2021novel}), and those that jointly cluster patients and predict their outcomes (e.g., \citet{lee2020temporal, lee2020outcome, huang2021deep, carr2021longitudinal, aguiar2022learning, qin2023t}).
+Modeling disease progression patterns of patients is crucial for developing treatment strategies.
+Understanding and learning these patterns from longitudinal tabular data, commonly found in healthcare, can be challenging.
+These time series often vary in length, exhibit irregular sampling, and have many missing entries.
+To this end, various methods have emerged in recent years to model such tabular time series data.
+These methods can broadly be categorized into those that focus only on predicting patient outcomes (e.g., \citet{choi2016retain, ma2017dipole, devlin2018bert, mollura2021novel}), and those that jointly cluster patients and predict their outcomes (e.g., \citet{lee2020temporal, lee2020outcome, huang2021deep, carr2021longitudinal, aguiar2022learning, qin2023t}).
 
-The mentioned approaches have several limitations. Specifically, prediction-focused models often struggle to differentiate patients with differing characteristics but the same outcome. 
+The mentioned approaches have several limitations.
+Specifically, prediction-focused models often struggle to differentiate patients with differing characteristics but the same outcome. 
 For instance, predicting in-hospital mortality from patient time series may yield the same risk for an elderly patient with liver dysfunction and a young patient with renal failure, despite them needing different treatments.
-In such a case, coarse prediction labels (e.g., in-hospital mortality which encompass diverse underlying causes) do not encourage prediction-centric models to capture clinically relevant details. This is because the model is not required to recognize the semantic differences between these two patients directly to achieve high prediction power.
+In such a case, coarse prediction labels (e.g., in-hospital mortality which encompass diverse underlying causes) do not encourage prediction-centric models to capture clinically relevant details.
+This is because the model is not required to recognize the semantic differences between these two patients directly to achieve high prediction power.
 We term this challenge as capturing ``raw feature heterogeneity'', where distinguishing patients with identical classification outcomes and contrasting raw features becomes a difficulty.
 
 
@@ -15,14 +20,17 @@ For example, in the supervised temporal clustering models by \citet{lee2020tempo
 This approximation incurs some loss in information such that using a patient's assigned cluster to predict the patient's outcome has worse accuracy than using the original prediction network.
 
 The supervised temporal clustering models by \citet{lee2020temporal} and \citet{aguiar2022learning} are also learned in a manner that arguably depends too much on user-specified design choices.
-Specifically these models employ k-means for initializing clusters, where the user must specify the number of clusters to use. Using a different clustering algorithm or number of clusters could drastically change the results. This situation may demand costly model re-training if a user finds the learned clusters to be hard to interpret, or either too fine or too coarse.
+Specifically these models employ k-means for initializing clusters, where the user must specify the number of clusters to use.
+Using a different clustering algorithm or number of clusters could drastically change the results.
+This situation may demand costly model re-training if a user finds the learned clusters to be hard to interpret, or either too fine or too coarse.
 
 
 \noindent
 \textbf{Our contributions.}
 To address the issue of raw feature heterogeneity (distinguishing between patients with the same outcome who look quite different) and to avoid the issues encountered with clustering models, our main contribution in this paper is to propose a framework for modeling variable-length tabular time series data called \emph{Temporal Supervised Contrastive Learning} (\mbox{\ChTwoSmallCaps{Temporal-SCL}}), which does not use clustering during model training due to the challenges stated earlier. 
 
-Our core innovation lies in adopting an embedding-centric paradigm that builds off from the fundamental concept of \emph{contrastive learning} \citep{le2020contrastive} which the goal is to learn an embedding representation where ``similar'' data points exhibit proximate embedding vectors, while ``dissimilar'' data point have distant embeddings. Building on top of \cite{khosla2020supervised}, our embedding-centric approach allows us to impose a structured representation that encapsulates the crucial properties outlined in the introduction for capturing the raw feature heterogeneity while maintaining high predictive power.
+Our core innovation lies in adopting an embedding-centric paradigm that builds off from the fundamental concept of \emph{contrastive learning} \citep{le2020contrastive} which the goal is to learn an embedding representation where ``similar'' data points exhibit proximate embedding vectors, while ``dissimilar'' data point have distant embeddings.
+Building on top of \cite{khosla2020supervised}, our embedding-centric approach allows us to impose a structured representation that encapsulates the crucial properties outlined in the introduction for capturing the raw feature heterogeneity while maintaining high predictive power.
 
 \ChTwoSmallCaps{Temporal-SCL} learns an embedding vector at each time step of a time series. The embedding space has the following properties:
 \begin{itemize}
@@ -32,8 +40,11 @@ Our core innovation lies in adopting an embedding-centric paradigm that builds o
 \end{itemize}
 We achieve the last property using a nearest neighbor pairing mechanism.
 
-We show that \ChTwoSmallCaps{Temporal-SCL} works well in practice. In two real clinical datasets, \ChTwoSmallCaps{Temporal-SCL} outperforms various baselines including state-of-the-art methods such as transformers, and removing the nearest neighbor pairing mechanism leads to noticeably lower accuracy. In a synthetic dataset with known ground truth embedding space structure, \mbox{\ChTwoSmallCaps{Temporal-SCL}} consistently recovers the correct structure (100\% success in 10 experimental repeats with different random seeds) whereas no baseline tested achieves this; removing nearest neighbor pairing makes our method's correct recovery rate~0\%.
+We show that \ChTwoSmallCaps{Temporal-SCL} works well in practice.
+In two real clinical datasets, \ChTwoSmallCaps{Temporal-SCL} outperforms various baselines including state-of-the-art methods such as transformers, and removing the nearest neighbor pairing mechanism leads to noticeably lower accuracy.
+In a synthetic dataset with known ground truth embedding space structure, \mbox{\ChTwoSmallCaps{Temporal-SCL}} consistently recovers the correct structure (100\% success in 10 experimental repeats with different random seeds) whereas no baseline tested achieves this; removing nearest neighbor pairing makes our method's correct recovery rate~0\%.
 
-We also propose a clustering-based heatmap visualization of the learned embedding space, relating it to raw features and to prediction outcomes. The clustering involved happens only \emph{after} model training and is purely for the purposes of visualization, where our visualization strategy is agnostic to the choice of clustering algorithm used or the number of clusters.
+We also propose a clustering-based heatmap visualization of the learned embedding space, relating it to raw features and to prediction outcomes.
+The clustering involved happens only \emph{after} model training and is purely for the purposes of visualization, where our visualization strategy is agnostic to the choice of clustering algorithm used or the number of clusters.
 
 

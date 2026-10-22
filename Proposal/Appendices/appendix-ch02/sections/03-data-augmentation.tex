@@ -2,8 +2,12 @@
 \subsection{Combining Data Augmentation with Nearest Neighbor Pairing}
 \label{ch02:sec:data-augmentation-with-nn-pairing}
 
-When data augmentation is available, nearest neighbor pairing can be run using an augmented training dataset. We keep track of what the original $N$ raw time series are prior to any data augmentation. Per training epoch, we use a different random augmentation of every original training time series and treat the augmented set of $N$ time series as a ``fresh'' set of training feature vectors for that epoch (prior to running our nearest neighbor pairing procedure).
+When data augmentation is available, nearest neighbor pairing can be run using an augmented training dataset.
+We keep track of what the original $N$ raw time series are prior to any data augmentation.
+Per training epoch, we use a different random augmentation of every original training time series and treat the augmented set of $N$ time series as a ``fresh'' set of training feature vectors for that epoch (prior to running our nearest neighbor pairing procedure).
 
-Alternatively, we can adopt the approach used in the original SCL, which involves pairing two random augmentations of the same raw input. This would require generating two random augmentations per training time series in each epoch. In fact, combining these two strategies for contrastive learning on images has been previously done \citep{dwibedi2021little}; however, this earlier work finds nearest neighbors in the embedding space rather than the raw feature space and has not been extended to variable-length irregularly sampled temporal data like the data we experiment on.
+Alternatively, we can adopt the approach used in the original SCL, which involves pairing two random augmentations of the same raw input.
+This would require generating two random augmentations per training time series in each epoch.
+In fact, combining these two strategies for contrastive learning on images has been previously done \citep{dwibedi2021little}; however, this earlier work finds nearest neighbors in the embedding space rather than the raw feature space and has not been extended to variable-length irregularly sampled temporal data like the data we experiment on.
 
 

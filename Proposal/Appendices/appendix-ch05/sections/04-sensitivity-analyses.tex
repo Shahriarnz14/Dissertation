@@ -46,31 +46,42 @@ This led to the following variants:
 
     \item \textbf{No conjunction expansion:} Remove the following sentence from the prompt: \texttt{"Separate conjunctive phrases into their component events and assign them the same timestamp (for example, separation of ‘fever and rash’ into 2 events: ‘fever’ and ‘rash’)"}
     
-    \item \textbf{Interval:} A query was added to the prompt for extracting the time interval (start and end time of clinical events). The original prompt’s instructions and few-shot examples were modified accordingly. 
+    \item \textbf{Interval:} A query was added to the prompt for extracting the time interval (start and end time of clinical events).
+The original prompt’s instructions and few-shot examples were modified accordingly. 
     
     \item \textbf{Interval + Type:} A query was added to the prompt for extracting the time interval and i2b2
-    event type (Interval+Type), where event type is one of: Factual, Possible, Hypothetical, Conditional, Negated, Historical, Uncertain. The original prompt’s instructions and few-shot examples were modified accordingly. 
+    event type (Interval+Type), where event type is one of: Factual, Possible, Hypothetical, Conditional, Negated, Historical, Uncertain.
+The original prompt’s instructions and few-shot examples were modified accordingly. 
 \end{enumerate}
 
 %\input{Scientific_data/Supplementary/prompt_ablation}
 
 \ChFiveParagraph{Semantic similarity:}
-The cumulative distributions of cosine distances between predicted and reference event phrases show clear differences across prompt variants. \emph{Interval} and \emph{Interval+Type} produce the closest matches, while \emph{Zero-shot} performs substantially worse, with a right-shifted distribution indicating lower-quality event spans. \emph{No role} and \emph{No conjunction} show modest degradation relative to the full prompt. These results
+The cumulative distributions of cosine distances between predicted and reference event phrases show clear differences across prompt variants. \emph{Interval} and \emph{Interval+Type} produce the closest matches, while \emph{Zero-shot} performs substantially worse, with a right-shifted distribution indicating lower-quality event spans. \emph{No role} and \emph{No conjunction} show modest degradation relative to the full prompt.
+These results
 demonstrate that including structured temporal guidance and explicit event formatting improves semantic alignment.
 
 \ChFiveParagraph{Temporal ordering.}
-The concordance index (c-index) follows a similar pattern. \emph{Interval+Type} achieves the highest median concordance, followed by \emph{Interval} and the full prompt. Removing role
-framing or conjunction splitting reduces ordering consistency, and \emph{Zero-shot} again yields the lowest performance with greater variability. This suggests that structured instructions help the model maintain coherent temporal ordering among extracted events.
+The concordance index (c-index) follows a similar pattern. \emph{Interval+Type} achieves the highest median concordance, followed by \emph{Interval} and the full prompt.
+Removing role
+framing or conjunction splitting reduces ordering consistency, and \emph{Zero-shot} again yields the lowest performance with greater variability.
+This suggests that structured instructions help the model maintain coherent temporal ordering among extracted events.
 
 \ChFiveParagraph{Timestamp accuracy.}
-Overall log-time discrepancy curves show that \emph{Interval} and \emph{Interval+Type} provide the most accurate timestamp predictions, whereas \emph{Zero-shot} exhibits the largest errors. When stratified by temporal distance from presentation, prompt differences are minimal for
-immediate events but widen substantially at longer horizons (1~day, 1~week, 1~year, and beyond). Structured prompts with explicit temporal cues maintain accuracy across these
+Overall log-time discrepancy curves show that \emph{Interval} and \emph{Interval+Type} provide the most accurate timestamp predictions, whereas \emph{Zero-shot} exhibits the largest errors.
+When stratified by temporal distance from presentation, prompt differences are minimal for
+immediate events but widen substantially at longer horizons (1~day, 1~week, 1~year, and beyond).
+Structured prompts with explicit temporal cues maintain accuracy across these
 intervals, while unstructured prompts degrade more quickly.
 
-When stratified by the time from presentation (e.g., within 1 hour, 1 day, 1 week), prompt differences are most pronounced for events occurring farther from the report anchor (Figure \ref{ch05:fig:prompt_ablation}, far right). For immediate events, all prompt versions perform comparably. However, at longer timescales (1 week to "ever"), Interval and Interval+Type maintain superior accuracy, while Zero-shot shows dramatic drops in performance. This suggests that structured prompts are particularly critical for accurate long-range temporal reasoning.
+When stratified by the time from presentation (e.g., within 1 hour, 1 day, 1 week), prompt differences are most pronounced for events occurring farther from the report anchor (Figure \ref{ch05:fig:prompt_ablation}, far right).
+For immediate events, all prompt versions perform comparably.
+However, at longer timescales (1 week to "ever"), Interval and Interval+Type maintain superior accuracy, while Zero-shot shows dramatic drops in performance.
+This suggests that structured prompts are particularly critical for accurate long-range temporal reasoning.
 
 Across semantic similarity, temporal ordering, and timestamp alignment, prompt components that provide explicit temporal structure or event-typing requirements consistently improve
-performance, while removing instructional scaffolding—particularly in the Zero-shot condition—results in substantial degradation. These findings highlight the importance of prompt
+performance, while removing instructional scaffolding—particularly in the Zero-shot condition—results in substantial degradation.
+These findings highlight the importance of prompt
 design in guiding LLMs to produce high-quality temporal annotations from clinical narratives.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,13 +94,13 @@ design in guiding LLMs to produce high-quality temporal annotations from clinica
 To illustrate qualitative differences among annotators, we compare temporal event sequences generated by several LLMs for a representative case report (PMC10629858) \citep{abu2023rare}, which describes a patient with lepromatous leprosy who later developed abdominal complications, recurrent bacteremia, severe sepsis, and ultimately died (Figure~\ref{ch05:fig:compare_llm_annotations}).
 
 
-\input{Appendices/appendix-ch05/figures/01}
+\input{Appendices/appendix-ch05/figures/case-report-annotation-panels}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\input{Appendices/appendix-ch05/figures/02}
+\input{Appendices/appendix-ch05/figures/temporal-annotation-comparison}
 
 
 
@@ -204,31 +215,45 @@ To illustrate qualitative differences among annotators, we compare temporal even
 % \end{figure*}
 
 
-Across models, the principal clinical trajectory is consistently recovered: confirmation of lepromatous leprosy, antibiotic treatment, evolving abdominal symptoms with corresponding imaging findings, subsequent sepsis, ICU readmission, and death. All annotators preserve the
+Across models, the principal clinical trajectory is consistently recovered: confirmation of lepromatous leprosy, antibiotic treatment, evolving abdominal symptoms with corresponding imaging findings, subsequent sepsis, ICU readmission, and death.
+All annotators preserve the
 temporal polarity of events, assigning negative times to historical information and positive times to post-admission findings.
 
-Differences emerge in event granularity and phrasing. Some models split conjunctive phrases into multiple events (e.g., listing each component medication separately), whereas others
-compress them into single entries. Several annotators also produce near-duplicate events at the same timestamp (e.g., both “diagnosed with lepromatous leprosy’’ and “skin biopsy confirmed’’), reflecting variation in how models segment clinically related information within the narrative.
+Differences emerge in event granularity and phrasing.
+Some models split conjunctive phrases into multiple events (e.g., listing each component medication separately), whereas others
+compress them into single entries.
+Several annotators also produce near-duplicate events at the same timestamp (e.g., both “diagnosed with lepromatous leprosy’’ and “skin biopsy confirmed’’), reflecting variation in how models segment clinically related information within the narrative.
 
-More pronounced differences appear in temporal normalization. For the expression “two months before admission,” models produce hour offsets ranging from approximately $-1464$ to $-1344$, and one model assigns $-144$ due to an apparent day–hour unit error. Long-range events such as the autologous bone marrow transplant plan, ICU readmission, and death also receive timestamps that vary by hundreds of hours across annotators. Despite this variability in absolute timing,
+More pronounced differences appear in temporal normalization.
+For the expression “two months before admission,” models produce hour offsets ranging from approximately $-1464$ to $-1344$, and one model assigns $-144$ due to an apparent day–hour unit error.
+Long-range events such as the autologous bone marrow transplant plan, ICU readmission, and death also receive timestamps that vary by hundreds of hours across annotators.
+Despite this variability in absolute timing,
 the relative ordering of major clinical milestones remains largely preserved.
 
-A recurring issue across models involves distinguishing planned actions from events that actually occurred. For example, most annotators correctly represent “planned autologous bone-marrow transplant’’ with an associated future timestamp, which is appropriate because planned interventions can be temporally located and may influence subsequent decision-making. However, several models omit the word “planned,’’ converting the entry into “autologous
-bone-marrow transplant’’ and thereby representing an intended but unperformed procedure as an event that occurred. In such cases, the discrepancy arises from the event label rather than the timestamp itself, illustrating how small linguistic omissions can alter the extracted temporal semantics.
+A recurring issue across models involves distinguishing planned actions from events that actually occurred.
+For example, most annotators correctly represent “planned autologous bone-marrow transplant’’ with an associated future timestamp, which is appropriate because planned interventions can be temporally located and may influence subsequent decision-making.
+However, several models omit the word “planned,’’ converting the entry into “autologous
+bone-marrow transplant’’ and thereby representing an intended but unperformed procedure as an event that occurred.
+In such cases, the discrepancy arises from the event label rather than the timestamp itself, illustrating how small linguistic omissions can alter the extracted temporal semantics.
 %\vspace{-3mm}
 
-\input{Appendices/appendix-ch05/tables/02}
+\input{Appendices/appendix-ch05/tables/annotation-error-types}
 
 
 Overall, the models capture the broad sequence of events but differ in how they segment conjunctive statements, handle near-duplicates, and resolve absolute times—particularly for
-long-range events. A taxonomy of common annotation errors observed across models—including granularity differences, duplicate events, temporal normalization variability, and intent–occurrence misclassification—is summarized in Table~\ref{ch05:tab:error_taxonomy}.
+long-range events.
+A taxonomy of common annotation errors observed across models—including granularity differences, duplicate events, temporal normalization variability, and intent–occurrence misclassification—is summarized in Table~\ref{ch05:tab:error_taxonomy}.
 
 
 \subsubsection{Sensitivity to Event Matching Strategy (LAPJV)}
 \label{ch05:apd:lapjv-matching}
-We additionally consider a globally optimal one-to-one event alignment based on the Linear Assignment Problem, solved using the Jonker--Volgenant (LAPJV) algorithm \citep{jonker1987shortest}. We define a rectangular cost matrix whose entries are pairwise cosine distances between predicted and reference events. To enforce the same distance thresholding used in the recursive heuristic, we assign a large penalty cost to pairs whose distance exceeds the threshold, effectively masking infeasible matches. LAPJV then computes a minimum-cost assignment under these constraints, yielding a globally optimal one-to-one alignment between the two event sets.
+We additionally consider a globally optimal one-to-one event alignment based on the Linear Assignment Problem, solved using the Jonker--Volgenant (LAPJV) algorithm \citep{jonker1987shortest}.
+We define a rectangular cost matrix whose entries are pairwise cosine distances between predicted and reference events.
+To enforce the same distance thresholding used in the recursive heuristic, we assign a large penalty cost to pairs whose distance exceeds the threshold, effectively masking infeasible matches.
+LAPJV then computes a minimum-cost assignment under these constraints, yielding a globally optimal one-to-one alignment between the two event sets.
 
-To assess sensitivity to the event alignment procedure, we repeat the inter-LLM comparison using LAPJV-based matching at a cosine distance threshold of 0.1. Table~\ref{ch05:tab:model_comparison_lapjv} reports event match rate, temporal concordance, and AULTC across five independent runs per model, and is directly comparable to the main-text results obtained using the recursive matching heuristic (Algorithm~\ref{ch05:alg:recursive_match}; Table~\ref{ch05:tab:model_comparison}).
+To assess sensitivity to the event alignment procedure, we repeat the inter-LLM comparison using LAPJV-based matching at a cosine distance threshold of 0.1.
+Table~\ref{ch05:tab:model_comparison_lapjv} reports event match rate, temporal concordance, and AULTC across five independent runs per model, and is directly comparable to the main-text results obtained using the recursive matching heuristic (Algorithm~\ref{ch05:alg:recursive_match}; Table~\ref{ch05:tab:model_comparison}).
 % To assess the impact of using a globally optimal matching procedure, we repeat the inter-LLM comparison using LAPJV-based event alignment at a fixed cosine distance threshold of 0.1.
 % Table~\ref{ch05:tab:model_comparison_lapjv} reports match rate, temporal concordance, and AULTC
 % across five independent runs for each model, and is directly comparable to the results obtained
@@ -277,7 +302,7 @@ To assess sensitivity to the event alignment procedure, we repeat the inter-LLM 
 
 
 
-\input{Appendices/appendix-ch05/tables/03}
+\input{Appendices/appendix-ch05/tables/lapjv-model-comparison}
 
 
 
@@ -288,7 +313,7 @@ plots temporal concordance and AULTC as a function of event match rate, with the
 point at threshold 0.1 highlighted.
 
 
-\input{Appendices/appendix-ch05/figures/03}
+\input{Appendices/appendix-ch05/figures/lapjv-matching-thresholds}
 
 
 Across models, LAPJV preserves high event match rates at low thresholds and exhibits a

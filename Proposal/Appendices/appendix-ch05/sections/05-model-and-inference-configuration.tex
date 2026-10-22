@@ -4,29 +4,37 @@
 
 Seven large language models were evaluated for textual time series annotation:
 Llama 3.3 70B Instruct, DeepSeek-R1, DeepSeek-V3, GPT-5, O4-mini, O3,
-and O1. The exact checkpoint identifiers and Azure deployment names are
-reported in Table~\ref{ch05:tab:model-identifiers}. Llama 3.3 70B Instruct and
-DeepSeek-R1 were also used to produce the full-corpus annotations. Each model
+and O1.
+The exact checkpoint identifiers and Azure deployment names are
+reported in Table~\ref{ch05:tab:model-identifiers}.
+Llama 3.3 70B Instruct and
+DeepSeek-R1 were also used to produce the full-corpus annotations.
+Each model
 was evaluated across five independent generation runs using the textual time
-series prompt in Supplementary Section~\ref{ch05:apd:extraction-prompt}. The revised technical-validation
+series prompt in Supplementary Section~\ref{ch05:apd:extraction-prompt}.
+The revised technical-validation
 results were calculated on 190 case reports after excluding the 10 pilot cases
 used during method development.
 
 Table~\ref{ch05:tab:inference-settings} summarizes the recorded inference
-configuration. Llama 3.3 70B Instruct was run using Hugging Face Transformers
-and PyTorch with bfloat16 weights and automatic device placement. The Azure
+configuration.
+Llama 3.3 70B Instruct was run using Hugging Face Transformers
+and PyTorch with bfloat16 weights and automatic device placement.
+The Azure
 OpenAI models were queried through the Chat Completions interface using API
-version \texttt{2024-12-01-preview}. Temperature, top-$p$, and generation seeds
-were not explicitly specified for the Azure models. In all API-based runs, the
+version \texttt{2024-12-01-preview}.
+Temperature, top-$p$, and generation seeds
+were not explicitly specified for the Azure models.
+In all API-based runs, the
 complete extraction prompt and case-report text were submitted together as a
 single user message, and responses were generated without streaming.
 
 
-\input{Appendices/appendix-ch05/tables/04}
+\input{Appendices/appendix-ch05/tables/annotation-model-identifiers}
 
 
 
-\input{Appendices/appendix-ch05/tables/05}
+\input{Appendices/appendix-ch05/tables/inference-generation-settings}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% Sensitivity analyses %%%%%%%%%%%

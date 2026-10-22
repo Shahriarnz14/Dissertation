@@ -80,7 +80,8 @@ This is again treated as a binary classification task over the \texttt{[CLS]} em
 We report macro-averaged F1 scores over all prediction examples.
 
 \ChSevenParagraph{Masked Language Modeling Approaches.}
-In addition to the MLP-head approach described above, we implement masked language modeling (MLM) variants that leverage the pretrained masked token prediction capabilities of encoder models. These approaches reformulate our forecasting tasks as cloze-style problems:
+In addition to the MLP-head approach described above, we implement masked language modeling (MLM) variants that leverage the pretrained masked token prediction capabilities of encoder models.
+These approaches reformulate our forecasting tasks as cloze-style problems:
 
 \ChSevenParagraph{1. Masked Event Occurrence Prediction.}
 For the time-window classification task, we construct prompts that include a \texttt{[MASK]} token whose prediction indicates whether an event occurs within the specified horizon:
@@ -90,7 +91,9 @@ For the time-window classification task, we construct prompts that include a \te
     \item \textbf{Target:} The model predicts either "\texttt{yes}" or "\texttt{no}" at the \texttt{[MASK]} position
 \end{itemize}
 
-We constrain the output vocabulary to only these two tokens and compute cross-entropy loss over their logits. For fine-tuned variants, we train the entire model to optimize this masked prediction task. For zero-shot variants, we directly use the pretrained model's predictions without additional training.
+We constrain the output vocabulary to only these two tokens and compute cross-entropy loss over their logits.
+For fine-tuned variants, we train the entire model to optimize this masked prediction task.
+For zero-shot variants, we directly use the pretrained model's predictions without additional training.
 
 \ChSevenParagraph{2. Masked Temporal Ordering.}
 For the concordance task, we predict relational tokens that indicate temporal ordering:
@@ -100,12 +103,15 @@ For the concordance task, we predict relational tokens that indicate temporal or
     \item \textbf{Target:} The model predicts "\texttt{before}" if $e_1$ occurs before $e_2$, else "\texttt{after}"
 \end{itemize}
 
-Again, we restrict predictions to these two tokens. This formulation allows the model to leverage its pretrained understanding of temporal relationships encoded during MLM pretraining. 
+Again, we restrict predictions to these two tokens.
+This formulation allows the model to leverage its pretrained understanding of temporal relationships encoded during MLM pretraining. 
 
 Note that in our dataset, we randomize the relative ordering of $e_1$ and $e_2$ each time to avoid introducing positional biases that could lead the model to rely on superficial cues rather than genuine temporal reasoning.
 
 \ChSevenParagraph{Implementation Details.}
-For both tasks, we extract the logits at the \texttt{[MASK]} position and apply a linear projection to the target vocabulary size (2 tokens). The key advantage of this approach is that it can leverage pretrained masked language modeling capabilities, potentially requiring less task-specific training. We evaluate both fine-tuned versions (which update all model parameters) and zero-shot versions (which use frozen pretrained weights).
+For both tasks, we extract the logits at the \texttt{[MASK]} position and apply a linear projection to the target vocabulary size (2 tokens).
+The key advantage of this approach is that it can leverage pretrained masked language modeling capabilities, potentially requiring less task-specific training.
+We evaluate both fine-tuned versions (which update all model parameters) and zero-shot versions (which use frozen pretrained weights).
 
 \ChSevenParagraph{Training and Evaluation.}
 Each task is trained separately using AdamW with linear learning rate decay and early stopping based on validation loss. 

@@ -10,12 +10,19 @@ Within the text-primary formulation, narrative text defines the candidate event 
 
 % Adding retrieved structured EHR evidence has little effect on event match rate, but more consistently improves temporal localization. This indicates that structured rows are most useful for sharpening when text-derived events occurred, not for replacing narrative event extraction. In this sense, structured EHR data act as partial temporal evidence for narrative-derived patient trajectories, while the narrative remains the primary source of clinically meaningful event content.
 
-The structured-data gap analysis explains why this distinction matters. Structured EHR data is not merely a noisier version of the narrative record; it offers a different view of the patient trajectory. When relevant counterparts exist, their timestamps can anchor timeline calibration. However, many clinically meaningful narrative events are absent, delayed, or semantically compressed in tabular form, including symptoms, functional status, temporal qualifiers, patient-reported information, and clinical context. 
+The structured-data gap analysis explains why this distinction matters.
+Structured EHR data is not merely a noisier version of the narrative record; it offers a different view of the patient trajectory.
+When relevant counterparts exist, their timestamps can anchor timeline calibration.
+However, many clinically meaningful narrative events are absent, delayed, or semantically compressed in tabular form, including symptoms, functional status, temporal qualifiers, patient-reported information, and clinical context. 
 \ChEightRebuttal{These findings characterize
 asymmetric coverage within the present text-primary analysis; they do not assess structured-only events or establish that either source is complete.}
 % Models built only on structured data may therefore miss important patient states even when their timestamps are precise, while models built only on text may recover those states but place them less accurately in time.
 
-The ablation results also support the scaffolded design. One-shot timeline generation requires a model to identify clinical events, infer relative timings, resolve vague temporal expressions, and decide how to use structured evidence in a single step. By first constructing an anchor-event scaffold, the workflow separates the temporal backbone of the encounter from supporting narrative details. This mirrors clinical reasoning, where events such as admission, diagnostic testing, treatment initiation, deterioration, procedures, and discharge provide temporal reference points for interpreting the rest of the patient course. Staged calibration then allows structured evidence to stabilize the backbone before refining the full trajectory.
+The ablation results also support the scaffolded design.
+One-shot timeline generation requires a model to identify clinical events, infer relative timings, resolve vague temporal expressions, and decide how to use structured evidence in a single step.
+By first constructing an anchor-event scaffold, the workflow separates the temporal backbone of the encounter from supporting narrative details.
+This mirrors clinical reasoning, where events such as admission, diagnostic testing, treatment initiation, deterioration, procedures, and discharge provide temporal reference points for interpreting the rest of the patient course.
+Staged calibration then allows structured evidence to stabilize the backbone before refining the full trajectory.
 
 
 \noindent\textbf{Limitations:} 

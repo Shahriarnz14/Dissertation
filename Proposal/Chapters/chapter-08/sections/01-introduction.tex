@@ -14,15 +14,34 @@ Similar temporal challenges extend across critical illness: risk forecasts depen
 This increasing focus on temporal structure is evident in early-warning systems \cite{henry2022factors}, studies showing that predictive utility varies with timing \cite{kamran2024evaluation}, and research on the temporal characteristics of sepsis subtypes and progression \cite{ch08:noroozizadeh2023temporal}.
 
 
-The growing emphasis on time in critical care reveals an important methodological gap: electronic health records (EHRs) are not organized as temporally grounded patient trajectories. Critical-care repositories such as MIMIC-III/IV \cite{ch08:johnson2016mimic,ch08:johnson2023mimic} make this challenge explicit by combining structured time-series measurements with narrative clinical documentation. These modalities provide complementary but asymmetric evidence for timeline construction (Figure~\ref{ch08:fig:motivation_multimodal_alignment}). Structured rows offer relatively precise temporal information from laboratory results, medications, procedures, vital signs, diagnoses, and administrative events. Clinical narratives, by contrast, provide richer accounts of the patient course, including symptoms, clinician assessments, patient-reported histories, functional status, disease progression, and contextual modifiers. For example, a note describing ``increasing lethargy and peripheral mottling'' may precede an increase in Sequential Organ Failure Assessment (SOFA) scores. Similarly, documented oliguria despite stable creatinine may indicate clinically meaningful states that structured measurements do not fully capture. 
+The growing emphasis on time in critical care reveals an important methodological gap: electronic health records (EHRs) are not organized as temporally grounded patient trajectories.
+Critical-care repositories such as MIMIC-III/IV \cite{ch08:johnson2016mimic,ch08:johnson2023mimic} make this challenge explicit by combining structured time-series measurements with narrative clinical documentation.
+These modalities provide complementary but asymmetric evidence for timeline construction (Figure~\ref{ch08:fig:motivation_multimodal_alignment}).
+Structured rows offer relatively precise temporal information from laboratory results, medications, procedures, vital signs, diagnoses, and administrative events.
+Clinical narratives, by contrast, provide richer accounts of the patient course, including symptoms, clinician assessments, patient-reported histories, functional status, disease progression, and contextual modifiers.
+For example, a note describing ``increasing lethargy and peripheral mottling'' may precede an increase in Sequential Organ Failure Assessment (SOFA) scores.
+Similarly, documented oliguria despite stable creatinine may indicate clinically meaningful states that structured measurements do not fully capture. 
 
-Recent studies point to both the promise and the difficulty of this problem. Multimodal annotation of discharge summaries aligned with structured EHR data demonstrated that access to both modalities can improve the precision of inpatient event timelines, highlighting the value of structured rows as temporal evidence when aligned with the narrative record \cite{ch08:frattallone2024using}. At the same time, text-only timeline reconstruction remains challenging in realistic EHR-style notes, where dense event structure, abbreviations, and semi-structured formatting make both event recovery and time assignment difficult \cite{noroozizadeh2026reconstructing,ch08:noroozizadeh2026forecasting}. Together, these findings motivate more explicit alignment between text-based and tabular approaches, with the goal of improving temporal precision while preserving the richer event content available in narrative text.\cite{ch08:moldwin2021empirical,seinen2025using}
+Recent studies point to both the promise and the difficulty of this problem.
+Multimodal annotation of discharge summaries aligned with structured EHR data demonstrated that access to both modalities can improve the precision of inpatient event timelines, highlighting the value of structured rows as temporal evidence when aligned with the narrative record \cite{ch08:frattallone2024using}.
+At the same time, text-only timeline reconstruction remains challenging in realistic EHR-style notes, where dense event structure, abbreviations, and semi-structured formatting make both event recovery and time assignment difficult \cite{noroozizadeh2026reconstructing,ch08:noroozizadeh2026forecasting}.
+Together, these findings motivate more explicit alignment between text-based and tabular approaches, with the goal of improving temporal precision while preserving the richer event content available in narrative text.\cite{ch08:moldwin2021empirical,seinen2025using}
 
-In this work, we investigate whether aligning retrieved structured EHR evidence with text-derived event timelines can improve the temporal precision of reconstructed patient trajectories. Our retrieval-augmented multimodal approach integrates structured rows directly into timeline reconstruction rather than treating textual and tabular data as separate views. The multistep pipeline first identifies temporally informative central events and uses them to create an initial scaffold of the patient trajectory. It then positions additional events relative to this scaffold and refines the resulting timeline using retrieved structured evidence. This decomposition reflects a clinically natural distinction between events that form the backbone of an encounter and those whose timing is best interpreted relative to that backbone. Using this framework, we assess whether and where multimodal alignment improves on text-only timeline reconstruction. Specifically, we examine the effects of introducing structured evidence at different stages of the reconstruction workflow, determine whether improvements are concentrated in temporal metrics rather than event recovery, and analyze which prognostically relevant information appears in text but is missing or delayed in tabular data.
+In this work, we investigate whether aligning retrieved structured EHR evidence with text-derived event timelines can improve the temporal precision of reconstructed patient trajectories.
+Our retrieval-augmented multimodal approach integrates structured rows directly into timeline reconstruction rather than treating textual and tabular data as separate views.
+The multistep pipeline first identifies temporally informative central events and uses them to create an initial scaffold of the patient trajectory.
+It then positions additional events relative to this scaffold and refines the resulting timeline using retrieved structured evidence.
+This decomposition reflects a clinically natural distinction between events that form the backbone of an encounter and those whose timing is best interpreted relative to that backbone.
+Using this framework, we assess whether and where multimodal alignment improves on text-only timeline reconstruction.
+Specifically, we examine the effects of introducing structured evidence at different stages of the reconstruction workflow, determine whether improvements are concentrated in temporal metrics rather than event recovery, and analyze which prognostically relevant information appears in text but is missing or delayed in tabular data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{Chapters/chapter-08/figures/02}
+\input{Chapters/chapter-08/figures/stroke-alert-grounding-example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{Chapters/chapter-08/figures/scaffolded-reconstruction-workflow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

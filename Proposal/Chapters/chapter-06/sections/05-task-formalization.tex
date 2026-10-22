@@ -3,7 +3,8 @@
 {\raggedright
 Given a clinical text document $T$, we extract a textual time series $S = \{(e_1,t_1), (e_2,t_2),...,(e_n,t_n)\}$ where $e_i$ represents a clinical finding (contiguous text span describing a temporally localizable patient event) and $t_i \in \mathbb{R}$ represents hours relative to admission ($t=0$).\par}
 
-We define clinical findings with two key modifications from i2b2 clinical concepts \citep{ch06:uzuner20112010}: (1) findings extend beyond single prepositional phrases for specificity (e.g., ``pain in chest that radiates substernally'' remains intact), and (2) conjunctions split into components (e.g., ``metastases in liver and pancreas'' $\rightarrow$ \{``metastasis in liver'', ``metastasis in pancreas''\}). Temporal assignment captures event start times (e.g., ``three-day history of fever'' $\rightarrow$ $t=-72$).
+We define clinical findings with two key modifications from i2b2 clinical concepts \citep{ch06:uzuner20112010}: (1) findings extend beyond single prepositional phrases for specificity (e.g., ``pain in chest that radiates substernally'' remains intact), and (2) conjunctions split into components (e.g., ``metastases in liver and pancreas'' $\rightarrow$ \{``metastasis in liver'', ``metastasis in pancreas''\}).
+Temporal assignment captures event start times (e.g., ``three-day history of fever'' $\rightarrow$ $t=-72$).
 
 For evaluation, given predicted $S_{pred}$ and reference $S_{ref}$, we compute: event matching via cosine distance of embeddings (threshold $\theta=0.1$; sensitivity analysis in Appendix~\ref{ch06:apd:threshold_sweep}), temporal ordering via concordance, and time accuracy via area under log-time curve (AULTC; see Appendix \ref{ch06:apd:ltcdf}).
 

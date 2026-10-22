@@ -10,19 +10,23 @@
 % \textbf{On how our benchmark reflects reality.} Our benchmark balances control and realism. Synthetic datasets allow systematic violations of ignorability, positivity, and ignorable censoring assumptions, reflecting challenges such as unmeasured confounding, treatment imbalance, and dropout. Semi-synthetic datasets increase realism by incorporating real covariate distributions, while still enabling ground-truth evaluation. Real datasets test performance under practical constraints. While results inevitably depend on context, our design---including assumption violations observed in practice and survival scenarios approximating common biomedical settings---ensures that \textsc{SurvHTE-Bench} captures a wide spectrum of realistic conditions. % This provides a rigorous yet extensible foundation for advancing causal survival methodology.
 
 % \textbf{Limitations and future work.} 
-While we have attempted to make our benchmark \ChFourRebuttal{representative of common causal survival setups}, various limitations remain. First, the synthetic datasets include numerous scenarios representing common real-world violations; however, they do not encompass all possible complexities, \ChFourRebuttal{such as RCT settings with informative censoring or}
+While we have attempted to make our benchmark \ChFourRebuttal{representative of common causal survival setups}, various limitations remain.
+First, the synthetic datasets include numerous scenarios representing common real-world violations; however, they do not encompass all possible complexities, \ChFourRebuttal{such as RCT settings with informative censoring or}
 % particularly 
-varying degrees of severity in assumption violations. The binary nature of our violations (either present or absent) may not capture the nuanced continuum of partial violations. 
+varying degrees of severity in assumption violations.
+The binary nature of our violations (either present or absent) may not capture the nuanced continuum of partial violations. 
 \ChFourRebuttal{We recognize that in real-world applications, assumption violations often exist on a continuum of severity. Future extensions of our benchmark could incorporate graded sensitivity analyses, such as varying the magnitude of unmeasured confounding (e.g., via Rosenbaum's $\Gamma$) or the degree of overlap violation. This would allow for a more granular ``dose-response'' analysis to pinpoint the exact thresholds at which specific estimators break down.}
 \ChFourRebuttal{Second, the choice of the most relevant causal estimand is inherently task-specific. While our evaluations cover restricted mean survival time alongside survival probabilities at fixed horizons (Appendix~\ref{ch04:app:surv_prob}), different clinical or policy objectives often dictate the need for alternative measures. Extending the benchmark to natively support a wider array of task-specific estimands---such as conditional median survival times or time-varying hazard ratios---would further enrich its scope.}
 % \textcolor{red}{Second, extending the evaluation to include additional estimands such as survival probabilities at fixed horizons would further enrich the benchmark's scope. Our focus on restricted mean survival time represents just one of several clinically relevant estimands for treatment effect estimation.} 
 %\textcolor{red}{Briefly discuss extension to other estimands?}
 Additionally, we limit our analysis to static, binary treatments with fixed baseline covariates, excluding scenarios involving time-varying treatments, instrumental variables, and dynamic covariate structures. %, each presenting significant analytical challenges. % Real-world clinical data often involves treatments that change over time based on patient response, creating complex feedback mechanisms not captured in our current benchmark.
 
-Future work could expand \textsc{SurvHTE-Bench} in several directions. Incorporating a wider variety of direct causal estimation methods, such as g-computation approaches 
+Future work could expand \textsc{SurvHTE-Bench} in several directions.
+Incorporating a wider variety of direct causal estimation methods, such as g-computation approaches 
 % and SurvITE \citep{curth2021survite}
 specifically designed for survival outcomes, would provide an even more comprehensive evaluation landscape, especially because Causal Survival Forests proved to be competitive but showed vulnerability to certain assumption violations like positivity. % We are also planning to include a wider variety of real-world datasets, including one from MIMIC-IV similar to \cite{meir2025heterogeneous}, in our \textsc{SurvHTE-Bench} benchmark to evaluate methods on actual clinical data with real-world complexity.
-Exploring more complex data-generating mechanisms that better mimic the heterogeneity and longitudinal nature of real-world clinical data represents another promising direction. Finally, extending the benchmark to support multi-valued or continuous treatments would address important practical scenarios encountered in precision medicine and policy optimization. 
+Exploring more complex data-generating mechanisms that better mimic the heterogeneity and longitudinal nature of real-world clinical data represents another promising direction.
+Finally, extending the benchmark to support multi-valued or continuous treatments would address important practical scenarios encountered in precision medicine and policy optimization. 
 
 % Despite our comprehensive approach, several limitations remain.
 % First, while the synthetic datasets include numerous synthetic scenarios representing common real-world violations, it does not encompass all possible complexities, particularly the spectrum of severity in assumption violations.
@@ -37,6 +41,9 @@ Exploring more complex data-generating mechanisms that better mimic the heteroge
 
 \ChFourParagraph{Acknowledgments}
 This research was supported by the Division of Intramural Research (DIR) of the National Library of Medicine (NLM), National Institutes of Health (NIH). 
-G.H.C. was supported by NSF CAREER award \#2047981. S.N. was supported by Carnegie Mellon University TCS Presidential Fellowship, and Natural Sciences and Engineering Research Council of Canada (NSERC) PGS-D award. S.N. was also supported in part by an appointment to the National Library of Medicine Research Participation Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health. ORISE is managed by ORAU under DOE contract number DE-SC0014664. All opinions expressed in this paper are the authors’ and do not necessarily reflect the policies and views of NIH, NLM, DOE, or ORAU/ORISE.
+G.H.C. was supported by NSF CAREER award \#2047981. S.N. was supported by Carnegie Mellon University TCS Presidential Fellowship, and Natural Sciences and Engineering Research Council of Canada (NSERC) PGS-D award.
+S.N. was also supported in part by an appointment to the National Library of Medicine Research Participation Program administered by the Oak Ridge Institute for Science and Education (ORISE) through an interagency agreement between the U.S. Department of Energy (DOE) and the National Library of Medicine, National Institutes of Health.
+ORISE is managed by ORAU under DOE contract number DE-SC0014664.
+All opinions expressed in this paper are the authors’ and do not necessarily reflect the policies and views of NIH, NLM, DOE, or ORAU/ORISE.
 
 

@@ -2,17 +2,23 @@
 \subsubsection{Evaluation Metrics}
 \label{ch05:sec:evaluation-metrics}
 
-We next assessed the quality of the extracted textual time series using the 200 manually annotated case reports as reference. Each large language model (LLM) annotator was evaluated across five independent runs to capture run-to-run variation in the generated timelines. For each model and run, we computed three complementary metrics as described below (detailed description in Supplementary Material, Section \ref{ch05:apd:evaluation-metrics}).
+We next assessed the quality of the extracted textual time series using the 200 manually annotated case reports as reference.
+Each large language model (LLM) annotator was evaluated across five independent runs to capture run-to-run variation in the generated timelines.
+For each model and run, we computed three complementary metrics as described below (detailed description in Supplementary Material, Section \ref{ch05:apd:evaluation-metrics}).
 
 \ChFiveParagraph{Event match rate (recall, precision, and F1)}
 
-To evaluate alignment between predicted and reference clinical events, we applied a recursive best-match strategy adapted from prior work \citep{wang2025large,pmlr-v333-noroozizadeh26a}, as summarized in Algorithm~\ref{ch05:alg:recursive_match}. At each iteration, the method selects the closest unmatched predicted--reference pair under a text-similarity metric, retains the match if it falls below a distance threshold, and removes both events before continuing. This procedure yields an efficient one-to-one alignment that accommodates timelines of unequal length.
+To evaluate alignment between predicted and reference clinical events, we applied a recursive best-match strategy adapted from prior work \citep{wang2025large,pmlr-v333-noroozizadeh26a}, as summarized in Algorithm~\ref{ch05:alg:recursive_match}.
+At each iteration, the method selects the closest unmatched predicted--reference pair under a text-similarity metric, retains the match if it falls below a distance threshold, and removes both events before continuing.
+This procedure yields an efficient one-to-one alignment that accommodates timelines of unequal length.
 
 \ChFiveRebuttal{
 We evaluate event identification using event match recall, precision, and F1. Let $M$ denote the number of one-to-one semantic matches after assignment and application of the cosine-distance threshold, $N_{\mathrm{manual}}$ the number of manually annotated events, and $N_{\mathrm{model}}$ the number of model-generated events. Event match recall is defined as $M/N_{\mathrm{manual}}$, event match precision as $M/N_{\mathrm{model}}$, and event match F1 as the harmonic mean of precision and recall. Precision therefore penalizes additional model-generated events that remain unmatched under the one-to-one alignment, complementing recall, which measures the proportion of manually annotated events recovered.
 }
 
-As a sensitivity analysis, we also evaluated a globally optimal one-to-one alignment based on the Linear Assignment Problem (LAPJV) \citep{jonker1987shortest}. Across all models, results differed by at most $0.3$ percentage points in event match recall relative to the recursive heuristic. We therefore report results using the recursive matching strategy in the main text and provide full LAPJV details and comparison tables in the Supplementary Material (Section~\ref{ch05:apd:lapjv-matching}).
+As a sensitivity analysis, we also evaluated a globally optimal one-to-one alignment based on the Linear Assignment Problem (LAPJV) \citep{jonker1987shortest}.
+Across all models, results differed by at most $0.3$ percentage points in event match recall relative to the recursive heuristic.
+We therefore report results using the recursive matching strategy in the main text and provide full LAPJV details and comparison tables in the Supplementary Material (Section~\ref{ch05:apd:lapjv-matching}).
 
 
 \ChFiveParagraph{Temporal metrics}

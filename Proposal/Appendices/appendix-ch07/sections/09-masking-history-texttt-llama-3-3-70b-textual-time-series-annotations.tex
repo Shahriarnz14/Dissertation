@@ -15,14 +15,17 @@ We evaluate performance across three datasets (\textit{T2S2}-\texttt{L3.3}, \tex
 As the proportion of masked history increases, we observe a general decline in F1 performance, particularly at higher masking rates (e.g., 90\%), suggesting that access to historical context is important for accurate forecasting. 
 Interestingly, the concordance index remains relatively stable, indicating the model's robustness in ranking the next \(k\) events with partial input histories.
 
-More specifically, we can see that F1 scores decrease monotonically with increasing TDR, with relatively mild degradation up to 30--60\% dropout and sharper declines thereafter. For example, in the \texttt{DeepSeek-R1} annotations (Table~\ref{ch07:tab:masking_effects_DS}), \textit{T2S2}/\textit{sepsis-10}/\textit{sepsis-100} drop from 0.576/0.428/0.607 at TDR = 0\% to 0.423/0.200/0.510 at TDR = 90\%, with \textit{sepsis-10} showing the largest relative decline. In contrast, concordance (c-index) remains stable across dropout levels (0.661--0.678), indicating that ranking-based evaluations are less sensitive to history truncation. These trends are consistent for \texttt{Llama-3.3} annotations (Table~\ref{ch07:tab:masking_effects_llama}), suggesting that ranking objectives capture temporal relationships that are more robust to missing historical information than binary classification accuracy of predicting whether an event happens within a time window.
+More specifically, we can see that F1 scores decrease monotonically with increasing TDR, with relatively mild degradation up to 30--60\% dropout and sharper declines thereafter.
+For example, in the \texttt{DeepSeek-R1} annotations (Table~\ref{ch07:tab:masking_effects_DS}), \textit{T2S2}/\textit{sepsis-10}/\textit{sepsis-100} drop from 0.576/0.428/0.607 at TDR = 0\% to 0.423/0.200/0.510 at TDR = 90\%, with \textit{sepsis-10} showing the largest relative decline.
+In contrast, concordance (c-index) remains stable across dropout levels (0.661--0.678), indicating that ranking-based evaluations are less sensitive to history truncation.
+These trends are consistent for \texttt{Llama-3.3} annotations (Table~\ref{ch07:tab:masking_effects_llama}), suggesting that ranking objectives capture temporal relationships that are more robust to missing historical information than binary classification accuracy of predicting whether an event happens within a time window.
 
 
-\input{Appendices/appendix-ch07/tables/07}
+\input{Appendices/appendix-ch07/tables/deepseek-history-masking}
 
 
 
-\input{Appendices/appendix-ch07/tables/08}
+\input{Appendices/appendix-ch07/tables/llama-history-masking}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

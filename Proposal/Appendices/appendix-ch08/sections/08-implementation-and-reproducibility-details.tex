@@ -2,5 +2,10 @@
 \FloatBarrier
 \subsection{Implementation and reproducibility details}\label{ch08:supp:implementation}
 \noindent
-All evaluated models are open-weight models run locally through \textit{llama.cpp}; no proprietary APIs are used. The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B. The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline. On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware. Models were run on NVIDIA A100 GPUs, with GPU count varying by model size. The stages differ in complexity: constrained extraction and assembly may be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost--quality tradeoff remains to be evaluated.
+All evaluated models are open-weight models run locally through \textit{llama.cpp}; no proprietary APIs are used.
+The evaluated models include DeepSeek V3.2, DeepSeek R1, GLM5, Kimi K2 Instruct, GPT-OSS-120B, and Qwen3.5 397B.
+The full multimodal workflow requires seven LLM calls per discharge summary in the no-retry setting, compared with one call for the single-step baseline.
+On discharge summaries averaging approximately 15k characters, average prompt-plus-output lengths were approximately 64k--72k tokens, with end-to-end runtimes of approximately 10--18 minutes per summary depending on model and hardware.
+Models were run on NVIDIA A100 GPUs, with GPU count varying by model size.
+The stages differ in complexity: constrained extraction and assembly may be amenable to smaller models or deterministic processing, whereas relation estimation and ambiguous calibration likely require stronger models; this stage-specific cost--quality tradeoff remains to be evaluated.
 

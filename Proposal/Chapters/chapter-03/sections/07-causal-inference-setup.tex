@@ -14,7 +14,8 @@ For patient \(i\), the RMET is defined as:
 \[
 \bar{T_i} = \mathbb{E}[\widetilde{T_i} | A_{i\tau}, \mathbf{Z}_{i\tau}] = \int_{0}^{M} {S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}) \, du,
 \]
-where \( {S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}) \) is the true survival function and \( M = 96 \) months denotes the maximum follow-up duration. In practice, we replace the true survival function with an estimated version using a survival model from Section~\ref{ch03:sec:methods_survival}.
+where \( {S}(u | A_{i\tau}, \mathbf{Z}_{i\tau}) \) is the true survival function and \( M = 96 \) months denotes the maximum follow-up duration.
+In practice, we replace the true survival function with an estimated version using a survival model from Section~\ref{ch03:sec:methods_survival}.
 
 \ChThreeParagraph{Potential outcomes.} 
 Under the potential outcomes framework, we denote the potential adverse event time under treatment \(a \in \{0,1\}\) by \(\widetilde{T_i}(a)\).
@@ -53,7 +54,8 @@ We extend meta-learning approaches (T-learner and S-learner from \citet{kunzel20
     \(
     \widehat{\mu}_a (\mathbf{Z}_{i\tau}) = \int_0^{M} \widehat{S}_a (u | \mathbf{Z}_{i\tau}) \, du,
     \)
-    with \(a\in\{0,1\}\). The ATE is then estimated as:
+    with \(a\in\{0,1\}\).
+The ATE is then estimated as:
     \[
     \widehat{\psi}_{\text{T-learner}} = \frac{1}{N} \sum_{i=1}^{N} \left( \widehat{\mu}_1 (\mathbf{Z}_{i\tau}) - \widehat{\mu}_0 (\mathbf{Z}_{i\tau}) \right).
     \]
@@ -76,7 +78,8 @@ We extend meta-learning approaches (T-learner and S-learner from \citet{kunzel20
     First set: \(
     \widehat{\mu}_{A_{i\tau}} (\mathbf{Z}_{i\tau}) = \widehat{\mu} (\mathbf{Z}_{i\tau}, A_{i\tau})
     \).
-    Then for patient \(i\), let \(J_K(i)\) denote the set of \(K\) nearest neighbors from the opposite treatment group. The estimated counterfactual RMET is
+    Then for patient \(i\), let \(J_K(i)\) denote the set of \(K\) nearest neighbors from the opposite treatment group.
+The estimated counterfactual RMET is
     \[
     \widehat{\mu}_{1-A_{i\tau}}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}(\mathbf{Z}_{j\tau}, A_{j\tau}),
     \]

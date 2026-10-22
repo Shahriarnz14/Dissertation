@@ -5,7 +5,8 @@
 \ChTwoHeadingOnly
 \subsubsection{Baselines}
 \label{ch02:sec:baselines}
-In this section we describe the baselines used for our experiments. We divide these baselines into 3 subgroups of: (a) Purely-supervised, (b) Predictive clustering, and (c) Self-supervised learning and contrastive learning methods.
+In this section we describe the baselines used for our experiments.
+We divide these baselines into 3 subgroups of: (a) Purely-supervised, (b) Predictive clustering, and (c) Self-supervised learning and contrastive learning methods.
 
 \begin{itemize}
     \item \textbf{Purely-Supervised Baselines}
@@ -50,7 +51,10 @@ We train a BERT-based \citep{devlin2018bert} model from scratch to encode the ti
 \textbf{Actor-Critic Temporal Predictive Clustering (AC-TPC).}
 \citet{lee2020temporal} proposed an actor-critic approach from reinforcement learning for temporal predictive clustering (AC-TPC) where each cluster consists of patients with similar future outcomes of interest.
 In this approach an RNN-based encoder and multi-layer perceptron predictor network are first trained to initialize time series embeddings.
-After initialization, a selector network and an embedding dictionary are jointly optimized with the encoder and predictor networks to obtain a representative embedding for each timestep, considering the outcome in the subsequent timestep. During inference at each timestep, the encoder maps a sequence into a latent embedding. Subsequently, the selector network assigns a cluster to this latent embedding. The centroid of the cluster assigned to the latent embedding is stored in the embedding dictionary and used by the predictor network to make predictions regarding the future outcome of interest.
+After initialization, a selector network and an embedding dictionary are jointly optimized with the encoder and predictor networks to obtain a representative embedding for each timestep, considering the outcome in the subsequent timestep.
+During inference at each timestep, the encoder maps a sequence into a latent embedding.
+Subsequently, the selector network assigns a cluster to this latent embedding.
+The centroid of the cluster assigned to the latent embedding is stored in the embedding dictionary and used by the predictor network to make predictions regarding the future outcome of interest.
 
 
 \noindent
@@ -69,13 +73,17 @@ After initialization, a selector network and an embedding dictionary are jointly
 
 \noindent
 \textbf{\ChTwoSmallCaps{Simple}-Supervised Contrastive Learning ({\ChTwoSmallCaps{Simple-SCL}})}
-This baseline lies under the umbrella of embedding-centric models. \ChTwoSmallCaps{Simple-SCL} is a special case of the original \ChTwoSmallCaps{SCL} \citep{khosla2020supervised} which does not use data augmentation. Similar to the original \ChTwoSmallCaps{SCL} it includes both an encoder network that first learns the embeddings and then a predictor network is trained on these learned embeddings to make predictions. In our experiments that deals with temporal data, we treat each time step as an individual data point to train the encoder and predictor networks. \emph{Note that \ChTwoSmallCaps{Simple-SCL} can be viewed as an ablation of our full \ChTwoSmallCaps{Temporal-SCL} model that excludes both the temporal network and the nearest neighbor pairing mechanism.}  
+This baseline lies under the umbrella of embedding-centric models. \ChTwoSmallCaps{Simple-SCL} is a special case of the original \ChTwoSmallCaps{SCL} \citep{khosla2020supervised} which does not use data augmentation.
+Similar to the original \ChTwoSmallCaps{SCL} it includes both an encoder network that first learns the embeddings and then a predictor network is trained on these learned embeddings to make predictions.
+In our experiments that deals with temporal data, we treat each time step as an individual data point to train the encoder and predictor networks. \emph{Note that \ChTwoSmallCaps{Simple-SCL} can be viewed as an ablation of our full \ChTwoSmallCaps{Temporal-SCL} model that excludes both the temporal network and the nearest neighbor pairing mechanism.}  
 
 \subsubsection{Experimental Setup Details}
 \label{ch02:sec:ExperimentalSetup}
 
 For all datasets, we randomly split the data into 60\% training, 20\% validation, and 20\% test sets. 
-This split is done at the patient level. The presented results of our experiments in the following sections would be for holdout test patients from which no training data was available. We train our model on the patients in the training set, optimize the hyperparameters on the patients in the validation set and report the results from the holdout patient test set. 
+This split is done at the patient level.
+The presented results of our experiments in the following sections would be for holdout test patients from which no training data was available.
+We train our model on the patients in the training set, optimize the hyperparameters on the patients in the validation set and report the results from the holdout patient test set. 
 We train each method on the training set, tune hyperparameters based on the validation set, and report evaluation metrics on the test set.
 Furthermore, we choose 10 different random seeds to randomize the parameter initialization of all the models evaluated as well as randomizing the train/validation/test sets for each experimental repeat.
 
@@ -84,7 +92,10 @@ Furthermore, we choose 10 different random seeds to randomize the parameter init
 
 \noindent
 \textbf{Evaluation metrics.}
-We use the same evaluation metrics as \citet{lee2020temporal}. To evaluate the supervised performance of our model and the baselines, we use area under receiver operator characteristic curve (AUROC) and area under precision-recall curve (AUPRC) obtained from the label predictions of our model and the ground-truth labels on the outcomes of interest. We use one-vs-rest AUROC and AUPRC. For the synthetic data experiment, we also look at the fraction of experimental repeats that a method recovers the ground truth structure. We also report the Silhouette index \citep{rousseeuw1987silhouettes} that gives us a measure of how similar a member is to its own cluster (homogeneity within a cluster) compared to other clusters (heterogeneity across clusters). 
+We use the same evaluation metrics as \citet{lee2020temporal}.
+To evaluate the supervised performance of our model and the baselines, we use area under receiver operator characteristic curve (AUROC) and area under precision-recall curve (AUPRC) obtained from the label predictions of our model and the ground-truth labels on the outcomes of interest. We use one-vs-rest AUROC and AUPRC.
+For the synthetic data experiment, we also look at the fraction of experimental repeats that a method recovers the ground truth structure.
+We also report the Silhouette index \citep{rousseeuw1987silhouettes} that gives us a measure of how similar a member is to its own cluster (homogeneity within a cluster) compared to other clusters (heterogeneity across clusters). 
 
 In the ablation studies presented in Section~\ref{ch02:sec:ablation}, we also evaluate the unsupervised performance of different ablations of \ChTwoSmallCaps{Temporal-SCL}.
 We cluster on the learned hyperspherical embeddings using a complete linkage Agglomerative Hierarchical Clustering to discover discrete latent states that could be of interest.  
@@ -104,22 +115,24 @@ Table~\ref{ch02:tab:trainingHyperParams} summarizes the hyperparameters used in 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
 
-\input{Appendices/appendix-ch02/tables/01}
+\input{Appendices/appendix-ch02/tables/training-hyperparameters}
 
 }
 
 \subsubsection{Synthetic Data}
 \label{ch02:sec:syntheticData_full}
-We generate a 2D dataset where every time series has exactly 3 time steps. We consider the static outcome case so that each time series has a single label (one of two classes: red or blue). The points are all on a 2D circle, where the only four possible time series in the embedding space are shown in Figure~\ref{ch02:fig:toyDataset_Raw} and  include: (i) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-blue.pdf}}{B}'' and (ii) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-blue.pdf}}{B}'' for the \textcolor{blue}{blue} class and iii) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-red.pdf}}{B}'' and (iv) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-red.pdf}}{B}'' for the \textcolor{red}{red} class. We place the starting time steps (``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-red.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-red.pdf}}{B}'') on angular points $\{0^{\circ}, 180^{\circ}, 0^{\circ}, 180^{\circ}\}$ of the circle circumference as shown on Figure~\ref{ch02:fig:toyDataset_Raw}. For these starting points we purposefully have the starting points of the two different classes fall in the same region.
+We generate a 2D dataset where every time series has exactly 3 time steps.
+We consider the static outcome case so that each time series has a single label (one of two classes: red or blue).
+The points are all on a 2D circle, where the only four possible time series in the embedding space are shown in Figure~\ref{ch02:fig:toyDataset_Raw} and  include: (i) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-blue.pdf}}{B}'' and (ii) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-blue.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-blue.pdf}}{B}'' for the \textcolor{blue}{blue} class and iii) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-red.pdf}}{B}'' and (iv) ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-red.pdf}}{B} $\rightarrow$ \scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-red.pdf}}{B}'' for the \textcolor{red}{red} class. We place the starting time steps (``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/circle-red.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/square-red.pdf}}{B}'') on angular points $\{0^{\circ}, 180^{\circ}, 0^{\circ}, 180^{\circ}\}$ of the circle circumference as shown on Figure~\ref{ch02:fig:toyDataset_Raw}. For these starting points we purposefully have the starting points of the two different classes fall in the same region.
 Next for the second time steps (``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-down-red.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/triangle-up-red.pdf}}{B}''), we place them on the angular points of $\{45^{\circ}, 135^{\circ}, -45^{\circ}, -135^{\circ}\}$. And finally for the terminal time steps (``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-blue.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/star-red.pdf}}{B}'', ``\scalerel*{\includegraphics{Appendices/appendix-ch02/images/plus-red.pdf}}{B}''), we place them on angular points of  $\{80^{\circ}, 100^{\circ}, -80^{\circ} -100^{\circ}\}$.
 Given the clashing of the two starting time steps, there are a total of 10 true embedding locations (which could be thought of as cluster centers). When we generate synthetic time series, each point is based on one of the 10 true ground truth embedding locations with Gaussian noise ($\mathcal{N}(0,8)$) added to the true angles noted above. We randomly sample 200 of each of the 4 possible 3-time stepped trajectories so that we have a total of 800 time series.
 
 
-\input{Appendices/appendix-ch02/figures/01}
+\input{Appendices/appendix-ch02/figures/mimic-inference-setup}
 
 
 
-\input{Appendices/appendix-ch02/figures/02}
+\input{Appendices/appendix-ch02/figures/adni-inference-setup}
 
 
 \subsubsection{Real Data}
@@ -128,11 +141,15 @@ Given the clashing of the two starting time steps, there are a total of 10 true 
 \textbf{Medical Information Mart for Intensive Care (MIMIC).}
 % \label{sec:data_mimic}
 We consider the trajectory of septic patients using data from the Medical Information Mart
-for Intensive Care (MIMIC-III) dataset (v1.4) \citep{johnson2018mimic}. We follow the same procedure as done by \citet{komorowski2018artificial} to identify 18,354 septic patients among which there is an observed mortality rate just above 20\% (determined by death within 48h of the final observation $y_i^{(L_i)}=1$ or death within 90 days of the final observation $y_i^{(L_i)}=2$ versus discharge $y_i^{(L_i)}=0$).
-From MIMIC, we extract demographic, lab results, and physiological features according to \citet{seymour2019derivation}, resulting in 29 features. Note that Seymour et al.~group these features as follows: (1) Hepatic: Bilirubin, AST, ALT; (2) Hematologic: Hemoglobin, INR, Platelets; (3) Neurologic: GCS; (4) Cardiovascular: Heart rate, Systolic blood pressure, Bicarbonate, Troponin, Lactate; (5) Pulmonary: Respiratory rate, SaO2, PaO2; (6) Inflammatory: Temperature, ESR, WBC count, Bands, C-Reactive protein; (7) Renal: Serum creatinine; (8) Other: Age, Gender, Elixhauser, Albumin, Chloride, Sodium, Glucose, BUN. 
+for Intensive Care (MIMIC-III) dataset (v1.4) \citep{johnson2018mimic}.
+We follow the same procedure as done by \citet{komorowski2018artificial} to identify 18,354 septic patients among which there is an observed mortality rate just above 20\% (determined by death within 48h of the final observation $y_i^{(L_i)}=1$ or death within 90 days of the final observation $y_i^{(L_i)}=2$ versus discharge $y_i^{(L_i)}=0$).
+From MIMIC, we extract demographic, lab results, and physiological features according to \citet{seymour2019derivation}, resulting in 29 features.
+Note that Seymour et al.~group these features as follows: (1) Hepatic: Bilirubin, AST, ALT; (2) Hematologic: Hemoglobin, INR, Platelets; (3) Neurologic: GCS; (4) Cardiovascular: Heart rate, Systolic blood pressure, Bicarbonate, Troponin, Lactate; (5) Pulmonary: Respiratory rate, SaO2, PaO2; (6) Inflammatory: Temperature, ESR, WBC count, Bands, C-Reactive protein; (7) Renal: Serum creatinine; (8) Other: Age, Gender, Elixhauser, Albumin, Chloride, Sodium, Glucose, BUN. 
 We compile the measurements recorded of these features in MIMIC for every 4 hours (duration of each timestep). 
-Our temporal data extraction follows the exact experimental procedure as \citet{komorowski2018artificial} that is also adopted by \citet{killian2020empirical}. Specifically, in the procedure that we followed, for the septic patients identified, we first found the time for the onset of sepsis based on Sepsis3 Criteria as $t_{\text{onset}}$, we then gathered recorded data of our selected features from the time 
-$t_0 = \max(t_{\text{icu-admission}}, t_{\text{onset}}-12)$ to the time $t_1 = \min(t_{\text{icu-discharge}} \text{ or } t_{\text{death}}, t_{\text{onset}}+24)$. This results in a maximum timeline $[t_0, t_1]$ of 36 hours worth of information captured from each patient (i.e. the maximum number of time steps would be 10 for a single patient) from $-12$ hours of the onset of sepsis to $+24$ hours afterwards.
+Our temporal data extraction follows the exact experimental procedure as \citet{komorowski2018artificial} that is also adopted by \citet{killian2020empirical}.
+Specifically, in the procedure that we followed, for the septic patients identified, we first found the time for the onset of sepsis based on Sepsis3 Criteria as $t_{\text{onset}}$, we then gathered recorded data of our selected features from the time 
+$t_0 = \max(t_{\text{icu-admission}}, t_{\text{onset}}-12)$ to the time $t_1 = \min(t_{\text{icu-discharge}} \text{ or } t_{\text{death}}, t_{\text{onset}}+24)$.
+This results in a maximum timeline $[t_0, t_1]$ of 36 hours worth of information captured from each patient (i.e. the maximum number of time steps would be 10 for a single patient) from $-12$ hours of the onset of sepsis to $+24$ hours afterwards.
 We impute the missing values from the population median if a measurement is not recorded before and the previously recorded value if the measurement is recorded in a previous timestep. 
 We also include a set of 26 indicators for our time-varying features at each timestep that tracks whether a measurement was recorded ($=1$) or imputed ($=0$).
 This dataset represent the case where only the final outcome-label is known and non-terminal timesteps have unknown state-label.

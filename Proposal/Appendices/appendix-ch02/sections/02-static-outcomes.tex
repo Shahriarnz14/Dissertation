@@ -7,7 +7,9 @@ To train a \ChTwoSmallCaps{Temporal-SCL} model for the static outcome case descr
 
 \noindent
 \textbf{Pre-training the encoder.}
-In the dynamic outcome case (i.e., the classification outcome changes over time), we use the procedure stated in Section~\ref{ch02:sec:learning-the-encoder}. However, in the static outcome case (i.e., the classification label is for the final time step only), during the pre-training phase, we only use the snapshot corresponding to the final time step per training time series. This is because we are not sure of what the true labels should be prior to the final time step, so for the pre-training we focus learning the embedding vectors based on time steps where we know the labels.
+In the dynamic outcome case (i.e., the classification outcome changes over time), we use the procedure stated in Section~\ref{ch02:sec:learning-the-encoder}.
+However, in the static outcome case (i.e., the classification label is for the final time step only), during the pre-training phase, we only use the snapshot corresponding to the final time step per training time series.
+This is because we are not sure of what the true labels should be prior to the final time step, so for the pre-training we focus learning the embedding vectors based on time steps where we know the labels.
 
 
 \noindent

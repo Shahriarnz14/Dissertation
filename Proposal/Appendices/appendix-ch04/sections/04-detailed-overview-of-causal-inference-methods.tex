@@ -2,14 +2,22 @@
 \subsection{Detailed Overview of Causal Inference Methods}
 \label{ch04:app:causal_method_details}
 
-This section provides a comprehensive explanation of the causal inference methods evaluated in our benchmark. We begin with outcome imputation methods that transform censored survival data into standard regression problems, followed by direct-survival CATE models specifically designed for right-censored data, and finally survival meta-learners that adapt standard meta-learner frameworks to handle censoring. For each method, we present the theoretical foundation, algorithmic procedure, and specific implementation considerations in the survival analysis context. Our exposition focuses on highlighting the unique characteristics that make each approach suitable for different survival and causal inference scenarios, with particular attention to how these methods handle the challenges posed by censoring and treatment effect heterogeneity.
+This section provides a comprehensive explanation of the causal inference methods evaluated in our benchmark.
+We begin with outcome imputation methods that transform censored survival data into standard regression problems, followed by direct-survival CATE models specifically designed for right-censored data, and finally survival meta-learners that adapt standard meta-learner frameworks to handle censoring.
+For each method, we present the theoretical foundation, algorithmic procedure, and specific implementation considerations in the survival analysis context.
+Our exposition focuses on highlighting the unique characteristics that make each approach suitable for different survival and causal inference scenarios, with particular attention to how these methods handle the challenges posed by censoring and treatment effect heterogeneity.
 
 
 \subsubsection{Outcome imputation methods}
-Meta-learners represent a flexible framework for estimating conditional average treatment effects (CATEs) by decomposing the causal inference problem into standard supervised learning tasks. The key advantage of meta-learners is that they allow practitioners to leverage any out-of-the-box machine learning algorithm as a ``base learner'' while maintaining principled approaches to causal effect estimation. This modularity makes meta-learners particularly attractive in practice, as they can incorporate state-of-the-art ML methods (e.g., random forests, gradient boosting, neural networks) without requiring specialized causal inference implementations. For detailed explanations on meta-learners, one can refer to \citet{ch04:kunzel2019metalearners,kennedy2023towards}. We provide a simplified overview below and largely refer to the documentation of the \href{https://econml.azurewebsites.net/spec/spec.html}{\texttt{econml}} package.
+Meta-learners represent a flexible framework for estimating conditional average treatment effects (CATEs) by decomposing the causal inference problem into standard supervised learning tasks.
+The key advantage of meta-learners is that they allow practitioners to leverage any out-of-the-box machine learning algorithm as a ``base learner'' while maintaining principled approaches to causal effect estimation.
+This modularity makes meta-learners particularly attractive in practice, as they can incorporate state-of-the-art ML methods (e.g., random forests, gradient boosting, neural networks) without requiring specialized causal inference implementations.
+For detailed explanations on meta-learners, one can refer to \citet{ch04:kunzel2019metalearners,kennedy2023towards}.
+We provide a simplified overview below and largely refer to the documentation of the \href{https://econml.azurewebsites.net/spec/spec.html}{\texttt{econml}} package.
 
 \textbf{T-Learner \citep{ch04:kunzel2019metalearners}.}
-The T-Learner (Two-Learner) adopts the most straightforward approach by fitting separate outcome models for treated and control groups. Given binary treatment $W \in \{0,1\}$, features $X$, and outcome $Y$, the T-Learner:
+The T-Learner (Two-Learner) adopts the most straightforward approach by fitting separate outcome models for treated and control groups.
+Given binary treatment $W \in \{0,1\}$, features $X$, and outcome $Y$, the T-Learner:
 
 \begin{enumerate}
     \item Splits the data by treatment assignment: ${(X^0, Y^0)}$ for controls and ${(X^1, Y^1)}$ for treated units
@@ -23,7 +31,8 @@ The T-Learner (Two-Learner) adopts the most straightforward approach by fitting 
             \hat{\tau}(x) = \hat{\mu}_1(x) - \hat{\mu}_0(x)
         \end{align*}
 \end{enumerate}
-where $M_0$ and $M_1$ can be any regression algorithm. The T-Learner is conceptually simple but can suffer from high variance when treatment groups have different sizes or when the outcome models extrapolate poorly to regions with limited overlap.
+where $M_0$ and $M_1$ can be any regression algorithm.
+The T-Learner is conceptually simple but can suffer from high variance when treatment groups have different sizes or when the outcome models extrapolate poorly to regions with limited overlap.
 
 \textbf{S-Learner \citep{ch04:kunzel2019metalearners}.} The S-Learner (Single-Learner) takes a unified modeling approach by including treatment assignment as an additional feature. The procedure involves:
 
@@ -37,7 +46,8 @@ where $M_0$ and $M_1$ can be any regression algorithm. The T-Learner is conceptu
             \hat{\tau}(x) = \hat{\mu}(x, 1) - \hat{\mu}(x, 0)
         \end{align*}
 \end{enumerate}
-This approach leverages all available data for training and can be more sample-efficient than the T-Learner. However, it relies heavily on the base learner's ability to capture treatment-feature interactions, and may perform poorly when these interactions are complex or when the treatment effect is small relative to the baseline outcome.
+This approach leverages all available data for training and can be more sample-efficient than the T-Learner.
+However, it relies heavily on the base learner's ability to capture treatment-feature interactions, and may perform poorly when these interactions are complex or when the treatment effect is small relative to the baseline outcome.
 
 \textbf{X-Learner \citep{ch04:kunzel2019metalearners}.} The X-Learner represents a more sophisticated approach that combines ideas from both T-Learner and inverse propensity weighting. The algorithm proceeds in multiple stages:
 \begin{enumerate}
@@ -61,7 +71,8 @@ This approach leverages all available data for training and can be more sample-e
             \hat{\tau}(x) = g(x)\hat{\tau}_0(x) + (1-g(x))\hat{\tau}_1(x)
         \end{align*}
 \end{enumerate}
-where $g(x)$ is the estimation for propensity score $P(W=1|X=x)$ and is typically fitted using logistic regression. The X-Learner is particularly effective when treatment groups have different sizes or when treatment effects are heterogeneous, as it explicitly models treatment effect variation and uses propensity weighting for optimal combination.
+where $g(x)$ is the estimation for propensity score $P(W=1|X=x)$ and is typically fitted using logistic regression.
+The X-Learner is particularly effective when treatment groups have different sizes or when treatment effects are heterogeneous, as it explicitly models treatment effect variation and uses propensity weighting for optimal combination.
 
 \textbf{DR-Learner \citep{kennedy2023towards}}. The DR-Learner (Doubly Robust Learner) extends the doubly robust framework to meta-learning by combining outcome modeling with propensity score estimation. The approach constructs doubly robust scores that remain consistent if either the outcome model or propensity model is correctly specified. It includes the following steps:
 \begin{enumerate}
@@ -95,7 +106,9 @@ The method proceeds by first estimating two nuisance functions:
     \item Outcome regression: $q(X, Z) = \mathbb{E}[Y | X, Z]$
     \item Treatment regression: $f(X, Z) = \mathbb{E}[W | X, Z]$
 \end{itemize}
-These nuisance functions can be estimated using any machine learning algorithm capable of regression (for continuous treatments) or classification (for binary treatments). Popular choices include random forests, gradient boosting, neural networks, or regularized linear models. After obtaining estimates $\hat{q}$ and $\hat{f}$, DML constructs residualized outcomes and treatments:
+These nuisance functions can be estimated using any machine learning algorithm capable of regression (for continuous treatments) or classification (for binary treatments).
+Popular choices include random forests, gradient boosting, neural networks, or regularized linear models.
+After obtaining estimates $\hat{q}$ and $\hat{f}$, DML constructs residualized outcomes and treatments:
 \begin{align*}
     \tilde{Y} = Y - \hat{q}(X, Z)\\
     \tilde{W} = W - \hat{f}(X, Z)
@@ -114,11 +127,15 @@ The final step estimates $\theta(X)$ by regressing $\tilde{Y}$ on $\tilde{W}$ an
 where $K_x(X_i)$ represents the similarity between points $x$ and $X_i$ as determined by how frequently they fall in the same leaf across the forest, and $\tilde{Y}$, $\tilde{W}$ are residuals from nuisance function estimates.
 
 \textbf{Implementation in survival context}
-In our benchmark, meta-learners, Double-ML, and Causal Forest are applied to survival outcomes through outcome imputation methods. We first apply imputation techniques (Pseudo-obs, Margin, or IPCW-T, see Appendix~\ref{ch04:app:imputation} for details) to convert censored survival times into continuous outcomes, then apply the meta-learners described above with various base regression algorithms (Lasso Regression, Random Forest, XGBoost). This two-stage approach allows leveraging the rich ecosystem of causal inference methods developed for continuous outcomes while handling the complexities of censored data.
+In our benchmark, meta-learners, Double-ML, and Causal Forest are applied to survival outcomes through outcome imputation methods.
+We first apply imputation techniques (Pseudo-obs, Margin, or IPCW-T, see Appendix~\ref{ch04:app:imputation} for details) to convert censored survival times into continuous outcomes, then apply the meta-learners described above with various base regression algorithms (Lasso Regression, Random Forest, XGBoost).
+This two-stage approach allows leveraging the rich ecosystem of causal inference methods developed for continuous outcomes while handling the complexities of censored data.
 
 \subsubsection{Direct-survival CATE methods}
 \textbf{Causal Survival Forests (CSF) \citep{ch04:cui2023estimating}} extends the Causal Forest methodology directly to right-censored survival data by incorporating doubly robust estimating equations from survival analysis. Unlike meta-learners that require outcome imputation, CSF handles censored observations natively while maintaining the adaptive partitioning advantages of tree-based methods.
-CSF builds upon the Causal Forest framework of \citet{athey2019grf} but adapts the splitting criterion and estimation procedure for survival outcomes. For a detailed explanation of the method, please refer to the original paper by \citet{ch04:cui2023estimating}. We provide an overview of the estimation procedures as follows:
+CSF builds upon the Causal Forest framework of \citet{athey2019grf} but adapts the splitting criterion and estimation procedure for survival outcomes.
+For a detailed explanation of the method, please refer to the original paper by \citet{ch04:cui2023estimating}.
+We provide an overview of the estimation procedures as follows:
 \begin{enumerate}
     \item \textbf{Nuisance estimation}: Using cross-fitting, estimate nuisance components including:
         \begin{itemize}
@@ -128,7 +145,8 @@ CSF builds upon the Causal Forest framework of \citet{athey2019grf} but adapts t
             \item Conditional expectations: $\hat{Q}_w(s|x) = E[y(T)|X = x, W = w, T \wedge h > s]$
         \end{itemize}
         where $y(T)$ is a transformation applied on the event time $T$, the same as defined in Eq.\ref{ch04:eq:cate}.
-    \item \textbf{Forest construction}: Build a forest where each tree uses a causal splitting criterion that maximizes treatment effect heterogeneity. The splitting rule targets variation in the doubly robust scores rather than prediction accuracy.
+    \item \textbf{Forest construction}: Build a forest where each tree uses a causal splitting criterion that maximizes treatment effect heterogeneity.
+The splitting rule targets variation in the doubly robust scores rather than prediction accuracy.
     \item \textbf{Local estimation}: For a target point $x$, compute forest weights $\alpha(x)$ indicating similarity based on leaf co-occurrence across trees, then estimate the CATE by solving:
         \begin{align*}
             \sum \alpha(x) \psi_{\hat{\tau}(x)}(X, y(U), U \wedge h, W, \Delta^h; \hat{e}, \hat{m}, \hat{S}^C_w, \hat{Q}_w) = 0
@@ -138,9 +156,11 @@ CSF builds upon the Causal Forest framework of \citet{athey2019grf} but adapts t
 
 
 \textbf{SurvITE \citep{curth2021survite}} adapts the representation learning paradigm for counterfactual inference to time-to-event data. Unlike methods that rely on local similarity in the covariate space, SurvITE addresses selection bias by learning a shared latent representation where the treated and control distributions are balanced, while simultaneously modeling the censoring mechanism.
-SurvITE builds upon the theoretical bounds of counterfactual regression but incorporates survival-specific loss functions to handle right-censored outcomes without requiring imputation. A brief outline of the method follows:
+SurvITE builds upon the theoretical bounds of counterfactual regression but incorporates survival-specific loss functions to handle right-censored outcomes without requiring imputation.
+A brief outline of the method follows:
 \begin{enumerate}
-    \item \textbf{Representation learning}: Map covariates $X$ to a latent representation $\Phi(X)$ via a deep neural network, subject to a discrepancy penalty. The objective is to minimize an Integral Probability Metric (IPM) (e.g., Wasserstein distance or MMD) between the treated and control populations in the latent space:
+    \item \textbf{Representation learning}: Map covariates $X$ to a latent representation $\Phi(X)$ via a deep neural network, subject to a discrepancy penalty.
+The objective is to minimize an Integral Probability Metric (IPM) (e.g., Wasserstein distance or MMD) between the treated and control populations in the latent space:
         \begin{align*}
             \text{IPM}(P_{\Phi}(X|W=1), P_{\Phi}(X|W=0)) < \epsilon
         \end{align*}
@@ -159,7 +179,8 @@ SurvITE builds upon the theoretical bounds of counterfactual regression but inco
 \subsubsection{Survival Meta-Learners}
 
 \textbf{T-Learner-Survival \citep{bo2024ameta,noroozizadeh2025impact}.}
-The T-Learner can be adapted to right-censored survival data by fitting separate survival models for each treatment group. Let $W \in \{0, 1\}$ denote the treatment indicator, $X$ be the covariate vector, and $T$ the observed survival time with censoring indicator $\delta$, and $h$ the maximum follow-up time.
+The T-Learner can be adapted to right-censored survival data by fitting separate survival models for each treatment group.
+Let $W \in \{0, 1\}$ denote the treatment indicator, $X$ be the covariate vector, and $T$ the observed survival time with censoring indicator $\delta$, and $h$ the maximum follow-up time.
 
 \begin{enumerate}
     \item \textbf{Split data by treatment:} Partition the dataset into $(X^0, T^0, \delta^0)$ for $W=0$ and $(X^1, T^1, \delta^1)$ for $W=1$.

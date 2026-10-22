@@ -1,10 +1,15 @@
 % !TeX root = ../../../main.tex
 \subsection{Imputation Methods Details} \label{ch04:app:imputation}
 
-We follow \citet{qi2023an} to implement three surrogate imputation strategies for estimating the true event time \( T \) in right-censored survival data. Let \( Y = \min(T, C) \) be the observed time, with censoring indicator \( \delta = \mathbbm{1}\{T \leq C\} \). Let \( S_{\text{KM}(\mathcal{D})}(t) \) denote the Kaplan-Meier estimate of the survival function using the dataset \( \mathcal{D} \), and \( N \) the number of subjects. The three methods below are used to impute a surrogate outcome \( \tilde{T}_i \) for censored subject \( i \) observed at time \( t_i \).
+We follow \citet{qi2023an} to implement three surrogate imputation strategies for estimating the true event time \( T \) in right-censored survival data.
+Let \( Y = \min(T, C) \) be the observed time, with censoring indicator \( \delta = \mathbbm{1}\{T \leq C\} \).
+Let \( S_{\text{KM}(\mathcal{D})}(t) \) denote the Kaplan-Meier estimate of the survival function using the dataset \( \mathcal{D} \), and \( N \) the number of subjects.
+The three methods below are used to impute a surrogate outcome \( \tilde{T}_i \) for censored subject \( i \) observed at time \( t_i \).
 
 \ChFourParagraph{1. Margin imputation:}
-This method assigns a “best guess” value to each censored subject using the nonparametric Kaplan-Meier estimator. This surrogate value, called the \emph{margin time}, can be interpreted as the conditional expectation of the event time given that the event occurs after the censoring time. For a subject censored at time \( t_i \), the margin-imputed event time is computed as:
+This method assigns a “best guess” value to each censored subject using the nonparametric Kaplan-Meier estimator.
+This surrogate value, called the \emph{margin time}, can be interpreted as the conditional expectation of the event time given that the event occurs after the censoring time.
+For a subject censored at time \( t_i \), the margin-imputed event time is computed as:
 \begin{equation}
 \tilde{T}^{\text{margin}}_i 
 = \mathbb{E}[T_i \mid T_i > t_i] 
@@ -12,34 +17,44 @@ This method assigns a “best guess” value to each censored subject using the 
 \end{equation}
 where \( S_{\text{KM}(\mathcal{D})}(t) \) is the Kaplan-Meier survival estimate derived from the training dataset.
 
-The reliability of this imputation depends on the censoring time. For example, if a subject is censored very early (e.g., at time 0), the margin time is highly uncertain due to the lack of observed data beyond that point. In contrast, if a subject is censored near the maximum observed follow-up, the margin time is more likely to be close to the true event time.
+The reliability of this imputation depends on the censoring time.
+For example, if a subject is censored very early (e.g., at time 0), the margin time is highly uncertain due to the lack of observed data beyond that point.
+In contrast, if a subject is censored near the maximum observed follow-up, the margin time is more likely to be close to the true event time.
 
 \ChFourParagraph{2. IPCW-T imputation:}
-This method imputes a surrogate event time for censored subjects based on the observed outcomes of subsequent uncensored individuals. Specifically, for a subject censored at time \( t_i \), the imputed value is calculated as the average event time of all uncensored subjects with observed times after \( t_i \):
+This method imputes a surrogate event time for censored subjects based on the observed outcomes of subsequent uncensored individuals.
+Specifically, for a subject censored at time \( t_i \), the imputed value is calculated as the average event time of all uncensored subjects with observed times after \( t_i \):
 \begin{equation}
 \tilde{T}^{\text{IPCW}}_i = 
 \frac{\sum_{j=1}^N \mathbbm{1}\{t_i < t_j\} \cdot \mathbbm{1}\{\delta_j = 1\} \cdot t_j}
      {\sum_{j=1}^N \mathbbm{1}\{t_i < t_j\} \cdot \mathbbm{1}\{\delta_j = 1\}}
 \end{equation}
-This imputes the event time for subject \( i \) by averaging the observed event times of those uncensored subjects who experienced the event after \( t_i \). The method is motivated by the idea that these subsequent subjects provide empirical evidence about the possible timing of the unobserved event.
+This imputes the event time for subject \( i \) by averaging the observed event times of those uncensored subjects who experienced the event after \( t_i \).
+The method is motivated by the idea that these subsequent subjects provide empirical evidence about the possible timing of the unobserved event.
 
-However, a limitation of this approach is that it fails to provide an imputation when there are no uncensored subjects observed after \( t_i \). In such cases, the denominator of the expression becomes zero, and the method is unable to approximate the event time. In \citet{qi2023an}, subjects for whom this occurs are excluded from evaluation, whereas in our setup we used the original observed time as the imputed time.
+However, a limitation of this approach is that it fails to provide an imputation when there are no uncensored subjects observed after \( t_i \).
+In such cases, the denominator of the expression becomes zero, and the method is unable to approximate the event time.
+In \citet{qi2023an}, subjects for whom this occurs are excluded from evaluation, whereas in our setup we used the original observed time as the imputed time.
 
 
 \ChFourParagraph{3. Pseudo-observation imputation:}
-This method imputes the event time using pseudo-observations, which estimate the contribution of each subject to an overall unbiased estimator of the event time distribution. Let \( \hat{\theta} \) be an estimator of the mean event time based on right-censored data, and let \( \hat{\theta}^{-i} \) denote the same estimator computed with the \( i \)-th subject removed from the dataset. Then, the pseudo-observation for subject \( i \) is defined as:
+This method imputes the event time using pseudo-observations, which estimate the contribution of each subject to an overall unbiased estimator of the event time distribution.
+Let \( \hat{\theta} \) be an estimator of the mean event time based on right-censored data, and let \( \hat{\theta}^{-i} \) denote the same estimator computed with the \( i \)-th subject removed from the dataset.
+Then, the pseudo-observation for subject \( i \) is defined as:
 \begin{equation}
 \tilde{T}^{\text{pseudo}}_i = e_{\text{Pseudo-Obs}}(t_i, \mathcal{D}) 
 = N \cdot \hat{\theta} - (N - 1) \cdot \hat{\theta}^{-i}
 \end{equation}
-This quantity can be interpreted as the individual contribution of subject \( i \) to the overall estimate \( \hat{\theta} \). In practice, both \( \hat{\theta} \) and \( \hat{\theta}^{-i} \) can be computed using the mean of the Kaplan-Meier survival curve:
+This quantity can be interpreted as the individual contribution of subject \( i \) to the overall estimate \( \hat{\theta} \).
+In practice, both \( \hat{\theta} \) and \( \hat{\theta}^{-i} \) can be computed using the mean of the Kaplan-Meier survival curve:
 \[
 \hat{\theta} = \mathbb{E}_t[S_{\text{KM}(\mathcal{D})}(t)], \quad
 \hat{\theta}^{-i} = \mathbb{E}_t[S_{\text{KM}(\mathcal{D} \setminus \{i\})}(t)]
 \]
 Once the pseudo-observations \( \tilde{T}^{\text{pseudo}}_i \) are computed for all censored subjects, they are substituted in place of the true event times for evaluation or modeling. 
 
-Although pseudo-observations are not exact conditional expectations, they can approximate \( \mathbb{E}[T_i \mid X_i] \) under certain assumptions. In particular, when censoring is independent of covariates and the sample size is large, pseudo-observations behave asymptotically like i.i.d. draws from the true conditional expectation:
+Although pseudo-observations are not exact conditional expectations, they can approximate \( \mathbb{E}[T_i \mid X_i] \) under certain assumptions.
+In particular, when censoring is independent of covariates and the sample size is large, pseudo-observations behave asymptotically like i.i.d. draws from the true conditional expectation:
 \[
 \mathbb{E}[\tilde{T}^{\text{pseudo}}_i \mid X_i] \approx \mathbb{E}[T_i \mid X_i]
 \]

@@ -20,18 +20,18 @@ This document is the authoritative project specification. `AGENTS.md` contains t
 - Use the copied CMU template for front matter, title page formatting, abstract placeholder, contents, list of figures, list of tables, pagination, appendices, and single bibliography. Retain required template files inside `Proposal/`.
 
 ## Structure and source mapping
-The following chapter titles are working headings; their use does not authorize rewriting existing paper text.
+Research chapter headings now use their full authoritative paper titles, as explicitly requested on October 22, 2026. This title/source refactoring does not authorize scientific editing.
 
 | Order | Part | Chapter/title | Read-only source (within `Papers/`) |
 |---|---|---|---|
 | 1 | — | Introduction | Placeholder; no source manuscript |
-| 2 | I: Learning from Structured Longitudinal Clinical Trajectories | Temporal Representation Learning | `Part-i/Temporal-SCL-ML4H2023/` |
-| 3 | II: Causal Inference from Longitudinal Clinical Data | Medication Adherence and Causal Modeling of Longitudinal Clinical Outcomes | `Part-ii/Impact-of-Medication-Non-adherence-CHIL2025/` |
-| 4 | II | Heterogeneous Treatment Effects under Censoring: SurvHTE | `Part-ii/SurvHTE-Bench-ICLR2026/` |
-| 5 | III: Recovering and Reasoning over Clinical Trajectories from Text | The Textual Time Series Framework / PMOA-TTS | `Part-iii/PMOA-TTS-ScientificData2027/` |
-| 6 | III | Reconstructing Sepsis Trajectories from Clinical Text | `Part-iii/T2S2-CHIL2026/` |
-| 7 | III | Forecasting Clinical Risk from Textual Time Series | `Part-iii/T2S2-Forecasting-AAAI2026/` |
-| 8 | III | Aligning Textual Trajectories with Structured EHR Data | `Part-iii/Text-Knows-What-Tables-Know-When-PSB2027/` |
+| 2 | I: Learning from Structured Longitudinal Clinical Trajectories | Temporal Supervised Contrastive Learning for Modeling Patient Risk Progression | `Part-i/Temporal-SCL-ML4H2023/` |
+| 3 | II: Causal Inference from Longitudinal Clinical Data | The Impact of Medication Non-adherence on Adverse Outcomes: Evidence from Schizophrenia Patients via Survival Analysis | `Part-ii/Impact-of-Medication-Non-adherence-CHIL2025/` |
+| 4 | II | SurvHTE‐Bench: A Benchmark for Heterogeneous Treatment Effect Estimation in Survival Analysis | `Part-ii/SurvHTE-Bench-ICLR2026/` |
+| 5 | III: Recovering and Reasoning over Clinical Trajectories from Text | Temporally annotated longitudinal textual time series from PubMed Open Access clinical case reports | `Part-iii/PMOA-TTS-ScientificData2027/` |
+| 6 | III | Reconstructing Sepsis Trajectories from Clinical Case Reports using LLMs: the Textual Time Series Corpus for Sepsis | `Part-iii/T2S2-CHIL2026/` |
+| 7 | III | Forecasting Clinical Risk from Textual Time Series: Structuring Narratives for Temporal AI in Healthcare | `Part-iii/T2S2-Forecasting-AAAI2026/` |
+| 8 | III | Text Knows What, Tables Know When: Clinical Timeline Reconstruction via Retrieval-Augmented Multimodal Alignment | `Part-iii/Text-Knows-What-Tables-Know-When-PSB2027/` |
 | 9 | III | Verification and Decision-Making from Textual Sepsis Trajectories | Placeholder for RL/sepsis verification proposal |
 | 10 | — | Discussion and Conclusion | Placeholder; no source manuscript |
 
@@ -53,7 +53,7 @@ Follow each selected root's actual active `\input`, `\include`, bibliography, ar
 
 Phase B was authorized in the same user instruction. Chapter 2 migration is **not** authorized until the completed skeleton is reviewed and explicitly approved.
 
-Current approval checkpoint (October 20, 2026): Chapters 2-7 and Appendices A-F are independently audited and approved. Phase H authorizes Chapter 8 and its entire active supplement as Appendix G, the final existing research-paper migration. The identified authoritative local root is `psb_camera_ready.tex`, with its exact active dependencies and false-color rebuttal branch. Preserve approved science, artwork, sizing, formatting, citations and editor/build configuration. Chapter 8/G is compiled and validated for independent user review (October 21, 2026; `Proposal/metadata/validation-ch08.md`). Stop here; do not begin Chapters 1, 9, 10 or the overarching abstract. Earlier phase-gate descriptions are historical requirements, superseded only by explicit approvals.
+Current approval checkpoint (October 22, 2026): Chapters 2-8 and Appendices A-G are independently audited and approved. The user authorized a sequential dissertation-wide source refactor: full paper chapter titles; brief paper citations; original author headers removed from rendering but retained as comments/provenance; individual abstracts disabled and preserved exactly in commented `sections/abstract.tex` files; descriptive figure/table module names; safe inter-sentence whitespace converted to newlines. Validate each phase and each chapter/appendix sentence-formatting pair. Do not write Chapters 1, 9, 10 or the overarching abstract. Stop for independent review after the refactor. The user’s explicit abstract/header instructions supersede the historical migration-stage requirement to render them; scientific body and supplements remain immutable. Earlier phase-gate descriptions below are historical requirements, superseded only by explicit approvals.
 
 Source cross-check links (not substitutes for local sources):
 - Ch 2: https://arxiv.org/abs/2312.05933

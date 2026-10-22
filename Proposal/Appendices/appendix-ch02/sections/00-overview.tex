@@ -1,11 +1,18 @@
 % !TeX root = ../../../main.tex
 \label{ch02:apd:first}
 This appendix is structured as follows. 
-In Section~\ref{ch02:sec:relating-to-original-SCL}, we compare the Simple-SCL method with the original Supervised Contrastive Learning (SCL), highlighting the use of data augmentation in SCL. Section~\ref{ch02:sec:handling-static-outcome} outlines adaptations for static outcome cases in Temporal-SCL, focusing on encoder pre-training and joint training modifications. In Section~\ref{ch02:sec:data-augmentation-with-nn-pairing}, we discuss how in our model we can integrate data augmentation with nearest neighbor pairing. 
+In Section~\ref{ch02:sec:relating-to-original-SCL}, we compare the Simple-SCL method with the original Supervised Contrastive Learning (SCL), highlighting the use of data augmentation in SCL.
+Section~\ref{ch02:sec:handling-static-outcome} outlines adaptations for static outcome cases in Temporal-SCL, focusing on encoder pre-training and joint training modifications.
+In Section~\ref{ch02:sec:data-augmentation-with-nn-pairing}, we discuss how in our model we can integrate data augmentation with nearest neighbor pairing. 
 
-In Section~\ref{ch02:sec:experiment-details}, we delve into the details of our experiments and our model setup. Section~\ref{ch02:sec:baselines} provides an overview of the baselines used in our experiments, categorized into purely-supervised, predictive clustering, and self-supervised learning methods. 
-Detailed experimental setup, including training hyperparameters and evaluation metrics, are presented in Section~\ref{ch02:sec:ExperimentalSetup}, while our synthetic data generation is outlined in Section~\ref{ch02:sec:syntheticData_full} and our specific approaches for real-world datasets like MIMIC and ADNI, and data imputation strategies are discussed in Section~\ref{ch02:sec:real-data-info}. Section \ref{ch02:sec:cluster} discusses the strategy for clustering on the embedding space for visualization. 
+In Section~\ref{ch02:sec:experiment-details}, we delve into the details of our experiments and our model setup.
+Section~\ref{ch02:sec:baselines} provides an overview of the baselines used in our experiments, categorized into purely-supervised, predictive clustering, and self-supervised learning methods. 
+Detailed experimental setup, including training hyperparameters and evaluation metrics, are presented in Section~\ref{ch02:sec:ExperimentalSetup}, while our synthetic data generation is outlined in Section~\ref{ch02:sec:syntheticData_full} and our specific approaches for real-world datasets like MIMIC and ADNI, and data imputation strategies are discussed in Section~\ref{ch02:sec:real-data-info}.
+Section \ref{ch02:sec:cluster} discusses the strategy for clustering on the embedding space for visualization. 
 
 Finally, Section~\ref{ch02:sec:experimental-results-details} delves into the details of the results from synthetic and real data experiments.
-In Section~\ref{ch02:sec:ToyExperiment_Results}, we present more comprehensive results from our synthetic data experiments. Sections~\ref{ch02:sec:heatmap_mimic} and \ref{ch02:sec:heatmap_adni} focus on visualizing embedding clusters for MIMIC and ADNI datasets, respectively. Section~\ref{ch02:sec:heatmap_mimic_raw} compares these visualizations with those derived from raw features. Lastly, in Section~\ref{ch02:sec:ablation}, we assesse the impact of different model components and in Section~\ref{ch02:sec:future_adni} we present an additional experiment on future cognitive impairment prediction in the ADNI dataset.
+In Section~\ref{ch02:sec:ToyExperiment_Results}, we present more comprehensive results from our synthetic data experiments.
+Sections~\ref{ch02:sec:heatmap_mimic} and \ref{ch02:sec:heatmap_adni} focus on visualizing embedding clusters for MIMIC and ADNI datasets, respectively.
+Section~\ref{ch02:sec:heatmap_mimic_raw} compares these visualizations with those derived from raw features.
+Lastly, in Section~\ref{ch02:sec:ablation}, we assesse the impact of different model components and in Section~\ref{ch02:sec:future_adni} we present an additional experiment on future cognitive impairment prediction in the ADNI dataset.
 

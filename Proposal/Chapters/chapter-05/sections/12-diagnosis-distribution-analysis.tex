@@ -10,12 +10,15 @@ Free-text diagnoses were then standardized to the Unified Medical Language Syste
 Each complete extracted diagnosis string was supplied directly to the UMLS candidate generator, with candidate selection designed to avoid fragmentation and improve canonical concept assignment (Supplementary Material, Section~\ref{ch05:apd:umls-mapping}).
 }
 
-Figure~\ref{ch05:fig:top_diagnoses} shows the 20 most frequent UMLS-normalized diagnoses in PMOA-TTS. These are dominated by common cardiometabolic and renal conditions, including hypertensive disease, diabetes mellitus and its subtypes, coronary artery disease, dyslipidemia, and chronic kidney disease.
+Figure~\ref{ch05:fig:top_diagnoses} shows the 20 most frequent UMLS-normalized diagnoses in PMOA-TTS.
+These are dominated by common cardiometabolic and renal conditions, including hypertensive disease, diabetes mellitus and its subtypes, coronary artery disease, dyslipidemia, and chronic kidney disease.
 \ChFiveRebuttal{
 Figure~\ref{ch05:fig:diagnoses} characterizes diagnoses represented within PMOA-TTS; it is not an evaluation of diagnostic recognition. Common diagnoses may appear as comorbidities in reports whose primary focus is a rare or atypical presentation.
 }
 
-We further examined co-occurrence structure using a clustered heatmap of diagnosis pairs (Figure~\ref{ch05:fig:diagnosis_cooccurrence}). The heatmap reveals coherent groupings among related conditions, most notably across diabetes variants, as well as broader co-occurrence patterns among cardiovascular, metabolic, and renal diagnoses. These patterns are consistent with well-established comorbidity relationships (e.g., hypertension with diabetes, or atrial fibrillation with coronary artery disease) and illustrate how the corpus captures clinically meaningful disease constellations.
+We further examined co-occurrence structure using a clustered heatmap of diagnosis pairs (Figure~\ref{ch05:fig:diagnosis_cooccurrence}).
+The heatmap reveals coherent groupings among related conditions, most notably across diabetes variants, as well as broader co-occurrence patterns among cardiovascular, metabolic, and renal diagnoses.
+These patterns are consistent with well-established comorbidity relationships (e.g., hypertension with diabetes, or atrial fibrillation with coronary artery disease) and illustrate how the corpus captures clinically meaningful disease constellations.
 
 \ChFiveRebuttal{
 To characterize rare-disease representation more directly, we matched UMLS CUIs associated with extracted diagnoses against disorder-level entities in the Orphanet rare-disease nomenclature \citep{lucano2026orphanet} using exact, validated UMLS mappings. After excluding groups and subtypes of disorders and entities designated as inactive, historical, deprecated, obsolete, or non-rare, the reference contained 5,942 Orphanet disorders. Overall, 41{,}775 of 124{,}349 reports (33.6\%) contained at least one extracted diagnosis mapped to an eligible Orphanet disorder, spanning 2,426 distinct ORPHAcodes. Across all extracted diagnoses, 50,299 of 474,075 mappings (10.6\%) matched the Orphanet reference. These statistics characterize rare-disease representation within PMOA-TTS rather than population prevalence.
@@ -23,7 +26,7 @@ To characterize rare-disease representation more directly, we matched UMLS CUIs 
 
 %\vspace{-5mm}
 
-\input{Chapters/chapter-05/figures/06}
+\input{Chapters/chapter-05/figures/diagnosis-co-occurrence}
 
 
 % To contextualize diagnosis frequencies beyond listing the most common conditions, we aggregated LLM-extracted, UMLS-normalized diagnoses into coarse disease groups and compared their prevalence in PMOA-TTS with published U.S.\ general-population prevalence estimates (Supplementary Material, Section \ref{ch05:apd:umls-mapping}, Table \ref{tab:us_disease_prevalence_sources}). Each case report’s diagnosis set was mapped to a predefined group taxonomy (e.g., cardiovascular, cancer, kidney disease, diabetes) derived from public epidemiologic summaries, and prevalence was computed as the fraction of reports containing at least one diagnosis assigned to each group. These estimates are comparable across groups but are not intended to reflect population-level incidence. To support transparency and reproducibility, we provide the source references used for U.S.\ baseline prevalence estimates and the full mapping procedure in Supplementary Material (Section \ref{ch05:apd:umls-mapping}, Table \ref{tab:us_disease_prevalence_sources}).

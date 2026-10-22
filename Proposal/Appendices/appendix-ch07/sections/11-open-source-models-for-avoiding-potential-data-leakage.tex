@@ -2,18 +2,24 @@
 \subsection{Open-Source Models for Avoiding Potential Data Leakage}
 \label{ch07:apd:open_source}
 
-We evaluated potential data leakage arising from large language models (LLMs) pretrained on web-scale corpora that may include PubMed Open Access (PMOA) case reports. Our safeguards target two avenues of leakage: (i) \emph{content overlap} with PMOA text, and (ii) \emph{task leakage} from using representations too close to raw prose. Below we summarize the controls embedded in our methods and the additional empirical evidence gathered for this concern.
+We evaluated potential data leakage arising from large language models (LLMs) pretrained on web-scale corpora that may include PubMed Open Access (PMOA) case reports.
+Our safeguards target two avenues of leakage: (i) \emph{content overlap} with PMOA text, and (ii) \emph{task leakage} from using representations too close to raw prose.
+Below we summarize the controls embedded in our methods and the additional empirical evidence gathered for this concern.
 
 \subsubsection{Task Design Minimizes Leakage}
 
 \textbf{Temporal annotations—not raw text—drive all evaluations.}
-We transform narratives into chronological lists of \emph{(event, time)} tuples and operate on these derived annotations (future-masked where applicable). Models are never scored on lexical similarity to the raw prose.
+We transform narratives into chronological lists of \emph{(event, time)} tuples and operate on these derived annotations (future-masked where applicable).
+Models are never scored on lexical similarity to the raw prose.
 
 \textbf{Temporal reordering changes the learning problem.}
-Events are reordered by extracted timestamps, breaking the original textual sequence seen during pretraining. This creates a distinct modeling challenge: correct temporal ordering and causal dependencies must be inferred from structured tuples rather than reproduced from prose. As shown in the main text, training/evaluating on time-ordered versus text-ordered sequences yields measurably different performance.
+Events are reordered by extracted timestamps, breaking the original textual sequence seen during pretraining.
+This creates a distinct modeling challenge: correct temporal ordering and causal dependencies must be inferred from structured tuples rather than reproduced from prose.
+As shown in the main text, training/evaluating on time-ordered versus text-ordered sequences yields measurably different performance.
 
 \textbf{Temporal metrics reduce any advantage from memorization.}
-Evaluation emphasizes temporal reasoning—forecasting F1 at fixed horizons, pairwise concordance (c-index), and AULTC—rather than surface-form similarity. Memorizing text order can even \emph{hurt} time-alignment metrics because clinical narratives often interleave retrospective commentary where textual order $\neq$ chronological order.
+Evaluation emphasizes temporal reasoning—forecasting F1 at fixed horizons, pairwise concordance (c-index), and AULTC—rather than surface-form similarity.
+Memorizing text order can even \emph{hurt} time-alignment metrics because clinical narratives often interleave retrospective commentary where textual order $\neq$ chronological order.
 
 \subsubsection{Open-Source, PubMed-Free Baselines}
 
@@ -21,14 +27,16 @@ Evaluation emphasizes temporal reasoning—forecasting F1 at fixed horizons, pai
 \emph{RedPajama-INCITE-7B-Instruct} is pretrained on English CommonCrawl (67\%), C4 (15\%), GitHub (4.5\%), Wikipedia (4.5\%), Books (4.5\%), arXiv (2.5\%), and StackExchange (2\%), explicitly \emph{excluding} PubMed. In our experiments it performs comparably to decoders that may have seen PMOA during pretraining.
 
 \textbf{Encoder baselines.} 
-We include \emph{BERT} (BooksCorpus + Wikipedia), \emph{RoBERTa} (CommonCrawl News, OpenWebText, Stories, Wikipedia), and \emph{DeBERTa} (\textit{RoBERTa}-style corpora). None of these encoders include PubMed in their pretraining data.
+We include \emph{BERT} (BooksCorpus + Wikipedia), \emph{RoBERTa} (CommonCrawl News, OpenWebText, Stories, Wikipedia), and \emph{DeBERTa} (\textit{RoBERTa}-style corpora).
+None of these encoders include PubMed in their pretraining data.
 
 
 \subsubsection{Post-Cutoff External Validation (Additional Evidence)}
-To probe encoder leakage further, we evaluated \textit{BERT}, \textit{RoBERTa}, and \textit{DeBERTa} on 115 case reports published \emph{after} their pretraining cutoffs (post-2020). Results mirror submission trends without degradation, which is inconsistent with a memorization hypothesis.
+To probe encoder leakage further, we evaluated \textit{BERT}, \textit{RoBERTa}, and \textit{DeBERTa} on 115 case reports published \emph{after} their pretraining cutoffs (post-2020).
+Results mirror submission trends without degradation, which is inconsistent with a memorization hypothesis.
 
 
-\input{Appendices/appendix-ch07/tables/09}
+\input{Appendices/appendix-ch07/tables/post-cutoff-forecasting}
 
 
 We also report competitive performance from \emph{OLMO-32B-Instruct} (fully documented training data) and parity from the PubMed-excluded \emph{RedPajama-INCITE-7B-Instruct} relative to decoders potentially exposed to PMOA, further indicating that prior PubMed exposure does not meaningfully advantage our temporally structured tasks.

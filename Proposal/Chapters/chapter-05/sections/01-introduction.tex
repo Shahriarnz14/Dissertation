@@ -26,11 +26,12 @@ To the best of our knowledge, PMOA–TTS constitutes the largest publicly availa
 % We demonstrate that these temporal annotations enable novel forms of analysis and significantly enhance downstream modeling of patient outcomes. 
 Compared to our prior pilot study \cite{wang2025large}, we expand the manually annotated reference set from 10 to 200 case reports and scale the LLM-annotated timelines from 100 to 124{,}349 reports. 
 
-Building PMOA-TTS requires addressing three challenges at scale: reliably identifying single-patient case reports, extracting timeline events with high fidelity from ambiguous free-text expressions, and rigorously evaluating the resulting annotations. We meet these needs with an LLM-based pipeline that selects relevant narratives beyond metadata filters, resolves relative time language into fine-grained event--time tuples, and enriches each case with structured demographics and diagnoses. 
+Building PMOA-TTS requires addressing three challenges at scale: reliably identifying single-patient case reports, extracting timeline events with high fidelity from ambiguous free-text expressions, and rigorously evaluating the resulting annotations.
+We meet these needs with an LLM-based pipeline that selects relevant narratives beyond metadata filters, resolves relative time language into fine-grained event--time tuples, and enriches each case with structured demographics and diagnoses. 
 % To illustrate downstream value, we also formulate a survival analysis task that operates directly on the extracted textual time series.
 
 
-\input{Chapters/chapter-05/figures/01}
+\input{Chapters/chapter-05/figures/case-report-event-tuples}
 
 
 
@@ -42,7 +43,11 @@ In summary, we (i) introduce the PMOA Textual Time Series (PMOA-TTS) corpus of 1
 }
 % ; and (v) illustrate one reuse pathway by framing survival prediction directly over textual time series.
 
-PMOA–TTS offers several contributions to the biomedical NLP and clinical AI communities. By releasing the largest openly available dataset of temporally structured clinical narratives, this work democratizes access to timeline-based clinical text—an area typically limited to proprietary EHR datasets. The corpus spans a wide range of diagnoses and demographics, supporting research on temporal patterns in diverse and sometimes underrepresented conditions. By making the extraction pipeline, prompting strategies, and evaluation framework publicly available, the project promotes transparency and reproducibility in LLM-based clinical information extraction. These contributions collectively advance the development of models for timeline reconstruction, temporal reasoning, and longitudinal prediction, while lowering the barrier
+PMOA–TTS offers several contributions to the biomedical NLP and clinical AI communities.
+By releasing the largest openly available dataset of temporally structured clinical narratives, this work democratizes access to timeline-based clinical text—an area typically limited to proprietary EHR datasets.
+The corpus spans a wide range of diagnoses and demographics, supporting research on temporal patterns in diverse and sometimes underrepresented conditions.
+By making the extraction pipeline, prompting strategies, and evaluation framework publicly available, the project promotes transparency and reproducibility in LLM-based clinical information extraction.
+These contributions collectively advance the development of models for timeline reconstruction, temporal reasoning, and longitudinal prediction, while lowering the barrier
 to entry for researchers working in resource-limited settings.
 
 

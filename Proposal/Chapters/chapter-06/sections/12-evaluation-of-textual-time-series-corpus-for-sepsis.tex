@@ -10,7 +10,8 @@ This pattern highlights a recurring tradeoff in the evaluation: models can achie
 
 The i2m4 results should be interpreted as a cross-schema evaluation rather than a direct in-domain test of T2S2-style extraction.
 All LLM match rates are lower on i2m4, where the reference annotations are legacy i2b2-style temporal concepts rather than standalone clinical findings.
-Among the LLMs, Llama 3.3 performs best on i2m4 across event match rate, concordance, median absolute error, and AULTC, and all LLMs with temporal predictions substantially outperform the BERT 5-CV time-regression baseline on AULTC. However, the low match rates indicate that many clinically meaningful T2S2-style findings are penalized when compared against fragmented concept-level references. 
+Among the LLMs, Llama 3.3 performs best on i2m4 across event match rate, concordance, median absolute error, and AULTC, and all LLMs with temporal predictions substantially outperform the BERT 5-CV time-regression baseline on AULTC.
+However, the low match rates indicate that many clinically meaningful T2S2-style findings are penalized when compared against fragmented concept-level references. 
 In contrast to concordances around 0.76 in i2m4, in \texttt{sepsis-40}, GPT-5 and Llama 3.3 were excellent time-ordering annotators, with concordances of 0.965 and 0.908, respectively.
 
 On \texttt{sepsis-100}, which is a bronze-standard proxy-reference set rather than clinical ground truth, DeepSeek-R1 achieves the highest event match rate, lowest median absolute error, and highest AULTC against the GPT-5 reference, while Llama 3.3 achieves the highest concordance.
@@ -28,13 +29,14 @@ This analysis shows that the i2m4 performance gap is driven in part by annotatio
 % This analysis provides additional insight into the factors contributing to variations in model performance for event match rate and c-index across datasets.
 
 
-\input{Chapters/chapter-06/tables/03}
+\input{Chapters/chapter-06/tables/prompt-variant-performance}
 
 
 To examine the results in greater detail, we show figures of the cumulative distribution function of event matches and concordance boxplots (Figure \ref{ch06:fig:time-disc}) for the \texttt{sepsis-40} dataset. 
 When the function reaches its maximum at the maximum cosine distance, it may be less than 1 because the label events have no events left to match, \emph{i.e.}, the reference method recovered an event that the prediction method did not. 
 The event match rates in Table \ref{ch06:tab:results} correspond to the match rate at the cosine distance threshold in Figure \ref{ch06:fig:time-disc} ($\theta=0.10$).  
-One could adjust the cosine distance threshold, for example, by increasing it to increase matches, at the cost of false positive matches that degrade temporal performance. We provide a systematic threshold analysis over $\theta \in [0.01, 0.5]$ in 0.01 increments in Appendix~\ref{ch06:apd:threshold_sweep}, which demonstrates a clear elbow near $\theta=0.10$ and supports our chosen operating point.
+One could adjust the cosine distance threshold, for example, by increasing it to increase matches, at the cost of false positive matches that degrade temporal performance.
+We provide a systematic threshold analysis over $\theta \in [0.01, 0.5]$ in 0.01 increments in Appendix~\ref{ch06:apd:threshold_sweep}, which demonstrates a clear elbow near $\theta=0.10$ and supports our chosen operating point.
 The concordance box plots (Figure \ref{ch06:fig:time-disc}) show strong performance among the large LLMs, whereas the Llama 3.1 8B and Mixtral 8x7B model performances are much lower, which is a consistent finding throughout our analysis.
 
 % To better visualize the time discrepancies, we plot cumulative time discrepancy plots (Figure \ref{ch06:fig:time-disc}) that show, for example, that 44\% of the GPT-5 annotations are exact time matches and that 80\% are within 1 week of the label timestamp. 
@@ -65,7 +67,7 @@ Detailed assessments for the \texttt{sepsis-40} ablations and the i2m4 dataset, 
 % The performance of the typing method (Interval + Type) is further degraded. Detailed assessments for the \texttt{sepsis-40} ablations and the i2m4 dataset, analogous to Figure \ref{ch06:fig:time-disc}, are shown in Appendix~\ref{ch06:apd:add-perf}. 
 
 
-\input{Chapters/chapter-06/figures/02}
+\input{Chapters/chapter-06/figures/event-temporal-evaluation}
 
 
 An expert qualitative review on \texttt{sepsis-10} ranked manual annotations highest, followed by O1-preview, DeepSeek-R1, and Llama 3.3; the full review protocol, ranking table, and representative error modes are provided in Appendix~\ref{ch06:apd:clinician_quality_review}.

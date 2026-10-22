@@ -2,7 +2,8 @@
 \subsubsection{Evaluation of Clinical Textual Time Series Quality}
 \label{ch05:sec:evaluation-of-tts-quality}
 
-Using the 200 manually annotated case reports as reference, we evaluated textual time series quality across LLM annotators and runs using event match recall, precision, and F1, temporal concordance (c-index), and AULTC. Table~\ref{ch05:tab:model_comparison} reports mean and standard deviation across runs for seven LLM variants: \texttt{Llama 3.3 70B}, \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3}, \texttt{OpenAI GPT-5}, \texttt{OpenAI O4-mini}, \texttt{OpenAI O3}, and \texttt{OpenAI O1}.
+Using the 200 manually annotated case reports as reference, we evaluated textual time series quality across LLM annotators and runs using event match recall, precision, and F1, temporal concordance (c-index), and AULTC.
+Table~\ref{ch05:tab:model_comparison} reports mean and standard deviation across runs for seven LLM variants: \texttt{Llama 3.3 70B}, \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3}, \texttt{OpenAI GPT-5}, \texttt{OpenAI O4-mini}, \texttt{OpenAI O3}, and \texttt{OpenAI O1}.
 
 \ChFiveRebuttal{
 We additionally evaluated event match precision and F1 to account for model-generated events that were not matched to the manually annotated timeline (Tables~\ref{ch05:tab:model_comparison} and~\ref{ch05:tab:bootstrap_intervals}). Precision varied from 0.756 for GPT-5 to 0.873 for O1, while recall showed the opposite pattern for these models (0.845 for GPT-5 versus 0.637 for O1), illustrating differences in the precision--recall tradeoff across models. F1 ranged from 0.712 to 0.798. Bootstrap 95\% confidence intervals for precision and F1 are reported in Table~\ref{ch05:tab:bootstrap_intervals}. Table~\ref{ch05:tab:model_comparison_lapjv} also includes precision and F1 under the LAPJV-based matching analysis.
@@ -10,16 +11,18 @@ We additionally evaluated event match precision and F1 to account for model-gene
 
 
 
-\input{Chapters/chapter-05/tables/02}
+\input{Chapters/chapter-05/tables/model-annotation-performance}
 
 
 
 
-\input{Chapters/chapter-05/tables/03}
+\input{Chapters/chapter-05/tables/annotation-bootstrap-intervals}
 
 
 
-To quantify uncertainty from a complementary perspective, we also performed a bootstrap analysis based on resampling the 200 annotated cases with replacement and recomputing metrics to obtain 95\% confidence intervals. These intervals characterize variability arising from the composition of the reference set, whereas the across-run standard deviations reflect variability in model sampling. The full set of bootstrap intervals is reported in Table~\ref{ch05:tab:bootstrap_intervals}.
+To quantify uncertainty from a complementary perspective, we also performed a bootstrap analysis based on resampling the 200 annotated cases with replacement and recomputing metrics to obtain 95\% confidence intervals.
+These intervals characterize variability arising from the composition of the reference set, whereas the across-run standard deviations reflect variability in model sampling.
+The full set of bootstrap intervals is reported in Table~\ref{ch05:tab:bootstrap_intervals}.
 
 % \begin{figure}[!tbp]
 % \centering
@@ -52,13 +55,14 @@ To quantify uncertainty from a complementary perspective, we also performed a bo
 
 
 
-\input{Chapters/chapter-05/figures/07}
+\input{Chapters/chapter-05/figures/llm-temporal-annotation-comparison}
 
 
 
 \paragraph{Text Event Match Performance}
 \label{ch05:sec:text-event-match-performance}
-Figure~\ref{ch05:fig:tts_evaluation} (A) shows the cumulative distributions of cosine distances between model-generated and reference event descriptions, with a threshold of 0.1 used to define a successful semantic match. At this threshold, 
+Figure~\ref{ch05:fig:tts_evaluation} (A) shows the cumulative distributions of cosine distances between model-generated and reference event descriptions, with a threshold of 0.1 used to define a successful semantic match.
+At this threshold, 
 \ChFiveRebuttal{
 \texttt{GPT-5} had the highest mean event-recall point estimate (0.845), followed by \texttt{DeepSeek-V3} (0.760), \texttt{O4-mini} (0.748), and \texttt{DeepSeek-R1} (0.746). \texttt{O3} and \texttt{Llama 3.3 70B} had mean recall values of 0.733 and 0.673, respectively, while \texttt{O1} had the lowest mean recall (0.637). These point estimates show variation across models in the proportion of manually annotated clinical events recovered under the selected semantic-matching threshold.
 }
@@ -69,7 +73,8 @@ Figure~\ref{ch05:fig:tts_evaluation} (A) shows the cumulative distributions of c
 \paragraph{Temporal Ordering Performance}
 \label{ch05:sec:temporal-ordering-performance}
 
-Using the same similarity threshold to identify matched events, temporal ordering accuracy was evaluated with the concordance index (c-index). As shown in Figure~\ref{ch05:fig:tts_evaluation} (B),
+Using the same similarity threshold to identify matched events, temporal ordering accuracy was evaluated with the concordance index (c-index).
+As shown in Figure~\ref{ch05:fig:tts_evaluation} (B),
 \ChFiveRebuttal{
 \texttt{GPT-5} had the highest mean concordance point estimate (0.902), followed closely by \texttt{O3} (0.898) and \texttt{O1} (0.885). \texttt{Llama 3.3 70B} and \texttt{O4-mini} both had mean concordance of 0.846, while \texttt{DeepSeek-V3} and \texttt{DeepSeek-R1} had mean concordance of 0.783 and 0.773, respectively. However, the bootstrap 95\% confidence intervals for the leading models overlapped. We therefore interpret the ordering of the mean estimates descriptively and do not consider these results evidence that one model was statistically superior in temporal ordering.
 The differences between event recall and concordance across models illustrate that these metrics capture distinct aspects of timeline quality. For example, \texttt{O1} had the lowest event recall but relatively high concordance among the events that were successfully matched.
@@ -91,7 +96,8 @@ The variation in mean AULTC was smaller than the variation observed for event re
 % The interval-stratified analysis in Figure~\ref{ch05:fig:tts_evaluation} (D) further shows how timestamp accuracy varies with temporal distance from the admission reference time.
 % }
 
-Taken together, these results show that semantic matching, temporal ordering, and timestamp accuracy provide complementary views of textual time series quality. Because the leading mean estimates differ across metrics and their bootstrap confidence intervals frequently overlap, we do not designate a single best-performing model.
+Taken together, these results show that semantic matching, temporal ordering, and timestamp accuracy provide complementary views of textual time series quality.
+Because the leading mean estimates differ across metrics and their bootstrap confidence intervals frequently overlap, we do not designate a single best-performing model.
 
 \paragraph{Timestamp Provenance Audit}
 \label{ch05:sec:timestamp-provenance-audit}

@@ -3,7 +3,7 @@
 We developed a four-stage pipeline (Figure \ref{ch06:fig:flow}) for case report detection, Sepsis-3 phenotyping, clinical finding extraction, and timestamp determination, applied to two data sources: (1) the absolute timeline annotations from \cite{ch06:frattallone2024using}, and (2) the PubMed Open Access subset \citep{pmc2024open} (see Table \ref{ch06:tab:dataset-summary}).
 
 
-\input{Chapters/chapter-06/tables/01}
+\input{Chapters/chapter-06/tables/dataset-summary}
 
 
 \paragraph{Datasets}
@@ -22,12 +22,18 @@ The full case identifiers for \texttt{sepsis-40} and \texttt{sepsis-10} are prov
 Figure~\ref{ch06:fig:flow} (right) shows phenotyping confusion matrices.
 
 \textbf{Phenotyping output parsing and clinician audit.}
-In practice, some LLMs produce verbose rationales rather than a minimal binary output. We therefore parsed phenotyping decisions using a rule-based extraction step that searches model responses for explicit affirmative/negative indicators of meeting sepsis criteria and maps them to a binary label. If primary extraction did not yield a valid label, a fallback strategy examined the final line of the response, and discordant parses were flagged for manual inspection. We additionally performed clinician audit on sampled and borderline cases to verify alignment with Sepsis-3 intent under information available in narratives.
+In practice, some LLMs produce verbose rationales rather than a minimal binary output.
+We therefore parsed phenotyping decisions using a rule-based extraction step that searches model responses for explicit affirmative/negative indicators of meeting sepsis criteria and maps them to a binary label.
+If primary extraction did not yield a valid label, a fallback strategy examined the final line of the response, and discordant parses were flagged for manual inspection.
+We additionally performed clinician audit on sampled and borderline cases to verify alignment with Sepsis-3 intent under information available in narratives.
 
 
 \paragraph{Clinical Finding Extraction and Temporal Assignment}
-We queried six LLMs (GPT-5, DeepSeek-R1-UD-IQ1\_S, Llama-3.3-70B-Instruct, Llama-3.1-70B-Instruct, Mixtral-8x7B-Instruct v0.1, Llama-3.1-8B-Instruct) using a structured prompt with few-shot examples to extract event-time pairs. The prompt instructs models to: assign admission time as $t=0$, use negative times for pre-admission events, split conjunctions, and capture event start times for durations (full prompt in Appendix \ref{ch06:apd:prompt}). For sensitivity analysis, we tested ablations (no-role, zero-shot, no-expansion) and augmentations (interval bounds, i2b2 typing).
+We queried six LLMs (GPT-5, DeepSeek-R1-UD-IQ1\_S, Llama-3.3-70B-Instruct, Llama-3.1-70B-Instruct, Mixtral-8x7B-Instruct v0.1, Llama-3.1-8B-Instruct) using a structured prompt with few-shot examples to extract event-time pairs.
+The prompt instructs models to: assign admission time as $t=0$, use negative times for pre-admission events, split conjunctions, and capture event start times for durations (full prompt in Appendix \ref{ch06:apd:prompt}).
+For sensitivity analysis, we tested ablations (no-role, zero-shot, no-expansion) and augmentations (interval bounds, i2b2 typing).
 
-For i2m4, we compared against a BERT baseline adapted from \cite{ch06:frattallone2024using}, using a 3-layer MLP regressor with L1 loss for time prediction. We filtered events to $\pm$2 weeks of admission for training stability (3,472$\rightarrow$3,350 findings) and used 5-fold cross-validation.
+For i2m4, we compared against a BERT baseline adapted from \cite{ch06:frattallone2024using}, using a 3-layer MLP regressor with L1 loss for time prediction.
+We filtered events to $\pm$2 weeks of admission for training stability (3,472$\rightarrow$3,350 findings) and used 5-fold cross-validation.
 
 

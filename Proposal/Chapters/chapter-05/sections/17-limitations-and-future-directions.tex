@@ -9,13 +9,16 @@ First, because published case reports preferentially describe unusual, severe, o
 \ChFiveRebuttal{
 Demographic fields may contain unsupported inferences, missing-value errors, and category-mapping errors and should not be used as verified patient attributes without source-level review.
 }
-At the same time, we should still note that case reports offer rich, temporally structured narratives with explicit clinical rationale, making them a useful testbed for developing and stress-testing textual time series methods. Our LLM-based framework is designed to be reusable and, in ongoing work, is being adapted to corpora such as MIMIC-IV discharge summaries for future dataset releases.
+At the same time, we should still note that case reports offer rich, temporally structured narratives with explicit clinical rationale, making them a useful testbed for developing and stress-testing textual time series methods.
+Our LLM-based framework is designed to be reusable and, in ongoing work, is being adapted to corpora such as MIMIC-IV discharge summaries for future dataset releases.
 
-Second, we model events as minimally modified text spans aligned to the source narrative. This design choice preserves interpretability and facilitates direct comparison with the underlying text but relies on embedding-based matching for evaluation and does not normalize event content to standard clinical ontologies such as UMLS. \ChFiveRebuttal{The free-text representation introduces lexical variation across reports. Synonym-aware retrieval and event-level mappings to controlled vocabularies may be added as downstream views of the data, but the source-faithful span should be retained so that normalization does not remove clinically important context or modifiers.}
+Second, we model events as minimally modified text spans aligned to the source narrative.
+This design choice preserves interpretability and facilitates direct comparison with the underlying text but relies on embedding-based matching for evaluation and does not normalize event content to standard clinical ontologies such as UMLS. \ChFiveRebuttal{The free-text representation introduces lexical variation across reports. Synonym-aware retrieval and event-level mappings to controlled vocabularies may be added as downstream views of the data, but the source-faithful span should be retained so that normalization does not remove clinically important context or modifiers.}
 
 Third, representing time with single relative points simplifies annotation and downstream use but cannot fully capture durations or complex temporal relations (e.g., overlapping intervals or recurrent events).
 
-Fourth, our one-to-one recursive event matching strategy emphasizes temporal consistency at the expense of recall, especially when the same clinical concept is expressed multiple times or in conjunctive form.  Alternative matching formulations (e.g., many-to-many or cluster-based matching) could improve coverage but would require more elaborate evaluation protocols. 
+Fourth, our one-to-one recursive event matching strategy emphasizes temporal consistency at the expense of recall, especially when the same clinical concept is expressed multiple times or in conjunctive form.
+Alternative matching formulations (e.g., many-to-many or cluster-based matching) could improve coverage but would require more elaborate evaluation protocols. 
 % Finally, the manual reference set comprises 200 cases annotated by a single clinical expert, so we cannot estimate inter-annotator agreement, and all metrics reflect agreement with that expert rather than an adjudicated consensus.
 
 These limitations point to several directions for future work, including ontology-aware event normalization, richer temporal representations (intervals and uncertainty), improved matching algorithms, and extension of the pipeline to diverse EHR-derived note types.
@@ -49,7 +52,7 @@ These limitations point to several directions for future work, including ontolog
 
 
 
-\input{Chapters/chapter-05/figures/09}
+\input{Chapters/chapter-05/figures/prompt-ablation-comparison}
 
 
 

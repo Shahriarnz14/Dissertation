@@ -2,31 +2,41 @@
 \subsection{Model Training Details and Hyperparameters on Benchmarking with Synthetic Data}
 \label{ch04:app:method_settings}
 
-To rigorously evaluate and compare the performance of causal inference models under controlled conditions, we conducted extensive benchmarking on synthetic datasets. Each synthetic dataset consisted of 50,000 samples generated under known data-generating processes explained in Appendix~\ref{ch04:app:synthetic-dataset}. For each experimental repeat, we selected a subset of 5,000 samples for training, 2,500 for validation, and 2,500 for testing, using 10 distinct random seeds (experimental repeats) to ensure robustness. Hyperparameters for each model were tuned on the validation set to minimize the Conditional Average Treatment Effect Root Mean Squared Error (CATE-RMSE).
-Throughout this paper, final results are always reported on the held-out test set using the best-performing configuration. Appendix~\ref{ch04:app:varying-train-size} provides complementary experiments that analyze the convergence behavior of each method under varying training set sizes.
+To rigorously evaluate and compare the performance of causal inference models under controlled conditions, we conducted extensive benchmarking on synthetic datasets.
+Each synthetic dataset consisted of 50,000 samples generated under known data-generating processes explained in Appendix~\ref{ch04:app:synthetic-dataset}.
+For each experimental repeat, we selected a subset of 5,000 samples for training, 2,500 for validation, and 2,500 for testing, using 10 distinct random seeds (experimental repeats) to ensure robustness.
+Hyperparameters for each model were tuned on the validation set to minimize the Conditional Average Treatment Effect Root Mean Squared Error (CATE-RMSE).
+Throughout this paper, final results are always reported on the held-out test set using the best-performing configuration.
+Appendix~\ref{ch04:app:varying-train-size} provides complementary experiments that analyze the convergence behavior of each method under varying training set sizes.
 
 This appendix details the hyperparameter grids used for model selection, the specific survival and outcome models applied within each causal inference framework, and the average computational cost associated with each method class.
 
 
 \subsubsection{Hyperparameters for outcome imputation methods}
 
-For methods based on outcome imputation, we employed standard regressors to estimate the conditional mean of the survival outcome given covariates and treatment assignment. We considered Lasso regression, Random Forest, and XGBoost as base models. Each was optimized using cross-validated grid search on the training set. The corresponding hyperparameter grids are listed in Table~\ref{ch04:tab:hyperparam-outcome-impute-reg}.
+For methods based on outcome imputation, we employed standard regressors to estimate the conditional mean of the survival outcome given covariates and treatment assignment.
+We considered Lasso regression, Random Forest, and XGBoost as base models.
+Each was optimized using cross-validated grid search on the training set.
+The corresponding hyperparameter grids are listed in Table~\ref{ch04:tab:hyperparam-outcome-impute-reg}.
 
 
-\input{Appendices/appendix-ch04/tables/06}
+\input{Appendices/appendix-ch04/tables/imputation-hyperparameters}
 
 
 
 
 \subsubsection{Hyperparameters for direct-survival CATE methods}
 
-For direct modeling of survival outcomes, we employed the Causal Survival Forests (CSF), which adapts the Causal Forest framework to handle right-censored data. We used the default hyperparameters from the original implementation. These are summarized in Table~\ref{ch04:tab:hyperparam-csf}.
+For direct modeling of survival outcomes, we employed the Causal Survival Forests (CSF), which adapts the Causal Forest framework to handle right-censored data.
+We used the default hyperparameters from the original implementation.
+These are summarized in Table~\ref{ch04:tab:hyperparam-csf}.
 
 
-\input{Appendices/appendix-ch04/tables/07}
+\input{Appendices/appendix-ch04/tables/causal-forest-hyperparameters}
 
 
-For SurvITE, we implemented a PyTorch version based on the original architecture and repository. The main configuration is summarized in Table~\ref{ch04:tab:hyperparam-survite}. % Unless otherwise noted, we use the same settings for all datasets. For datasets with \texttt{mimic\_syn} we increase the hidden layer widths to $64$ units to accommodate the higher-dimensional feature space.
+For SurvITE, we implemented a PyTorch version based on the original architecture and repository.
+The main configuration is summarized in Table~\ref{ch04:tab:hyperparam-survite}. % Unless otherwise noted, we use the same settings for all datasets. For datasets with \texttt{mimic\_syn} we increase the hidden layer widths to $64$ units to accommodate the higher-dimensional feature space.
 
 % \begin{table}[htbp]
 % \centering
@@ -57,7 +67,7 @@ For SurvITE, we implemented a PyTorch version based on the original architecture
 % }
 
 
-\input{Appendices/appendix-ch04/tables/08}
+\input{Appendices/appendix-ch04/tables/survite-hyperparameters}
 
 
 
@@ -67,19 +77,25 @@ For SurvITE, we implemented a PyTorch version based on the original architecture
 {\raggedright For survival meta-learners--specifically T-Learner-Survival, S-Learner-Survival, and Matching-\allowbreak Learner-Survival--we used three different base survival models: Random Survival Forests (RSF), DeepSurv, and DeepHit. Each of these models was tuned using a predefined hyperparameter grid, listed in Table~\ref{ch04:tab:hyperparam-base-surv}.\par}
 
 
-\input{Appendices/appendix-ch04/tables/09}
+\input{Appendices/appendix-ch04/tables/meta-learner-hyperparameters}
 
 
-Hyperparameters were selected through empirical tuning informed by prior literature. For neural network-based models (DeepSurv, DeepHit), we used early stopping to mitigate overfitting. All experiments were made reproducible by setting random seeds. The best-performing hyperparameter configuration was selected using CATE-RMSE on the validation set, and all final results were obtained on the test set using these optimal configurations.
+Hyperparameters were selected through empirical tuning informed by prior literature.
+For neural network-based models (DeepSurv, DeepHit), we used early stopping to mitigate overfitting.
+All experiments were made reproducible by setting random seeds.
+The best-performing hyperparameter configuration was selected using CATE-RMSE on the validation set, and all final results were obtained on the test set using these optimal configurations.
 
 
 \subsubsection{Computation time of survival CATE methods}
 
-We also measured the computational cost of each CATE estimation method in terms of average runtime per dataset and experimental repeat. Each runtime was recorded using Python’s \texttt{time.time()} and averaged across 40 synthetic datasets and 10 random seeds. Table~\ref{ch04:tab:runtime-comparison} presents the mean runtime (in seconds) and standard deviation (excluding the time required for imputation). 
-As expected, neural network-based survival models incur substantially higher computational costs than classical or tree-based methods. All experiments were conducted on a machine equipped with an AMD Ryzen 9 5900X CPU, 128GB RAM, and an NVIDIA GeForce RTX 4090 GPU (CUDA version 12.2).
+We also measured the computational cost of each CATE estimation method in terms of average runtime per dataset and experimental repeat.
+Each runtime was recorded using Python’s \texttt{time.time()} and averaged across 40 synthetic datasets and 10 random seeds.
+Table~\ref{ch04:tab:runtime-comparison} presents the mean runtime (in seconds) and standard deviation (excluding the time required for imputation). 
+As expected, neural network-based survival models incur substantially higher computational costs than classical or tree-based methods.
+All experiments were conducted on a machine equipped with an AMD Ryzen 9 5900X CPU, 128GB RAM, and an NVIDIA GeForce RTX 4090 GPU (CUDA version 12.2).
 
 
-\input{Appendices/appendix-ch04/tables/10}
+\input{Appendices/appendix-ch04/tables/causal-method-runtimes}
 
 
 

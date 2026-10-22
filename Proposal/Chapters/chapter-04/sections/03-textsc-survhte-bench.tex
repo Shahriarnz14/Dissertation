@@ -4,7 +4,7 @@
 
 
 
-\input{Chapters/chapter-04/tables/01}
+\input{Chapters/chapter-04/tables/synthetic-causal-configurations}
 
 
 
@@ -26,12 +26,16 @@ We construct a modular suite of 40 synthetic datasets that systematically vary a
 % \textcolor{red}{Jeremy's comment: ensuring that the reader is aware of the connection of the synthetic datasets and where they originate from/where they have (or have not) been tested. So they understand better what is classical, and which of these settings are new to the benchmark.}
 % To rigorously evaluate CATE estimators for right‐censored outcomes, we construct a modular suite of synthetic datasets that systematically vary across two axes: the causal configurations and the survival scenarios. The design of different survival scenarios builds on \citet{meir2025heterogeneous}, and we expand it in scope and coverage, as well as adding different causal configurations.
 % \textcolor{red}{Argue why each violation reflects a common real‐world challenge. and why not including the other combinations.}
-Crossing 8 causal configurations with 5 survival scenarios yields $8\times5=40$ synthetic datasets, each with binary, time‑fixed treatment, five independently sampled covariates, each distributed as $\text{Uniform}(0,1)$, and up to 50{,}000 units. For each unit~$i$, we generate both $T_i(0)$ and $T_i(1)$, ensuring that ground-truth CATEs are always known. 
+Crossing 8 causal configurations with 5 survival scenarios yields $8\times5=40$ synthetic datasets, each with binary, time‑fixed treatment, five independently sampled covariates, each distributed as $\text{Uniform}(0,1)$, and up to 50{,}000 units.
+For each unit~$i$, we generate both $T_i(0)$ and $T_i(1)$, ensuring that ground-truth CATEs are always known. 
 
 
 %\vspace{-1em}
 % \textbf{Causal configurations.} %\label{subsec:causal-configs}
-The 8 \textbf{causal configurations} (Table~\ref{ch04:tab:synthetic-data-causal-config}) include randomized controlled trials (\texttt{RCT-50}, \texttt{RCT-5}) and observational studies with correctly specified propensity scores (i.e., these are known during training) with all confounders observed in estimation (\texttt{OBS-CPS}), unobserved confounding (\texttt{OBS-UConf}), or lack of positivity (\texttt{OBS-NoPos}). Each observational setting has variants with suffix ``\texttt{-InfC}'', where ignorable censoring is replaced by informative censoring, where censoring times depend stochastically on event times. These violations reflect common real-world challenges: unmeasured risk factors in treatment decisions (violating ignorability), treatment imbalance in observational studies (violating positivity), and dropout mechanisms correlated with health outcomes (violating ignorable censoring). We do not model interference (consistency violations) or censoring-positivity violations, which require specialized designs beyond our scope. 
+The 8 \textbf{causal configurations} (Table~\ref{ch04:tab:synthetic-data-causal-config}) include randomized controlled trials (\texttt{RCT-50}, \texttt{RCT-5}) and observational studies with correctly specified propensity scores (i.e., these are known during training) with all confounders observed in estimation (\texttt{OBS-CPS}), unobserved confounding (\texttt{OBS-UConf}), or lack of positivity (\texttt{OBS-NoPos}).
+Each observational setting has variants with suffix ``\texttt{-InfC}'', where ignorable censoring is replaced by informative censoring, where censoring times depend stochastically on event times.
+These violations reflect common real-world challenges: unmeasured risk factors in treatment decisions (violating ignorability), treatment imbalance in observational studies (violating positivity), and dropout mechanisms correlated with health outcomes (violating ignorable censoring).
+We do not model interference (consistency violations) or censoring-positivity violations, which require specialized designs beyond our scope. 
 % , covering the following pathologies: %. They capture different pathologies:
 % \begin{itemize}[leftmargin=1.5em, itemsep=0pt,parsep=0pt,partopsep=0pt,topsep=0pt, label={}]
 % \item \texttt{RCT-50/5}: randomized controlled trials with treatment rates of 50\% and, separately, 5\%.
@@ -45,7 +49,7 @@ Additional variations, such as informative censoring with the censoring time dri
 
 
 
-\input{Chapters/chapter-04/tables/02}
+\input{Chapters/chapter-04/tables/synthetic-survival-scenarios}
 
 
 %%% move to appendix
@@ -57,8 +61,10 @@ Additional variations, such as informative censoring with the censoring time dri
 The 5 \textbf{survival scenarios} (Table~\ref{ch04:tab:synthetic-data-survival-scenario})
 % covering various survival time distributions and censoring regimes.  
 % Scenarios \texttt{A}/\texttt{B} use low censoring rate ($<$30\%) and familiar AFT/Cox models; \texttt{C} and \texttt{E} share a discrete-time Poisson hazard but differ only in administrative censoring (40\% vs $>$70\%); \texttt{E} exhibit high censoring ($>$70\%) with adjusted censoring distribution.
-include Cox proportional hazards (low censoring), accelerated failure time (AFT) models (low and high censoring), and Poisson hazards (medium and high censoring). These distributions cover proportional hazards (Cox) and non-proportional hazards (AFT\footnote{The AFT noise distribution we use (that is additive in log survival time) is Gaussian so that the resulting model does \emph{not} satisfy the proportional hazards assumption (which would require the noise to be Gumbel).}, Poisson), with censoring levels ranging from under 30\% to over 70\%.
-This variety reflects practical challenges like high censoring common in EHR cohorts, accelerated processes in oncology, and discrete hazard approximations in epidemiology. Within each survival scenario, coefficients are tuned so that event times are comparable across different causal configurations.
+include Cox proportional hazards (low censoring), accelerated failure time (AFT) models (low and high censoring), and Poisson hazards (medium and high censoring).
+These distributions cover proportional hazards (Cox) and non-proportional hazards (AFT\footnote{The AFT noise distribution we use (that is additive in log survival time) is Gaussian so that the resulting model does \emph{not} satisfy the proportional hazards assumption (which would require the noise to be Gumbel).}, Poisson), with censoring levels ranging from under 30\% to over 70\%.
+This variety reflects practical challenges like high censoring common in EHR cohorts, accelerated processes in oncology, and discrete hazard approximations in epidemiology.
+Within each survival scenario, coefficients are tuned so that event times are comparable across different causal configurations.
 Full generation formulas and summary statistics (e.g., censoring rate, treatment rate, ATE) for each dataset are in Appendix~\ref{ch04:app:synthetic-dataset}.
 %%% move to appendix
 % We vary survival‐time generative models as well as censoring rate. We generate potential event times $T(0)$ and $T(1)$ under one of five survival scenarios, including AFT, Cox, and Poisson distributions. The true event time $T$ under the unit's treatment assignment is chosen based on $W$ The five scenarios also cover different levels of censoring rate (low, median, and high). In the informative censoring case, the censoring time is instead generated from an exponential distribution whose rate increases linearly with the true event time. After $T$ and $C$ are sampled, we derive the observed time $Y = \min(T, C)$ and event indicator $\delta = 1(T \leq C)$. Because we generate both potential outcomes, the true CATE $\tau(x) = T(1 | x) - T(0 | x)$ is known. The population-level average treatment effect (ATE) can be obtained by taking the average of CATE across a large sample size.
@@ -77,7 +83,8 @@ Per dataset, averaged over 10 random splits, we report:
 \textbf{Survival CATE methods implemented.}
 We evaluate the three broad families of survival CATE methods (53 variants total; see Appendix~\ref{ch04:app:exp-setup} for the full list, Appendix~\ref{ch04:app:causal_method_details} for methodological details):
 \begin{itemize}
-    \item \emph{Outcome imputation methods}: meta-learners (S-, T-, X-, DR-Learners) paired with base regression learners (lasso, random forest, XGBoost), plus Double-ML and Causal Forest, each combined with the three imputations (Pseudo-obs, Margin, and IPCW-T \citep{qi2023an}, see Appendix~\ref{ch04:app:imputation} for details). In total, we implement $42$ variants.
+    \item \emph{Outcome imputation methods}: meta-learners (S-, T-, X-, DR-Learners) paired with base regression learners (lasso, random forest, XGBoost), plus Double-ML and Causal Forest, each combined with the three imputations (Pseudo-obs, Margin, and IPCW-T \citep{qi2023an}, see Appendix~\ref{ch04:app:imputation} for details).
+In total, we implement $42$ variants.
     \item \emph{Direct-survival CATE methods}:
     We include SurvITE~\citep{curth2021survite} and Causal Survival Forests~\citep{ch04:cui2023estimating}.
     \item \emph{Survival meta-learners}:
@@ -85,7 +92,9 @@ We evaluate the three broad families of survival CATE methods (53 variants total
 \end{itemize}
 % While many of these methods draw from existing literature, to the best of our knowledge, we are the first to systematically categorize them into these three families and implement them in a unified, modular framework.
 % This design facilitates reproducibility, extensibility, and fair comparison across approaches.
-Note that some implemented methods are straightforward extensions of existing ideas despite not having been previously published. For example, \citep{qi2023an} suggested ways of replacing censoring times with imputed survival times for the purposes of model evaluation, but their imputation strategies naturally can be coupled with standard CATE learners to obtain survival CATE estimators. Similarly, pairing meta-learners with different base learners (e.g., lasso regression, XGBoost, or DeepSurv) yields natural yet previously unpublished variants.
+Note that some implemented methods are straightforward extensions of existing ideas despite not having been previously published.
+For example, \citep{qi2023an} suggested ways of replacing censoring times with imputed survival times for the purposes of model evaluation, but their imputation strategies naturally can be coupled with standard CATE learners to obtain survival CATE estimators.
+Similarly, pairing meta-learners with different base learners (e.g., lasso regression, XGBoost, or DeepSurv) yields natural yet previously unpublished variants.
 % Full details of each causal methodology appear in Appendix~\ref{ch04:app:causal_method_details}. % \textcolor{red}{Make sure all appendix parts are properly referred to in the main body.}
 
 

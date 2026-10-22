@@ -8,27 +8,35 @@ The PMOA-TTS dataset is deposited on Hugging Face \cite{shahriar_noroozizadeh_20
 \ChFiveRebuttal{
 PMOA-TTS distributes derived structured annotations and source identifiers rather than copies of source-article text, figures, images, or supplementary files. The released annotations and metadata are licensed under CC BY-NC-SA 4.0 (\url{https://creativecommons.org/licenses/by-nc-sa/4.0/}); reuse of the underlying source articles remains subject to the article-level terms displayed by PMC (\url{https://pmc.ncbi.nlm.nih.gov/tools/openftlist/}).
 }
-The dataset card lists task tags (\texttt{Text Classification}), modality (\texttt{Text}), format support (\texttt{Parquet via auto-conversion}), language (\texttt{English}), and size (``\texttt{100K--1M}''). Data record schema with an example JSON entry is shown in Figure~\ref{ch05:fig:record_schema}.
+The dataset card lists task tags (\texttt{Text Classification}), modality (\texttt{Text}), format support (\texttt{Parquet via auto-conversion}), language (\texttt{English}), and size (``\texttt{100K--1M}'').
+Data record schema with an example JSON entry is shown in Figure~\ref{ch05:fig:record_schema}.
 % \ChFiveRebuttal{
 % The demographic fields are LLM-extracted or LLM-mapped descriptors from the case-report narrative. They should not be interpreted as independently verified biological sex at birth, self-identified race or ethnicity, or population-representative demographic measurements. The model returns Not Specified when no value is identified; ethnicity is Not Specified in 89\% of reports.
 % }
 
 \noindent PMOA-TTS has the following dataset splits:
 
-\input{Chapters/chapter-05/figures/03}
+\input{Chapters/chapter-05/figures/record-schema-example}
 
 
 
 
 \begin{itemize}
-    \item \texttt{train\_DSR1/L33}: The full TTS release contains \ChFiveRebuttal{124{,}349 records} with valid event-time rows. The \texttt{train\_DSR1} and \texttt{train\_L33} splits contain annotations generated using \texttt{DeepSeek-R1} and \texttt{Llama 3.3 70B}, respectively. Here, a split denotes a version of the dataset defined by the annotation model used. These splits serve as the default releases and contain the primary annotations used in downstream analyses.
+    \item \texttt{train\_DSR1/L33}: The full TTS release contains \ChFiveRebuttal{124{,}349 records} with valid event-time rows.
+The \texttt{train\_DSR1} and \texttt{train\_L33} splits contain annotations generated using \texttt{DeepSeek-R1} and \texttt{Llama 3.3 70B}, respectively.
+Here, a split denotes a version of the dataset defined by the annotation model used.
+These splits serve as the default releases and contain the primary annotations used in downstream analyses.
     
     \item {\raggedright \ChFiveRebuttal{\texttt{case\_study\_100} contains the TTS-bearing portion of the 100-document case-identification evaluation. Of the 100 candidate documents reviewed, 88 were confirmed to contain a single-patient case report and therefore have TTS annotations; the remaining 12 did not contain a case report and consequently have no patient timeline in this split.}\par}
     
-    \item \texttt{case\_study\_n200}: A benchmark of 200 manually reviewed case reports used for qualitative and quantitative evaluation of LLM-generated annotations. Each model is evaluated across five independent runs on this subset to assess run-to-run variability in annotation consistency.
+    \item \texttt{case\_study\_n200}: A benchmark of 200 manually reviewed case reports used for qualitative and quantitative evaluation of LLM-generated annotations.
+Each model is evaluated across five independent runs on this subset to assess run-to-run variability in annotation consistency.
 
 \end{itemize}
 
-The data repository also has an additional data split \texttt{TTS\_n200\_additional\_models}, which bundles the single-expert manual timelines (the reference set) together with parallel LLM-generated textual time series for additional models, including open-weight models such as \texttt{DeepSeek-V3}, \texttt{DeepSeek-R1 quantized}, and \texttt{DeepSeek-V3-0324}, and proprietary OpenAI models such as \texttt{GPT5}, \texttt{O1}, \texttt{O3}, and \texttt{O4-mini}. This split is designed for lightweight benchmarking and cross-model comparison on a fixed 200-case cohort without re-annotating the full corpus. For the full \ChFiveRebuttal{124{,}349} release, we provide textual time series produced by \texttt{DeepSeek-R1} and \texttt{Llama 3.3 70B}; the additional models are released only on the 200-case subset due to resource constraints. For completeness, both \texttt{Llama 3.3 70B} and \texttt{DeepSeek-R1} were also executed in five independent runs on the \texttt{case\_study\_n200} subset, and these annotated outputs are included in the dataset.
+The data repository also has an additional data split \texttt{TTS\_n200\_additional\_models}, which bundles the single-expert manual timelines (the reference set) together with parallel LLM-generated textual time series for additional models, including open-weight models such as \texttt{DeepSeek-V3}, \texttt{DeepSeek-R1 quantized}, and \texttt{DeepSeek-V3-0324}, and proprietary OpenAI models such as \texttt{GPT5}, \texttt{O1}, \texttt{O3}, and \texttt{O4-mini}.
+This split is designed for lightweight benchmarking and cross-model comparison on a fixed 200-case cohort without re-annotating the full corpus.
+For the full \ChFiveRebuttal{124{,}349} release, we provide textual time series produced by \texttt{DeepSeek-R1} and \texttt{Llama 3.3 70B}; the additional models are released only on the 200-case subset due to resource constraints.
+For completeness, both \texttt{Llama 3.3 70B} and \texttt{DeepSeek-R1} were also executed in five independent runs on the \texttt{case\_study\_n200} subset, and these annotated outputs are included in the dataset.
 \ChFiveRebuttal{Additional details regarding exact model versions, access dates, decoding settings, context limits, seeds, and the inference framework are available in Supplementary Material Section  \ref{ch05:sec:supp-model-configuration}}.
 

@@ -4,20 +4,26 @@
 
 \ChFourHeadingOnly
 \subsubsection{Semi-synthetic datasets setup}
-To complement synthetic benchmarks and real-world case studies, we construct semi-synthetic datasets that pair real covariates with simulated treatment assignment and survival outcomes. This strategy preserves realistic covariate distributions and correlations while enabling controlled evaluation against known ground-truth CATEs. We consider two covariate sources: the ACTG HIV trial and MIMIC-IV ICU records. Table~\ref{ch04:tab:semi-syn-dataset-summary} summarizes dataset sizes, covariate counts, treatment and censoring rates, and whether the treatment-assignment and event-time mechanisms depend on covariates through linear versus non-linear functions; full generative details are provided in Appendix~\ref{ch04:app:actg-semi-dataset} and~\ref{ch04:app:mimic-suite}. Figure~\ref{ch04:fig:semi-syn-km-curves} shows Kaplan--Meier curves for event and censoring in the treatment and control groups for each semi-synthetic dataset.
+To complement synthetic benchmarks and real-world case studies, we construct semi-synthetic datasets that pair real covariates with simulated treatment assignment and survival outcomes.
+This strategy preserves realistic covariate distributions and correlations while enabling controlled evaluation against known ground-truth CATEs.
+We consider two covariate sources: the ACTG HIV trial and MIMIC-IV ICU records.
+Table~\ref{ch04:tab:semi-syn-dataset-summary} summarizes dataset sizes, covariate counts, treatment and censoring rates, and whether the treatment-assignment and event-time mechanisms depend on covariates through linear versus non-linear functions; full generative details are provided in Appendix~\ref{ch04:app:actg-semi-dataset} and~\ref{ch04:app:mimic-suite}.
+Figure~\ref{ch04:fig:semi-syn-km-curves} shows Kaplan--Meier curves for event and censoring in the treatment and control groups for each semi-synthetic dataset.
 
 
-\input{Appendices/appendix-ch04/tables/25}
+\input{Appendices/appendix-ch04/tables/semi-synthetic-dataset-overview}
 
 
 
-\input{Appendices/appendix-ch04/figures/15}
+\input{Appendices/appendix-ch04/figures/semi-synthetic-survival-curves}
 
 
 
 
 \subsubsection{ACTG semi-synthetic dataset} \label{ch04:app:actg-semi-dataset}
-The ACTG semi-synthetic dataset is derived from the ACTG 175 HIV clinical trial \citep{hammer1996atrial}, which contains 23 baseline covariates. Following the construction procedure of \citet{chapfuwa2021enabling}, we simulate covariate-dependent treatment assignment and generate event times from a Gompertz--Cox model with an AFT-style censoring mechanism. This dataset exhibits realistic treatment imbalance and moderate censoring ($\sim$51\%), providing a clinically grounded benchmark with preserved trial covariate structure.
+The ACTG semi-synthetic dataset is derived from the ACTG 175 HIV clinical trial \citep{hammer1996atrial}, which contains 23 baseline covariates.
+Following the construction procedure of \citet{chapfuwa2021enabling}, we simulate covariate-dependent treatment assignment and generate event times from a Gompertz--Cox model with an AFT-style censoring mechanism.
+This dataset exhibits realistic treatment imbalance and moderate censoring ($\sim$51\%), providing a clinically grounded benchmark with preserved trial covariate structure.
 
 More concretely, following \citet{chapfuwa2021enabling}, we generate: 
 $$X = \text{ACTG covariates}$$
@@ -34,27 +40,29 @@ where $\sigma(\cdot)$ is the sigmoid function, $\{ \beta_A, \alpha_A, \lambda_A,
 {\raggedright We construct a suite of nine semi-synthetic datasets derived from MIMIC-IV ICU records~\citep{johnson2023mimic}. All variants share the same covariates and sample size, and differ only in the treatment-assignment and event/censoring mechanisms. The suite is organized into two complementary subsets: (1) \emph{independent assignment with varying censoring severity} (MIMIC-$i$--$v$), which isolates robustness to censoring under randomized treatment; and (2) \emph{confounded assignment with varying functional form} (MIMIC-$vi$--$ix$), which evaluates robustness to observed confounding and to non-linear (interaction-based) event and censoring mechanisms while keeping covariates fixed.\par}
 
 
-We extract 36 covariates spanning laboratory test abnormalities (e.g., creatinine, glucose, hemoglobin), demographic features (e.g., age, sex, race, marital status), and admission descriptors (e.g., admission type, recurrent admissions, night admission). Table~\ref{ch04:tab:mimic-covariates} summarizes covariate statistics; Table~\ref{ch04:tab:mimic-demographics} reports demographic and categorical distributions; and Figure~\ref{ch04:fig:mimic_corr} shows correlations among covariates.
+We extract 36 covariates spanning laboratory test abnormalities (e.g., creatinine, glucose, hemoglobin), demographic features (e.g., age, sex, race, marital status), and admission descriptors (e.g., admission type, recurrent admissions, night admission).
+Table~\ref{ch04:tab:mimic-covariates} summarizes covariate statistics; Table~\ref{ch04:tab:mimic-demographics} reports demographic and categorical distributions; and Figure~\ref{ch04:fig:mimic_corr} shows correlations among covariates.
 
 % The second family of datasets is derived from MIMIC-IV ICU records~\citep{johnson2023mimic}. We extract 36 covariates that span laboratory test abnormalities (e.g., creatinine, glucose, hemoglobin), demographic features (e.g., age, sex, race, marital status), and admission descriptors (e.g., admission type, recurrent admissions, night admission). Treatments ($W$) are simulated as Bernoulli($0.5$), and event times are generated following the formulation of \citet{meir2025heterogeneous}, where baseline hazards depend on subsets of laboratory and demographic covariates. Five variants are created by altering the censoring distribution, resulting in censoring rates ranging from 53\% to 88\%. This design mimics the range of censoring observed in longitudinal EHR studies, from moderate censoring to highly censored survival outcomes.
 
 
-\input{Appendices/appendix-ch04/tables/26}
+\input{Appendices/appendix-ch04/tables/mimic-covariate-summary}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/27}
+\input{Appendices/appendix-ch04/tables/mimic-categorical-distributions}
 
 
 
-\input{Appendices/appendix-ch04/figures/16}
+\input{Appendices/appendix-ch04/figures/mimic-covariate-correlations}
 
 
 We now introduce some shared notation in all of the MIMIC semi-synthetic datasets.
 Let $X_{1:5}$ denote the first five binary covariates corresponding to abnormal laboratory values
 (\textit{Anion gap}, \textit{Bicarbonate}, \textit{Calcium total}, \textit{Chloride}, \textit{Creatinine}),
-and let $X_{36}$ denote the standardized \textit{Admission age}. We define the abnormal-lab burden as
+and let $X_{36}$ denote the standardized \textit{Admission age}.
+We define the abnormal-lab burden as
 \[
 S = \sum_{j=1}^{5} X_j.
 \]
@@ -95,7 +103,8 @@ where $\lambda_c \in \{21, 23, 24.7, 26.5, 29\}$ controls censoring severity for
 
 \paragraph{Confounded assignment, varying functional form (MIMIC-$vi$--$ix$)}
 \label{ch04:app:mimic-vi-ix}
-This subset reuses the same covariate backbone but introduces covariate-dependent treatment assignment (observed confounding) with a propensity score and varies whether the event-time and censoring mechanisms are linear or non-linear in covariates. The four variants correspond to the following combinations:
+This subset reuses the same covariate backbone but introduces covariate-dependent treatment assignment (observed confounding) with a propensity score and varies whether the event-time and censoring mechanisms are linear or non-linear in covariates.
+The four variants correspond to the following combinations:
 \begin{itemize}
     \item MIMIC-$vi$: Propensity score=\texttt{linear}, event/censoring time=\texttt{linear};
     \item MIMIC-$vii$: Propensity score=\texttt{linear}, event/censoring time=\texttt{non-linear};
@@ -122,7 +131,9 @@ We consider two propensity-score families:
     \end{align*}
     with $(b_0,b_1,b_2,b_3,b_4)=(-0.2,\,0.8,\,0.4,\,-0.3,\,0.5)$.
 \end{itemize}
-where $\sigma(\cdot)$ is the sigmoid function. We clip $e(x)$ into $[0.05,0.95]$ to avoid near-deterministic treatment assignment and preserve overlap. Note that the coefficients are chosen (by checking the realized $\mathbb{E}[W]$) so that the treatment rate remains close to $0.5$ while inducing confounding through $X_{36}$ and $S$.
+where $\sigma(\cdot)$ is the sigmoid function.
+We clip $e(x)$ into $[0.05,0.95]$ to avoid near-deterministic treatment assignment and preserve overlap.
+Note that the coefficients are chosen (by checking the realized $\mathbb{E}[W]$) so that the treatment rate remains close to $0.5$ while inducing confounding through $X_{36}$ and $S$.
 
 
 \ChFourParagraph{Event-time and censoring mechanisms.}
@@ -174,40 +185,52 @@ For each dataset, we compute unit-level ground-truth survival probabilities at h
 
 
 
-Across all MIMIC variants, the sample size is $N=25{,}170$ and the covariate distributions in Tables~\ref{ch04:tab:mimic-covariates} and~\ref{ch04:tab:mimic-demographics} are identical. The subset MIMIC-$i$--$v$ spans censoring rates from approximately 53\% to 88\% under covariate-independent treatment assignment ($\Pr(W{=}1)\approx 0.5$), isolating the effect of censoring severity. The subset MIMIC-$vi$--$ix$ keeps censoring moderate (around 53\% in our instantiation) while introducing covariate-dependent treatment assignment and varying whether event-time and censoring mechanisms are linear or non-linear in covariates, providing complementary stress tests for both confounding and misspecified or non-linear hazard/censoring relationships.
+Across all MIMIC variants, the sample size is $N=25{,}170$ and the covariate distributions in Tables~\ref{ch04:tab:mimic-covariates} and~\ref{ch04:tab:mimic-demographics} are identical.
+The subset MIMIC-$i$--$v$ spans censoring rates from approximately 53\% to 88\% under covariate-independent treatment assignment ($\Pr(W{=}1)\approx 0.5$), isolating the effect of censoring severity.
+The subset MIMIC-$vi$--$ix$ keeps censoring moderate (around 53\% in our instantiation) while introducing covariate-dependent treatment assignment and varying whether event-time and censoring mechanisms are linear or non-linear in covariates, providing complementary stress tests for both confounding and misspecified or non-linear hazard/censoring relationships.
 
 
 \subsubsection{Semi-synthetic results: full MIMIC suite and additional estimands}
 \label{ch04:app:other-estimand-result}
 
-This section extends the semi-synthetic evaluation in Section~\ref{ch04:sec:semi-syn-data-experiment}. First, we complete coverage of the full MIMIC semi-synthetic suite by reporting RMST-based CATE RMSE on MIMIC-$vi$--$ix$ under the same primary estimand used in the main paper (RMST evaluated at the maximum observed time $T_{\max}$). Second, we report results for additional estimands that probe time-horizon sensitivity: horizon-specific survival-probability CATEs and RMST evaluated at a shorter horizon (the median event time $T_{\text{med}}$).
+This section extends the semi-synthetic evaluation in Section~\ref{ch04:sec:semi-syn-data-experiment}.
+First, we complete coverage of the full MIMIC semi-synthetic suite by reporting RMST-based CATE RMSE on MIMIC-$vi$--$ix$ under the same primary estimand used in the main paper (RMST evaluated at the maximum observed time $T_{\max}$).
+Second, we report results for additional estimands that probe time-horizon sensitivity: horizon-specific survival-probability CATEs and RMST evaluated at a shorter horizon (the median event time $T_{\text{med}}$).
 
 
 \paragraph{Primary estimand: RMST at $T_{\max}$ (full MIMIC suite)}
 \label{ch04:app:semi-syn-rmst-tmax}
 
 The main paper reports RMST-based CATE RMSE on ACTG and the censoring-severity subset MIMIC-$i$--$v$ (Table~\ref{ch04:tab:semi-syn-cate-rmse}).
-Table~\ref{ch04:tab:mimic-vi-ix-results} reports CATE RMSE on MIMIC-$vi$--$ix$ using the same estimand as in the main paper: RMST evaluated at the maximum observed time in each dataset. These variants reuse the same covariates as MIMIC-$i$--$v$ but introduce covariate-dependent treatment assignment and/or non-linear event-time and censoring mechanisms (Appendix~\ref{ch04:app:mimic-vi-ix}). Across MIMIC-$i$--$ix$, mean RMSE values typically lie in a narrow band, so practical differences are often reflected more strongly in stability (variance across repetitions) than in average error.
+Table~\ref{ch04:tab:mimic-vi-ix-results} reports CATE RMSE on MIMIC-$vi$--$ix$ using the same estimand as in the main paper: RMST evaluated at the maximum observed time in each dataset.
+These variants reuse the same covariates as MIMIC-$i$--$v$ but introduce covariate-dependent treatment assignment and/or non-linear event-time and censoring mechanisms (Appendix~\ref{ch04:app:mimic-vi-ix}).
+Across MIMIC-$i$--$ix$, mean RMSE values typically lie in a narrow band, so practical differences are often reflected more strongly in stability (variance across repetitions) than in average error.
 
 \ChFourParagraph{Dataset-dependent performance patterns.}
-The ACTG dataset (Table~\ref{ch04:tab:semi-syn-cate-rmse}) exhibits clearer separation among methods, whereas the MIMIC variants (Tables~\ref{ch04:tab:semi-syn-cate-rmse} and~\ref{ch04:tab:mimic-vi-ix-results}) show substantially tighter clustering. This reinforces that method rankings can depend on covariate structure and data-generating mechanisms: approaches that perform well in trial-like settings (ACTG) need not be the strongest in high-dimensional EHR-like settings (MIMIC), and vice versa.
+The ACTG dataset (Table~\ref{ch04:tab:semi-syn-cate-rmse}) exhibits clearer separation among methods, whereas the MIMIC variants (Tables~\ref{ch04:tab:semi-syn-cate-rmse} and~\ref{ch04:tab:mimic-vi-ix-results}) show substantially tighter clustering.
+This reinforces that method rankings can depend on covariate structure and data-generating mechanisms: approaches that perform well in trial-like settings (ACTG) need not be the strongest in high-dimensional EHR-like settings (MIMIC), and vice versa.
 
 \ChFourParagraph{Censoring-gradient and stability under MIMIC-$i$--$v$.}
-The censoring sweep MIMIC-$i$--$v$ (53\%--88\% censoring) provides a granular view of censoring sensitivity. Several methods maintain stable mean RMSE as censoring increases, but standard deviation can change markedly for some learners under extreme censoring (Table~\ref{ch04:tab:semi-syn-cate-rmse}). As a result, stability considerations (e.g., standard deviation across repeats) can be as important as mean RMSE when operating in highly censored regimes typical of EHR studies.
+The censoring sweep MIMIC-$i$--$v$ (53\%--88\% censoring) provides a granular view of censoring sensitivity.
+Several methods maintain stable mean RMSE as censoring increases, but standard deviation can change markedly for some learners under extreme censoring (Table~\ref{ch04:tab:semi-syn-cate-rmse}).
+As a result, stability considerations (e.g., standard deviation across repeats) can be as important as mean RMSE when operating in highly censored regimes typical of EHR studies.
 
 \ChFourParagraph{Robustness across mechanism complexity (MIMIC-$vi$--$ix$).}
-Moving from MIMIC-$i$--$v$ to the mechanism-complexity subset MIMIC-$vi$--$ix$ does not qualitatively change the overall picture: multiple methods remain competitive and the top-performing group (Causal Survival Forests and S-Learner-Survival) is often tightly clustered (Table~\ref{ch04:tab:mimic-vi-ix-results}). This suggests that the primary conclusions drawn from MIMIC-$i$--$v$ are not driven solely by covariate-independent treatment assignment; rather, they persist under observed confounding and non-linear outcome/censoring mechanisms within the same covariate support.
+Moving from MIMIC-$i$--$v$ to the mechanism-complexity subset MIMIC-$vi$--$ix$ does not qualitatively change the overall picture: multiple methods remain competitive and the top-performing group (Causal Survival Forests and S-Learner-Survival) is often tightly clustered (Table~\ref{ch04:tab:mimic-vi-ix-results}).
+This suggests that the primary conclusions drawn from MIMIC-$i$--$v$ are not driven solely by covariate-independent treatment assignment; rather, they persist under observed confounding and non-linear outcome/censoring mechanisms within the same covariate support.
 
 
 
-\input{Appendices/appendix-ch04/tables/28}
+\input{Appendices/appendix-ch04/tables/mimic-rmst-cate-errors}
 
 
 
 \paragraph{Additional estimand: horizon-specific survival-probability CATEs}
 \label{ch04:app:surv_prob}
 
-In addition to RMST-based CATEs, we consider treatment effects defined on the survival function at a fixed horizon. Let $S_i(w;h)=\Pr(T_i(w)>h)$ denote the potential-outcome survival probability for unit $i$ under treatment $w\in\{0,1\}$ at horizon $h$. In this case, the transformation $y(\cdot)$ in~\ChFourEqref{ch04:eq:cate} is replaced by
+In addition to RMST-based CATEs, we consider treatment effects defined on the survival function at a fixed horizon.
+Let $S_i(w;h)=\Pr(T_i(w)>h)$ denote the potential-outcome survival probability for unit $i$ under treatment $w\in\{0,1\}$ at horizon $h$.
+In this case, the transformation $y(\cdot)$ in~\ChFourEqref{ch04:eq:cate} is replaced by
 \[
 y\big(T_i(w)\big) := S_i(w; h).
 \]
@@ -217,32 +240,37 @@ The corresponding CATE is:
 \end{equation}
 We evaluate $\tau_h(x)$ at three dataset-specific horizons given by the empirical 25th, 50th, and 75th percentiles of the realized event-time distribution.
 
-We evaluate $\tau_h(x)$ at three dataset-specific horizons given by the empirical 25th, 50th, and 75th percentiles of the realized event-time distribution. We report results for methods that explicitly model conditional survival functions (direct-survival CATE methods and survival meta-learners). Our outcome-imputation baselines impute event times (or RMST) rather than estimating a full conditional survival curve, and therefore are not included for this estimand.
+We evaluate $\tau_h(x)$ at three dataset-specific horizons given by the empirical 25th, 50th, and 75th percentiles of the realized event-time distribution.
+We report results for methods that explicitly model conditional survival functions (direct-survival CATE methods and survival meta-learners).
+Our outcome-imputation baselines impute event times (or RMST) rather than estimating a full conditional survival curve, and therefore are not included for this estimand.
 Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75} summarize RMSE across the MIMIC semi-synthetic datasets for the 25th, 50th, and 75th percentile horizons, respectively. 
 
 
 
 
-\input{Appendices/appendix-ch04/tables/29}
+\input{Appendices/appendix-ch04/tables/survival-first-quartile-cate}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/30}
+\input{Appendices/appendix-ch04/tables/survival-median-cate}
 
 
 
 
-\input{Appendices/appendix-ch04/tables/31}
+\input{Appendices/appendix-ch04/tables/survival-third-quartile-cate}
 
 
 % Across horizons, performance differences are typically more pronounced at earlier horizons (25th percentile) and become more compressed at later horizons, while the overall ordering remains broadly stable.
 
 \ChFourParagraph{Horizon effects.}
-Across MIMIC variants, performance gaps are generally more pronounced at earlier horizons (25th percentile) and become more compressed at later horizons (75th percentile). This is consistent with the intuition that early-horizon survival probabilities can be more sensitive to misspecification and estimation error, whereas later-horizon estimates may be less discriminative across methods in these settings.
+Across MIMIC variants, performance gaps are generally more pronounced at earlier horizons (25th percentile) and become more compressed at later horizons (75th percentile).
+This is consistent with the intuition that early-horizon survival probabilities can be more sensitive to misspecification and estimation error, whereas later-horizon estimates may be less discriminative across methods in these settings.
 
 \ChFourParagraph{Method family patterns.}
-Across horizons, Causal Survival Forests tends to achieve the lowest RMSE among the survival CATE estimators, while survival meta-learners remain competitive but display method-specific sensitivity. In particular, S-Learner-Survival is typically among the most stable meta-learners across horizons and variants, whereas Matching Survival shows larger degradation for later-horizon survival probabilities in several variants (Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75}). SurvITE is consistently less accurate than Causal Survival Forests under this estimand, with the gap more salient at earlier horizons.
+Across horizons, Causal Survival Forests tends to achieve the lowest RMSE among the survival CATE estimators, while survival meta-learners remain competitive but display method-specific sensitivity.
+In particular, S-Learner-Survival is typically among the most stable meta-learners across horizons and variants, whereas Matching Survival shows larger degradation for later-horizon survival probabilities in several variants (Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75}).
+SurvITE is consistently less accurate than Causal Survival Forests under this estimand, with the gap more salient at earlier horizons.
 
 Overall, the methods' relative performance appears stable across the 25th, 50th, and 75th percentile horizons, with no major reversals as $h$ changes.
 
@@ -250,7 +278,9 @@ Overall, the methods' relative performance appears stable across the 25th, 50th,
 \paragraph{Additional estimand: RMST horizon sensitivity}
 \label{ch04:apd:rmst_horizon_sensitivity}
 
-The main paper reports RMST-based CATEs evaluated at a large horizon $h=T_{\max}$ (the maximum observed time in each dataset). To probe horizon sensitivity, we additionally evaluate RMST at a shorter horizon $h=T_{\text{med}}$, the median of the realized event-time distribution in each dataset. Table~\ref{ch04:tab:rmst-sensitivity-results} compares CATE RMSE under both horizons across the full MIMIC suite.
+The main paper reports RMST-based CATEs evaluated at a large horizon $h=T_{\max}$ (the maximum observed time in each dataset).
+To probe horizon sensitivity, we additionally evaluate RMST at a shorter horizon $h=T_{\text{med}}$, the median of the realized event-time distribution in each dataset.
+Table~\ref{ch04:tab:rmst-sensitivity-results} compares CATE RMSE under both horizons across the full MIMIC suite.
 
 
 
@@ -349,13 +379,14 @@ The main paper reports RMST-based CATEs evaluated at a large horizon $h=T_{\max}
 
 
 
-\input{Appendices/appendix-ch04/tables/32}
+\input{Appendices/appendix-ch04/tables/rmst-horizon-comparison}
 
 
 
 
 \ChFourParagraph{Robustness to horizon choice.}
-Shortening the horizon typically reduces absolute RMSE (as expected for a less variable target), but the relative behavior of method families is largely preserved: methods that are competitive at $T_{\max}$ tend to remain competitive at $T_{\text{med}}$, and large ranking reversals are uncommon. Differences are more apparent in the stability of certain learners (e.g., matching-based survival approaches), which remain more sensitive to horizon choice (Table~\ref{ch04:tab:rmst-sensitivity-results}).
+Shortening the horizon typically reduces absolute RMSE (as expected for a less variable target), but the relative behavior of method families is largely preserved: methods that are competitive at $T_{\max}$ tend to remain competitive at $T_{\text{med}}$, and large ranking reversals are uncommon.
+Differences are more apparent in the stability of certain learners (e.g., matching-based survival approaches), which remain more sensitive to horizon choice (Table~\ref{ch04:tab:rmst-sensitivity-results}).
 
 
 
@@ -365,13 +396,20 @@ Shortening the horizon typically reduces absolute RMSE (as expected for a less v
 This subsection provides a consolidated interpretation of the semi-synthetic results across datasets and estimands (Tables~\ref{ch04:tab:semi-syn-cate-rmse}, \ref{ch04:tab:mimic-vi-ix-results}, \ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75}, and \ref{ch04:tab:rmst-sensitivity-results}), focusing on stability characteristics and implications for method selection.
 
 \ChFourParagraph{No universally best method across realistic data structures.}
-Across ACTG and the MIMIC suite, no single method dominates uniformly. ACTG resembles a trial-like setting with moderate dimensionality and covariate-dependent assignment, where flexible doubly robust estimators can perform strongly (Table~\ref{ch04:tab:semi-syn-cate-rmse}). In contrast, the high-dimensional, EHR-like MIMIC variants yield tighter performance bands, and survival-oriented approaches are frequently competitive (Tables~\ref{ch04:tab:semi-syn-cate-rmse} and~\ref{ch04:tab:mimic-vi-ix-results}). This highlights a limitation of relying on a single data structure: rankings can shift when covariate support, censoring regime, and assignment mechanisms change.
+Across ACTG and the MIMIC suite, no single method dominates uniformly.
+ACTG resembles a trial-like setting with moderate dimensionality and covariate-dependent assignment, where flexible doubly robust estimators can perform strongly (Table~\ref{ch04:tab:semi-syn-cate-rmse}).
+In contrast, the high-dimensional, EHR-like MIMIC variants yield tighter performance bands, and survival-oriented approaches are frequently competitive (Tables~\ref{ch04:tab:semi-syn-cate-rmse} and~\ref{ch04:tab:mimic-vi-ix-results}).
+This highlights a limitation of relying on a single data structure: rankings can shift when covariate support, censoring regime, and assignment mechanisms change.
 
 \ChFourParagraph{Mean performance versus stability.}
-In MIMIC, mean RMSE values are often close, so variability across repetitions provides an additional signal for method selection. Under extreme censoring (MIMIC-$i$--$ii$), some approaches exhibit noticeably higher variability, whereas others remain stable across censoring levels (Table~\ref{ch04:tab:semi-syn-cate-rmse}). When performance differences are small, stability can be the more actionable differentiator.
+In MIMIC, mean RMSE values are often close, so variability across repetitions provides an additional signal for method selection.
+Under extreme censoring (MIMIC-$i$--$ii$), some approaches exhibit noticeably higher variability, whereas others remain stable across censoring levels (Table~\ref{ch04:tab:semi-syn-cate-rmse}).
+When performance differences are small, stability can be the more actionable differentiator.
 
 \ChFourParagraph{Estimand dependence and time-horizon effects.}
-Comparing RMST-based CATEs to horizon-specific survival-probability CATEs illustrates that estimand choice can change how clearly methods separate. Survival-probability CATEs at earlier horizons tend to be more discriminative (Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75}), while RMST-based targets can compress differences by integrating over time. The RMST horizon sensitivity analysis further indicates that shortening the horizon changes the scale of errors but rarely overturns broad conclusions (Table~\ref{ch04:tab:rmst-sensitivity-results}).
+Comparing RMST-based CATEs to horizon-specific survival-probability CATEs illustrates that estimand choice can change how clearly methods separate.
+Survival-probability CATEs at earlier horizons tend to be more discriminative (Tables~\ref{ch04:tab:cate_rmse_prob25}--\ref{ch04:tab:cate_rmse_prob75}), while RMST-based targets can compress differences by integrating over time.
+The RMST horizon sensitivity analysis further indicates that shortening the horizon changes the scale of errors but rarely overturns broad conclusions (Table~\ref{ch04:tab:rmst-sensitivity-results}).
 
 \ChFourParagraph{Practical guidance.}
 Taken together, the semi-synthetic results suggest the following heuristics. (i) In trial-like settings with moderate dimensionality and covariate-dependent assignment (e.g., ACTG), flexible causal estimators can provide strong accuracy (Table~\ref{ch04:tab:semi-syn-cate-rmse}). (ii) In highly censored, high-dimensional EHR-like settings (e.g., MIMIC), survival-oriented estimators and stable meta-learner variants are often competitive, and stability under censoring becomes particularly important (Tables~\ref{ch04:tab:semi-syn-cate-rmse} and~\ref{ch04:tab:mimic-vi-ix-results}). (iii) When multiple methods fall within a tight RMSE band, secondary considerations---stability, interpretability, and computational cost---may dominate method choice.

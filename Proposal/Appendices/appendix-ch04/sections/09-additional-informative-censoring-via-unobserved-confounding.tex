@@ -9,7 +9,8 @@ This extension demonstrates the flexibility of our modular data generation frame
 We follow the same covariate generation procedure as in our synthetic datasets: observed covariates $X \sim \text{Uniform}(0,1)^5$ and an unobserved covariate $U \sim \text{Uniform}(0,1)$. 
 Treatment assignment follows the \texttt{OBS-UConf} configuration, where $U$ enters into both treatment assignment and outcome generation but remains unobserved during estimation. 
 
-We focus on survival Scenario~\texttt{C} (Poisson hazards with medium censoring). Event times and censoring times are generated as follows, where $w \in \{0,1\}$ is the treatment indicator:
+We focus on survival Scenario~\texttt{C} (Poisson hazards with medium censoring).
+Event times and censoring times are generated as follows, where $w \in \{0,1\}$ is the treatment indicator:
 \begin{align}
     \lambda(w) &= X_2^2 + X_3 + 6 + 2\left(\sqrt{0.3 \cdot X_1 + 0.7 \cdot U} - 0.3\right) \cdot w + \epsilon, \\
     T(w) &\sim \text{Poisson}(\lambda(w)), \\
@@ -48,7 +49,7 @@ Figure~\ref{ch04:fig:uconf-ic-results} reports CATE RMSE and ATE bias (mean $\pm
 % \end{figure}
 
 
-\input{Appendices/appendix-ch04/figures/20}
+\input{Appendices/appendix-ch04/figures/informative-censoring-errors}
 
 
 The results indicate that Causal Survival Forests and survival meta-learners with matching tend to perform best under this setting, consistent with findings from the main synthetic datasets. 

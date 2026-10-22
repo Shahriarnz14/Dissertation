@@ -1,7 +1,8 @@
 % !TeX root = ../../../main.tex
 \subsection{Sepsis onset inference prompt}
 \label{ch06:apd:onset_prompt}
-We estimate sepsis onset time relative to admission ($t=0$) using a prompt that requests two onset times: one using qSOFA and one using SOFA-style reasoning when sufficient evidence is available. The model outputs a two-row bar-separated table with onset timestamps in hours (or NA if criteria are not met).
+We estimate sepsis onset time relative to admission ($t=0$) using a prompt that requests two onset times: one using qSOFA and one using SOFA-style reasoning when sufficient evidence is available.
+The model outputs a two-row bar-separated table with onset timestamps in hours (or NA if criteria are not met).
 
 \begin{tcolorbox}[breakable,
   colback=yellow!10,

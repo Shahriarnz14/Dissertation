@@ -4,7 +4,7 @@
 \label{ch05:sec:case-report-identification-performance}
 
 
-\input{Chapters/chapter-05/tables/01}
+\input{Chapters/chapter-05/tables/case-report-identification}
 
 
 
@@ -51,12 +51,15 @@
 %     \end{tabular}
 % \end{table}
 
-Table~\ref{ch05:tab:case_report_identification} reports the performance of the LLM-based pipeline and a PubMed metadata filter for identifying single-patient case reports on the manually reviewed 100-document case-identification evaluation set, evaluated across five diagnostic categories using clinician-assigned labels as reference. In this evaluation set, the LLM-based pipeline achieved precision of 1.00 across all diagnostic categories and in aggregate, meaning that every document flagged as a single-patient case report by the pipeline was confirmed as such in this sample. The PubMed metadata filter showed lower and more variable precision, ranging from 0.84 (atrial fibrillation) to 1.00 (hypertension), with an overall precision of 0.92. 
+Table~\ref{ch05:tab:case_report_identification} reports the performance of the LLM-based pipeline and a PubMed metadata filter for identifying single-patient case reports on the manually reviewed 100-document case-identification evaluation set, evaluated across five diagnostic categories using clinician-assigned labels as reference.
+In this evaluation set, the LLM-based pipeline achieved precision of 1.00 across all diagnostic categories and in aggregate, meaning that every document flagged as a single-patient case report by the pipeline was confirmed as such in this sample.
+The PubMed metadata filter showed lower and more variable precision, ranging from 0.84 (atrial fibrillation) to 1.00 (hypertension), with an overall precision of 0.92. 
 \ChFiveRebuttal{
 Within the manually reviewed evaluation set, both methods achieved recall of 0.96, indicating comparable coverage of the confirmed single-patient case reports represented in this set. This quantity is not an estimate of corpus-level sensitivity.
 }
 
-Overall accuracy was higher for the LLM-based pipeline (0.96 vs.\ 0.88), largely due to better exclusion of multi-patient or non-case-report articles that were sometimes misclassified by the metadata-based filter. Performance patterns were consistent across diagnostic subsets, with the LLM pipeline maintaining high F1 scores (0.94--1.00). 
+Overall accuracy was higher for the LLM-based pipeline (0.96 vs.\ 0.88), largely due to better exclusion of multi-patient or non-case-report articles that were sometimes misclassified by the metadata-based filter.
+Performance patterns were consistent across diagnostic subsets, with the LLM pipeline maintaining high F1 scores (0.94--1.00). 
 \ChFiveRebuttal{
 These results characterize identification performance within the manually reviewed evaluation set; because the set contains documents surfaced by at least one of the two approaches, they do not establish corpus-level sensitivity over PMOA.
 }

@@ -64,7 +64,8 @@ We provide detailed pseudocode for how we adapted the causal meta-learner algori
 Specifically, we implement T-Learner, S-Learner, and \(K\)-Nearest-Neighbors Matching approaches adapted for survival analysis under a finite time horizon. 
 Each algorithm estimates individual and average treatment effects by modeling survival functions conditioned on baseline covariates and treatment assignments. 
 
-Algorithm~\ref{ch03:alg:t-learner} describes the T-Learner, which fits separate survival models for treated and control groups. Algorithm~\ref{ch03:alg:s-learner} details the S-Learner, which fits a single survival model incorporating the treatment as an additional covariate. 
+Algorithm~\ref{ch03:alg:t-learner} describes the T-Learner, which fits separate survival models for treated and control groups.
+Algorithm~\ref{ch03:alg:s-learner} details the S-Learner, which fits a single survival model incorporating the treatment as an additional covariate. 
 Algorithm~\ref{ch03:alg:matching} outlines the \(K\)-Nearest-Neighbors Matching Estimator, which imputes counterfactual outcomes by averaging over nearest neighbors from the opposite treatment group in the covariate space.
 
 All methods operate on the cohort \(\mathcal{D}_\tau\), which contains baseline covariates \(\mathbf{Z}_{i\tau}\), treatment assignments \(A_{i\tau}\), observed event times \(T_i\), and event/censoring indicators \(\delta_i\). 
@@ -84,7 +85,8 @@ Each approach uses a time horizon \(M\) to compute restricted mean estimates of 
 \label{ch03:apd:matching_derivation}
 The matching estimator aims to estimate the Individual Treatment Effect (ITE) for each patient $ i $, defined as the difference in RMET under treatment (non-adherence, $ A_{i\tau} = 1 $) versus control (adherence, $ A_{i\tau} = 0 $):
 $$ \text{ITE}_i = \bar{T}_i(1) - \bar{T}_i(0), $$
-where $ \bar{T}_i(a) = \mu_a(\mathbf{Z}_{i\tau}) = \int_{0}^{M} S(u \mid A_{i\tau} = a, \mathbf{Z}_{i\tau}) \, du $ represents the true RMET under treatment $ a $, and $ \mathbf{Z}_{i\tau} $ is the covariate vector at time $ \tau $. The upper bound $ M $ is a fixed time horizon (e.g., the maximum follow-up time).
+where $ \bar{T}_i(a) = \mu_a(\mathbf{Z}_{i\tau}) = \int_{0}^{M} S(u \mid A_{i\tau} = a, \mathbf{Z}_{i\tau}) \, du $ represents the true RMET under treatment $ a $, and $ \mathbf{Z}_{i\tau} $ is the covariate vector at time $ \tau $.
+The upper bound $ M $ is a fixed time horizon (e.g., the maximum follow-up time).
 
 In practice, we observe only one of these potential outcomes for each patient:
 \begin{itemize}
@@ -97,13 +99,15 @@ The matching estimator uses a survival model and nearest-neighbor matching to es
 Steps of the Matching Estimator:
 \begin{enumerate}
 \item Estimate the Factual RMET:
-   We fit a survival model (e.g., Random Survival Forest or Cox Proportional Hazards) to estimate the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) $ for the observed treatment $ A_{i\tau} $. The factual RMET is:
+   We fit a survival model (e.g., Random Survival Forest or Cox Proportional Hazards) to estimate the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) $ for the observed treatment $ A_{i\tau} $.
+The factual RMET is:
    $$ \widehat{\mu}_{A_{i\tau}}(\mathbf{Z}_{i\tau}) = \int_{0}^{M} \widehat{S}(u \mid \mathbf{Z}_{i\tau}, A_{i\tau}) \, du. $$
    This represents the estimated RMET under the treatment the patient actually received.\\
 (Note that this is similar to S-learner’s $\widehat{\mu}(\mathbf{Z}_{i\tau}, a)$ with $a=A_{i\tau}$ the observed treatment).
 
 \item Estimate the Counterfactual RMET:
-   For each patient $ i $, we identify the $ K $ nearest neighbors (based on $ \mathbf{Z}_{i\tau} $) from the opposite treatment group. The counterfactual RMET is approximated by averaging the factual RMETs of these neighbors:
+   For each patient $ i $, we identify the $ K $ nearest neighbors (based on $ \mathbf{Z}_{i\tau} $) from the opposite treatment group.
+The counterfactual RMET is approximated by averaging the factual RMETs of these neighbors:
    \begin{itemize}
    \item If $ A_{i\tau} = 1 $ (non-adherent), the counterfactual RMET under adherence ($ a = 0 $) is:
      $$ \widehat{\mu}_{0}(\mathbf{Z}_{i\tau}) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{A_{j\tau}}(\mathbf{Z}_{j\tau}),$$
@@ -143,9 +147,12 @@ Role of $ \widehat{\mu} $ and $ \widehat{S}(\cdot) $:
 
 \subsubsection{ATE Estimate Derivation of Causal Survival Forest}
 \label{ch03:apd:csf_ate_derivation}
-The Causal Survival Forest (CSF), as introduced by \citet{cui2023estimating}, is an inherently causal method designed to estimate heterogeneous treatment effects in survival data. Unlike meta-learners that adapt existing survival models (e.g., matching), CSF directly estimates the treatment effect within a random forest framework tailored to survival outcomes. We used CSF as another baseline to validate our treatment effect findings.
+The Causal Survival Forest (CSF), as introduced by \citet{cui2023estimating}, is an inherently causal method designed to estimate heterogeneous treatment effects in survival data.
+Unlike meta-learners that adapt existing survival models (e.g., matching), CSF directly estimates the treatment effect within a random forest framework tailored to survival outcomes.
+We used CSF as another baseline to validate our treatment effect findings.
 
-CSF builds an ensemble of survival trees. Each tree splits the covariate space $ \mathbf{Z}_{i\tau} $ using a criterion that maximizes the difference in survival outcomes between treatment groups.
+CSF builds an ensemble of survival trees.
+Each tree splits the covariate space $ \mathbf{Z}_{i\tau} $ using a criterion that maximizes the difference in survival outcomes between treatment groups.
 \begin{itemize}
 \item For a patient $ i $, the estimate $ \widehat{\mu}_a(\mathbf{Z}_{i\tau}) $ is computed by averaging the RMSTs from the leaf nodes across all trees where $ \mathbf{Z}_{i\tau} $ falls under treatment $ a $.
 \item Internally, CSF estimates the survival function $ \widehat{S}(u \mid \mathbf{Z}_{i\tau}, a) $ for each treatment level and computes:

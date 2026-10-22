@@ -3,7 +3,7 @@
 \label{ch03:sec:eval_metrics}
 % \vspace{-0.25em}
 
-\input{Chapters/chapter-03/tables/01}
+\input{Chapters/chapter-03/tables/prediction-three-six-months}
 
 
 
@@ -23,7 +23,8 @@ The following metrics are used to evaluate time-to-event predictions:
     \[
     \text{IBS} = \int_{0}^{M} \text{BS}(t)\, w(t)\, dt,
     \]
-    where \(\text{BS}(t)\) is the Brier score at time \(t\) and \(w(t)\) is a weighting function. Lower values denote better calibration.
+    where \(\text{BS}(t)\) is the Brier score at time \(t\) and \(w(t)\) is a weighting function.
+Lower values denote better calibration.
     
     \item \textbf{Time-dependent Area Under the Curve (\(\text{AUC}^{td}\))}: Quantifies the model’s discriminative ability by evaluating how well it distinguishes individuals experiencing events at different time points \citep{uno2007evaluating}. 
     We report the mean across all prediction time points. 
@@ -33,7 +34,8 @@ The following metrics are used to evaluate time-to-event predictions:
 \ChThreeParagraph{Causal Inference Evaluation.}  
 At each snapshot \(\tau\), the ATE is estimated on the full cohort.
 The survival models used for ATE estimation are trained on different randomized subsets across experimental repeats, employing cross-validation to avoid overfitting. 
-The ATE is reported along with its standard deviation across experimental repeats. The standard deviation gives an empirical measure of uncertainty in the~ATE.
+The ATE is reported along with its standard deviation across experimental repeats.
+The standard deviation gives an empirical measure of uncertainty in the~ATE.
 
 In our experimental setup, a negative ATE suggests that non-adherence is associated with an earlier occurrence of adverse events (in months), and a positive ATE implies a delay in adverse events occurring.
 
