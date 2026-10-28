@@ -1,11 +1,8 @@
-# Shared by the native LaTeX Workshop recipe and optional scripts/build.sh.
-# Run latexmk from Proposal/ so this file and the template paths are found.
+# Local output/flags; shared dependency paths also work on Overleaf.
+# Run latexmk from Proposal/. Overleaf exports omit this local adapter.
+require './latexmkrc';
 $pdf_mode = 1;
 $out_dir = 'build';
 $aux_dir = 'build';
-$max_repeat = 8;
-$pdflatex = '/Library/TeX/texbin/pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -synctex=1 -recorder %O %S';
-$bibtex = '/Library/TeX/texbin/bibtex %O %B';
-# Resolve the copied template without changing its internal style paths.
-$ENV{'TEXINPUTS'} = './template//:' . ($ENV{'TEXINPUTS'} // '');
-$ENV{'BIBINPUTS'} = '.:' . ($ENV{'BIBINPUTS'} // '');
+$pdflatex = 'pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -synctex=1 -recorder %O %S';
+$bibtex = 'bibtex %O %B';

@@ -1,0 +1,7 @@
+# Shared dependency configuration: local .latexmkrc loads this file;
+# Overleaf reads this filename at the exported project root.
+# Leave engine commands and output directories to each environment.
+$max_repeat = 8;
+$ENV{'TEXINPUTS'} = './template//:' . ($ENV{'TEXINPUTS'} // '');
+$ENV{'BIBINPUTS'} = '.:' . ($ENV{'BIBINPUTS'} // '');
+1;
