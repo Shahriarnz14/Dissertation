@@ -1,6 +1,8 @@
 % !TeX root = ../main.tex
 % Narrow technical adaptations to unchanged copied CMU template files.
 % See metadata/transformation-log.md for rationale and validation.
+\definecolor{ProposalPublishedBlue}{HTML}{174A8B}
+\definecolor{ProposalProposedBlue}{HTML}{1683C4}
 \makeatletter
 \newcommand{\ProposalPatchFailure}[1]{%
   \PackageError{proposal}{CMU compatibility patch failed: #1}%
@@ -35,37 +37,121 @@
 \patchcmd{\cmu@appendix}{\cleardoublepage}{\cleardoublepage\phantomsection}
   {}{\ProposalPatchFailure{appendix anchor}}
 
+% The template's later visual redefinition omitted its own presence tracker.
+% Mark the real environment as present while retaining its title-page style.
+\pretocmd{\acknowledgments}{\global\let\@acknowledgments@exists\@true}
+  {}{\ProposalPatchFailure{acknowledgments presence tracker}}
+
 % A Part divider intentionally contains no prose. Exempt just this transition
 % from the template's paragraph-after-heading check; keep all other checks.
 \apptocmd{\part}{\addtocounter{cmusectionline}{1}}
   {}{\ProposalPatchFailure{Part divider transition}}
+
+% Replace only the CMU Part heading's visual renderer. Keep the template's
+% counter, label, contents-entry, page-break, and section-check mechanisms.
+\newcommand{\ProposalPartDivider}[1]{%
+  \magicsection% same destination mechanism as the original section heading
+  \thispagestyle{empty}% hide the footer without changing the page counter
+  \begingroup
+    \normalfont\rmfamily
+    \setstretch{1}% local leading; subsequent chapters retain their spacing
+    \centering
+    \null\par
+    \vspace*{\stretch{0.9}}%
+    {\large Part \thepart\par}%
+    \vspace{1em}%
+    {\color{black!25}\rule{4em}{0.4pt}\par}%
+    \vspace{1.25em}%
+    \noindent\begin{minipage}{0.84\textwidth}
+      \centering
+      \hyphenpenalty=10000\exhyphenpenalty=10000
+      \Huge\bfseries
+      #1\par
+    \end{minipage}\par
+    \vspace*{\stretch{1.1}}%
+  \endgroup
+  % The native centered section renderer consumes this one-heading flag.
+  \global\let\cmu@section@bold\@false
+}
+\patchcmd{\part}
+  {\section{Part \thepart\protect\\ #1}}
+  {\ProposalPartDivider{#1}}
+  {}{\ProposalPatchFailure{Part divider renderer}}
 
 % Captions containing references are moving arguments. Keep the CMU reference
 % tracking wrapper protected while writing LoF/LoT records, so its loop is
 % executed when typesetting the reference rather than expanded inside a write.
 \protected\gdef\cmu@ref{\@ifstar{\cmu@ref@{*}}{\cmu@ref@{}}}
 
-% The legacy formatter bypasses the modern kernel's TOC hyperlink hooks.
-% Use the recorded destination for both the title and page, only while reading
-% the TOC. Keep its CMU entry types, hierarchy, leaders and automatic numbers.
+% The legacy formatter bypasses the modern kernel's navigation-link hooks.
+% Use each recorded destination for both its title/caption and page number.
+% Explicit caption colors survive; hyperlink styling adds no color or bolding.
+\newif\ifProposalTOCLegendPending
+\newcommand{\ProposalTOCColor}[1]{\def\ProposalListEntryColor{#1}}
+\newcommand{\ProposalTOCPartIII}{%
+  \ProposalTOCColor{ProposalPublishedBlue}%
+  \ProposalTOCLegendPendingtrue
+}
+\newcommand{\ProposalPartIIILegend}{%
+  \begingroup
+    \color{black}%
+    \def\@thefnmark{*}%
+    % An unlinked symbolic footnote avoids nested links in the Part III row
+    % and leaves the scientific chapters' footnote counters untouched.
+    \@footnotetext{%
+      \textcolor{ProposalPublishedBlue}{\rule{1em}{0.7em}}~Preliminary published results of proposed work;\enspace
+      \textcolor{ProposalProposedBlue}{\rule{1em}{0.7em}}~Proposed work.}%
+  \endgroup
+}
+\newcommand{\ProposalListLink}[2]{%
+  % Caption references and URLs remain visible, but the entire list entry
+  % points to its own float instead of creating competing nested links.
+  \hyperlink{#1}{\begin{NoHyper}#2\end{NoHyper}}%
+}
+\newcommand{\ProposalListContentsLine}[4]{%
+  \gdef\@contentsline@destination{#4}%
+  \begingroup
+    % The PDF-management link backend also reads hyperref's color settings.
+    \hypersetup{linkcolor=\ProposalListEntryColor,
+      urlcolor=\ProposalListEntryColor,citecolor=\ProposalListEntryColor}%
+    \color{\ProposalListEntryColor}%
+    \def\ProposalListTitle{#2}%
+    \ifProposalTOCLegendPending
+      \ifstrequal{#1}{part}
+        {\def\ProposalListTitle{#2\textsuperscript{*}}}{}%
+    \fi
+    \if\relax\detokenize{#4}\relax
+      \csname l@#1\endcsname{\ProposalListTitle}{#3}%
+    \else
+      \csname l@#1\endcsname
+        {\ProposalListLink{#4}{\ProposalListTitle}}%
+        {\textcolor{\ProposalListEntryColor}{\ProposalListLink{#4}{#3}}}%
+    \fi
+  \endgroup
+  % Insert outside the formatter's title box so the footnote reaches the page.
+  \ifProposalTOCLegendPending
+    \ifstrequal{#1}{part}{%
+      \ProposalPartIIILegend
+      \ProposalTOCLegendPendingfalse}{}%
+  \fi
+}
+\newcommand{\ProposalStartList}[1]{%
+  \color{black}%
+  \def\Hy@colorlink##1{\begingroup}%
+  \ProposalTOCColor{black}%
+  \ProposalTOCLegendPendingfalse
+  \let\contentsline\ProposalListContentsLine
+  \ProposalOriginalStartTOC{#1}%
+}
+% Keep the CMU entry hierarchy, leaders, automatic numbers, and TOC indents.
 \newcommand{\ProposalStartTOC}[1]{%
   \setstretch{\setspace@singlespace}% no vertical skip for hidden entries
   \global\let\ProposalAfterTOCColorLink\Hy@colorlink
-  \let\Hy@colorlink\ProposalTOCColorLink
-  \hypersetup{linktoc=all}%
   % Chapter records already append a nonbreaking space after numberline;
   % consume it here so first and continuation lines share the same indent.
   \def\numberline##1{%
     \hb@xt@\@tempdima{##1\hfil}\@ifnextchar~{\@gobble}{}}%
-  \def\contentsline##1##2##3##4{%
-    \gdef\@contentsline@destination{##4}%
-    \if\relax\detokenize{##4}\relax
-      \csname l@##1\endcsname{##2}{##3}%
-    \else
-      \csname l@##1\endcsname
-        {\hyperlink{##4}{##2}}{\hyperlink{##4}{##3}}%
-    \fi}%
-  \ProposalOriginalStartTOC{#1}%
+  \ProposalStartList{#1}%
 }
 
 % These commands are defined by the template at begin-document time.
@@ -83,7 +169,12 @@
   \let\ProposalOriginalTOC\tableofcontents
   \renewcommand{\tableofcontents}{%
     \begingroup
-      \let\ProposalTOCColorLink\Hy@colorlink
+      % Add a modest gap only between visible TOC entries; keep wrapped
+      % lines single-spaced and leave figure/table lists unchanged.
+      \patchcmd{\ThesisContentsEntry}
+        {\vskip \z@ \@plus.2\p@}
+        {\vskip 2.5pt \@plus.2\p@}
+        {}{\ProposalPatchFailure{contents entry spacing}}%
       % singlespacing inserts a baseline-sized vskip even for entries excluded
       % by tocdepth. Set the stretch without that skip; nothing else changes.
       \def\singlespacing{\setstretch{\setspace@singlespace}}%
@@ -100,9 +191,23 @@
     {}{\ProposalPatchFailure{figures list page break}}%
   \pretocmd{\listoffigures}{\cleardoublepage\phantomsection}
     {}{\ProposalPatchFailure{figures list target}}%
+  \let\ProposalOriginalLOF\listoffigures
+  \renewcommand{\listoffigures}{%
+    \begingroup
+      \let\ProposalOriginalStartTOC\@starttoc
+      \let\@starttoc\ProposalStartList
+      \ProposalOriginalLOF
+    \endgroup}%
   \patchcmd{\listoftables}{\cleardoublepage}{}
     {}{\ProposalPatchFailure{tables list page break}}%
   \pretocmd{\listoftables}{\cleardoublepage\phantomsection}
     {}{\ProposalPatchFailure{tables list target}}%
+  \let\ProposalOriginalLOT\listoftables
+  \renewcommand{\listoftables}{%
+    \begingroup
+      \let\ProposalOriginalStartTOC\@starttoc
+      \let\@starttoc\ProposalStartList
+      \ProposalOriginalLOT
+    \endgroup}%
 }
 \makeatother

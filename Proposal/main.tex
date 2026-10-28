@@ -14,7 +14,7 @@
 \input{macros/ch08}
 % Editable title-page metadata.
 \newcommand{\ProposalTitle}{Representation and Reasoning over Longitudinal Clinical Trajectories from Structured Data and Text}
-\newcommand{\ProposalSubmissionDate}{Nov 6, 2026}
+\newcommand{\ProposalSubmissionDate}{November 13, 2026}
 \newcommand{\ProposalCopyrightYear}{2026}
 
 \title{\ProposalTitle}
@@ -37,7 +37,9 @@
 \input{macros/template-compat}
 
 \begin{document}
+
 \tagstructbegin{tag=Document}
+
 \frontmatter
 \maketitle
 \clearpage
@@ -49,6 +51,13 @@
 \addcontentsline{toc}{chapter}{Abstract}
 \ProposalPlaceholder{The dissertation abstract has not been written.}
 \end{abstract}
+
+\clearpage
+\begin{acknowledgments}
+\phantomsection
+\addcontentsline{toc}{chapter}{Acknowledgments}
+\ProposalPlaceholder{The acknowledgments have not been written.}
+\end{acknowledgments}
 
 \tableofcontents
 \listoffigures
@@ -62,12 +71,15 @@
 \input{Parts/part-02}
 \input{Chapters/chapter-03/chapter}
 \input{Chapters/chapter-04/chapter}
+\addtocontents{toc}{\protect\ProposalTOCPartIII}
 \input{Parts/part-03}
 \input{Chapters/chapter-05/chapter}
 \input{Chapters/chapter-06/chapter}
 \input{Chapters/chapter-07/chapter}
 \input{Chapters/chapter-08/chapter}
+\addtocontents{toc}{\protect\ProposalTOCColor{ProposalProposedBlue}}
 \input{Chapters/chapter-09/chapter}
+\addtocontents{toc}{\protect\ProposalTOCColor{black}}
 \input{Chapters/chapter-10/chapter}
 
 \backmatter
@@ -91,4 +103,5 @@
   \ProposalPlaceholder{The unified bibliography will be populated from the selected manuscripts during their approved migrations.}
 \fi
 \tagstructend
+
 \end{document}
