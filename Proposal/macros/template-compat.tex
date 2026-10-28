@@ -45,6 +45,29 @@
 % executed when typesetting the reference rather than expanded inside a write.
 \protected\gdef\cmu@ref{\@ifstar{\cmu@ref@{*}}{\cmu@ref@{}}}
 
+% The legacy formatter bypasses the modern kernel's TOC hyperlink hooks.
+% Use the recorded destination for both the title and page, only while reading
+% the TOC. Keep its CMU entry types, hierarchy, leaders and automatic numbers.
+\newcommand{\ProposalStartTOC}[1]{%
+  \setstretch{\setspace@singlespace}% no vertical skip for hidden entries
+  \global\let\ProposalAfterTOCColorLink\Hy@colorlink
+  \let\Hy@colorlink\ProposalTOCColorLink
+  \hypersetup{linktoc=all}%
+  % Chapter records already append a nonbreaking space after numberline;
+  % consume it here so first and continuation lines share the same indent.
+  \def\numberline##1{%
+    \hb@xt@\@tempdima{##1\hfil}\@ifnextchar~{\@gobble}{}}%
+  \def\contentsline##1##2##3##4{%
+    \gdef\@contentsline@destination{##4}%
+    \if\relax\detokenize{##4}\relax
+      \csname l@##1\endcsname{##2}{##3}%
+    \else
+      \csname l@##1\endcsname
+        {\hyperlink{##4}{##2}}{\hyperlink{##4}{##3}}%
+    \fi}%
+  \ProposalOriginalStartTOC{#1}%
+}
+
 % These commands are defined by the template at begin-document time.
 \AtBeginDocument{%
   % Bibliography bookmarks need plain text; visible heading styling is kept
@@ -57,6 +80,22 @@
     {}{\ProposalPatchFailure{contents page break}}%
   \pretocmd{\tableofcontents}{\cleardoublepage\phantomsection}
     {}{\ProposalPatchFailure{contents target}}%
+  \let\ProposalOriginalTOC\tableofcontents
+  \renewcommand{\tableofcontents}{%
+    \begingroup
+      \let\ProposalTOCColorLink\Hy@colorlink
+      % singlespacing inserts a baseline-sized vskip even for entries excluded
+      % by tocdepth. Set the stretch without that skip; nothing else changes.
+      \def\singlespacing{\setstretch{\setspace@singlespace}}%
+      % Reserve room for the widest Part and Appendix labels plus a gap.
+      \renewcommand*\l@part[2]{\ThesisContentsEntry{0}{0em}{5.5em}{##1}{##2}}%
+      \renewcommand*\l@appendix[2]{\ThesisContentsEntry{1}{0em}{7.5em}{##1}{##2}}%
+      \let\ProposalOriginalStartTOC\@starttoc
+      \let\@starttoc\ProposalStartTOC
+      \ProposalOriginalTOC
+    \endgroup
+    % Retain the template's established link styling outside the TOC.
+    \let\Hy@colorlink\ProposalAfterTOCColorLink}%
   \patchcmd{\listoffigures}{\cleardoublepage}{}
     {}{\ProposalPatchFailure{figures list page break}}%
   \pretocmd{\listoffigures}{\cleardoublepage\phantomsection}
