@@ -12,15 +12,48 @@
 \input{macros/ch06}
 \input{macros/ch07}
 \input{macros/ch08}
-\input{frontmatter/metadata}
+% Editable title-page metadata.
+\newcommand{\ProposalTitle}{Representation and Reasoning over Longitudinal Clinical Trajectories from Structured Data and Text}
+\newcommand{\ProposalSubmissionDate}{Nov 6, 2026}
+\newcommand{\ProposalCopyrightYear}{2026}
+
+\title{\ProposalTitle}
+\author{Shahriar Noroozizadeh}
+\degreetitle{Doctor of Philosophy}
+\discipline{Machine Learning and Public Policy}
+% Optional college and department display are intentionally left unset.
+\thesisdate{\ProposalSubmissionDate}
+\committeememberone{George H. Chen (Co-Chair)}
+\committeemembertwo{Jeremy C. Weiss (Co-Chair)}
+\committeememberthree{Zachary C. Lipton}
+\committeememberfour{Vaishnavh Nagarajan}
+\committeememberfive{Kun Zhang}
+\hypersetup{
+  pdfauthor={Shahriar Noroozizadeh},
+  pdftitle={\ProposalTitle},
+  pdfsubject={Dissertation proposal skeleton},
+  pdfkeywords={}
+}
 \input{macros/template-compat}
 
 \begin{document}
 \tagstructbegin{tag=Document}
 \frontmatter
-\input{frontmatter/titlepage}
-\input{frontmatter/abstract}
-\input{frontmatter/contents}
+\maketitle
+\clearpage
+% The title is unnumbered; restart the template's Roman front matter here.
+\frontmatter
+
+\begin{abstract}
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstract}
+\ProposalPlaceholder{The dissertation abstract has not been written.}
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
 
 \bodymatter
 \input{Chapters/chapter-01/chapter}
@@ -45,6 +78,17 @@
 \input{Appendices/appendix-ch06/appendix}
 \input{Appendices/appendix-ch07/appendix}
 \input{Appendices/appendix-ch08/appendix}
-\input{backmatter/bibliography}
+
+
+\urlstyle{rm}
+\ifProposalBibliographyReady
+  \bibliography{references}
+\else
+  % Use the template's bibliography heading and required-section tracking.
+  % Do not invoke BibTeX on an empty database or fabricate citations.
+  \clearpage
+  \bibsection
+  \ProposalPlaceholder{The unified bibliography will be populated from the selected manuscripts during their approved migrations.}
+\fi
 \tagstructend
 \end{document}
