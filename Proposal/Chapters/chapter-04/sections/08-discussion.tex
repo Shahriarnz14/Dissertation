@@ -2,29 +2,15 @@
 \subsection{Discussion}
 \label{ch04:sec:conclusion_limitations}
 
-\textsc{SurvHTE-Bench} provides the first comprehensive and extensible platform for systematically benchmarking heterogeneous treatment effect estimators under right-censored survival settings. By spanning synthetic, semi-synthetic, and real datasets, the benchmark enables both controlled stress-testing of estimators under systematic assumption violations and validation in realistic clinical-like settings. Our empirical evaluations reveal strengths and weaknesses across estimator families. 
-
-
-
-
-
 While we have attempted to make our benchmark \ChFourRebuttal{representative of common causal survival setups}, various limitations remain.
 First, the synthetic datasets include numerous scenarios representing common real-world violations; however, they do not encompass all possible complexities, \ChFourRebuttal{such as RCT settings with informative censoring or}
 varying degrees of severity in assumption violations.
 The binary nature of our violations (either present or absent) may not capture the nuanced continuum of partial violations. 
-\ChFourRebuttal{We recognize that in real-world applications, assumption violations often exist on a continuum of severity. Future extensions of our benchmark could incorporate graded sensitivity analyses, such as varying the magnitude of unmeasured confounding (e.g., via Rosenbaum's $\Gamma$) or the degree of overlap violation. This would allow for a more granular ``dose-response'' analysis to pinpoint the exact thresholds at which specific estimators break down.}
-\ChFourRebuttal{Second, the choice of the most relevant causal estimand is inherently task-specific. While our evaluations cover restricted mean survival time alongside survival probabilities at fixed horizons (Appendix~\ref{ch04:app:surv_prob}), different clinical or policy objectives often dictate the need for alternative measures. Extending the benchmark to natively support a wider array of task-specific estimands---such as conditional median survival times or time-varying hazard ratios---would further enrich its scope.}
+
+\ChFourRebuttal{Second, the choice of the most relevant causal estimand is inherently task-specific.
+While our evaluations cover restricted mean survival time alongside survival probabilities at fixed horizons \citep[Appendix G.4.2]{noroozizadeh2026survhte}, different clinical or policy objectives often dictate the need for alternative measures.}
+
 Additionally, we limit our analysis to static, binary treatments with fixed baseline covariates, excluding scenarios involving time-varying treatments, instrumental variables, and dynamic covariate structures. %
 
-Future work could expand \textsc{SurvHTE-Bench} in several directions.
-Incorporating a wider variety of direct causal estimation methods, such as g-computation approaches 
-specifically designed for survival outcomes, would provide an even more comprehensive evaluation landscape, especially because Causal Survival Forests proved to be competitive but showed vulnerability to certain assumption violations like positivity. %
 Exploring more complex data-generating mechanisms that better mimic the heterogeneity and longitudinal nature of real-world clinical data represents another promising direction.
 Finally, extending the benchmark to support multi-valued or continuous treatments would address important practical scenarios encountered in precision medicine and policy optimization. 
-
-
-
-
-
-
-

@@ -1,5 +1,9 @@
 % !TeX root = ../../../main.tex
-\subsection{Imputation Methods Details} \label{ch04:app:imputation}
+
+\subsection{Estimator Implementation and Training Details}\label{ch04:app:implementation}
+
+\ChFourHeadingOnly
+\subsubsection{Imputation methods}\label{ch04:app:imputation}
 
 We follow \citet{qi2023an} to implement three surrogate imputation strategies for estimating the true event time \( T \) in right-censored survival data.
 Let \( Y = \min(T, C) \) be the observed time, with censoring indicator \( \delta = \mathbbm{1}\{T \leq C\} \).
@@ -7,8 +11,6 @@ Let \( S_{\text{KM}(\mathcal{D})}(t) \) denote the Kaplan-Meier estimate of the 
 The three methods below are used to impute a surrogate outcome \( \tilde{T}_i \) for censored subject \( i \) observed at time \( t_i \).
 
 \ChFourParagraph{1. Margin imputation:}
-This method assigns a “best guess” value to each censored subject using the nonparametric Kaplan-Meier estimator.
-This surrogate value, called the \emph{margin time}, can be interpreted as the conditional expectation of the event time given that the event occurs after the censoring time.
 For a subject censored at time \( t_i \), the margin-imputed event time is computed as:
 \begin{equation}
 \tilde{T}^{\text{margin}}_i 
@@ -16,10 +18,6 @@ For a subject censored at time \( t_i \), the margin-imputed event time is compu
 = t_i + \frac{\int_{t_i}^{\infty} S_{\text{KM}(\mathcal{D})}(t) \, dt}{S_{\text{KM}(\mathcal{D})}(t_i)}
 \end{equation}
 where \( S_{\text{KM}(\mathcal{D})}(t) \) is the Kaplan-Meier survival estimate derived from the training dataset.
-
-The reliability of this imputation depends on the censoring time.
-For example, if a subject is censored very early (e.g., at time 0), the margin time is highly uncertain due to the lack of observed data beyond that point.
-In contrast, if a subject is censored near the maximum observed follow-up, the margin time is more likely to be close to the true event time.
 
 \ChFourParagraph{2. IPCW-T imputation:}
 This method imputes a surrogate event time for censored subjects based on the observed outcomes of subsequent uncensored individuals.
@@ -29,41 +27,77 @@ Specifically, for a subject censored at time \( t_i \), the imputed value is cal
 \frac{\sum_{j=1}^N \mathbbm{1}\{t_i < t_j\} \cdot \mathbbm{1}\{\delta_j = 1\} \cdot t_j}
      {\sum_{j=1}^N \mathbbm{1}\{t_i < t_j\} \cdot \mathbbm{1}\{\delta_j = 1\}}
 \end{equation}
-This imputes the event time for subject \( i \) by averaging the observed event times of those uncensored subjects who experienced the event after \( t_i \).
-The method is motivated by the idea that these subsequent subjects provide empirical evidence about the possible timing of the unobserved event.
 
 However, a limitation of this approach is that it fails to provide an imputation when there are no uncensored subjects observed after \( t_i \).
 In such cases, the denominator of the expression becomes zero, and the method is unable to approximate the event time.
 In \citet{qi2023an}, subjects for whom this occurs are excluded from evaluation, whereas in our setup we used the original observed time as the imputed time.
 
-
 \ChFourParagraph{3. Pseudo-observation imputation:}
-This method imputes the event time using pseudo-observations, which estimate the contribution of each subject to an overall unbiased estimator of the event time distribution.
 Let \( \hat{\theta} \) be an estimator of the mean event time based on right-censored data, and let \( \hat{\theta}^{-i} \) denote the same estimator computed with the \( i \)-th subject removed from the dataset.
 Then, the pseudo-observation for subject \( i \) is defined as:
 \begin{equation}
 \tilde{T}^{\text{pseudo}}_i = e_{\text{Pseudo-Obs}}(t_i, \mathcal{D}) 
 = N \cdot \hat{\theta} - (N - 1) \cdot \hat{\theta}^{-i}
 \end{equation}
-This quantity can be interpreted as the individual contribution of subject \( i \) to the overall estimate \( \hat{\theta} \).
 In practice, both \( \hat{\theta} \) and \( \hat{\theta}^{-i} \) can be computed using the mean of the Kaplan-Meier survival curve:
 \[
 \hat{\theta} = \mathbb{E}_t[S_{\text{KM}(\mathcal{D})}(t)], \quad
 \hat{\theta}^{-i} = \mathbb{E}_t[S_{\text{KM}(\mathcal{D} \setminus \{i\})}(t)]
 \]
-Once the pseudo-observations \( \tilde{T}^{\text{pseudo}}_i \) are computed for all censored subjects, they are substituted in place of the true event times for evaluation or modeling. 
 
-Although pseudo-observations are not exact conditional expectations, they can approximate \( \mathbb{E}[T_i \mid X_i] \) under certain assumptions.
-In particular, when censoring is independent of covariates and the sample size is large, pseudo-observations behave asymptotically like i.i.d. draws from the true conditional expectation:
-\[
-\mathbb{E}[\tilde{T}^{\text{pseudo}}_i \mid X_i] \approx \mathbb{E}[T_i \mid X_i]
-\]
-This makes the pseudo-observation method a principled, nonparametric approach for imputing censored survival times, particularly when estimating global quantities like the mean event time.
-
-These imputation strategies enable us to transform the survival outcome into a fully observed target variable, allowing the application of standard regression-based methods in causal effect estimation. 
 To ensure meaningful estimates, it is important that each imputed event time for a censored subject is guaranteed to be greater than or equal to the censoring time---reflecting the fact that the true event must occur after the last time it was observed. 
 In our implementation, we manually enforce this constraint by setting the imputed value to the observed censoring time whenever the imputation procedure yields a value less than \( t_i \).
 
+\subsubsection{Survival meta-learners}\label{ch04:app:survival-meta-learners}
 
+\textbf{T-Learner-Survival \citep{bo2024ameta,noroozizadeh2025impact}.}
+The T-Learner can be adapted to right-censored survival data by fitting separate survival models for each treatment group.
+Let $W \in \{0, 1\}$ denote the treatment indicator, $X$ be the covariate vector, and $T$ the observed survival time with censoring indicator $\delta$, and $h$ the maximum follow-up time.
+\textbf{Estimate restricted mean survival time (RMST):} Compute RMST for each treatment as:
+    \begin{align*}
+        \widehat{\mu}_0(x) = \int_0^h \widehat{S}_0(u|x) du, \quad \widehat{\mu}_1(x) = \int_0^h \widehat{S}_1(u|x) du
+    \end{align*}
+\textbf{Estimate CATE:} For any $x$, estimate treatment effect:
+    \begin{align*}
+        \widehat{\tau}_{\text{T-Learner}}(x) = \widehat{\mu}_1(x) - \widehat{\mu}_0(x)
+    \end{align*}
 
+\textbf{S-Learner-Survival \citep{bo2024ameta,noroozizadeh2025impact}.}
+The S-Learner adapts by training a single survival model over all data with treatment as a covariate.
 
+\textbf{Matching-Survival \citep{noroozizadeh2025impact}.}
+The Matching-Learner estimates the CATE by imputing the counterfactual Restricted Mean Survival Time (RMST) using matched data points from the opposite treatment group.
+
+\begin{enumerate}
+    \item \textbf{Estimate factual RMST:} Fit a survival model on the full dataset and compute:
+    \begin{align*}
+        \widehat{\mu}_{W_i}(X_i) = \int_0^h \widehat{S}(u | X_i, W_i) du
+    \end{align*}
+    \item \textbf{Find matches:} For each individual $i$, identify $K$ nearest neighbors $J_K(i)$ from the opposite treatment group (\(1-W_i\)).
+    \item \textbf{Estimate counterfactual RMST:} Average factual RMSTs of matched neighbors:
+    \begin{align*}
+        \widehat{\mu}_{1-W_i}(X_i) = \frac{1}{K} \sum_{j \in J_K(i)} \widehat{\mu}_{W_j}(X_j)
+    \end{align*}
+    \item \textbf{Estimate CATE:} Compute CATE for each unit:
+    \begin{align*}
+        \widehat{\tau}_{\text{matching}}(X_i) = \big(\widehat{\mu}_{W_i}(X_i) - \widehat{\mu}_{1-W_i} (X_i)\big) \cdot \big(2 W_i - 1 \big)
+    \end{align*}
+\end{enumerate}
+
+\subsubsection{Synthetic benchmark training}\label{ch04:app:method_settings}
+
+For methods based on outcome imputation, we employed standard regressors to estimate the conditional mean of the survival outcome given covariates and treatment assignment.
+We considered Lasso regression, Random Forest, and XGBoost as base models.
+Each was optimized using cross-validated grid search on the training set.
+
+For direct modeling of survival outcomes, we employed the Causal Survival Forests (CSF), which adapts the Causal Forest framework to handle right-censored data.
+We used the default hyperparameters from the original implementation.
+For SurvITE, we implemented a PyTorch version based on the original architecture and repository.
+
+For neural network-based models (DeepSurv, DeepHit), we used early stopping to mitigate overfitting.
+All experiments were made reproducible by setting random seeds.
+The best-performing hyperparameter configuration was selected using CATE-RMSE on the validation set, and all final results were obtained on the test set using these optimal configurations.
+
+The synthetic validation and test protocol is described in Section~\ref{ch04:sec:synth_results}.
+
+Full method descriptions and hyperparameter settings are provided in \citet[Appendices D--E, Tables 9--12]{noroozizadeh2026survhte}.

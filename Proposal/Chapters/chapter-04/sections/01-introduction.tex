@@ -2,39 +2,29 @@
 \subsection{Introduction}
 \label{ch04:sec:intro}
 
+Chapter~\ref{chap:ch03} uses observational survival analysis and patient-level ITE estimation to examine medication non-adherence and adverse-outcome timing.
+Without counterfactual ground truth, agreement across models and predictive performance cannot establish treatment-effect estimation accuracy, and the empirical findings require an observational interpretation.
+This chapter addresses that broader evaluation problem by comparing survival CATE estimators conditional on $X$ in controlled settings with known reference effects and systematically varied conditions.
+The benchmark uses fixed covariates and time-fixed binary treatment; it does not reproduce the longitudinal setting of Chapter~\ref{chap:ch03} or retrospectively validate its estimates.
 
-In many causal inference applications where we aim to quantify how well a treatment works, estimating \emph{heterogeneous treatment effects} (HTEs) could be more useful than only estimating population‐level \emph{average treatment effects} (ATEs), building on the intuition that the same treatment can vary in effectiveness when given to different individuals. 
-In survival analysis with right-censored outcomes (common in clinical trials and electronic health records), estimating HTEs can be especially challenging.
+In survival analysis with right-censored outcomes (common in clinical trials and electronic health records), estimating heterogeneous treatment effects (HTEs) can be especially challenging.
 In addition to the standard difficulties of causal inference (unobserved counterfactuals, confounding), the analyst must account for censoring, where the event of interest is only observed for a subset of subjects.
 These features complicate identification and estimation, yet they are central in high-stakes applications such as precision medicine and individualized policy-making~\citep{zhu2020targeted,chapfuwa2021enabling,curth2021survite}.
 
 \ChFourRebuttal{Recent years have seen a growing set of causal survival methods~\citep{chapfuwa2021enabling,curth2021survite,ch04:cui2023estimating,bo2024ameta,noroozizadeh2025impact,xu2024estimating,meir2025heterogeneous}.}
 Despite methodological advancement, no standardized benchmark exists, limiting reproducibility and fair comparisons. 
 Most studies rely on bespoke simulations or limited real datasets with unknown ground truth, with differing levels of censoring, survival distributions, and causal assumptions.
-As a result, comparisons are not standardized, the robustness of different proposed methods is unclear, and progress is difficult to measure. 
-
-\ChFourRebuttal{
-While there is a growing benchmarking literature for treatment-effect heterogeneity in fully observed outcomes (e.g., \cite{NEURIPS2022_benchmark,Shimoni2018Benchmarking,Kapkic2024causalbench}) and recent benchmarks for survival ATE estimation (e.g., \cite{voinot2025causal}), to our knowledge, there is not yet any benchmark for survival HTE estimation under right-censoring. This missing piece motivates our focus on heterogeneous effects in censored time-to-event data.
-}
-
 
 We introduce \textsc{SurvHTE‐Bench}, the first comprehensive benchmark for HTE estimation in right-censored survival data.
 Our contributions are as follows:
 \begin{itemize}
-    \item \textbf{Method unification:} We categorize existing survival HTE methods (and natural extensions of such existing methods that technically have not previously been published) into three broad families: outcome imputation methods, direct-survival causal methods, and survival meta-learners.
+    \item \textbf{Method unification:} We categorize existing survival HTE methods into three broad families: outcome imputation methods, direct-survival causal methods, and survival meta-learners.
 We provide a modular implementation of 53 methods among these families.
-This is the first systematic framework that unifies survival HTE methods, facilitating reproducibility and extensibility.  
     \item \textbf{Synthetic benchmark design:} We present a curated suite of 40 synthetic datasets spanning eight causal configurations (with different combinations of randomization, unobserved confounding, overlap violation, informative censoring) crossed with five survival scenarios (with different survival and censoring distributions), yielding controlled settings with known ground-truth HTEs under realistic assumption violations.
     \item \textbf{Semi-synthetic and real data:} We also include 10 semi-synthetic datasets adapted from existing literature (real covariates with simulated treatments and outcomes) that aim to be more realistic compared to purely synthetic datasets while still having ground truth on HTEs.
-We further include 2 widely studied real datasets: the Twins dataset that has known ground truth \citep{almond2005the} (i.e., per twin, one has the treatment and the other does not, so that we observe both counterfactual outcomes), and the HIV clinical trial dataset without known ground truth \citep{hammer1996atrial}.
+We further include 2 widely studied real datasets: the Twins dataset \citep{almond2005the}, and the HIV clinical trial dataset without known ground truth \citep{hammer1996atrial}.
     \item \textbf{Comprehensive evaluation:} We compare representative estimators across all settings.
 Our results show that no single method dominates: performance depends on causal assumptions, censoring, and survival dynamics.
-Notably, \textcolor{black}{S- and matching-learners} among survival meta-learners demonstrate robustness under severe violations and high censoring.
 \end{itemize}
 
-While prior work has explored subsets of these design choices (e.g., \citet{ch04:cui2023estimating,meir2025heterogeneous}), \mbox{\textsc{SurvHTE-Bench}} is the first to systematically evaluate survival HTE methods under assumption violations, diverse survival models, and across synthetic, semi-synthetic, and real data.
-We focus on binary treatments and static covariates with right-censored outcomes, as even this basic setting lacks a standardized benchmark.
 More complex extensions (time-varying treatments, longitudinal covariates, and instrumental variables) are beyond our present scope. 
-
-
-

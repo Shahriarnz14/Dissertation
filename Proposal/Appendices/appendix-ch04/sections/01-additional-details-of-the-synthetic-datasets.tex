@@ -1,8 +1,6 @@
 % !TeX root = ../../../main.tex
 \subsection{Additional Details of the Synthetic Datasets}\label{ch04:app:synthetic-dataset}
 
-Our synthetic datasets systematically vary across two orthogonal dimensions: causal configurations (treatment assignment mechanisms and assumption violations) and survival scenarios (event-time distributions and censoring mechanisms).
-This section provides the mathematical formulations for generating covariates, treatment assignments, event times, and censoring times across all scenarios.
 For event time and censoring time distribution, we adapt the generation process from \citet{meir2025heterogeneous} and make some adjustments, with, for example, different censoring mechanisms under informative censoring settings; for treatment assignment in observational study settings, we adapt the propensity score from \citet{ch04:cui2023estimating}.
 For simplicity, we omit the unit index $i$ in this section.
 
@@ -98,10 +96,6 @@ C_i \sim \text{Exponential}(\text{rate} = \lambda_0 + \alpha \cdot T_i)
 \end{equation}
 where $\lambda_0 = 1.0$ and $\alpha = 0.1$ are baseline parameters that create dependence between censoring and event times.
 
-While in the main benchmark we induce informative censoring by making censoring times dependent on event times, this is not the only way to violate the ignorable censoring assumption.
-To demonstrate the extensibility of our modular design and for completeness, we additionally include in Appendix~\ref{ch04:app:informative-censoring-uconf} a setting where informative censoring arises through unobserved confounding.
-
-
 \subsubsection{Observed data construction}
 The observed survival data consists of:
 \begin{align*}
@@ -110,41 +104,12 @@ The observed survival data consists of:
 \end{align*}
 where $T = T(W)$ represents the factual event time under the observed treatment assignment.
 
-The combination of these five survival scenarios with eight causal configurations yields our comprehensive benchmark of 40 synthetic datasets, each designed to test estimator performance under specific combinations of survival dynamics and causal assumption violations.
-
-
-
-
-\input{Appendices/appendix-ch04/tables/survival-censoring-generation}
-
-
-
-
 \input{Appendices/appendix-ch04/tables/synthetic-censoring-rates}
-
-
-
 
 \input{Appendices/appendix-ch04/tables/synthetic-treatment-rates}
 
-
-
-
 \input{Appendices/appendix-ch04/tables/synthetic-treatment-effects}
 
-
-
-
-
-\input{Appendices/appendix-ch04/figures/synthetic-survival-curves}
-
-
-
-
-
 \ChFourParagraph{\ChFourRebuttal{Remark on parameter calibration.}}
-\ChFourRebuttal{The constants used in our synthetic generators are inherited from and aligned with prior causal-survival simulation setups~\citep{ch04:cui2023estimating,meir2025heterogeneous}, and are set to span distinct, interpretable regimes that the benchmark aims to cover. In particular, we calibrate (i) \emph{censoring severity} by shifting the relative scales of event-time and censoring-time processes (e.g., the AFT intercept change between Scenarios~\texttt{B} and~\texttt{D} increases typical event times and, together with the corresponding censoring model, yields higher censoring in \texttt{D}); (ii) \emph{treatment prevalence} and \emph{confounding strength} by adjusting propensity-score weights so that most configurations remain near balanced treatment except where imbalance is intentional (e.g., \texttt{RCT-5}), while allowing controlled dependence on observed or latent drivers; and (iii) \emph{effect magnitude/heterogeneity} through the coefficients on $W$ and $W$--covariate interactions, which we keep in a moderate range for comparability across scenarios. These choices are not unique, and alternative parameterizations could yield valid benchmarks; our goal is to provide a principled and reproducible instantiation that cleanly separates survival dynamics from causal-assumption stress and produces a broad range of survival CATE evaluation settings.}
 
-
-
-
+\ChFourRebuttal{The constants used in our synthetic generators are inherited from and aligned with prior causal-survival simulation setups~\citep{ch04:cui2023estimating,meir2025heterogeneous}, and are set to span distinct, interpretable regimes that the benchmark aims to cover.}
