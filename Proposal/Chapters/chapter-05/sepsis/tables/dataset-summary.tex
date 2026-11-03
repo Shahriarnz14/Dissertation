@@ -1,0 +1,28 @@
+% !TeX root = ../../../../main.tex
+\begin{table}[htbp]
+\caption{Corpora and reference annotations for PMOA-TTS and sepsis reconstruction. The PMOA-derived corpora use the December 17, 2024 source archive. Timeline references, phenotype labels, and models being evaluated have distinct roles.}
+\ChSixFloatLabel{ch06:tab:dataset-summary}
+\ChSixTableBodyStart
+\begin{ChSixFloatBody}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\raggedright\arraybackslash}p{.17\linewidth}>{\raggedright\arraybackslash}p{.12\linewidth}>{\raggedright\arraybackslash}p{.30\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}
+\toprule
+Corpus or analysis & Reports & Annotation or reference & Purpose and established relationship \\
+\midrule
+PMOA-TTS release & 124,349 & DeepSeek-R1 and Llama 3.3 & General textual time-series resource; distinct model-defined releases. \\[3pt]
+Case identification & 100; 88 confirmed cases & Clinician document labels; manual structured-field review & Identification benchmark; the 88 confirmed cases support structured-field validation. \\[3pt]
+PMOA reconstruction & 200 & Single-expert manual timelines; seven evaluated LLMs & Primary benchmark: 190 sampled reports plus 10 pilot reports; five runs per model. \\[3pt]
+Timestamp provenance & 200 & GPT-5 extraction with a \texttt{known} flag & Audit of text-supported, rule-determined, and inferred timestamps; not full-corpus provenance labels. \\[3pt]
+GLP1-RA agreement & 140 & Two clinically trained annotators & Separate agreement analysis; Annotator 1 is the reference. \\[3pt]
+T2S2 corpus & 2,139 & GPT-4o and Llama 3.1 8B cohort screening; LLM timelines & Sepsis reconstruction resource; full-corpus agreement uses DeepSeek-R1 as proxy reference. \\[3pt]
+\texttt{sepsis-40} & 40 & Clinician timelines and phenotype labels & Primary clinician-reference evaluation; 3,229 reference events. \\[3pt]
+\texttt{sepsis-10} & 10 & Clinician timelines & Subset of \texttt{sepsis-40}; 801 reference events; clinician review, grounding, self-consistency, and onset analyses. \\[3pt]
+\texttt{sepsis-100} & 100 & GPT-5 timeline reference; QwQ-32B-Preview phenotype labels & Proxy-reference evaluation; reports do not overlap with \texttt{sepsis-40}. \\[3pt]
+i2m4 & 20 & Physician temporal-concept annotations and phenotype labels & 15 i2b2 and 5 MIMIC-IV discharge summaries; cross-schema evaluation using interval lower bounds. \\[3pt]
+Sepsis clinician agreement & 5 & Two independent clinician annotators & Separate agreement analysis under the \texttt{sepsis-40} guidelines. \\
+\bottomrule
+\end{tabular}
+\end{ChSixFloatBody}
+\end{table}

@@ -2,33 +2,29 @@
 
 
 
-This appendix is organized as follows:
 
+
+
+
+
+
+
+
+\ChSevenStarSection{Supplementary Material}
+ 
+
+Shared reconstruction methods and extraction prompts are provided in Chapter~\ref{chap:ch05} and Appendix~\ref{app:ch05}.
+The forecasting sensitivity and full survival results are presented in Sections~\ref{ch07:sec:shared-sensitivity-results} and~\ref{ch07:apd:full_survival}.
+
+This supplementary material provides detailed information organized as follows:
 \begin{itemize}
-    \item \textbf{Appendix~\ref{ch06:apd:subset_ids} (\nameref{ch06:apd:subset_ids}):} PMCID lists for the \texttt{sepsis-40} and \texttt{sepsis-10} annotated subsets.
-
-    \item \textbf{Appendix~\ref{ch06:apd:clinician_quality_review} (\nameref{ch06:apd:clinician_quality_review}):} Expert qualitative review protocol, ranking results, and representative annotation error modes for \texttt{sepsis-10}.
-
-    \item \textbf{Appendix~\ref{ch06:apd:prompt} (\nameref{ch06:apd:prompt}):} Main clinical event--timestamp extraction prompt.
-
-    \item \textbf{Appendix~\ref{ch06:apd:phenotype-prompt} (\nameref{ch06:apd:phenotype-prompt}):} Sepsis-3 phenotyping prompt used for computational labeling.
-
-    \item \textbf{Appendix~\ref{ch06:apd:onset_prompt} (\nameref{ch06:apd:onset_prompt}):} Prompt for sepsis onset timestamp inference.
-
-    \item \textbf{Appendix~\ref{ch06:apd:ltcdf} (\nameref{ch06:apd:ltcdf}):} Derivation and discussion of the area under the log-time curve (AULTC) metric.
-
-    \item \textbf{Appendix~\ref{ch06:apd:pseudo} (\nameref{ch06:apd:pseudo}):} Pseudocode for the recursive best-match procedure used for event alignment.
-
-    \item \textbf{Appendix~\ref{ch06:apd:excerpt} (\nameref{ch06:apd:excerpt}):} Worked examples with manual and LLM annotations, including an illustrative example with finer-grained timing (Appendix~\ref{ch06:apd:fine_example}).
-
-    \item \textbf{Appendix~\ref{ch06:apd:threshold_sweep} (\nameref{ch06:apd:threshold_sweep}):} Sensitivity analysis of the cosine distance matching threshold used to compute event match rate.
-
-    \item \textbf{Appendix~\ref{ch06:apd:add-perf} (\nameref{ch06:apd:add-perf}):} Additional performance analyses and ablation studies.
-
-    \item \textbf{Appendix~\ref{ch06:apd:validation_details} (\nameref{ch06:apd:validation_details}):} Additional details for the hallucination audit, multi-pass self-consistency analysis, and full-corpus cross-model agreement.
-
-    \item \textbf{Appendix~\ref{ch06:apd:error-analysis} (\nameref{ch06:apd:error-analysis}):} Error analysis of event matching and temporal predictions for i2m4 versus \texttt{sepsis-40} performance differences.
+    \item \textbf{Appendix~\ref{ch07:apd:prompts}}: Prompting strategies for zero-shot and few-shot forecasting.
+    \item \textbf{Appendix~\ref{ch07:apd:encoder-forecasting}}: Technical details of encoder-based forecasting methods, including MLP-head and masking approaches.
+    \item \textbf{Appendix~\ref{ch07:apd:encoder-survival}}: Survival modeling framework using language model embeddings and the hyperparameters used.
+    \item \textbf{Appendix~\ref{ch07:apd:full_tables}}: Complete forecasting performance tables for all models on DeepSeek-R1 and Llama-3.3-70B annotations.
+    \item \textbf{Appendix~\ref{ch07:apd:additional_insights}}: Additional insights into forecasting results.
+    \item \textbf{Appendix~\ref{ch07:apd:open_source}}: Analysis of open-source models to address data leakage concerns.
+    \item \textbf{Appendix~\ref{ch07:apd:beyond_pmoa}}: Generalizability beyond PubMed case reports: comparison with other clinical sources.
+    \item \textbf{Appendix~\ref{ch07:apd:broader_impact}}: Broader societal impact and ethical considerations.
 \end{itemize}
-
-
 

@@ -1,0 +1,57 @@
+% !TeX root = ../../../../main.tex
+\subsection{Clinical Reliability, Validation, and Error Analysis}
+\label{ch06:sec:additional_validation}
+
+\ChSixHeadingOnly
+
+\subsubsection{Inter-annotator Agreement}
+\label{ch06:sec:iaa}
+To contextualize residual model--clinician discrepancies, we quantified agreement between two independent clinician annotators on five sampled case reports from T2S2, annotated under the same guidelines.
+We report (i) model--annotator alignment for two leading LLM annotators against each clinician and (ii) clinician--clinician agreement using the same metrics as the main evaluation.
+
+
+\input{Chapters/chapter-05/sepsis/tables/inter-annotator-agreement}
+
+
+
+
+
+
+Tables~\ref{ch06:tab:iaa_manual} and~\ref{ch06:tab:iaa_models} contextualize the main results by quantifying annotator variability under the same guidelines and metrics.
+Clinician--clinician agreement is imperfect even on the same case reports (Table~\ref{ch06:tab:iaa_manual}), reflecting inherent ambiguity in mapping narrative descriptions to temporally localized findings and timestamps.
+Against this reference, the strongest LLM annotators achieve model--clinician agreement that is comparable to clinician--clinician agreement across the same metrics (Table~\ref{ch06:tab:iaa_models}), supporting that the leading performance levels in Table~\ref{ch06:tab:results} are meaningful relative to human variability rather than artifacts of the evaluation protocol.
+
+\paragraph{Inter-annotator agreement on a GLP1-RA subset}
+\label{ch05:glp_iaa}
+
+\ChFiveRebuttal{To contextualize agreement with the single-expert reference set, we also analyzed a separate 140-case report subset of PMOA-TTS involving patients who took GLP-1 RA (Glucagon-like Peptide Receptor Agonists) medications. Two clinically trained annotators independently constructed event-time timelines for this subset using the same annotation framework. Using Annotator 1 as the reference and the same matching and temporal metrics used for the model evaluation, Annotator 2 achieved an event match recall of 0.811, temporal concordance of 0.798, and AULTC of 0.702.}
+
+\input{Chapters/chapter-05/sepsis/sections/16-clinician-review-results}
+
+\subsubsection{Sepsis Onset Timestamp Inference}
+\label{ch06:sec:onset-inference}
+In addition to extracting event--time pairs, we infer an explicit sepsis onset timestamp from narrative cues.
+Given a case report, the onset procedure estimates the earliest time consistent with Sepsis-3 criteria relative to admission ($t=0$), producing two onset estimates based on qSOFA and SOFA-style reasoning when sufficient evidence is available.
+We used GLM-4.6 (2-bit) for this inference.
+The full prompt is provided in Appendix~\ref{ch06:apd:onset_prompt}.
+
+\label{ch06:sec:onset_results}
+
+On \texttt{sepsis-10}, SOFA-based onset matched clinician onset exactly in 6 of 9 valid cases where onset could be assessed, excluding one neonatal outlier for which neonatal SOFA would be more appropriate.
+The median absolute error was 0 hours (mean $\approx 3.4$ hours), with a single moderate deviation of 24 hours.
+In contrast, qSOFA-based onset tended to lag substantially (mean absolute error $\approx 355$ hours including the outlier and $\approx 126$ hours excluding it), consistent with retrospective reporting of qSOFA-related cues in case narratives rather than true physiologic delay, whereas SOFA-based onset closely aligned with clinician-annotated sepsis onset.
+
+\subsubsection{Grounding and Consistency}
+\label{ch06:sec:additional_validation_summary}
+
+We further evaluated factual grounding, generation stability, and full-corpus consistency using analyses summarized here and detailed in Appendix~\ref{ch06:apd:validation_details}.
+In the \texttt{sepsis-10} hallucination audit, 1,517 total extracted events from combined DeepSeek-R1 and Llama-3.3-70B-Instruct were reviewed through automated lexical grounding followed by manual adjudication of unresolved cases; no unsupported hallucinated events were identified (Table~\ref{ch06:tab:hallucination_audit} in Appendix~\ref{ch06:apd:hallucination_audit_results}).
+On the same \texttt{sepsis-10} reports, multi-pass self-consistency across five random seeds showed stable extraction behavior across DeepSeek-R1, Llama 3.3, O1-preview, and GPT-5 (Table~\ref{ch06:tab:self_consistency} in Appendix~\ref{ch06:apd:self_consistency_results}).
+Across the full 2,139-report corpus, Llama-3.3-70B-Instruct achieved strong agreement with DeepSeek-R1, with event match recall 0.79, concordance 0.87, and AULTC 0.83 (Table~\ref{ch06:tab:full_corpus_agreement} in Appendix~\ref{ch06:apd:full_corpus_agreement_results}).
+
+\subsubsection{Annotation Error Analysis}
+We qualitatively compared temporal annotations produced by several LLMs on a representative case report to illustrate characteristic differences in event extraction and timestamping (Supplementary Material, Section~\ref{ch05:apd:inter-llm-comparison}).
+While all models recovered the major clinical trajectory and preserved temporal polarity, they varied in
+event granularity, paraphrasing, and long-range temporal normalization.
+These differences complement the aggregate quantitative results and highlight the impact of model behavior on the structure of extracted timelines.
+Common model-specific error patterns, such as granularity variation, duplicate events, and differences in temporal normalization, are summarized in the Supplementary Material, Section~\ref{ch05:apd:inter-llm-comparison}, Table~\ref{ch05:tab:error_taxonomy}.

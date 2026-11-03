@@ -1,0 +1,20 @@
+% !TeX root = ../../../../main.tex
+\subsubsection{Evaluation Methodology}
+\ChSixHeadingOnly
+\paragraph{Quantitative evaluation of extracted timelines}
+\label{ch06:sec:evaluation_methodology_metrics}
+We evaluate extracted textual time series using four metrics:\\
+\textbf{Event match rate}: Proportion of reference events matched via recursive best matching with cosine distance threshold 0.1 using PubMedBert embeddings (Appendix~\ref{ch06:apd:pseudo}).\\
+\textbf{Concordance (c-index)}: Probability of correctly ordering random event pairs.\\
+\textbf{Median absolute error (MAE)}: Median time discrepancy (in hours) among matched events.\\
+\textbf{Area under log-time curve (AULTC)}: Integrated log-transformed discrepancies capturing accuracy across time scales (detailed derivation in Appendix \ref{ch06:apd:ltcdf}).
+
+A clinician qualitative review of annotation quality on \texttt{sepsis-10} is described in Appendix~\ref{ch06:apd:clinician_quality_review}.
+
+
+
+
+
+\input{Chapters/chapter-05/sepsis/tables/model-reconstruction-performance}
+
+

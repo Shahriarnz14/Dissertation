@@ -1,31 +1,31 @@
 % !TeX root = ../../../main.tex
 \subsection{Related Work}
+\label{ch08:sec:related_work}
 
-\ChSevenParagraph{Temporal Information Extraction from Clinical Text:}
-Extracting timelines from clinical narratives is a challenging biomedical NLP task.
-The i2b2 2012 challenge introduced annotated datasets for temporal relation extraction from discharge summaries \citep{ch07:uzuner20112010}.
-Subsequent methods linked clinical events to timestamps or temporal expressions \citep{leeuwenberg2020towards,ch07:frattallone2024using}, typically assuming pre-defined event spans.
-We adopt our prior approach \citep{ch07:noroozizadeh2025reconstructing,noroozizadeh2025pmoa} to assign timepoints to findings from full-length case reports, enabling finer temporal resolution.
-Unlike methods using structured EHR data, we focus solely on text—crucial for sources like PubMed that lack structured metadata.
-By directly supervising event-time alignment, we overcome limitations of span-based annotations~\citep{rosenbloom2011data}.
-This aligns with growing emphasis on temporality in sepsis and critical care phenotyping \citep{johnson2018comparative,kamran2024evaluation}, particularly given high missingness rates in structured data \citep{ch07:johnson2023mimic,seinen2025using}.
 
-\ChSevenParagraph{Predictive Modeling with Clinical Text:}
-Clinical text has been used for outcome prediction tasks like mortality and readmission, with models like \textit{ClinicalBERT} achieving high levels of performance on EHR notes \citep{huang2019clinicalbert,gu2021domain}. 
-Text captures complementary information—symptoms and social factors—not found in structured codes. 
-However, traditional approaches using full-text or bag-of-words representations obscure temporal dynamics. 
-Our approach preserves event order within narratives, treating data as time series.
-This aligns with recent efforts adapting LLMs for time series tasks, such as Time-LLM mapping numeric sequences to tokens \citep{jin2023time}. 
-To our knowledge, this is the first work to forecast from LLM-derived time series in clinical domains. 
-While prior sepsis prediction models rely on vitals or scores like SOFA and SAPS \citep{hou2020predicting,noroozizadeh2023temporal}, our method is complementary—leveraging narrative descriptions that include clinician interpretations and context. 
-This is valuable when case reports or patient histories are available but structured data is sparse or unavailable.
+\textbf{Clinical temporal information extraction.}
+Clinical timeline reconstruction builds on a long tradition of temporal reasoning and temporal information extraction in medicine \cite{ch08:kohane1987temporal,zhou2007temporal}.
+Early annotation schemes and shared tasks, including i2b2 and THYME, focused on identifying clinical events, time expressions, and temporal relations such as before, after, overlap, and containment \cite{ch08:uzuner20112010,sun2013evaluating,sun2013annotating,ch08:styler2014temporal}.
+Systems such as MedTime and cTAKES-temporal operationalized these ideas for clinical notes by extracting time expressions and temporal relations \cite{lin2013medtime,savova2010mayo,lin2016multilayered}.
+Pre-LLM work also studied patient timelines and longitudinal record summarization, including timeline generation from clinical notes and HARVEST for summarizing longitudinal patient records \cite{nikfarjam2013towards,hirsch2015harvest}.
+These studies established the importance of temporal structure in clinical narratives, but primarily focused on temporal annotation, relation extraction, or summarization rather than grounding narrative-derived absolute timelines in structured EHR evidence.
 
-\ChSevenParagraph{Large Language Models in Healthcare:}
-Recent LLMs such as \texttt{GPT-3} and \texttt{GPT-4} have enabled applications from medical QA to note summarization.
-These models encode substantial medical knowledge and reasoning capacity—\texttt{GPT-4} demonstrates strong performance on board exams and can support patient record abstraction for quality reporting \citep{boussina2024large}.
-However, their use in clinical forecasting remains largely unexplored.
-Our benchmark tests LLMs via zero- and few-shot prompting to assess clinical event forecasting from patient narratives, comparing results to fine-tuned models to quantify the gap between general-purpose and task-specific modeling.
-This contributes evidence that while LLMs hold broad medical knowledge, fine-tuning and structured inputs are often required for clinical reliability \citep{huang2019clinicalbert,gu2021domain}.
-Some studies suggest domain-specific tuning does not always improve over foundation models \citep{jeong2024medical}, reinforcing the need for task-specific evaluations like ours.
+
+\noindent
+\textbf{LLM-based clinical timeline reconstruction.}
+Recent work has moved from relation-centered temporal extraction toward absolute event timelines.
+Leeuwenberg and Moens studied absolute event timeline extraction from English clinical reports, while Frattallone-Llado et al. showed that aligning discharge summaries with structured EHR data can improve inpatient event timeline precision \cite{leeuwenberg2020towards,ch08:frattallone2024using}.
+Textual time-series work has further shown that clinical narratives can be converted into event--time tuples for temporal forecasting, but these approaches are primarily text-only and do not use structured EHR rows as calibration evidence during reconstruction \cite{ch08:wang2025large,noroozizadeh2026reconstructing,ch08:noroozizadeh2026forecasting,ch08:kumar2026temporally}.
+Recent shared tasks such as ChemoTimelines have renewed interest in patient-level clinical timeline extraction using prompting, fine-tuning, and dictionary-enhanced LLM systems \cite{yao2025chemotimelines,zhang2025uwbionlp}.
+Our work differs from these efforts by treating timeline reconstruction as multimodal temporal grounding: narrative text supplies event semantics, while structured EHR rows are retrieved as partial temporal evidence for timestamp calibration.
+
+
+\noindent
+\textbf{Asymmetric evidence in structured and narrative EHR data.}
+Clinical machine learning studies have shown that structured and unstructured EHR data encode complementary information for phenotyping, prediction, and patient representation \cite{ch08:moldwin2021empirical,liu2022multimodal,seinen2025using}.
+Structured data provide dense timestamped measurements, but often omit symptoms, functional status, patient-reported histories, and clinical reasoning.
+Narrative notes preserve this context, but are often retrospective and not organized as chronological trajectories.
+This asymmetry makes clinical timeline reconstruction different from standard multimodal fusion: the goal is not to merge two complete views of the same event sequence, but to use structured rows as partial temporal evidence for a narrative-derived patient trajectory.
+Our retrieval-augmented scaffolded workflow is designed for this setting, selecting candidate structured rows for each text-derived event and updating timestamps only when the retrieved evidence is clinically relevant.
 
 

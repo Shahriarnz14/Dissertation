@@ -1,20 +1,31 @@
 % !TeX root = ../../../main.tex
-\begin{sloppypar}
-\subsubsection{Related work}
-Numerous critical care and sepsis datasets are available \mbox{(semi-)publicly}, \emph{e.g.}, \cite{thoral2021sharing,pollard2018eicu}, including several with de-identified clinical discharge summaries: MIMIC-III \citep{ch06:johnson2016mimic}
-and MIMIC-IV \citep{ch06:johnson2023mimic}. 
-Sepsis phenotyping (including Sepsis-3) has been conducted using a variety of methods on structured data \citep{johnson2018comparative}, although structured data is often highly missing, leading to suboptimal phenotyping \citep{seinen2025using}.
-Additionally, the timing of sepsis phenotyping is crucial, in that delays in sepsis prediction can nullify predictiveness and lead to burdensome and unhelpful analytic models \citep{kamran2024evaluation}.  
-\end{sloppypar}
+\subsection{Related Work}
 
-Several works have used the i2b2 (a competition subset of MIMIC-II/III) to construct timelines of clinical concepts \citep{leeuwenberg2020towards,ch06:frattallone2024using}.  
-In the case of \cite{leeuwenberg2020towards}, the event spans are already given, and focus on an excerpt of the full discharge summary, so we focus our direct comparison on that of \cite{ch06:frattallone2024using}.
-In contrast to these works, we adopt an annotation process focused on temporal assignment to clinical findings rather than i2b2 clinical concepts \citep{ch06:uzuner20112010}, which allows for greater specificity of the event in the absence of additional context.  
-Additionally, as compared to \cite{ch06:frattallone2024using},
-we focus on using text alone for clinical time series construction, which is necessary for the PubMed Open Access Subset since no complementary data source is available.
+\ChSevenParagraph{Temporal Information Extraction from Clinical Text:}
+Extracting timelines from clinical narratives is a challenging biomedical NLP task.
+The i2b2 2012 challenge introduced annotated datasets for temporal relation extraction from discharge summaries \citep{ch07:uzuner20112010}.
+Subsequent methods linked clinical events to timestamps or temporal expressions \citep{leeuwenberg2020towards,ch07:frattallone2024using}, typically assuming pre-defined event spans.
+We adopt our prior approach \citep{ch07:noroozizadeh2025reconstructing,noroozizadeh2025pmoa} to assign timepoints to findings from full-length case reports, enabling finer temporal resolution.
+Unlike methods using structured EHR data, we focus solely on text—crucial for sources like PubMed that lack structured metadata.
+By directly supervising event-time alignment, we overcome limitations of span-based annotations~\citep{rosenbloom2011data}.
+This aligns with growing emphasis on temporality in sepsis and critical care phenotyping \citep{johnson2018comparative,kamran2024evaluation}, particularly given high missingness rates in structured data \citep{ch07:johnson2023mimic,seinen2025using}.
 
-Broadly in the medical domain, LLMs are showing promise in medical tasks such as summarization \citep{van2024adapted}.
-In fact, some findings suggest that 
-medical fine-tuning rarely leads to improved performance over the corresponding foundation models \citep{jeong-etal-2024-medical}. 
-In our analysis, we primarily use foundation LLMs and show that their scale and instruction-tuning are central to the performance of the model.  
+\ChSevenParagraph{Predictive Modeling with Clinical Text:}
+Clinical text has been used for outcome prediction tasks like mortality and readmission, with models like \textit{ClinicalBERT} achieving high levels of performance on EHR notes \citep{huang2019clinicalbert,gu2021domain}. 
+Text captures complementary information—symptoms and social factors—not found in structured codes. 
+However, traditional approaches using full-text or bag-of-words representations obscure temporal dynamics. 
+Our approach preserves event order within narratives, treating data as time series.
+This aligns with recent efforts adapting LLMs for time series tasks, such as Time-LLM mapping numeric sequences to tokens \citep{jin2023time}. 
+To our knowledge, this is the first work to forecast from LLM-derived time series in clinical domains. 
+While prior sepsis prediction models rely on vitals or scores like SOFA and SAPS \citep{hou2020predicting,noroozizadeh2023temporal}, our method is complementary—leveraging narrative descriptions that include clinician interpretations and context. 
+This is valuable when case reports or patient histories are available but structured data is sparse or unavailable.
+
+\ChSevenParagraph{Large Language Models in Healthcare:}
+Recent LLMs such as \texttt{GPT-3} and \texttt{GPT-4} have enabled applications from medical QA to note summarization.
+These models encode substantial medical knowledge and reasoning capacity—\texttt{GPT-4} demonstrates strong performance on board exams and can support patient record abstraction for quality reporting \citep{boussina2024large}.
+However, their use in clinical forecasting remains largely unexplored.
+Our benchmark tests LLMs via zero- and few-shot prompting to assess clinical event forecasting from patient narratives, comparing results to fine-tuned models to quantify the gap between general-purpose and task-specific modeling.
+This contributes evidence that while LLMs hold broad medical knowledge, fine-tuning and structured inputs are often required for clinical reliability \citep{huang2019clinicalbert,gu2021domain}.
+Some studies suggest domain-specific tuning does not always improve over foundation models \citep{jeong2024medical}, reinforcing the need for task-specific evaluations like ours.
+
 

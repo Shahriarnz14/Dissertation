@@ -1,24 +1,55 @@
 % !TeX root = ../../../main.tex
-\subsection{Sepsis-Specific Reconstruction Study}
-\label{ch06:sec:intro}
+\subsection{Introduction}
 
-The Third International Consensus Definitions for Sepsis (Sepsis-3) are the benchmark definitions for sepsis, the dysfunctional immune response to an infection, which are used in trial eligibility criteria \citep{kyriazopoulou2021procalcitonin} and phenotyping studies \citep{ch06:seymour2019derivation}.
-In the critical care literature, sepsis is seen as a heterogeneous disease, a pathway arrived upon from a multitude of infectious origins, anatomical sites, and comorbid profiles.  
-There is increasing recognition of the importance of time in understanding sepsis and sepsis progression, as seen in early-warning systems \citep{henry2022factors}, variation in prediction utility \citep{kamran2024evaluation}, and endotype characterization \citep{ch06:noroozizadeh2023temporal}.
+Healthcare disparities persist globally, with preventable deaths from conditions like sepsis disproportionately affecting underserved populations who often present to under-resourced facilities with limited access to specialized expertise.
+In these settings, much of the critical diagnostic and prognostic information exists only in unstructured clinical narratives—case reports, discharge summaries, and progress notes—as comprehensive structured data infrastructure may be unavailable~\cite{anzalone2025lower,seinen2025using}.
+While machine learning approaches have shown promise on structured data, with recent work demonstrating that incorporating text alongside structured inputs significantly improves predictive performance~\citep{kline2022multimodal}, large language models struggle with clinical risk estimation, especially in patient-facing scenarios~\citep{wongposition}.
+This gap highlights the need for automated risk forecasting from textual clinical records that could democratize access to expert-level clinical reasoning, particularly in resource-constrained environments where timely specialist consultation is not available.
+The challenge of LLM risk estimation motivates a structured treatment of risk forecasting and survival modeling from unstructured narrative sources.
 
-Meanwhile, structured data streams, which are the data resources these tools use, are often incomplete records with insufficient information to render or confirm a diagnosis of sepsis \citep{moldwin2021empirical}. %
-A more complete alternative is the discharge summary, or more generally, the case report, in which a clinician documents the clinical findings pertinent to the case and care management.
-The impracticality of using the case report is that it is only written in full after the encounter is over, \emph{i.e.}, with a less granular timestamp than the events contained within. 
-In principle, having a more complete, fine-grained temporal record could enable better temporal analyses of patients with sepsis, leading to better understanding and treatment improvements.
-
-At present, the (semi-)public critical care repositories at the research frontier contain high resolution structured signals and low resolution textual signals. 
-While several concerted efforts have focused on extracting temporal information, they have largely focused on temporal relations between clinical concepts \citep{sun2013evaluating} rather than on event timing.  
-Those that have focused on timing \citep{leeuwenberg2020towards,ch06:frattallone2024using} used excerpted summaries and relatively small sample sizes. 
+Among textual sources, retrospective case reports serve as a rich training ground for developing temporally-aware AI systems that can eventually be deployed on real-time clinical notes.
+Case reports provide holistic accounts of clinical trajectories with explicit temporal reasoning—exactly the type of structured thinking needed for real-time clinical decision support.
+However, their narrative structure interleaves temporally unordered information, making them difficult to apply in forecasting tasks.
+Without identifying the time of occurrence for each event, models are prone to causal leakage—using information not available at the time of prediction.
+Solving this temporal reasoning challenge in case reports establishes the foundation for deployment in live clinical environments where such capabilities could improve patient outcomes.
 
 
-In order to train sepsis models that can incorporate information referenced in free text with finer temporal granularity, we seek to generate larger samples of textual time series.
-To do so, we introduce a novel Sepsis-3 textual time series corpus from the PubMed Open Access (PMOA) Subset.
-We adopt an LLM-as-annotator approach, evaluating both the ability of models to extract clinical findings and their ability to associate those findings with timestamps.
-We augment existing clinical annotations with our own PMOA annotations and contrast LLM annotations with both our clinician annotations and the annotations of \cite{ch06:frattallone2024using}.
-Because the corpus is automatically generated beyond the manually annotated subset, we validate it through a multi-layer framework: clinician-annotated gold-standard evaluation on \texttt{sepsis-40}, clinician--clinician agreement, bootstrap uncertainty quantification, bronze-standard proxy-reference evaluation on \texttt{sepsis-100}, direct hallucination auditing, multi-pass self-consistency, and full-corpus cross-model agreement.
-These assessments provide evidence for the quality and limitations of the LLM annotations and support the use of T2S2 as a retrospective research resource for temporal modeling of sepsis trajectories.
+
+\input{Chapters/chapter-06/figures/case-report-timeline-representations}
+
+
+One might ask whether large pretrained language models can already perform forecasting from clinical narratives, given their exposure to biomedical texts~\citep{peng2020empirical,weber2024redpajama}.
+However, these models have architectural limitations for temporal reasoning tasks.
+Encoder-based models apply random masking that rarely yields temporally coherent representations, while decoder-style models mask text in linear sequence, modeling events in text order rather than time order. 
+Our experiments make these limitations explicit.
+For instance, on the timeline in Figure \ref{ch07:fig:annotation_ex}, the chance of recovering a valid time-ordered mask is below $0.002\%$, and decoder models show low temporal concordance (e.g., $c=0.23$).
+Without a task-specific restructuring, such factors lead to suboptimal forecasting performance.
+
+To address these temporal reasoning challenges, we develop a forecasting framework that
+transforms free-text narratives into textual time series---sequences of (event, time) tuples---and makes explicit the temporal structure of patient trajectories.
+The construction and reconstruction evaluation of these representations are presented in Chapter~\ref{chap:ch05} and Appendix~\ref{app:ch05}.
+
+Our work builds on extensive research in clinical NLP and temporal reasoning~\citep{kohane1987temporal,leeuwenberg2020towards,cheng2023typed}, but shifts the emphasis from extraction to downstream clinical forecasting.
+While prior efforts have focused on entity recognition and temporal relation extraction \citep{zhou2007temporal,ch07:uzuner20112010,sun2013evaluating}, few have systematically assessed how such representations influence downstream tasks such as risk prediction and survival modeling.
+We bridge this gap by formalizing textual time series representations and evaluating their effectiveness for temporally grounded clinical prediction.
+
+We empirically assess this framework across multiple tasks and modeling strategies, benchmarking encoder and decoder models—both fine-tuned and prompted versions—on three forecasting tasks: event prediction, survival analysis, and temporal ordering of future clinical events.
+Our results show no single model dominates across all tasks, highlighting the importance of aligning model architecture with forecasting objectives.
+We further examine how input ordering (time vs. narrative) impacts generalization and analyze the sensitivity of models to missing historical context through systematic masking experiments.
+
+{\raggedright
+In summary, this paper makes the following contributions:
+
+\mbox{(i) \textbf{Comprehensive Model Comparison:}}
+    We conduct a comprehensive evaluation of encoder- and instruction-tuned decoder-based models—using both fine-tuned MLP heads and prompting—across event prediction, temporal ordering, and survival analysis tasks.
+Results show no single model excels universally, underscoring the need to align model choice with the specific forecasting objective;
+\mbox{(ii) \textbf{Temporal- versus Text- Ordering:}}
+    We investigate the impact of annotation order by comparing training on time-ordered versus text-ordered data.
+Results show that preserving the narrative's natural order can improve generalization to external datasets, while time-based ordering can enhance ranking performance;
+\mbox{(iii) \textbf{Sensitivity Analysis of Temporal Masking:}}
+    We conduct systematic dropout experiments by randomly masking parts of the clinical history to assess their impact on forecasting and event ordering.
+While higher masking levels reduce classification performance (F1), the concordance index remains largely stable, highlighting differing sensitivities of binary prediction and ranking tasks to historical context in textual time series;
+(iv) \textbf{Methodological Framework for Temporal Clinical Forecasting:} Our approach demonstrates how narrative clinical texts can be systematically converted into structured temporal representations for forecasting tasks, providing a replicable methodology that could be adapted to other clinical and non-clinical text sources.
+
+
+\par}
