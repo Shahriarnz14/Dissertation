@@ -3,6 +3,7 @@
 \label{ch05:sec:evaluation-of-tts-quality}
 
 Using the 200 manually annotated case reports as reference, we evaluated textual time series quality across LLM annotators and runs using event match recall, precision, and F1, temporal concordance (c-index), and AULTC.
+Each large language model (LLM) annotator was evaluated across five independent runs to capture run-to-run variation in the generated timelines.
 Table~\ref{ch05:tab:model_comparison} reports mean and standard deviation across runs for seven LLM variants: \texttt{Llama 3.3 70B}, \texttt{DeepSeek-R1}, \texttt{DeepSeek-V3}, \texttt{OpenAI GPT-5}, \texttt{OpenAI O4-mini}, \texttt{OpenAI O3}, and \texttt{OpenAI O1}.
 
 \ChFiveRebuttal{
@@ -67,15 +68,9 @@ Because the leading mean estimates differ across metrics and their bootstrap con
 \label{ch05:sec:timestamp-provenance-audit}
 
 \ChFiveRebuttal{
-The production TTS schema stores a single timestamp for each extracted event and does not distinguish whether the timestamp is directly supported by temporal information in the source text or inferred from narrative context. Because this provenance was not retained during full-corpus generation, we conducted a targeted audit of the 200 evaluation reports using GPT-5. We retained the original event-time extraction task while adding a binary \emph{known} indicator for each event. \emph{known=1} was assigned when the timestamp was anchored by admission/presentation or directly supported by an absolute or relative temporal expression in the source text; \emph{known=0} was assigned when the timestamp was inferred from narrative context or clinical judgment.
+The production TTS schema stores a single timestamp for each extracted event and does not distinguish whether the timestamp is directly supported by temporal information in the source text or inferred from narrative context. Because this provenance was not retained during full-corpus generation, we conducted a targeted audit of the 200 evaluation reports using GPT-5. We retained the original event-time extraction task while adding a binary \emph{known} indicator for each event. \emph{known=1} was assigned when the timestamp was anchored by admission/presentation, directly supported by an absolute or relative temporal expression in the source text, or fixed by an annotation convention; \emph{known=0} was assigned when the timestamp was inferred from narrative context or clinical judgment.
 }
 
 \ChFiveRebuttal{
-Across 11,618 extracted events, 6,314 (54.35\%) timestamps were text-supported or directly anchored (\emph{known=1}), while 5,304 (45.65\%) were inferred (\emph{known=0}). At the case level, the median proportion of text-supported timestamps was 53.29\% (IQR: 31.58\%--75.52\%). Thus, while a slight majority of timestamps could be tied directly to temporal evidence under this definition, temporal imputation accounts for a considerable fraction of the generated timelines. This audit is limited to GPT-5 outputs on the evaluation sample and does not provide provenance annotations for the full corpus or establish that the observed proportions generalize to other extraction models.
+Across 11,618 extracted events, 6,314 (54.35\%) timestamps were text-supported or rule-determined (\emph{known=1}), while 5,304 (45.65\%) were inferred (\emph{known=0}). At the case level, the median proportion of text-supported or rule-determined timestamps was 53.29\% (IQR: 31.58\%--75.52\%). Thus, while a slight majority of timestamps were text-supported or rule-determined under this definition, temporal imputation accounts for a considerable fraction of the generated timelines. This audit is limited to GPT-5 outputs on the evaluation sample and does not provide provenance annotations for the full corpus or establish that the observed proportions generalize to other extraction models.
 }
-
-\paragraph{Inter-annotator agreement on a GLP1-RA subset}
-\label{ch05:glp_iaa}
-
-\ChFiveRebuttal{To contextualize agreement with the single-expert reference set, we also analyzed a separate 140-case report subset of PMOA-TTS involving patients who took GLP-1 RA (Glucagon-like Peptide Receptor Agonists) medications. Two clinically trained annotators independently constructed event-time timelines for this subset using the same annotation framework. Using Annotator 1 as the reference and the same matching and temporal metrics used for the model evaluation, Annotator 2 achieved an event match rate of 0.811, temporal concordance of 0.798, and AULTC of 0.702.}
-

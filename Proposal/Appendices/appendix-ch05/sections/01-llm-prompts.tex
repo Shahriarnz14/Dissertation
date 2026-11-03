@@ -1,5 +1,5 @@
 % !TeX root = ../../../main.tex
-\subsection{LLM Prompts}
+\subsection{Extraction, Provenance, and Clinical Prompts}
 \label{ch05:apd:llm-prompts}
 
 \ChFiveHeadingOnly
@@ -228,6 +228,14 @@ Return one event per row with exactly three pipe-separated columns in this order
 The time must be numeric and expressed in hours without a unit. The known value must be either 0 or 1. Do not use the pipe character within an event description. Return only the rows. Do not include a header, table title, explanation, Markdown, or code fences.
 \end{tcolorbox}
 
+The PMOA-TTS and sepsis reconstruction prompts are reproduced separately to preserve their historical wording.
 
+\begingroup\ChSixBegin
 
+\input{Appendices/appendix-ch06/sections/03-annotation-prompt}
 
+\input{Appendices/appendix-ch06/sections/04-phenotyping-prompt}
+
+\input{Appendices/appendix-ch06/sections/05-sepsis-onset-inference-prompt}
+
+\endgroup

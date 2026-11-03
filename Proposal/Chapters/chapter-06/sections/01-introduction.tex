@@ -1,5 +1,5 @@
 % !TeX root = ../../../main.tex
-\subsection{Introduction}
+\subsection{Sepsis-Specific Reconstruction Study}
 \label{ch06:sec:intro}
 
 The Third International Consensus Definitions for Sepsis (Sepsis-3) are the benchmark definitions for sepsis, the dysfunctional immune response to an infection, which are used in trial eligibility criteria \citep{kyriazopoulou2021procalcitonin} and phenotyping studies \citep{ch06:seymour2019derivation}.
@@ -22,8 +22,3 @@ We adopt an LLM-as-annotator approach, evaluating both the ability of models to 
 We augment existing clinical annotations with our own PMOA annotations and contrast LLM annotations with both our clinician annotations and the annotations of \cite{ch06:frattallone2024using}.
 Because the corpus is automatically generated beyond the manually annotated subset, we validate it through a multi-layer framework: clinician-annotated gold-standard evaluation on \texttt{sepsis-40}, clinician--clinician agreement, bootstrap uncertainty quantification, bronze-standard proxy-reference evaluation on \texttt{sepsis-100}, direct hallucination auditing, multi-pass self-consistency, and full-corpus cross-model agreement.
 These assessments provide evidence for the quality and limitations of the LLM annotations and support the use of T2S2 as a retrospective research resource for temporal modeling of sepsis trajectories.
-
-
-\input{Chapters/chapter-06/figures/corpus-pipeline-phenotyping}
-
-

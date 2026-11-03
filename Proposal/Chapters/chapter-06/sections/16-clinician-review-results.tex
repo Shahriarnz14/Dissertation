@@ -1,0 +1,15 @@
+% !TeX root = ../../../main.tex
+
+\subsubsection{Clinician Annotation Quality Review}
+
+A clinician qualitative review of annotation quality on \texttt{sepsis-10} is described in Appendix~\ref{ch06:apd:clinician_quality_review}.
+
+The reviewed annotation bundle included O1-preview as the OpenAI annotation; replacing GPT-5 which was evaluated separately in the main quantitative results in Table~\ref{ch06:tab:results}.
+
+Inspecting the clinical quality of the annotations, we report the mean rank, top-1 fraction, top-1-LLM fraction, and quality level in Table~\ref{ch06:tab:sep10review}.
+There is a clear performance ordering in the review, with manual annotations ranked highest, O1-preview a close second, followed by DeepSeek-R1 IQ1 and Llama 3.3.
+While the Llama 3.3 annotations were rated acceptable a high percentage of the time (90\%), the other Llama and Mixtral approaches fail to achieve Acceptable performance in excess of 50\%.
+Comparing DeepSeek-R1 IQ1 and Llama 3.3, the former has more variable clinician-rated quality (8 of 10 cases rated Acceptable or better), but maintains both higher event match recall and AULTC in the main quantitative evaluation (Table~\ref{ch06:tab:results} and Figure~\ref{ch06:fig:time-disc}).
+The clinical reviewer also noted that some Llama 3.3 discrepancies for large time horizons, \emph{i.e.}, years, were large, which is corroborated by the long-horizon subpanels in Figure~\ref{ch06:fig:time-disc}.
+
+\input{Appendices/appendix-ch06/tables/clinician-annotation-review}

@@ -1,0 +1,16 @@
+% !TeX root = ../../../main.tex
+
+\subsection{Clinical Review, Grounding, and Consistency}\label{ch05:apd:clinical-validation}
+
+These analyses distinguish clinician review, agreement with individual clinicians, factual grounding, generation stability, and agreement between model annotations.
+
+\input{Appendices/appendix-ch06/sections/02-clinician-annotation-quality-review}
+
+\subsubsection{Model--Clinician Agreement}
+
+Two clinicians independently annotated five sampled T2S2 case reports using the same extraction and timestamping guidelines as \texttt{sepsis-40}.
+We compute clinician--clinician agreement and model--clinician agreement using the same metrics (event match recall, concordance, and AULTC), enabling comparison between model disagreement and human disagreement under the evaluation protocol.
+
+\input{Chapters/chapter-06/tables/model-annotator-comparison}
+
+\input{Appendices/appendix-ch06/sections/11-additional-corpus-validation-details}

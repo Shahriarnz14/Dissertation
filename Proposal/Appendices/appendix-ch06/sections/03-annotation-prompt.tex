@@ -1,5 +1,5 @@
 % !TeX root = ../../../main.tex
-\subsection{Annotation Prompt}\label{ch06:apd:prompt}
+\subsubsection{Annotation Prompt}\label{ch06:apd:prompt}
 The main annotation prompt used for clinical finding extraction is shown below. 
 Specific components are color-coded to relate them directly to the ablation analysis in Section~\ref{ch06:sec:annotation_results_quantitative} and Table~\ref{ch06:tab:sens}: \textcolor{ChSixDarkPurple}{role-playing instruction} (``You are a physician''), \textcolor{ChSixDarkRed}{conjunction expansion}, and \textcolor{ChSixDarkTeal}{few-shot example}.
 
@@ -22,7 +22,7 @@ Specific components are color-coded to relate them directly to the ablation anal
 
 An 18-year-old male was admitted to the hospital with a 3-day history of fever and rash. Four weeks ago, he was diagnosed with acne and received the treatment with minocycline, 100 mg daily, for 3 weeks. With increased WBC count, eosinophilia, and systemic involvement, this patient was diagnosed with DRESS syndrome. The fever and rash persisted through admission, and diffuse erythematous or maculopapular eruption with pruritus was present. One day later the patient was discharged.
 
-Let's find the locations of event in the case report, it shows that four weeks ago of fever and rash, four weeks ago, he was diagnosed with acne and receive treatment. So the event of fever and rash happen four weeks ago, 672 hours, it is before admitted to the hospital, so the time stamp is -672. diffuse erythematous or maculopapular eruption with pruritus was documented on the admission exam, so the time stamp is 0 hours, since it happens right at admission. DRESS syndrome has no specific time, but it should happen soon after admission to the hospital, so we use our clinical judgment to give the diagnosis of DRESS syndrome the timestamp 0. Then the output should look like
+Let's find the locations of event in the case report, it shows that four weeks ago was the acne diagnosis and start of minocycline treatment, four weeks ago, he was diagnosed with acne and receive treatment. So the event of acne diagnosis and start of minocycline treatment happen four weeks ago, 672 hours, it is before admitted to the hospital, so the time stamp is -672. diffuse erythematous or maculopapular eruption with pruritus was documented on the admission exam, so the time stamp is 0 hours, since it happens right at admission. DRESS syndrome has no specific time, but it should happen soon after admission to the hospital, so we use our clinical judgment to give the diagnosis of DRESS syndrome the timestamp 0. Then the output should look like
 
 18 years old $|$ 0\
 
@@ -64,6 +64,3 @@ Separate conjunctive phrases into its component events and assign them the same 
 \textless \textbackslash end prefix\textgreater
 
 \end{tcolorbox}
-
-
-
