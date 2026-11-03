@@ -1,7 +1,7 @@
 % !TeX root = ../../../main.tex
 \subsubsection{Modeling Approaches}
 To evaluate performance on the event forecasting and survival prediction tasks, we implement five modeling paradigms: (i) decoder-only large language models (LLMs) with fine-tuned heads, (ii) prompted LLMs without gradient updates (zero- or few-shot), (iii) encoder-only models with task-specific fine-tuned heads, (iv) encoder-masking models with fine-tuning, and (v) encoder-masking models in zero-shot settings.
-In Appendix~\ref{ch07:apd:encoder-forecasting} and~\ref{ch07:apd:encoder-survival}, we provide technical details of encoder-based forecasting methods and the survival modeling framework respectively.
+In Appendix~\ref{ch07:apd:encoder-forecasting} and~\ref{ch07:apd:encoder-survival}, we provide technical details of encoder-based forecasting methods and survival model training respectively.
 
 \ChSevenParagraph{(i) Fine-tuned LLMs.}  
 We apply instruction-tuned decoder-only models from the \textit{Llama} and \textit{DeepSeek} families: \textit{Llama-3.3-70B-Instruct}, \textit{Llama-3.1-8B-Instruct}, and their distilled variants \citep{grattafiori2024llama,liu2024deepseek}.
@@ -29,7 +29,7 @@ Architectures include general-purpose models (\textit{BERT-base-uncased} \citep{
 For each model, we append a task-specific MLP head for event occurrence or ordering prediction. 
 The model input is the same flattened prefix of the event sequence used in other settings, tokenized and formatted according to the respective architecture. 
 These models are trained using standard supervised learning objectives and evaluated on the same metrics as other methods: F1 score for event occurrence, and pairwise concordance for temporal ordering. 
-For survival analysis, the final hidden states are passed into a time-to-event prediction head and evaluated using the time-dependent concordance index \citep{ch07:antolini2005time}.
+For survival analysis, the final hidden states are used as covariates for downstream survival models and evaluated using the time-dependent concordance index \citep{ch07:antolini2005time}.
 
 \ChSevenParagraph{(iv, v) Encoder-Masking Models.}
 We adapt masked language modeling (MLM) for our temporal reasoning tasks.

@@ -1,0 +1,33 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Shared Forecasting Sensitivity Analyses}\label{ch07:sec:shared-sensitivity-results}
+\ChSevenHeadingOnly
+
+\paragraph{Time-Ordered versus Text-Ordered Training}\label{ch07:apd:sensitivity_analyses}
+
+{\raggedright
+Table \ref{ch07:tab:dsr1q_l33_comparison} shows time-ordering generally improves concordance, particularly for \texttt{DeepSeek-R1} annotations, while F1 scores show mixed results. Text-ordering sometimes yields better external dataset performance with \texttt{Llama-3.3-70B}, suggesting that preserving the narrative sequence can support accurate classification even when it does not follow temporal order.  These results highlight a trade-off between temporal alignment and narrative coherence for different tasks.
+
+
+\par}
+\input{Chapters/chapter-07/tables/text-time-order-comparison}
+
+\paragraph{Masking History}\label{ch07:apd:masking_l33_dsr1}
+
+Tables~\ref{ch07:tab:masking_effects_DS} and~\ref{ch07:tab:masking_effects_llama} report the effect of timestep dropout on classification and ranking performance.
+We evaluate performance across three datasets (\textit{T2S2}, \textit{sepsis-10}, and \textit{sepsis-100}) using F1 scores for prediction of next \(k\) events happening within the next day and concordance index (c-index) for correctly ordering the next \(k\) events.
+As the proportion of masked history increases, we observe a general decline in F1 performance, particularly at higher masking rates (e.g., 90\%), suggesting that access to historical context is important for accurate forecasting.
+Interestingly, the concordance index remains relatively stable, indicating the model's robustness in ranking the next \(k\) events with partial input histories.
+
+More specifically, we can see that F1 scores generally decrease with increasing TDR, with relatively mild degradation up to 30--60\% dropout and sharper declines thereafter.
+For example, in the \texttt{DeepSeek-R1} annotations (Table~\ref{ch07:tab:masking_effects_DS}), \textit{T2S2}/\textit{sepsis-10}/\textit{sepsis-100} drop from 0.576/0.428/0.607 at TDR = 0\% to 0.423/0.200/0.510 at TDR = 90\%, with \textit{sepsis-10} showing the largest relative decline.
+In contrast, concordance (c-index) remains stable across dropout levels (0.661--0.678), indicating that ranking-based evaluations are less sensitive to history truncation.
+These trends are consistent for \texttt{Llama-3.3} annotations (Table~\ref{ch07:tab:masking_effects_llama}), suggesting that ranking objectives capture temporal relationships that are more robust to missing historical information than binary classification accuracy of predicting whether an event happens within a time window.
+
+
+\input{Chapters/chapter-07/tables/deepseek-history-masking}
+
+
+
+\input{Chapters/chapter-07/tables/llama-history-masking}
+
+\FloatBarrier

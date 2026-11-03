@@ -1,0 +1,34 @@
+% !TeX root = ../../../main.tex
+\subsubsection{Prediction-Instance Construction}\label{ch07:sec:prediction-instances}
+
+We develop a general framework for predictive modeling over textual time series of the encoder-only models, designed to accommodate the irregular, event-based structure common to clinical case reports. 
+As highlighted Section~\ref{ch07:sec:tts-annotation}, each data instance consists of a sequence of clinical events, where each event is a free-text string describing a clinical finding, intervention, or diagnosis, paired with a timestamp in hours relative to the time of admission. 
+The format resembles a two-column table, where the first column contains textual clinical events and the second column contains integer-valued timestamps.
+
+\ChSevenParagraph{Input Preprocessing and Timeseries Construction.}
+From each case report, we construct multiple training examples for sequence forecasting.
+For a fixed number $K$ of candidate future events, we generate overlapping windows of historical events and forecast targets.
+Specifically, for each case report with $L$ rows, we construct a sequence of up to $L-K$ forecasting examples.
+Each example is structured as follows:
+
+\begin{itemize}
+    \item A \textbf{history segment} $\mathcal{H}_t = \{(e_i, t_i)\}_{i=1}^{n}$, consisting of clinical events $e_i$ occurring at timestamps $t_i \leq t$.
+    \item A \textbf{forecast target} $\mathcal{F}_t = \{(f_j, \tau_j)\}_{j=1}^{K}$, consisting of the next $K$ events after $t$.
+\end{itemize}
+
+To preserve the temporal coherence of events, we treat all events with the same timestamp as an atomic unit.
+That is, if multiple events share the same timestamp, they are included together in the history or forecast block, and the next forecasting window is only advanced after the full timestamp block has been consumed.
+
+\ChSevenParagraph{Model Input Representation.}
+Each training example is serialized into a transformer-compatible input by linearizing the historical events and forecast events.
+Importantly, we preserve both temporal and textual content by encoding each historical event in the form ``\texttt{t:e}'' where \texttt{t} is the timestamp and \texttt{e} is the event string.
+The input to the language model takes the form:
+
+\begin{equation}
+\texttt{[CLS]} \; t_1\texttt{:}e_1 \; \texttt{[SEP]} \; t_2\texttt{:}e_2 \; \texttt{[SEP]} \; \dots \; \texttt{[SEP]} \; t_n\texttt{:}e_n
+\end{equation}
+
+All inputs are truncated from the left (i.e., keeping the most recent tokens) if they exceed the model's context window (typically 512 tokens).
+
+Target-specific input components are described in Appendix~\ref{ch07:apd:encoder-forecasting}.
+\par

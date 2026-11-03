@@ -18,7 +18,7 @@ This creates a distinct modeling challenge: correct temporal ordering and causal
 As shown in the main text, training/evaluating on time-ordered versus text-ordered sequences yields measurably different performance.
 
 \textbf{Temporal metrics reduce any advantage from memorization.}
-Evaluation emphasizes temporal reasoning—forecasting F1 at fixed horizons, pairwise concordance (c-index), and AULTC—rather than surface-form similarity.
+Evaluation emphasizes temporal reasoning—forecasting F1 at fixed horizons and pairwise concordance (c-index)—rather than surface-form similarity.
 Memorizing text order can even \emph{hurt} time-alignment metrics because clinical narratives often interleave retrospective commentary where textual order $\neq$ chronological order.
 
 \subsubsection{Open-Source, PubMed-Free Baselines}
@@ -45,7 +45,7 @@ The \textbf{key takeaways} are
 \begin{itemize}
     \item Using derived, time-ordered \emph{(event, time)} tuples and temporal metrics directly targets temporal reasoning and reduces susceptibility to content memorization.
     \item PubMed-free baselines and post-cutoff tests provide external checks
-    \item Empirically, models without PubMed exposure achieve comparable performance, arguing against causal leakage into our forecasting, concordance, and AULTC evaluations.
+    \item Empirically, models without PubMed exposure achieve comparable performance, arguing against causal leakage into our forecasting and concordance evaluations.
 \end{itemize}
 
 
