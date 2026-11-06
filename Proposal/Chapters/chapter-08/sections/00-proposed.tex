@@ -1,0 +1,87 @@
+% !TeX root = ../../../main.tex
+When norepinephrine alone is insufficient to support blood pressure in septic shock, clinicians may add vasopressin.
+The timing of this decision depends on the patient's evolving condition and response to treatment.
+The Optimal Vasopressin Initiation in Septic Shock (OVISS) study modeled this as an hourly reinforcement learning problem, representing patients through 14 time-varying structured clinical features and baseline characteristics \citep{kalimouttou2025optimal}.
+Across four datasets, the learned policy recommended initiating vasopressin more often than clinicians did.
+Its recommended timing, however, differed across datasets: earlier in the UPMC and UCSF cohorts, but later in the MIMIC-IV validation cohort.
+In pooled external validation, agreement with the policy was associated with lower in-hospital mortality (adjusted odds ratio 0.81, 95\% CI 0.73--0.91).
+This observational result does not establish that following the policy would improve outcomes.
+It leaves open a question that we study here: how much do the learned policy, and our assessment of it, depend on the clinical information included in the patient state?
+
+Our prior work on multimodal temporal alignment (Chapter 7) gives a concrete reason to examine this question.
+Of 8,439 narrative-derived events from 40 sepsis patient encounters, only 33.5\% were adequately represented in structured EHR records, while 35.1\% had no identified structured counterpart \citep{kumar2026text}.
+The missing information included symptoms, clinical assessments, descriptions of severity, and contextual details.
+Such information may matter both for why a treatment was chosen and for what happened to the patient afterward.
+
+As a starting point, we have developed a registry of 34 interpretable clinical features that could be relevant to treatment selection and outcomes.
+We applied this registry to textual time series (TTS) reconstructed from discharge summaries of 300 patients in the OVISS MIMIC-IV sepsis cohort.
+From 70,693 events, we extracted 8,719 candidate feature assertions, covering 30.6\% of distinct event timestamps, with a median of 8.5 distinct features per patient.
+These features describe infection findings, mechanisms of shock, cardiovascular assessments, and limitations on treatment escalation.
+This establishes that we can extract candidate longitudinal features from the narrative trajectories.
+Whether the features are clinically accurate and relevant to vasopressin initiation remains to be assessed with our clinical collaborators.
+
+Prior studies have learned sepsis treatment policies from structured records, most notably the AI Clinician \citep{komorowski2018artificial}.
+The difficulties of evaluating such policies from observational data are also well established \citep{gottesman2019guidelines}.
+Closest to our proposed use of text is MORE-CLEAR \citep{lim2026large}, which combines LLM-derived representations of clinical notes with structured ICU observations for offline reinforcement learning.
+Its multimodal approach used persistent context from initial notes and it improved several retrospective policy-evaluation metrics across MIMIC-III, MIMIC-IV, and a Korean ICU dataset.
+In contrast to this work, we focus on a specific treatment decision, vasopressin initiation, and on interpretable textual features organized over time.
+We also begin with a separate question: whether adding clinical information available in text changes the evaluation of an already learned policy.
+
+Two other lines of work inform this question.
+Delphic offline RL studies uncertainty about policies when hidden confounding is nonidentifiable \citep{pace2024delphic}.
+\citet{sivaraman2026indirect} examine how case complexity affects sepsis recommendations and clinicians' responses to AI advice.
+The latter does not directly study text as an input to policy learning, but is relevant to interpreting disagreements between clinicians and learned policies.
+
+We organize the proposed work around two uses of textual context: evaluating a fixed policy and learning a new one.
+Keeping these questions separate allows us to examine whether additional information changes our conclusions about a policy before changing the policy itself.
+
+\textbf{Offline policy learning.}
+We have reimplemented an OVISS-inspired approach on our MIMIC-IV cohort, including fitted Q-iteration (FQI).
+We have also considered conservative Q-learning (CQL), implicit Q-learning (IQL), and batch-constrained Q-learning (BCQ), with supervised behavior cloning as a baseline \citep{ernst2005tree,kumar2020conservative,kostrikov2021offline,fujimoto2019benchmarking}.
+These methods differ in how they estimate action values and handle actions with little support in the observed clinician trajectories.
+We will compare them using the same cohort definitions and evaluation procedures.
+This comparison will test whether any contribution from textual context depends on the method used to learn the policy.
+
+\textbf{Constructing multimodal policy states.}
+We first need to determine what the text adds.
+We will compare the TTS-derived features against the original OVISS inputs and, separately, against an expanded set of structured EHR variables.
+The second comparison is necessary to distinguish information absent from the OVISS state from information absent from the structured record more broadly.
+The gap analysis in Chapter 7 provides initial evidence that structured records do not capture all clinically relevant information expressed in narrative text.
+
+The textual information also has different temporal roles.
+Baseline conditions and clinical history are relevant throughout a patient's course, including decisions to initiate vasopressin or defer treatment.
+Findings such as worsening perfusion, fluid responsiveness, or a suspected cause of shock may change during care.
+We will therefore construct states that combine persistent context with time-varying textual features across the decision trajectory.
+Restricting attention to the observations immediately before vasopressin administration would miss this distinction.
+
+Our existing MIMIC-IV discharge-summary TTS provides a starting point for studying what can be recovered retrospectively from patient histories.
+Its use for sequential decisions, however, requires care about when that information became available.
+We will also investigate MIMIC-III, which contains nursing and physician notes recorded during hospitalization.
+\citet{hsu2020characterizing} report nursing notes are available for 73.0\% of MIMIC-III admissions and discharge summaries for 96.7\% patients.
+We will assess note availability in a comparable septic-shock cohort, then compare features reconstructed from discharge summaries with those obtained from notes documented during care.
+This comparison will help establish the robustness of the representations and which information could have been available at each decision.
+
+\textbf{Evaluating policies with additional clinical context.}
+Our primary experiment holds the learned vasopressin-initiation policy and evaluation cohort fixed.
+We then evaluate that same policy using three sets of information: (1) OVISS-style structured states, (2) expanded structured histories, and (3) states augmented with TTS-derived features.
+We will examine changes in estimated policy value, treatment-assignment models, and conclusions about policy performance, using observational methods that account for measured time-varying confounding.
+
+The purpose of fixing the policy is to isolate changes in its evaluation from changes in its recommendations.
+The recommended actions remain the same; the information used to assess them changes so that the fixed policy is learned from the original structured state, while the additional textual variables enter the evaluation models.
+We will examine treatment overlap, agreement across estimators, and sensitivity to feature selection and temporal representation.
+If the estimates differ, this would show that the evaluation is sensitive to the available clinical information.
+It would not establish that the additional features have eliminated unmeasured confounding.
+
+\textbf{Learning policies with textual context.}
+We will then study whether adding TTS features changes the policies themselves.
+In particular, we will examine when they recommend vasopressin initiation and how their recommendations differ for patients with different clinical histories.
+We will compare interpretable clinical features with generic textual embeddings to assess how the representation of narrative information affects the learned policy.
+
+One question is whether the added context explains some disagreements between structured-only policies and clinicians.
+Clinicians may have acted on information missing from the structured state; making that information available to the model could change its recommendation.
+Greater agreement would help characterize what the text contributes, but would not by itself show that the policy is better.
+We will evaluate learned policies on held-out data and work with clinical collaborators to review selected differences in recommendations.
+
+Finally, we will use controlled semi-synthetic experiments with known confounding mechanisms to test whether additional clinical information improves evaluation accuracy.
+These experiments complement the observational analyses, where the true policy value is unknown.
+Through this work, we aim to determine what TTS contributes beyond structured records, when that information changes conclusions about vasopressin initiation, and whether it supports more useful representations for sequential decision-making.
