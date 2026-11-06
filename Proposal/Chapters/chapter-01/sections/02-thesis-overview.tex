@@ -1,0 +1,60 @@
+% !TeX root = ../../../main.tex
+\subsection{Thesis Statement and Overview}
+\label{ch01:sec:thesis-overview}
+
+\noindent\textbf{Thesis Statement.}
+This dissertation develops temporal representation learning and inference methods to characterize clinical progression and treatment-related differences in event timing.
+We pursue three methodological aims:
+
+\noindent\textbf{(S1)} Learn temporally coherent patient-state representations that preserve predictive discrimination and clinically meaningful differences among patients with the same outcome.
+
+\noindent\textbf{(S2)} Define and estimate treatment effects on time-to-event outcomes, and measure estimation accuracy against known reference effects under different violations of causal assumptions and censoring mechanisms.
+
+\noindent\textbf{(S3)} Construct and validate clinical event histories from narrative text, study forecasting from these histories, and use textual and structured evidence to improve temporal grounding and investigate their use in sequential decision-making.
+
+\noindent\textbf{\hyperref[part:structured]{Part~\ref*{part:structured}}: Temporal Representation Learning.}
+A representation can predict an outcome well while failing to preserve meaningful differences among patients with that outcome.
+In \hyperref[chap:ch02]{Chapter~\ref*{chap:ch02}}, we develop Temporal Supervised Contrastive Learning (Temporal-SCL) to learn patient-state embeddings that retain clinically relevant variation while supporting outcome prediction \citep{ch06:noroozizadeh2023temporal}.
+We combine outcome labels, feature-space similarity, and temporal regularization for variable-length clinical time series.
+In our approach, nearest-neighbor pairing allows feature differences within an outcome class to influence the contrastive objective.
+Temporal-SCL achieves higher mean predictive performance than the evaluated baselines on two tasks: mortality prediction in sepsis patients, a static outcome, and cognitive-status classification, a dynamic outcome.
+The synthetic experiments also let us examine what the representations preserve beyond the outcome labels.
+Under the study's qualitative visual recovery criterion, the full model recovered all ten underlying state clusters in each of ten experimental repeats.
+Other baseline methods could predict outcomes well without consistently recovering this structure.
+
+\noindent\textbf{\hyperref[part:causal]{Part~\ref*{part:causal}}: Causal Survival Analysis and Evaluation.}
+In \hyperref[chap:ch03]{Chapter~\ref*{chap:ch03}}, we study medication non-adherence and the timing of mortality, involuntary hospitalization, or jail booking among patients with schizophrenia \citep{noroozizadeh2025impact}.
+We use longitudinal clinical and administrative histories for survival modeling and patient-level individual treatment-effect (ITE) estimation at successive observation snapshots.
+Contrasts in restricted mean event time quantify differences in expected time free of the composite adverse outcome over a specified horizon.
+We find associations between non-adherence and earlier events that are particularly evident at earlier snapshots, although their strength varies across models and observation times.
+Because unmeasured confounding may remain, we interpret these findings as associations rather than established causal effects.
+A separate difficulty is evaluating the treatment-effect estimates themselves.
+Without counterfactual reference effects, we cannot directly measure patient-level ITE accuracy.
+Neither predictive performance nor agreement between estimators resolves this problem.
+In \hyperref[chap:ch04]{Chapter~\ref*{chap:ch04}}, we develop SurvHTE-Bench to study treatment-effect estimation accuracy in settings where reference effects can be known \citep{noroozizadeh2026survhte}.
+The benchmark evaluates conditional average treatment-effect (CATE) estimators with fixed covariates and a time-fixed binary treatment.
+This controlled setting differs from the longitudinal adherence analysis in \hyperref[chap:ch03]{Chapter~\ref*{chap:ch03}}.
+Using controlled synthetic and semi-synthetic settings, we directly measure CATE root mean squared error (RMSE) as we vary survival dynamics, treatment assignment, censoring, and violations of identifying assumptions.
+We examine both estimation accuracy and the relative rankings of estimators, and complement these experiments with real-data analyses.
+
+\noindent\textbf{\hyperref[part:text]{Part~\ref*{part:text}}: Textual Clinical Trajectories and Temporal Reasoning.}
+We next study how to reconstruct clinical progression from narrative text.
+We construct textual time series (TTS), in which natural-language descriptions of heterogeneous clinical events are paired with relative timestamps.
+\hyperref[chap:ch05]{Chapter~\ref*{chap:ch05}} brings together PubMed Open Access-TTS, drawn from more than 124,000 published clinical case reports \citep{noroozizadeh2025pmoa}, and sepsis-specific reconstruction and validation \citep{pmlr-v333-noroozizadeh26a}.
+We develop evaluation procedures using annotated subsets to assess whether LLM-reconstructed histories recover clinical events and, among successfully matched events, accurately recover their ordering and timestamps.
+Targeted clinician review provides a further assessment of these histories.
+In \hyperref[chap:ch07]{Chapter~\ref*{chap:ch07}}, we study what can be predicted from such event sequences \citep{noroozizadeh2026forecasting}.
+We formulate three tasks: predicting whether supplied candidate events occur within a forecast window, correct ordering of supplied future events, and estimating survival from event histories.
+We compare language model architectures, temporal objectives, input ordering, and the amount of historical context needed for improved forecasting performance.
+The results depend on the task: encoder transformers generally perform better on event occurrence and ordering, while LLM-derived representations show stronger survival discrimination in several evaluated settings.
+In \hyperref[chap:ch08]{Chapter~\ref*{chap:ch08}}, we develop a retrieval-augmented multimodal alignment method that uses structured EHR records to calibrate the timing of events reconstructed from clinical notes \citep{kumar2026text}.
+We show that structured observations provide partial temporal anchors.
+A complementary coverage analysis shows that a substantial fraction of narrative-derived events have no structured counterpart.
+In an evaluation on 40 discharge summaries, calibration leaves event recovery largely unchanged and improves temporal point estimates for the reported model–metric combinations.
+Beyond temporal calibration, \hyperref[chap:ch09]{Chapter~\ref*{chap:ch09}} proposes to examine whether narrative-derived context can supplement structured patient states for observational reinforcement learning in septic shock.
+Our hypothesis is that textual events contain clinically relevant variables omitted from the policy states.
+Incorporating this information could change policy evaluation and potentially help address some sources of unmeasured confounding in observational analyses.
+This remains a question for the proposed study.
+
+\hyperref[chap:ch10]{Chapter~\ref*{chap:ch10}} will bring together the conclusions and future research directions.
+The appendices provide supporting methods and results for each chapter.

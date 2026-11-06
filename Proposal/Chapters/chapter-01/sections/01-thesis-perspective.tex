@@ -1,0 +1,39 @@
+% !TeX root = ../../../main.tex
+\subsection{Motivation and Thesis Perspective}
+\label{ch01:sec:thesis-perspective}
+
+Recent advances in artificial intelligence have produced strong results on a range of medical tasks shedding light on the broader potential of AI in healthcare.
+Leading large language models have exceeded 90\% accuracy on medical licensing examination-style questions \citep{vishwanath2026generalpurpose}, produced clinical summaries judged comparable to or better than those written by medical experts \citep{van2024adapted}, and supported patient matching to clinical trials using unstructured health records \citep{callies2025realworld}.
+In simulated consultations, research systems have shown promise in conversational diagnosis and clinical information gathering \citep{saab2026advancing}.
+Specialized foundation models have also achieved nearly 90\% accuracy in answering questions about longitudinal health records on internal benchmarks \citep{sellergren2026medgemmatechnicalreport}.
+Beyond medical question answering, generative Transformers have modeled disease progression across large patient populations, showing strong performance in predicting the occurrence and timing of future diagnoses from longitudinal health histories \citep{shmatko2025learning}.
+These results suggest a broader role for AI in healthcare: learning from the evolving course of a patient's illness to anticipate adverse outcomes and provide evidence for clinical decisions.
+Progress toward this use depends both on model capabilities and on how we represent, learn from, and reason about longitudinal clinical information.
+
+These opportunities raise three challenges concerning what can be learned from patient histories and what the observed data allow us to conclude.
+The first concerns what a learned representation preserves about a patient's clinical condition.
+In conventional supervised learning, representations are typically optimized for a particular prediction task.
+Two patient states may differ in clinically meaningful ways and still share the same outcome label that a model can predict that label accurately without preserving these differences.
+Such distinctions can matter when the representation is used beyond the original task.
+Monitoring how a patient's condition evolves, or supporting subsequent clinical analyses and decisions, may require information that the prediction objective did not require the representation to retain.
+Thus, learning representations for these uses calls for objectives that capture patient heterogeneity and temporal relationships beyond the distinctions needed for outcome prediction alone.
+
+The second challenge concerns the outcomes being modeled.
+Clinical prognosis often depends on whether an adverse event occurs and when it occurs, as well as how treatment and adherence to it might change that timing.
+The latter question brings causal inference into survival modeling: we need to define meaningful treatment-effect estimands and estimate these effects from longitudinal observational data.
+Right-censoring, potentially unmeasured confounding, and the absence of observable counterfactual outcomes complicate both the inference of these effects and the evaluation of treatment-effect estimators in time-to-event settings.
+
+The third challenge concerns the information from which we construct a patient's clinical history.
+Much of longitudinal healthcare modeling relies on structured measurements, diagnoses, and treatment records.
+Yet for many conditions, symptom progression, responses to interventions, suspected causes of deterioration, and clinical uncertainty are often documented more fully in narrative text.
+These details can shape clinical assessments and treatment decisions.
+Recent advances in LLMs suggest that we may recover this information and construct timelines that describe the patient's course more fully, providing predictive models with additional clinical context and better informing models used to support decisions about care.
+The temporal structure of this history, however, is not necessarily explicit in the narrative.
+An event may be described retrospectively or mentioned out of order, with its time left implicit or uncertain.
+We therefore need methods for identifying and representing heterogeneous clinical events, recovering their temporal relationships, and assigning event times without losing the information expressed in the narrative.
+Even if this reconstruction succeeds, it leaves a distinct modeling question: can a language model effectively forecast future events from the resulting sequence?
+Answering this requires studying temporal prediction from textual event histories, including model architectures and the organization of historical context.
+Structured records, when available, can provide complementary evidence for grounding events in time, while narrative histories may contain clinically important factors absent from structured patient states, including information relevant to treatment decisions and sequential decision-making.
+
+These three challenges motivate the three parts of this dissertation: temporal representation learning; causal survival analysis and evaluation; and textual trajectory reconstruction, forecasting, and multimodal temporal alignment.
+The final proposed work builds on the third part to investigate how narrative-derived clinical context can complement structured patient states in observational sequential decision-making for a case study of septic shock treatment.
