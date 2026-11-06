@@ -1,0 +1,48 @@
+% !TeX root = ../../../main.tex
+Recent advances in artificial intelligence have created new opportunities to understand disease progression, anticipate adverse outcomes, and support clinical decision-making.
+Realizing this potential requires methods that can learn from how patients' conditions change over time, reason about the timing and effects of interventions, and recover clinically meaningful information from different sources.
+This dissertation contributes to these goals through temporal representation learning, causal survival analysis and evaluation, and the reconstruction and modeling of clinical trajectories from narrative text.
+Together, these directions demonstrate how advances in learning objectives of temporal modeling, and the use of complementary clinical information can support richer representations of patient histories and more informative analyses of disease progression and treatment.
+
+In \hyperref[part:structured]{Part~\ref*{part:structured}} of this dissertation examined how to learn representations of structured longitudinal observations that retain meaningful differences among patient states.
+Through Temporal-SCL, we developed a supervised contrastive learning framework that combines outcome supervision with feature-space similarity and temporal relationships.
+Our experiments demonstrated that these representations can achieve strong predictive performance while preserving aspects of the underlying patient-state structure that prediction-focused methods may overlook.
+This distinction is important for longitudinal modeling, where patients with similar predicted outcomes can have substantially different clinical conditions and trajectories.
+Learning representations that retain such differences provides opportunities for more informative characterization of patient states and subsequent clinical analyses.
+
+In \hyperref[part:causal]{Part~\ref*{part:causal}}, we addressed the timing of adverse outcomes and the estimation of treatment effects from longitudinal data.
+Our study of medication non-adherence among patients with schizophrenia combined survival modeling with treatment-effect estimation framework to examine differences in expected time until adverse outcomes.
+Beyond the clinical associations identified in this study, the work illustrated the importance of defining interpretable time-to-event estimands and evaluating models at different points along a patient's history.
+We subsequently developed SurvHTE-Bench to provide a systematic evaluation of heterogeneous treatment-effect estimators for right-censored outcomes.
+By comparing estimators against known reference effects under different survival mechanisms, censoring conditions, and causal assumptions, the benchmark provides a foundation for understanding their relative strengths and limitations.
+These contributions support more rigorous development and assessment of causal survival methods for clinical and other longitudinal applications.
+
+In \hyperref[part:text]{Part~\ref*{part:text}}, we explored how large language models can recover and use the temporal information contained in clinical narratives.
+We introduced textual time series (TTS) to represent patient histories as sequences of natural-language clinical events associated with timestamps, and developed PMOA-TTS, a resource containing more than 124,000 clinical case reports and over 5.6 million extracted events.
+Our reconstruction and validation studies established methods for evaluating both the clinical content and temporal organization of these trajectories, including a focused investigation of sepsis.
+Building on this representation, we formulated forecasting tasks involving future-event occurrence, temporal ordering, and survival prediction.
+The results revealed different strengths across model families and prediction tasks, and showed how the organization and availability of historical information influence forecasting performance.
+These studies provide resources, evaluation methods, and modeling approaches for learning from clinical histories that would otherwise remain difficult to use in longitudinal prediction.
+
+Our multimodal temporal alignment work in \hyperref[part:text]{Part~\ref*{part:text}}further demonstrated the complementary roles of structured records and narrative text.
+Structured observations can provide useful temporal anchors, while narratives contain symptoms, assessments, and clinical context that may not be adequately represented in structured fields.
+Our retrieval-augmented alignment framework uses these complementary sources to improve temporal grounding in selected settings while preserving the clinical information recovered from text.
+Our structured-data gap analysis also found that a substantial fraction of narrative-derived events lacked corresponding structured observations.
+These findings support the value of combining modalities to reconstruct more informative patient trajectories rather than relying exclusively on either structured records or clinical narratives.
+
+A natural extension of this research that is proposed in this work is to investigate how textual trajectories can contribute to sequential clinical decision-making.
+In \hyperref[chap:ch09]{Chapter~\ref*{chap:ch09}}, we propose studying whether narrative-derived clinical information can complement structured patient states in reinforcement learning for vasopressin initiation in septic shock.
+An important question is whether additional clinical context changes the estimated value of an existing treatment policy, before considering how it changes the policies learned from observational data.
+This direction also provides an opportunity to examine how baseline clinical information and evolving narrative-derived observations can be incorporated into longitudinal state representations.
+More broadly, it connects temporal reconstruction and multimodal learning to the evaluation of treatment strategies, where the information available about a patient's condition can influence both clinical decisions and the conclusions drawn from observational records.
+
+Several limitations and opportunities for further research remain.
+The observational studies depend on the available clinical information and the assumptions required for causal interpretation, motivating continued work on evaluation under more complex longitudinal settings.
+For textual trajectories, published case reports and discharge summaries often describe events retrospectively, making it important to distinguish when an event occurred from when information about it became available.
+Published case reports are also more likely to describe unusual, complex, or severe presentations, and therefore do not represent the full distribution of patients and disease courses encountered in routine clinical practice.
+These considerations motivate extending the proposed methods to additional clinical populations and documentation sources, including progress and nursing notes collected during care, as well as further evaluation of temporal representations in prospective settings.
+
+Taken together, this dissertation advances methods for learning from structured longitudinal observations, studying treatment effects on time-to-event outcomes, and reconstructing and reasoning over clinical trajectories from text.
+The contributions show how temporal information can be used in different learning and inference problems, and how complementary clinical data sources can provide a more informative account of a patient's course.
+As AI systems become increasingly capable of learning from complex clinical records, developing such representations and evaluation methods will be important for translating advances in modeling into meaningful progress in healthcare.
+The methods, resources, and findings developed here provide a foundation for future research on longitudinal prediction, causal analysis, and sequential clinical decision-making.
