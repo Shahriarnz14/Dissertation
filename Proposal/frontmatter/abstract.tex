@@ -1,0 +1,30 @@
+% !TeX root = ../main.tex
+% \vspace{-2em}
+Recent progress in AI has opened new possibilities in healthcare for understanding and supporting patient care. 
+Longitudinal clinical information provides a basis for exploring these possibilities. 
+Clinical records describe how a patient's condition changes, when adverse events occur, and why treatments are given. 
+This information is distributed across structured measurements and narrative text, often with incomplete follow-up or uncertain timing. 
+Making use of this information requires developing methods that can capture the temporal relationships among patient observations, clinical events, and treatment decisions. 
+This dissertation develops methods for representing patient trajectories, estimating survival treatment effects, and reconstructing clinical timelines from narratives.
+
+
+We begin by introducing Temporal Supervised Contrastive Learning (Temporal-SCL) for variable-length clinical time series. 
+The method combines outcome supervision and temporal regularization with nearest-neighbor pairing in feature space as an alternative to data augmentation. 
+On two clinical datasets, Temporal-SCL improves predictive performance over the evaluated baselines. 
+On synthetic data, it recovers known state structure that similarly predictive alternatives cannot consistently recover.
+
+We next study medication non-adherence and adverse-event timing in schizophrenia patients where we combine survival prediction with patient-level treatment-effect estimation. 
+Our derived estimators associate non-adherence with earlier adverse events, although unmeasured confounding limits causal interpretation. 
+To examine estimation accuracy under controlled conditions, we then introduce SurvHTE-Bench for heterogeneous survival treatment-effect estimation with fixed covariates and time-fixed binary treatments. 
+We show that performance of causal survival estimator families largely depends on survival dynamics, censoring, and violations of causal assumptions.
+
+Lastly, we look at clinical narratives, which provide information that structured records often miss, including symptoms, treatment rationale, and descriptions of disease progression. 
+We develop textual time series (TTS), which pair natural-language event descriptions with relative timestamps. 
+Using this representation, we construct PMOA-TTS from 124,349 published clinical case reports, yielding over 5.6 million timestamped events, and evaluate reconstruction on reference sets. 
+In the sepsis cohort of the reports, we then use event histories to forecast the occurrence and ordering of the next candidate events and to predict survival. 
+Our analysis reveals that representations learned by different language model architectures capture distinct aspects of event histories, making them better suited to different forecasting tasks. 
+Next, we turn our focus to narratives with corresponding structured EHR records. 
+We develop a retrieval-augmented multimodal alignment framework to calibrate event times reconstructed from text and improving temporal accuracy. 
+We also show that a substantial portion of textual events do not have suitable structured counterparts. 
+Finally, building on this finding, we propose to extract interpretable features from discharge-summary trajectories and study how narrative context affects observational reinforcement learning for vasopressin initiation in septic shock. 
+We aim to examine how this context affects the evaluation of fixed policies and the learning of new ones, and assess how much of clinicians' treatment behavior remains unexplained when textual events are excluded.

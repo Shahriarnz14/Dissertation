@@ -4,4 +4,8 @@
 $max_repeat = 8;
 $ENV{'TEXINPUTS'} = './template//:' . ($ENV{'TEXINPUTS'} // '');
 $ENV{'BIBINPUTS'} = '.:' . ($ENV{'BIBINPUTS'} // '');
+# Exact body sizes can generate local bitmap math fonts. Keep that cache
+# with the build products instead of writing into the user's TeX installation.
+require Cwd;
+$ENV{'TEXMFVAR'} = Cwd::getcwd() . '/build/texmf-var';
 1;

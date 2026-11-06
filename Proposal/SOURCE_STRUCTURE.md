@@ -65,7 +65,9 @@ latexmk -pdf -synctex=1 -interaction=nonstopmode -halt-on-error \
   -file-line-error -outdir=build main.tex
 ```
 
-`latexmkrc` supplies relative template and bibliography search paths. No original-paper directory or archived wrapper is required. The repository and Proposal-local LaTeX Workshop configurations are unchanged; the latter retains its existing absolute cache output directory.
+`latexmkrc` supplies relative template and bibliography search paths. No original-paper directory or archived wrapper is required. Both the repository and Proposal-local LaTeX Workshop configurations write to `Proposal/build/`, so opening either folder uses the same PDF and auxiliary files. Let latexmk finish all BibTeX and LaTeX passes before reviewing `build/main.pdf`; intermediate passes can have missing references and incomplete contents. A successful completed build reports that all targets are up to date.
+
+If LaTeX Workshop still shows old warnings after a successful terminal build, open `main.tex`, run **LaTeX Workshop: Build with recipe**, and choose **latexmk (force rebuild and refresh diagnostics)**. This runs `latexmk -g` through the extension so it receives fresh compiler output and refreshes the Problems panel. The normal first recipe remains incremental. No warning filters or auxiliary-file deletion are needed.
 
 For a standalone source export, place `main.tex`, `latexmkrc`, `references.bib`, `Chapters/`, `Appendices/`, `Parts/`, `macros/` and `template/` at the export root. Documentation may accompany them. Exclude build products, editor settings, metadata and archived standalone wrappers. Do not upload cached bibliography or auxiliary files.
 

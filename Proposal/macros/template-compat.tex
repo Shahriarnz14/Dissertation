@@ -2,7 +2,9 @@
 % Narrow technical adaptations to unchanged copied CMU template files.
 % See metadata/transformation-log.md for rationale and validation.
 \definecolor{ProposalPublishedBlue}{HTML}{174A8B}
-\definecolor{ProposalProposedBlue}{HTML}{1683C4}
+% Use one proposal color. Keep the former name as an alias so existing
+% contents files remain readable on the first rebuild after this change.
+\colorlet{ProposalProposedBlue}{ProposalPublishedBlue}
 \makeatletter
 \newcommand{\ProposalPatchFailure}[1]{%
   \PackageError{proposal}{CMU compatibility patch failed: #1}%
@@ -99,8 +101,7 @@
     % An unlinked symbolic footnote avoids nested links in the Part III row
     % and leaves the scientific chapters' footnote counters untouched.
     \@footnotetext{%
-      \textcolor{ProposalPublishedBlue}{\rule{1em}{0.7em}}~Preliminary published results of proposed work;\enspace
-      \textcolor{ProposalProposedBlue}{\rule{1em}{0.7em}}~Proposed work.}%
+      \textcolor{ProposalPublishedBlue}{\rule{1em}{0.7em}}~Recent research and ongoing developments for Proposal}%
   \endgroup
 }
 \newcommand{\ProposalListLink}[2]{%
@@ -173,7 +174,7 @@
       % lines single-spaced and leave figure/table lists unchanged.
       \patchcmd{\ThesisContentsEntry}
         {\vskip \z@ \@plus.2\p@}
-        {\vskip 2.5pt \@plus.2\p@}
+        {\vskip 1.25pt \@plus.2\p@}
         {}{\ProposalPatchFailure{contents entry spacing}}%
       % singlespacing inserts a baseline-sized vskip even for entries excluded
       % by tocdepth. Set the stretch without that skip; nothing else changes.

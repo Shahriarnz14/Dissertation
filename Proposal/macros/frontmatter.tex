@@ -1,0 +1,52 @@
+% !TeX root = ../main.tex
+% User-supplied front matter; keep the copied CMU title-page machinery.
+\newcommand{\ProposalKeywords}{Machine Learning, Healthcare, Temporal Representation Learning, Time Series, Time-to-Event Prediction, Survival Analysis, Causal Inference, Large Language Models, Forecasting, Multimodal Alignment, Sequential Decision Making}
+\hypersetup{pdfkeywords={\ProposalKeywords}}
+
+% Restore only the two footnote settings after the title-page clear. Keep the
+% initial CMU shipout outside an extra group so its setup remains in effect.
+\newskip\ProposalSavedFootnoteSkip
+\newcommand{\ProposalBeginTitleSupport}{%
+  \let\ProposalSavedFootnoteRule\footnoterule
+  \ProposalSavedFootnoteSkip=\skip\footins
+  \renewcommand{\footnoterule}{}%
+  \setlength{\skip\footins}{14pt}}
+\newcommand{\ProposalEndTitleSupport}{%
+  \let\footnoterule\ProposalSavedFootnoteRule
+  \skip\footins=\ProposalSavedFootnoteSkip}
+\makeatletter
+% Raise only the abstract heading and body by one inch. Keep its footer and
+% the document geometry unchanged, including all other front-matter pages.
+\patchcmd{\abstract}
+  {\vspace*{2cm}}
+  {\vspace*{\dimexpr2cm-1in\relax}}
+  {}{\ProposalPatchFailure{abstract opening top spacing}}
+\newcommand{\ProposalTitleSupport}{%
+  % The copied template already loads footmisc with bottom placement.
+  % An unnumbered insertion keeps the supplied text in the footnote area.
+  \begingroup
+    \def\@thefnmark{}%
+    \long\def\@makefntext##1{%
+      \setstretch{1}\normalfont\fontsize{8}{10}\selectfont
+      \justifying\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}%
+      \noindent##1}%
+    \@footnotetext{\input{frontmatter/support}}%
+  \endgroup}
+\newcommand{\ProposalKeywordsPageStyle}{%
+  \thispagestyle{empty}% no printed number before the abstract
+  \cmu@page@label{keywords}}% unique PDF page anchor before Roman i
+\patchcmd{\maketitle}
+  {© \@author, \thesisyear}
+  {© \@author, \thesisyear\ProposalTitleSupport}
+  {}{\ProposalPatchFailure{title-page research support}}
+% Share the available vertical space between the five lower title-page
+% blocks. Small corrections account for the different line-box/font sizes,
+% giving similar visible gaps while retaining all text and its typography.
+\newcommand{\ProposalTitleBlockSpace}[1][0pt]{\vspace{#1 plus 1fill}}
+\newcommand{\ProposalPatchTitleBlockSpace}[1]{%
+  \patchcmd{\maketitle}{\vspace{4 em}}{\ProposalTitleBlockSpace[#1]}
+    {}{\ProposalPatchFailure{title-page block spacing}}}
+\forcsvlist{\ProposalPatchTitleBlockSpace}{0pt,0pt,0pt,5.15pt}
+\patchcmd{\maketitle}{\vfill}{\ProposalTitleBlockSpace[0.1pt]}
+  {}{\ProposalPatchFailure{title-page copyright spacing}}
+\makeatother

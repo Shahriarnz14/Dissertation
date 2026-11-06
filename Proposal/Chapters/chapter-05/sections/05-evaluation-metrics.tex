@@ -10,7 +10,7 @@ To evaluate alignment between predicted and reference clinical events, we applie
 At each iteration, the method selects the closest unmatched predicted--reference pair under a text-similarity metric, retains the match if it falls below a distance threshold, and removes both events before continuing.
 This procedure yields an efficient one-to-one alignment that accommodates timelines of unequal length.
 
-We evaluate event identification using event match recall, precision, and F1.
+We evaluate event identification using event match recall (event match rate), precision, and F1.
 Precision therefore penalizes additional model-generated events that remain unmatched under the one-to-one alignment, complementing recall, which measures the proportion of reference events recovered.
 
 As a sensitivity analysis, we also evaluated a globally optimal one-to-one alignment based on the Linear Assignment Problem (LAPJV) \citep{jonker1987shortest}.
@@ -29,6 +29,6 @@ Concordance is also evaluated only on successfully matched events with usable ti
 
 The common metric definitions, including concordance tie handling and AULTC normalization, are given in Appendix~\ref{ch05:apd:evaluation-metrics}.
 
-Study-specific aggregation and uncertainty conventions are retained with the corresponding results.
+% Study-specific aggregation and uncertainty conventions are retained with the corresponding results.
 
-The historical term \emph{event match rate} in the unchanged figures denotes event match recall.
+% The historical term \emph{event match rate} in the unchanged figures denotes event match recall.

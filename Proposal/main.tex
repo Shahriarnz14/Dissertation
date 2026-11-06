@@ -14,7 +14,7 @@
 \input{macros/ch08}
 % Editable title-page metadata.
 \newcommand{\ProposalTitle}{Representation and Reasoning over Longitudinal Clinical Trajectories from Structured Data and Text}
-\newcommand{\ProposalSubmissionDate}{November 13, 2026}
+\newcommand{\ProposalSubmissionDate}{November 2026}
 \newcommand{\ProposalCopyrightYear}{2026}
 
 \title{\ProposalTitle}
@@ -23,40 +23,47 @@
 \discipline{Machine Learning and Public Policy}
 % Optional college and department display are intentionally left unset.
 \thesisdate{\ProposalSubmissionDate}
-\committeememberone{George H. Chen (Co-Chair)}
-\committeemembertwo{Jeremy C. Weiss (Co-Chair)}
-\committeememberthree{Zachary C. Lipton}
-\committeememberfour{Vaishnavh Nagarajan}
-\committeememberfive{Kun Zhang}
+\committeememberone{George H. Chen (Co-Chair), {\footnotesize Carnegie Mellon University}}
+\committeemembertwo{Jeremy C. Weiss (Co-Chair), {\footnotesize National Institutes of Health}}
+\committeememberthree{Zachary C. Lipton, {\footnotesize Carnegie Mellon University}}
+\committeememberfour{Vaishnavh Nagarajan, {\footnotesize Google DeepMind}}
+\committeememberfive{Kun Zhang, {\footnotesize Carnegie Mellon University}}
 \hypersetup{
   pdfauthor={Shahriar Noroozizadeh},
   pdftitle={\ProposalTitle},
-  pdfsubject={Dissertation proposal skeleton},
+  pdfsubject={Dissertation Proposal in Machine Learning and Public Policy},
   pdfkeywords={}
 }
 \input{macros/template-compat}
+\input{macros/typography}
+\input{macros/frontmatter}
 
 \begin{document}
 
 \tagstructbegin{tag=Document}
 
 \frontmatter
+\ProposalBeginTitleSupport
 \maketitle
 \clearpage
-% The title is unnumbered; restart the template's Roman front matter here.
+\ProposalEndTitleSupport
+\input{frontmatter/keywords}
+% Both preliminary pages are unnumbered; Roman i begins with the abstract.
 \frontmatter
 
 \begin{abstract}
 \phantomsection
 \addcontentsline{toc}{chapter}{Abstract}
-\ProposalPlaceholder{The dissertation abstract has not been written.}
+\input{frontmatter/abstract}
 \end{abstract}
 
 \clearpage
 \begin{acknowledgments}
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgments}
-\ProposalPlaceholder{The acknowledgments have not been written.}
+% \ProposalPlaceholder{The acknowledgments have not been written.}
+\noindent The acknowledgments section will be written by the time of dissertation defense. \\
+\noindent In the meantime, I would like to thank the committee members for their time and thoughtful feedback on this proposal, as well as the faculty at Heinz and MLD for their continued support and valuable feedback on my research during my PhD studies so far.
 \end{acknowledgments}
 
 \tableofcontents
@@ -102,6 +109,11 @@
   \bibsection
   \ProposalPlaceholder{The unified bibliography will be populated from the selected manuscripts during their approved migrations.}
 \fi
+% One completely blank final page after the bibliography.
+\clearpage
+\thispagestyle{empty}
+\null
+\clearpage
 \tagstructend
 
 \end{document}

@@ -1,0 +1,67 @@
+% !TeX root = ../main.tex
+% Full source-paper citations, generated from the same unified bibliography.
+\usepackage{bibentry}
+\AtBeginDocument{\nobibliography*}
+\makeatletter
+\newcommand{\ProposalSourceCite}[1]{%
+  \begingroup
+    % Numeric natbib's citet omits the year. Add its existing date locally
+    % while preserving the ordinary linked author and citation-number output.
+    \let\ProposalSourceOriginalNATTest\NAT@test
+    \renewcommand{\NAT@test}[1]{%
+      \ProposalSourceOriginalNATTest{##1}%
+      \ifnum##1=\@ne\space\NAT@date\fi}%
+    \citet{#1}%
+  \endgroup}
+\newcommand{\ProposalSourceSummary}[1]{%
+  \ProposalSourceSeparator\ProposalSourceCite{#1}%
+  \def\ProposalSourceSeparator{;\space}}
+% Annotate only the full entry inside its chapter's source box. The author
+% fields, ordinary citations and final bibliography retain their plain names.
+\newcommand{\ProposalMarkSourceAuthor}[2]{%
+  % On a first build bibentry is unresolved until BibTeX has produced the bbl.
+  % Once the entry exists, still fail if an expected author cannot be found.
+  \ifcsdef{BR@r@#1\@extra@b@citeb}{%
+    \expandafter\patchcmd\csname BR@r@#1\@extra@b@citeb\endcsname
+      {#2}{#2*}
+      {}{\ProposalPatchFailure{co-first author #2 in #1}}}{}%
+}
+\newcommand{\ProposalSourceCoFirst}[2]{%
+  \csdef{ProposalSourceAuthors@#1}{%
+    \forcsvlist{\ProposalMarkSourceAuthor{#1}}{#2}}}
+\ProposalSourceCoFirst{noroozizadeh2026survhte}{Shahriar Noroozizadeh,Xiaobin Shen}
+\ProposalSourceCoFirst{noroozizadeh-pmoa-tts-v4}{Shahriar Noroozizadeh,Sayantan Kumar}
+\ProposalSourceCoFirst{noroozizadeh2026forecasting}{Shahriar Noroozizadeh,Sayantan Kumar}
+\ProposalSourceCoFirst{kumar2026text}{Sayantan Kumar,Shahriar Noroozizadeh,Juyong Kim}
+\newcommand{\ProposalFullSourceEntry}[1]{%
+  \par\ProposalSourceEntrySeparator
+  \begingroup
+    \fontsize{10}{12}\selectfont
+    \setlength{\leftskip}{1em}% indent every citation line, including wraps
+    \setlength{\parskip}{1pt}% tighter spacing between author/title/venue blocks
+    % Keep citation destinations exclusively in the final bibliography;
+    % repeated entry text must not create duplicate PDF anchors.
+    \let\hyper@natanchorstart\@gobble
+    \let\hyper@natanchorend\@empty
+    \renewcommand{\newblock}{\par\noindent}% authors, title, venue on new lines
+    \ifcsdef{ProposalSourceAuthors@#1}{\csuse{ProposalSourceAuthors@#1}}{}%
+    \noindent\bibentry{#1}.\par
+    \ifcsdef{ProposalSourceAuthors@#1}{%
+      {\fontsize{9}{11}\selectfont\noindent
+       * Co-first authors.\par}}{}%
+  \endgroup
+  \def\ProposalSourceEntrySeparator{\addvspace{6pt}}}
+\newcommand{\ProposalChapterSources}[1]{%
+  \begin{tcolorbox}[enhanced,colback=black!4,colframe=black,
+    boxrule=0.5pt,arc=2mm,boxsep=0pt,
+    left=10pt,right=10pt,top=8pt,bottom=8pt,
+    before skip=0pt,after skip=12pt,
+    before upper={\setstretch{1}\normalfont\fontsize{10}{12.5}\selectfont
+      \raggedright\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}}]
+    \def\ProposalSourceSeparator{}%
+    \def\ProposalSourceEntrySeparator{}%
+    \emph{This chapter is based on \forcsvlist{\ProposalSourceSummary}{#1}:}\par
+    \forcsvlist{\ProposalFullSourceEntry}{#1}%
+  \end{tcolorbox}%
+}
+\makeatother

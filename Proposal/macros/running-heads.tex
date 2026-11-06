@@ -1,0 +1,134 @@
+% !TeX root = ../main.tex
+% Alternating outer page numbers and chapter/section running heads.
+% Use the printed CMU page counter for parity and odd-page chapter openings.
+\NewMarkClass{proposal-chapter}
+\NewMarkClass{proposal-section}
+\makeatletter
+\newif\ifProposalRomanPages
+\pretocmd{\pagenumbering}{%
+  \global\ProposalRomanPagesfalse
+  \ifstrequal{#1}{roman}{\global\ProposalRomanPagestrue}{}%
+  \ifstrequal{#1}{Roman}{\global\ProposalRomanPagestrue}{}%
+}{}{\ProposalPatchFailure{Roman footer detection}}
+
+% User-specified running titles. Full chapter/appendix opening titles remain
+% separate. Appendix A corresponds to Chapter 2, B to Chapter 3, and so on.
+\newcommand{\ProposalShortTitle}[1]{%
+  \ifcase\numexpr#1\relax
+  \or Introduction%
+  \or Temporal Supervised Contrastive Learning%
+  \or Impact of Medication Adherence on the Timing of Adverese Outcomes%
+  \or SURVHTE-BENCH: Heteregenous Treatment Estimation in Survival Analysis%
+  \or Textual Time Series: Construction and Validation%
+  \or Forecasting Clinical Risk from Textual Time Series%
+  \or Text Knows What, Tables Know When: Multimodal Temporal Alignment%
+  \or Verification and Sequential Decision-Making from Multimodal Sepsis Trajectories%
+  \or Discussion and Conclusion%
+  \fi}
+
+\newcommand{\ProposalOuterFooter}{%
+  \normalfont\normalsize\bfseries
+  % The first Roman page can have a different underlying LaTeX page value;
+  % use the CMU counter that actually supplies the printed page number.
+  \ifProposalRomanPages
+    \hfil\thepage\hfil
+  \else
+    \ifodd\c@cmupage\hfil\thepage\else\thepage\hfil\fi
+  \fi}
+
+% Preserve the copied template's special rotated-page footer if ever used.
+\let\ProposalCMUPlainStyle\ps@plain
+\def\ps@plain{%
+  \ProposalCMUPlainStyle
+  \let\ProposalCMURotatedFooter\@oddfoot
+  \def\@oddfoot{%
+    \ifx\cmu@rotation\cmu@rotation@cw
+      \ProposalCMURotatedFooter
+    \else
+      \ProposalOuterFooter
+    \fi}%
+  \let\@evenfoot\@oddfoot
+}
+
+\newcommand{\ProposalRunningHeadText}{%
+  \normalfont\fontsize{9.5}{11.5}\selectfont
+  \ifodd\c@cmupage
+    \parbox[b]{\dimexpr\textwidth-3.5em\relax}{%
+      \normalfont\fontsize{9.5}{11.5}\selectfont\raggedright
+      \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}%
+      \strut\LastMark{proposal-section}\strut}%
+    \hfil{\fontsize{11.5}{14.5}\selectfont\bfseries\thepage}%
+  \else
+    {\fontsize{11.5}{14.5}\selectfont\bfseries\thepage}\hfil
+    \parbox[b]{\dimexpr\textwidth-3.5em\relax}{%
+      \normalfont\fontsize{9.5}{11.5}\selectfont\raggedleft
+      \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}%
+      \strut\LastMark{proposal-chapter}\strut}%
+  \fi}
+% The lower edge of the 0.4pt rule sits 0.9in from the top. It is 2pt below
+% the header box, followed by 0.2in headsep; the text block starts at 1.1in.
+\newcommand{\ProposalRunningHead}{%
+  \vbox{\hbox to\textwidth{\ProposalRunningHeadText}%
+    \kern2pt\hrule height0.4pt width\textwidth}}
+\def\ps@proposalrunning{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\ProposalRunningHead
+  \let\@evenhead\ProposalRunningHead
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+}
+
+\newcommand{\ProposalChapterRunning}[1]{%
+  \InsertMark{proposal-chapter}{CHAPTER \arabic{chapter}.\protect\hspace{0.8em}%
+    \MakeUppercase{\ProposalShortTitle{\value{chapter}}}}%
+  \InsertMark{proposal-section}{}%
+  \thispagestyle{plain}% chapter-opening number belongs in the footer
+}
+\newcommand{\ProposalAppendixRunning}[1]{%
+  \InsertMark{proposal-chapter}{APPENDIX \Alph{appendix}.\protect\hspace{0.8em}%
+    \MakeUppercase{\ProposalShortTitle{\value{appendix}+1}}}%
+  \InsertMark{proposal-section}{}%
+  \thispagestyle{plain}% use the same opening-page convention for appendices
+}
+% Flush floats, then insert an unprinted even verso only when necessary.
+% Part dividers are placed on even pages below, immediately before chapters.
+\newcommand{\ProposalClearToOddPage}{%
+  \clearpage
+  \ifodd\c@cmupage\else
+    \null\thispagestyle{empty}\newpage
+  \fi}
+% If a Part precedes the chapter, insert any necessary blank before the Part.
+% The divider occupies an even page, followed directly by the odd opening.
+\newcommand{\ProposalClearToEvenPage}{%
+  \clearpage
+  \ifodd\c@cmupage
+    \null\thispagestyle{empty}\newpage
+  \fi}
+\patchcmd{\part}{\cleardoublepage}{\ProposalClearToEvenPage}
+  {}{\ProposalPatchFailure{even-page Part divider}}
+\patchcmd{\chapter}{\cleardoublepage}{\ProposalClearToOddPage}
+  {}{\ProposalPatchFailure{odd-page chapter opening}}
+\patchcmd{\cmu@appendix}{\cleardoublepage}{\ProposalClearToOddPage}
+  {}{\ProposalPatchFailure{odd-page appendix opening}}
+\apptocmd{\chapter}{\ProposalChapterRunning{#1}}
+  {}{\ProposalPatchFailure{chapter running mark}}
+\apptocmd{\cmu@appendix}{\ProposalAppendixRunning{#1}}
+  {}{\ProposalPatchFailure{appendix running mark}}
+\apptocmd{\bodymatter}{\pagestyle{proposalrunning}}
+  {}{\ProposalPatchFailure{body running page style}}
+
+\AtBeginDocument{%
+  % CMU uses subsection for displayed sections (5.2), and subsubsection for
+  % displayed subsections (5.2.1). Only the former updates this mark class.
+  % LastMark selects the latest heading on the page, or carries it forward
+  % when no new section is introduced. Counters are expanded on insertion.
+  \renewcommand{\subsectionmark}[1]{%
+    \InsertMark{proposal-section}{Sec.\space\thesection.\arabic{subsection}.%
+      \protect\hspace{0.8em}#1}}%
+  \apptocmd{\bibsection}{%
+    \InsertMark{proposal-chapter}{Bibliography}%
+    \InsertMark{proposal-section}{Bibliography}%
+    \thispagestyle{plain}}
+    {}{\ProposalPatchFailure{bibliography running marks}}%
+}
+\makeatother

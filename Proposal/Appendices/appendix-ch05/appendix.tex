@@ -3,7 +3,9 @@
 \ChSixBegin
 \ChFiveBegin
 \emergencystretch=2em
-\appendix{Constructing and Validating Textual Clinical Trajectories}\label{app:ch05}\label{app:ch06}
+% Keep breakable prompt boxes within the fixed CMU text height.
+\tcbset{pad at break*/.append style={enlargepage flexible=0pt}}
+\appendix{Constructing and Validating Patient Trajectories via Textual Time Series}\label{app:ch05}\label{app:ch06}
 This appendix supports the reconstruction studies in Chapter~\ref{chap:ch05}.
 
 \input{Appendices/appendix-ch05/sections/06-corpora-references-models}

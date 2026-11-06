@@ -1,0 +1,107 @@
+% !TeX root = ../main.tex
+% Helen Zhou reference typography, requested November 5, 2026.
+% Load after template-compat; preserve the CMU chapter/appendix machinery.
+\usepackage[T1]{fontenc}
+\usepackage[rm,tt=false]{libertine}
+% Font expansion improves justified line breaks without changing text or
+% letting punctuation protrude beyond the requested margins.
+\usepackage[protrusion=false]{microtype}
+\geometry{letterpaper,left=1.0625in,right=1.0625in,
+  top=1.1in,bottom=0.8in,bindingoffset=0in,
+  includehead=false,includefoot=false,headheight=40pt,headsep=0.2in,footskip=0.5in}
+
+% fncychap expects a book/report chapter name; CMU provides its own chapter
+% command on article. Only its heading renderer is used below.
+\providecommand{\chaptername}{Chapter}
+\makeatletter
+\let\ProposalCMUAppendix\appendix
+\makeatother
+\usepackage[Lenny]{fncychap}
+\makeatletter
+\let\appendix\ProposalCMUAppendix
+\makeatother
+\ChNameVar{\fontsize{14}{16}\usefont{OT1}{phv}{m}{n}\selectfont}
+\ChNumVar{\fontsize{60}{62}\usefont{OT1}{ptm}{m}{n}\selectfont}
+\ChRuleWidth{1pt}
+\ChTitleVar{\normalfont\rmfamily\Huge}
+
+\makeatletter
+% Reduce only the normal body size by 1pt. Retain the approved 14.5pt
+% baseline and the class's existing heading, caption and small-size scales.
+\let\ProposalOriginalNormalSize\normalsize
+\renewcommand{\normalsize}{%
+  \ProposalOriginalNormalSize\fontsize{11}{14.5}\selectfont}
+% Exact 11pt (rather than the standard class's 10.95pt) needs an explicit
+% math-size entry; retain the existing 8pt/6pt script sizes.
+\DeclareMathSizes{11}{11}{8}{6}
+
+% Undo the template's alias that forces indentation after every heading.
+\def\@afterindentfalse{\let\if@afterindent\iffalse}
+% Omit the saved indentation box before paragraph tagging inserts PDF nodes.
+% The legacy after-heading lastbox removal alone cannot remove an indent
+% once marked-content nodes intervene in the tagged-PDF paragraph hook.
+\AddToHook{para/begin}{%
+  \if@nobreak\if@afterindent\else\OmitIndent\fi\fi}
+
+% Change only the visual block. Keep automatic counters, labels, bookmarks,
+% contents entries, float suppression and the CMU chapter hooks intact.
+% Reduce only Lenny's initial 50pt skip to one third; retain its 20pt/40pt
+% frame-to-title and title-to-content skips for chapters and appendices.
+\newlength{\ProposalChapterTopSkip}
+\setlength{\ProposalChapterTopSkip}{\dimexpr50pt/3\relax}
+\patchcmd{\@makechapterhead}{\vspace*{50\p@}}
+  {\vspace*{\ProposalChapterTopSkip}}
+  {}{\ProposalPatchFailure{chapter opening top skip}}
+\patchcmd{\chapter}
+  {\vspace*{1cm} {\raggedright\LARGE\textbf {Chapter \thesection}\par}
+    \vspace{1cm}
+    {\setstretch{1.05}\raggedright\Huge \bfseries #1\par}
+    \vspace{1cm}
+    \justifying}
+  {\@makechapterhead{#1}}
+  {}{\ProposalPatchFailure{Lenny chapter renderer}}
+\newcommand{\ProposalMakeAppendixHead}[1]{%
+  \begingroup
+    \def\@chapapp{Appendix}%
+    \def\thechapter{\appendixnum}% only the displayed glyph; counters unchanged
+    \@mainmattertrue
+    \@makechapterhead{#1}%
+  \endgroup}
+\patchcmd{\cmu@appendix}
+  {\vspace*{1cm}
+    {\raggedright\LARGE\bfseries Appendix \appendixnum\par}
+    {\raggedright\LARGE\bfseries #1\par}
+    \vspace{1cm}}
+  {\ProposalMakeAppendixHead{#1}}
+  {}{\ProposalPatchFailure{Lenny appendix renderer}}
+\apptocmd{\chapter}{\@afterindentfalse\@afterheading}
+  {}{\ProposalPatchFailure{unindented first chapter paragraph}}
+\apptocmd{\cmu@appendix}{\@afterindentfalse\@afterheading}
+  {}{\ProposalPatchFailure{unindented first appendix paragraph}}
+% Wrapped section headings align left without stretched interword spaces.
+\appto\@subsection@style{\raggedright}
+\appto\@subsubsection@style{\raggedright}
+\appto\@paragraph@style{\raggedright}
+% Migrated unnumbered headings bypass @startsection; give them the same
+% first-paragraph behavior without editing any manuscript module.
+\newcommand{\ProposalUnindentedAfterHeading}[1]{%
+  \ifcsdef{#1}
+    {\csletcs{ProposalOriginal#1}{#1}%
+     \csdef{#1}##1{\csuse{ProposalOriginal#1}{##1}%
+       \@afterindentfalse\@afterheading}}
+    {\ProposalPatchFailure{unnumbered heading #1}}%
+}
+\forcsvlist{\ProposalUnindentedAfterHeading}{ChThreeParagraph,ChFourParagraph,ChFourStarSection,ChFiveParagraph,ChFiveStarSection,ChFiveStarSubsection,ChSixParagraph,ChSixStarSection,ChSevenParagraph,ChSevenStarSection,ChSevenStarSubsection,ChEightParagraph,ChEightStarSection}
+
+\AtBeginDocument{%
+  % Remove CMU's 1.5x multiplier; use the normal body size defined above.
+  \setstretch{1}%
+  \normalfont\normalsize
+  \justifying
+  \setlength{\parindent}{1.5em}%
+  \setlength{\parskip}{6pt}%
+  \pagestyle{plain}% centered Roman footers; title/Part pages stay empty
+}
+\makeatother
+\input{macros/running-heads}
+\input{macros/chapter-sources}
